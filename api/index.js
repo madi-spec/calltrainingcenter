@@ -373,11 +373,26 @@ app.get('/api/scenarios/meta/voices', (req, res) => {
   });
 });
 
+// Debug endpoint to check env vars
+app.get('/api/debug/env', (req, res) => {
+  res.json({
+    hasRetellKey: !!process.env.RETELL_API_KEY,
+    retellKeyPrefix: process.env.RETELL_API_KEY ? process.env.RETELL_API_KEY.substring(0, 8) + '...' : 'NOT SET',
+    hasAnthropicKey: !!process.env.ANTHROPIC_API_KEY,
+    anthropicKeyPrefix: process.env.ANTHROPIC_API_KEY ? process.env.ANTHROPIC_API_KEY.substring(0, 12) + '...' : 'NOT SET'
+  });
+});
+
 // Create training call
 app.post('/api/calls/create-training-call', async (req, res) => {
   try {
     const { scenario } = req.body;
     if (!scenario) return res.status(400).json({ error: 'Scenario is required' });
+
+    // Check for API key
+    if (!process.env.RETELL_API_KEY) {
+      return res.status(500).json({ error: 'RETELL_API_KEY not configured' });
+    }
 
     const company = configStore.company;
     const processedScenario = {
@@ -389,13 +404,16 @@ app.post('/api/calls/create-training-call', async (req, res) => {
 
     const agentPrompt = buildAgentPrompt(processedScenario, company);
 
+    console.log('Creating LLM with Retell...');
     // Create LLM
     const llm = await getRetellClient().llm.create({
       model: 'gpt-4o',
       general_prompt: agentPrompt,
       begin_message: processedScenario.openingLine || 'Hello?'
     });
+    console.log('LLM created:', llm.llm_id);
 
+    console.log('Creating agent...');
     // Create agent
     const agent = await getRetellClient().agent.create({
       agent_name: `CSR Training - ${processedScenario.name}`,
@@ -403,11 +421,14 @@ app.post('/api/calls/create-training-call', async (req, res) => {
       voice_id: scenario.voiceId || '11labs-Adrian',
       language: 'en-US'
     });
+    console.log('Agent created:', agent.agent_id);
 
+    console.log('Creating web call...');
     // Create web call
     const webCall = await getRetellClient().call.createWebCall({
       agent_id: agent.agent_id
     });
+    console.log('Web call created:', webCall.call_id);
 
     res.json({
       success: true,
@@ -418,7 +439,13 @@ app.post('/api/calls/create-training-call', async (req, res) => {
     });
   } catch (error) {
     console.error('Error creating call:', error);
-    res.status(500).json({ error: error.message });
+    const errorDetails = {
+      error: error.message,
+      type: error.constructor.name,
+      status: error.status || error.statusCode,
+      details: error.error || error.body || null
+    };
+    res.status(500).json(errorDetails);
   }
 });
 

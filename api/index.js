@@ -375,11 +375,19 @@ app.get('/api/scenarios/meta/voices', (req, res) => {
 
 // Debug endpoint to check env vars
 app.get('/api/debug/env', (req, res) => {
+  const retellKey = process.env.RETELL_API_KEY || '';
+  const anthropicKey = process.env.ANTHROPIC_API_KEY || '';
+
   res.json({
-    hasRetellKey: !!process.env.RETELL_API_KEY,
-    retellKeyPrefix: process.env.RETELL_API_KEY ? process.env.RETELL_API_KEY.substring(0, 8) + '...' : 'NOT SET',
-    hasAnthropicKey: !!process.env.ANTHROPIC_API_KEY,
-    anthropicKeyPrefix: process.env.ANTHROPIC_API_KEY ? process.env.ANTHROPIC_API_KEY.substring(0, 12) + '...' : 'NOT SET'
+    hasRetellKey: !!retellKey,
+    retellKeyLength: retellKey.length,
+    retellKeyPrefix: retellKey ? retellKey.substring(0, 10) : 'NOT SET',
+    retellKeyValid: retellKey.startsWith('key_'),
+    hasAnthropicKey: !!anthropicKey,
+    anthropicKeyLength: anthropicKey.length,
+    anthropicKeyPrefix: anthropicKey ? anthropicKey.substring(0, 15) : 'NOT SET',
+    anthropicKeyValid: anthropicKey.startsWith('sk-ant-'),
+    envVarNames: Object.keys(process.env).filter(k => k.includes('RETELL') || k.includes('ANTHROPIC'))
   });
 });
 
@@ -390,8 +398,16 @@ app.post('/api/calls/create-training-call', async (req, res) => {
     if (!scenario) return res.status(400).json({ error: 'Scenario is required' });
 
     // Check for API key
-    if (!process.env.RETELL_API_KEY) {
+    const retellKey = process.env.RETELL_API_KEY || '';
+    if (!retellKey) {
       return res.status(500).json({ error: 'RETELL_API_KEY not configured' });
+    }
+    if (!retellKey.startsWith('key_')) {
+      return res.status(500).json({
+        error: 'RETELL_API_KEY appears malformed',
+        hint: 'Key should start with "key_"',
+        actualPrefix: retellKey.substring(0, 5)
+      });
     }
 
     const company = configStore.company;
@@ -440,12 +456,44 @@ app.post('/api/calls/create-training-call', async (req, res) => {
   } catch (error) {
     console.error('Error creating call:', error);
     const errorDetails = {
-      error: error.message,
+      error: error.message || 'Unknown error',
       type: error.constructor.name,
       status: error.status || error.statusCode,
-      details: error.error || error.body || null
+      details: error.error || error.body || null,
+      stack: process.env.NODE_ENV !== 'production' ? error.stack : undefined,
+      retellKeyConfigured: !!process.env.RETELL_API_KEY,
+      retellKeyValid: (process.env.RETELL_API_KEY || '').startsWith('key_')
     };
     res.status(500).json(errorDetails);
+  }
+});
+
+// Test Retell connection
+app.get('/api/debug/test-retell', async (req, res) => {
+  try {
+    const retellKey = process.env.RETELL_API_KEY || '';
+    if (!retellKey.startsWith('key_')) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid Retell API key format',
+        keyPrefix: retellKey.substring(0, 5),
+        expectedPrefix: 'key_'
+      });
+    }
+
+    // Try to list agents as a simple test
+    const agents = await getRetellClient().agent.list();
+    res.json({
+      success: true,
+      message: 'Retell connection successful',
+      agentCount: agents?.length || 0
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      status: error.status || error.statusCode
+    });
   }
 });
 

@@ -1,0 +1,69 @@
+{
+  "company": {
+    "name": "Accel Pest & Termite Control",
+    "phone": "(877) 716-7522",
+    "website": "https://www.accelpest.com/",
+    "logo": "https://cdn.accelpest.com/wp-content/uploads/2024/01/NEW-Accel-Logo-PMS116-scaled.png",
+    "colors": {
+      "primary": "#003388",
+      "secondary": "#8217",
+      "accent": "#32373c",
+      "background": null,
+      "text": null
+    },
+    "serviceAreas": [
+      "Richmond",
+      "Virginia Beach",
+      "Hampton",
+      "Canton",
+      "Newport News"
+    ],
+    "services": [
+      "Pest Control",
+      "Termite Control",
+      "Mosquito Control",
+      "Rodent Control",
+      "Ant Control",
+      "Bed Bug Control",
+      "Flea and Tick Control",
+      "Cockroach Control",
+      "Bee and Wasp Control",
+      "Crawl Space Insulation",
+      "Attic Insulation",
+      "Moisture Control"
+    ],
+    "pricing": {
+      "hasPublicPricing": true,
+      "quarterlyPrice": "42",
+      "initialPrice": null,
+      "notes": "Plans starting at $42/month for basic pest control, $64/month for pest & termite, $79/month for pest & mosquito, $99/month for total service"
+    },
+    "guarantees": [
+      "100% Satisfaction Guarantee",
+      "Free re-service",
+      "Sentricon Termite Baiting System with lifetime warranty"
+    ],
+    "valuePropositions": [
+      "QualityPro accredited company",
+      "Locally owned and operated",
+      "Same day service available",
+      "Customized treatment plans",
+      "40+ common pests covered",
+      "Named best medium-sized pest control company",
+      "58,000 customers served",
+      "98% customer satisfaction",
+      "Sentricon termite baiting system"
+    ],
+    "businessHours": "Mon-Sat 7am-7pm"
+  },
+  "settings": {
+    "defaultVoiceId": "11labs-Adrian",
+    "callTimeout": 600000,
+    "enableAnalytics": true
+  },
+  "extractedIntelligence": {
+    "companies": [],
+    "terminology": [],
+    "suggestedScenarios": []
+  }
+}

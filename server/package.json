@@ -1,0 +1,21 @@
+{
+  "name": "csr-training-server",
+  "version": "1.0.0",
+  "description": "CSR Training Simulator Backend",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "@anthropic-ai/sdk": "^0.24.0",
+    "retell-sdk": "^4.0.0",
+    "cheerio": "^1.0.0-rc.12",
+    "puppeteer": "^22.0.0",
+    "axios": "^1.6.7"
+  }
+}

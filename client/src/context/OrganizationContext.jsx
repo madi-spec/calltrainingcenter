@@ -60,10 +60,11 @@ export function OrganizationProvider({ children }) {
   }, []);
 
   // Fetch organization directly from API
-  const fetchOrganization = useCallback(async () => {
-    console.log('[ORG] fetchOrganization called, isAuthenticated:', isAuthenticated);
-    if (!isAuthenticated) {
-      console.log('[ORG] Not authenticated, returning null');
+  // force: bypass the isAuthenticated check (used during refresh when auth state is transitioning)
+  const fetchOrganization = useCallback(async (force = false) => {
+    console.log('[ORG] fetchOrganization called, isAuthenticated:', isAuthenticated, 'force:', force);
+    if (!force && !isAuthenticated) {
+      console.log('[ORG] Not authenticated and not forced, returning null');
       return null;
     }
 
@@ -385,8 +386,9 @@ export function OrganizationProvider({ children }) {
     }
 
     // Also fetch organization data directly to ensure we have the latest
-    console.log('[ORG] Fetching organization data...');
-    const orgData = await fetchOrganization();
+    // Pass force=true to bypass isAuthenticated check since auth state may be transitioning
+    console.log('[ORG] Fetching organization data (forced)...');
+    const orgData = await fetchOrganization(true);
     console.log('[ORG] fetchOrganization returned:', orgData ? 'data' : 'null');
 
     if (orgData) {

@@ -48,8 +48,20 @@ export function ProtectedRoute({ children }) {
  */
 export function RoleProtectedRoute({ children, allowedRoles }) {
   const { isLoaded, isSignedIn } = useUser();
-  const { loading, profile } = useAuth();
+  const { loading, profile, role } = useAuth();
   const location = useLocation();
+
+  // Debug logging
+  console.log('[ROLE CHECK]', {
+    isLoaded,
+    isSignedIn,
+    loading,
+    hasProfile: !!profile,
+    profileRole: profile?.role,
+    contextRole: role,
+    allowedRoles,
+    path: location.pathname
+  });
 
   if (!isLoaded || loading) {
     return (
@@ -66,12 +78,17 @@ export function RoleProtectedRoute({ children, allowedRoles }) {
     return <Navigate to="/auth/login" state={{ from: location }} replace />;
   }
 
-  if (!profile || !allowedRoles.includes(profile?.role)) {
+  // Use role from context (which handles API fetch) instead of profile?.role
+  const effectiveRole = role || profile?.role;
+
+  if (!effectiveRole || !allowedRoles.includes(effectiveRole)) {
+    console.log('[ROLE CHECK] Access denied - effectiveRole:', effectiveRole);
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-100">Access Denied</h1>
           <p className="text-gray-400 mt-2">You don't have permission to view this page.</p>
+          <p className="text-gray-500 mt-1 text-sm">Role: {effectiveRole || 'none'} | Required: {allowedRoles.join(', ')}</p>
         </div>
       </div>
     );

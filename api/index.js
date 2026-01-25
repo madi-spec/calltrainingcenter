@@ -1101,6 +1101,40 @@ app.get('/api/debug/env', (req, res) => {
   });
 });
 
+app.get('/api/debug/test-auth', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.json({ error: 'No authorization header', hasHeader: false });
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+    const { verifyToken } = await import('@clerk/clerk-sdk-node');
+
+    try {
+      const payload = await verifyToken(token, {
+        secretKey: process.env.CLERK_SECRET_KEY
+      });
+      res.json({
+        success: true,
+        clerkUserId: payload.sub,
+        tokenExp: payload.exp,
+        tokenIat: payload.iat
+      });
+    } catch (verifyError) {
+      res.json({
+        success: false,
+        error: verifyError.message,
+        errorCode: verifyError.code,
+        secretKeySet: !!process.env.CLERK_SECRET_KEY,
+        secretKeyPrefix: process.env.CLERK_SECRET_KEY?.substring(0, 10)
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.get('/api/debug/test-retell', async (req, res) => {
   try {
     const retellKey = process.env.RETELL_API_KEY || '';

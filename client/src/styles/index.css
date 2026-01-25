@@ -456,6 +456,104 @@
     --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1) !important;
   }
 
+  /* Additional light mode text fixes */
+  .light h1.text-white,
+  .light h2.text-white,
+  .light h3.text-white,
+  .light h4.text-white,
+  .light h5.text-white,
+  .light h6.text-white,
+  .light p.text-white,
+  .light span.text-white,
+  .light div.text-white,
+  .light label.text-white {
+    color: #111827 !important;
+  }
+
+  /* But preserve white text on colored/gradient backgrounds */
+  .light .bg-gradient-to-r .text-white,
+  .light .bg-gradient-to-l .text-white,
+  .light .bg-gradient-to-br .text-white,
+  .light .bg-gradient-to-bl .text-white,
+  .light .bg-primary-500 .text-white,
+  .light .bg-primary-600 .text-white,
+  .light .bg-primary-700 .text-white,
+  .light .bg-blue-500 .text-white,
+  .light .bg-blue-600 .text-white,
+  .light .bg-blue-700 .text-white,
+  .light .bg-green-500 .text-white,
+  .light .bg-green-600 .text-white,
+  .light .bg-red-500 .text-white,
+  .light .bg-red-600 .text-white,
+  .light .bg-purple-500 .text-white,
+  .light .bg-purple-600 .text-white,
+  .light .bg-purple-700 .text-white,
+  .light .bg-indigo-500 .text-white,
+  .light .bg-indigo-600 .text-white {
+    color: #ffffff !important;
+  }
+
+  /* Direct white text on gradient parents */
+  .light [class*="bg-gradient"] > .text-white,
+  .light [class*="bg-gradient"] > * > .text-white,
+  .light [class*="bg-gradient"] h1,
+  .light [class*="bg-gradient"] h2,
+  .light [class*="bg-gradient"] h3,
+  .light [class*="bg-gradient"] p.text-white,
+  .light [class*="bg-gradient"] span.text-white {
+    color: #ffffff !important;
+  }
+
+  /* Fix more gray text variants */
+  .light .text-gray-50 { color: #111827 !important; }
+
+  /* Fix divide colors */
+  .light .divide-gray-700 > * + * { border-color: #e5e7eb !important; }
+  .light .divide-gray-600 > * + * { border-color: #d1d5db !important; }
+
+  /* Fix ring colors */
+  .light .ring-gray-700 { --tw-ring-color: #e5e7eb !important; }
+  .light .ring-gray-600 { --tw-ring-color: #d1d5db !important; }
+
+  /* Fix outline colors */
+  .light .outline-gray-700 { outline-color: #e5e7eb !important; }
+
+  /* Light mode for modals and overlays */
+  .light .bg-gray-900\/80 { background-color: rgba(255, 255, 255, 0.9) !important; }
+  .light .bg-gray-900\/90 { background-color: rgba(255, 255, 255, 0.95) !important; }
+  .light .bg-black\/50 { background-color: rgba(0, 0, 0, 0.3) !important; }
+  .light .bg-black\/60 { background-color: rgba(0, 0, 0, 0.4) !important; }
+
+  /* Fix active states */
+  .light .active\:bg-gray-700:active { background-color: #d1d5db !important; }
+  .light .active\:bg-gray-800:active { background-color: #e5e7eb !important; }
+
+  /* Fix disabled states */
+  .light .disabled\:bg-gray-700:disabled { background-color: #e5e7eb !important; }
+  .light .disabled\:text-gray-400:disabled { color: #9ca3af !important; }
+
+  /* Ensure form labels are visible */
+  .light label { color: #374151; }
+  .light label.text-gray-300 { color: #374151 !important; }
+  .light label.text-gray-400 { color: #6b7280 !important; }
+
+  /* Fix select dropdowns */
+  .light select option {
+    background-color: #ffffff;
+    color: #111827;
+  }
+
+  /* Fix code/pre blocks */
+  .light pre { background-color: #f3f4f6 !important; color: #1f2937 !important; }
+  .light code { background-color: #e5e7eb !important; color: #1f2937 !important; }
+
+  /* Fix table styles */
+  .light table { border-color: #e5e7eb; }
+  .light th { background-color: #f9fafb; color: #374151; }
+  .light td { color: #1f2937; }
+  .light tr:hover { background-color: #f3f4f6; }
+  .light tbody tr { border-color: #e5e7eb; }
+
   /* Hide scrollbar but keep scroll functionality */
   .scrollbar-hide {
     -ms-overflow-style: none;

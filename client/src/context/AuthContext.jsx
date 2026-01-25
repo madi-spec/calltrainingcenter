@@ -162,12 +162,15 @@ export function AuthProvider({ children }) {
       setProfileLoading(true);
 
       if (isSignedIn && user) {
-        // First try to fetch existing profile
-        let userProfile = await fetchProfile(user.id);
+        // Always sync/fetch through API to get correct profile with role
+        // This bypasses RLS issues with direct Supabase queries
+        const userProfile = await syncUserToDatabase();
 
-        // If no profile exists, sync from Clerk
-        if (!userProfile) {
-          userProfile = await syncUserToDatabase();
+        if (userProfile) {
+          console.log('[AUTH] Profile loaded:', {
+            email: userProfile.email,
+            role: userProfile.role
+          });
         }
 
         setProfile(userProfile);
@@ -179,7 +182,7 @@ export function AuthProvider({ children }) {
     };
 
     loadProfile();
-  }, [isLoaded, isSignedIn, user, fetchProfile, syncUserToDatabase]);
+  }, [isLoaded, isSignedIn, user, syncUserToDatabase]);
 
   // Check if user has a specific permission
   const hasPermission = useCallback((permission) => {

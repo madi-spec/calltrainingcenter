@@ -3,6 +3,9 @@ import { useAuth } from './AuthContext';
 
 const OrganizationContext = createContext(null);
 
+// Track which user we fetched data for to reset on user change
+let lastFetchedUserId = null;
+
 const defaultOrganization = {
   name: 'Your Company',
   phone: '',
@@ -33,7 +36,8 @@ const defaultOrganization = {
 };
 
 export function OrganizationProvider({ children }) {
-  const { organization: authOrganization, authFetch, isAuthenticated, refreshProfile } = useAuth();
+  const { organization: authOrganization, authFetch, isAuthenticated, refreshProfile, profile } = useAuth();
+  const currentUserId = profile?.id;
   const [organization, setOrganization] = useState(defaultOrganization);
   const [branches, setBranches] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -126,11 +130,48 @@ export function OrganizationProvider({ children }) {
     return mergedOrg;
   }, []);
 
+  // Reset state when user logs out or changes
+  useEffect(() => {
+    if (!isAuthenticated && !authOrganization) {
+      console.log('[ORG] User logged out, resetting state');
+      hasFetchedFromApi.current = false;
+      lastFetchedUserId = null;
+      setOrganization(defaultOrganization);
+      // Reset CSS variables to defaults
+      const root = document.documentElement;
+      root.style.removeProperty('--color-brand');
+      root.style.removeProperty('--color-brand-dark');
+      root.style.removeProperty('--color-brand-light');
+      root.style.removeProperty('--color-primary-500');
+      root.style.removeProperty('--color-primary-600');
+      root.style.removeProperty('--color-primary-800');
+      // Also reset Layout-applied variables
+      root.style.removeProperty('--brand-primary');
+      root.style.removeProperty('--brand-secondary');
+      root.style.removeProperty('--brand-accent');
+      root.style.removeProperty('--brand-primary-rgb');
+    }
+  }, [isAuthenticated, authOrganization]);
+
   // Update organization from auth context AND fetch from API
   useEffect(() => {
     const loadOrganization = async () => {
+      // Check if this is a new user (different from last fetch)
+      const userChanged = currentUserId && lastFetchedUserId !== currentUserId;
+      if (userChanged) {
+        console.log('[ORG] User changed, resetting fetch flag. Old:', lastFetchedUserId, 'New:', currentUserId);
+        hasFetchedFromApi.current = false;
+        lastFetchedUserId = currentUserId;
+      }
+
+      // First, use auth context data for quick initial render
       if (authOrganization) {
-        // First, use auth context data for quick initial render
+        console.log('[ORG] Processing authOrganization:', {
+          id: authOrganization.id,
+          name: authOrganization.name,
+          logo_url: authOrganization.logo_url,
+          brand_colors: authOrganization.brand_colors
+        });
         const mergedOrg = processOrgData(authOrganization);
         if (mergedOrg) {
           setOrganization(mergedOrg);
@@ -139,8 +180,9 @@ export function OrganizationProvider({ children }) {
       }
 
       // Fetch from API to ensure we have the latest data (including logo_url, brand_colors)
-      // Only fetch once per session to avoid unnecessary API calls
+      // Only fetch once per user session to avoid unnecessary API calls
       if (isAuthenticated && !hasFetchedFromApi.current) {
+        console.log('[ORG] Fetching fresh data from API...');
         hasFetchedFromApi.current = true;
         const orgData = await fetchOrganization();
         if (orgData) {
@@ -165,7 +207,7 @@ export function OrganizationProvider({ children }) {
     } else if (!isAuthenticated) {
       setLoading(false);
     }
-  }, [authOrganization, isAuthenticated, applyBrandColors, processOrgData, fetchOrganization]);
+  }, [authOrganization, isAuthenticated, currentUserId, applyBrandColors, processOrgData, fetchOrganization]);
 
   // Fetch branches when authenticated
   useEffect(() => {

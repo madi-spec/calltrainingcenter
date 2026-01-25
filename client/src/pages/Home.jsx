@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Filter, Phone } from 'lucide-react';
-import { useCompany } from '../context/CompanyContext';
+import { useOrganization } from '../context/OrganizationContext';
+import { useAuth } from '../context/AuthContext';
 import Input from '../components/ui/Input';
 import ScenarioGrid from '../components/scenarios/ScenarioGrid';
 
 function Home() {
-  const { company } = useCompany();
+  const { organization: company } = useOrganization();
+  const { authFetch } = useAuth();
   const [scenarios, setScenarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -14,11 +16,11 @@ function Home() {
 
   useEffect(() => {
     fetchScenarios();
-  }, []);
+  }, [authFetch]);
 
   const fetchScenarios = async () => {
     try {
-      const response = await fetch('/api/scenarios');
+      const response = await authFetch('/api/scenarios');
       if (response.ok) {
         const data = await response.json();
         setScenarios(data.scenarios || []);

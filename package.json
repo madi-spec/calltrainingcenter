@@ -4,11 +4,11 @@
   "description": "AI-Powered CSR Training Simulator for Pest Control Companies",
   "private": true,
   "scripts": {
-    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
-    "dev": "npm run dev:server & npm run dev:client",
-    "dev:server": "cd server && npm run dev",
+    "install:all": "npm install && cd api && npm install && cd ../client && npm install",
+    "dev": "npm run dev:api & npm run dev:client",
+    "dev:api": "cd api && npm run dev",
     "dev:client": "cd client && npm run dev",
     "build": "cd client && npm run build",
-    "start": "cd server && npm start"
+    "start": "cd api && npm start"
   }
 }

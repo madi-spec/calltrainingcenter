@@ -1,0 +1,349 @@
+import { Router } from 'express';
+import { createAdminClient, TABLES } from '../lib/supabase.js';
+import { authMiddleware, tenantMiddleware } from '../lib/auth.js';
+import { recordUsage } from '../lib/stripe.js';
+
+const router = Router();
+
+// Apply auth middleware to all routes
+router.use(authMiddleware);
+router.use(tenantMiddleware);
+
+/**
+ * GET /api/training/recent
+ * Get recent training sessions for current user
+ */
+router.get('/recent', async (req, res) => {
+  try {
+    const { limit = 5 } = req.query;
+    const adminClient = createAdminClient();
+
+    const { data: sessions, error } = await adminClient
+      .from(TABLES.TRAINING_SESSIONS)
+      .select('*')
+      .eq('user_id', req.user.id)
+      .order('created_at', { ascending: false })
+      .limit(parseInt(limit));
+
+    if (error) throw error;
+
+    res.json({ sessions });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * GET /api/training/history
+ * Get full training history for current user
+ */
+router.get('/history', async (req, res) => {
+  try {
+    const { page = 1, limit = 20 } = req.query;
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const adminClient = createAdminClient();
+
+    const { data: sessions, error, count } = await adminClient
+      .from(TABLES.TRAINING_SESSIONS)
+      .select('*', { count: 'exact' })
+      .eq('user_id', req.user.id)
+      .order('created_at', { ascending: false })
+      .range(offset, offset + parseInt(limit) - 1);
+
+    if (error) throw error;
+
+    res.json({
+      sessions,
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total: count
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * GET /api/training/session/:id
+ * Get a specific training session
+ */
+router.get('/session/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const adminClient = createAdminClient();
+
+    const { data: session, error } = await adminClient
+      .from(TABLES.TRAINING_SESSIONS)
+      .select('*')
+      .eq('id', id)
+      .eq('organization_id', req.organization.id)
+      .single();
+
+    if (error) throw error;
+    if (!session) {
+      return res.status(404).json({ error: 'Session not found' });
+    }
+
+    // Check if user can view this session
+    if (session.user_id !== req.user.id && !['manager', 'admin', 'owner'].includes(req.user.role)) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    res.json({ session });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * POST /api/training/session
+ * Create a new training session
+ */
+router.post('/session', async (req, res) => {
+  try {
+    const { scenario_id, retell_call_id, assignment_id } = req.body;
+    const adminClient = createAdminClient();
+
+    const { data: session, error } = await adminClient
+      .from(TABLES.TRAINING_SESSIONS)
+      .insert({
+        organization_id: req.organization.id,
+        user_id: req.user.id,
+        scenario_id,
+        retell_call_id,
+        assignment_id,
+        status: 'in_progress',
+        started_at: new Date().toISOString()
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    res.json({ session });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * PATCH /api/training/session/:id
+ * Update a training session (complete it with results)
+ */
+router.patch('/session/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      transcript_raw,
+      transcript_formatted,
+      overall_score,
+      category_scores,
+      strengths,
+      improvements,
+      duration_seconds,
+      points_earned,
+      badges_earned
+    } = req.body;
+
+    const adminClient = createAdminClient();
+
+    // Calculate billable minutes
+    const billableMinutes = Math.ceil((duration_seconds || 0) / 60);
+
+    const { data: session, error } = await adminClient
+      .from(TABLES.TRAINING_SESSIONS)
+      .update({
+        transcript_raw,
+        transcript_formatted,
+        overall_score,
+        category_scores,
+        strengths,
+        improvements,
+        duration_seconds,
+        points_earned: points_earned || 0,
+        badges_earned: badges_earned || [],
+        billable_minutes: billableMinutes,
+        status: 'completed',
+        ended_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .eq('user_id', req.user.id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    // Update user stats
+    await adminClient
+      .from(TABLES.USERS)
+      .update({
+        total_points: req.user.total_points + (points_earned || 0),
+        last_training_at: new Date().toISOString()
+      })
+      .eq('id', req.user.id);
+
+    // Record usage for billing
+    if (billableMinutes > 0) {
+      await recordUsage(req.organization.id, billableMinutes, id, req.user.id);
+    }
+
+    // Update assignment if applicable
+    if (session.assignment_id) {
+      const { data: assignment } = await adminClient
+        .from(TABLES.TRAINING_ASSIGNMENTS)
+        .select('progress')
+        .eq('id', session.assignment_id)
+        .single();
+
+      if (assignment) {
+        const progress = assignment.progress || { completed: 0, total: 1 };
+        progress.completed += 1;
+
+        const newStatus = progress.completed >= progress.total ? 'completed' : 'in_progress';
+
+        await adminClient
+          .from(TABLES.TRAINING_ASSIGNMENTS)
+          .update({
+            progress,
+            status: newStatus,
+            completed_at: newStatus === 'completed' ? new Date().toISOString() : null
+          })
+          .eq('id', session.assignment_id);
+      }
+    }
+
+    res.json({ session });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * GET /api/training/team-recent
+ * Get recent team training sessions (for managers)
+ */
+router.get('/team-recent', async (req, res) => {
+  try {
+    if (!['manager', 'admin', 'owner'].includes(req.user.role)) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    const { limit = 10 } = req.query;
+    const adminClient = createAdminClient();
+
+    // Get user IDs for the manager's teams
+    let userQuery = adminClient
+      .from(TABLES.USERS)
+      .select('id')
+      .eq('organization_id', req.organization.id)
+      .eq('status', 'active');
+
+    // Managers only see their team's users
+    if (req.user.role === 'manager') {
+      const { data: teams } = await adminClient
+        .from('teams')
+        .select('id')
+        .eq('manager_id', req.user.id);
+
+      if (teams && teams.length > 0) {
+        const teamIds = teams.map(t => t.id);
+        userQuery = userQuery.in('team_id', teamIds);
+      } else {
+        return res.json({ sessions: [] });
+      }
+    }
+
+    const { data: users } = await userQuery;
+    const userIds = users?.map(u => u.id) || [];
+
+    if (userIds.length === 0) {
+      return res.json({ sessions: [] });
+    }
+
+    const { data: sessions, error } = await adminClient
+      .from(TABLES.TRAINING_SESSIONS)
+      .select(`
+        *,
+        user:users(id, full_name, email)
+      `)
+      .in('user_id', userIds)
+      .eq('status', 'completed')
+      .order('created_at', { ascending: false })
+      .limit(parseInt(limit));
+
+    if (error) throw error;
+
+    // Format for frontend
+    const formattedSessions = sessions?.map(s => ({
+      id: s.id,
+      user_id: s.user_id,
+      user_name: s.user?.full_name || 'Unknown',
+      scenario_name: s.scenario_name || 'Practice Session',
+      overall_score: s.overall_score,
+      duration_seconds: s.duration_seconds,
+      points_earned: s.points_earned,
+      created_at: s.created_at
+    })) || [];
+
+    res.json({ sessions: formattedSessions });
+  } catch (error) {
+    console.error('Error fetching team recent sessions:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * GET /api/training/team
+ * Get team training sessions (for managers)
+ */
+router.get('/team', async (req, res) => {
+  try {
+    if (!['manager', 'admin', 'owner'].includes(req.user.role)) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    const { limit = 20, page = 1 } = req.query;
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const adminClient = createAdminClient();
+
+    let query = adminClient
+      .from(TABLES.TRAINING_SESSIONS)
+      .select(`
+        *,
+        user:users(full_name, email)
+      `, { count: 'exact' })
+      .eq('organization_id', req.organization.id)
+      .order('created_at', { ascending: false });
+
+    // Managers only see their branch
+    if (req.user.role === 'manager' && req.user.branch_id) {
+      const { data: branchUsers } = await adminClient
+        .from(TABLES.USERS)
+        .select('id')
+        .eq('branch_id', req.user.branch_id);
+
+      const userIds = branchUsers?.map(u => u.id) || [];
+      query = query.in('user_id', userIds);
+    }
+
+    const { data: sessions, error, count } = await query
+      .range(offset, offset + parseInt(limit) - 1);
+
+    if (error) throw error;
+
+    res.json({
+      sessions,
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total: count
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+export default router;

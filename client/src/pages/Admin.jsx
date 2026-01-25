@@ -11,13 +11,15 @@ import {
   MapPin,
   DollarSign
 } from 'lucide-react';
-import { useCompany } from '../context/CompanyContext';
+import { useOrganization } from '../context/OrganizationContext';
+import { useAuth } from '../context/AuthContext';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import Input, { Textarea } from '../components/ui/Input';
 
 function Admin() {
-  const { company, updateCompany, refreshCompany } = useCompany();
+  const { organization: company, updateOrganization: updateCompany } = useOrganization();
+  const { authFetch } = useAuth();
   const [activeTab, setActiveTab] = useState('scraper');
 
   return (
@@ -61,10 +63,10 @@ function Admin() {
 
       {/* Tab Content */}
       {activeTab === 'scraper' && (
-        <CompanyScraperTab company={company} updateCompany={updateCompany} />
+        <CompanyScraperTab company={company} updateCompany={updateCompany} authFetch={authFetch} />
       )}
       {activeTab === 'transcript' && (
-        <TranscriptLoaderTab />
+        <TranscriptLoaderTab authFetch={authFetch} />
       )}
       {activeTab === 'config' && (
         <CompanyConfigTab company={company} updateCompany={updateCompany} />
@@ -89,11 +91,13 @@ function TabButton({ children, active, onClick, icon: Icon }) {
   );
 }
 
-function CompanyScraperTab({ company, updateCompany }) {
+function CompanyScraperTab({ company, updateCompany, authFetch }) {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
+  const [applying, setApplying] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const handleScrape = async () => {
     if (!url) return;
@@ -101,9 +105,10 @@ function CompanyScraperTab({ company, updateCompany }) {
     setLoading(true);
     setError(null);
     setResult(null);
+    setSuccess(null);
 
     try {
-      const response = await fetch('/api/admin/scrape-company', {
+      const response = await authFetch('/api/admin/scrape-company', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url })
@@ -126,23 +131,36 @@ function CompanyScraperTab({ company, updateCompany }) {
   const handleApply = async () => {
     if (!result?.extracted) return;
 
-    const companyData = {
-      name: result.extracted.name || company.name,
-      phone: result.extracted.phone || company.phone,
-      website: url,
-      logo: result.logo,
-      colors: result.colors || company.colors,
-      serviceAreas: result.extracted.serviceAreas || company.serviceAreas,
-      services: result.extracted.services || company.services,
-      pricing: result.extracted.pricing || company.pricing,
-      guarantees: result.extracted.guarantees || company.guarantees,
-      valuePropositions: result.extracted.valuePropositions || company.valuePropositions,
-      businessHours: result.extracted.businessHours || company.businessHours
-    };
+    setApplying(true);
+    setError(null);
+    setSuccess(null);
 
-    await updateCompany(companyData);
-    setResult(null);
-    setUrl('');
+    try {
+      // Map to snake_case for database
+      const companyData = {
+        name: result.extracted.name || company.name,
+        phone: result.extracted.phone || company.phone,
+        website: url,
+        logo_url: result.logo,
+        colors: result.colors || company.colors,
+        service_areas: result.extracted.serviceAreas || company.service_areas,
+        services: result.extracted.services || company.services,
+        pricing: result.extracted.pricing || company.pricing,
+        guarantees: result.extracted.guarantees || company.guarantees,
+        value_propositions: result.extracted.valuePropositions || company.value_propositions,
+        business_hours: result.extracted.businessHours || company.business_hours
+      };
+
+      await updateCompany(companyData);
+      setSuccess('Configuration applied successfully!');
+      setResult(null);
+      setUrl('');
+    } catch (err) {
+      console.error('Apply error:', err);
+      setError(err.message || 'Failed to apply configuration');
+    } finally {
+      setApplying(false);
+    }
   };
 
   return (
@@ -173,6 +191,13 @@ function CompanyScraperTab({ company, updateCompany }) {
             <div className="mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center gap-3">
               <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
               <p className="text-sm text-red-300">{error}</p>
+            </div>
+          )}
+
+          {success && (
+            <div className="mt-4 p-4 bg-green-500/10 border border-green-500/20 rounded-lg flex items-center gap-3">
+              <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+              <p className="text-sm text-green-300">{success}</p>
             </div>
           )}
         </Card.Content>
@@ -275,10 +300,10 @@ function CompanyScraperTab({ company, updateCompany }) {
               </div>
             </Card.Content>
             <Card.Footer className="flex justify-end gap-4">
-              <Button variant="secondary" onClick={() => setResult(null)}>
+              <Button variant="secondary" onClick={() => setResult(null)} disabled={applying}>
                 Cancel
               </Button>
-              <Button onClick={handleApply} icon={CheckCircle}>
+              <Button onClick={handleApply} icon={CheckCircle} loading={applying}>
                 Apply Configuration
               </Button>
             </Card.Footer>
@@ -289,7 +314,7 @@ function CompanyScraperTab({ company, updateCompany }) {
   );
 }
 
-function TranscriptLoaderTab() {
+function TranscriptLoaderTab({ authFetch }) {
   const [transcript, setTranscript] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -303,7 +328,7 @@ function TranscriptLoaderTab() {
     setResult(null);
 
     try {
-      const response = await fetch('/api/admin/load-transcript', {
+      const response = await authFetch('/api/admin/load-transcript', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ transcript })

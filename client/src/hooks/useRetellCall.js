@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { RetellWebClient } from 'retell-client-js-sdk';
+import { useAuth } from '../context/AuthContext';
 
 const CALL_STATES = {
   IDLE: 'idle',
@@ -11,6 +12,7 @@ const CALL_STATES = {
 };
 
 export function useRetellCall() {
+  const { authFetch } = useAuth();
   const [callState, setCallState] = useState(CALL_STATES.IDLE);
   const [transcript, setTranscript] = useState([]);
   const [error, setError] = useState(null);
@@ -21,9 +23,17 @@ export function useRetellCall() {
   const callIdRef = useRef(null);
   const timerRef = useRef(null);
   const startTimeRef = useRef(null);
+  const initializedRef = useRef(false);
+  const startingCallRef = useRef(false);  // Prevent concurrent startCall calls
 
-  // Initialize Retell client
+  // Initialize Retell client - only once
   useEffect(() => {
+    // Prevent double initialization in React 18 Strict Mode
+    if (initializedRef.current) {
+      return;
+    }
+    initializedRef.current = true;
+
     retellClientRef.current = new RetellWebClient();
 
     const client = retellClientRef.current;
@@ -42,6 +52,7 @@ export function useRetellCall() {
     client.on('call_ended', () => {
       console.log('Call ended');
       setCallState(CALL_STATES.ENDED);
+      startingCallRef.current = false;  // Reset for next call
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
@@ -65,25 +76,42 @@ export function useRetellCall() {
       console.error('Retell error:', error);
       setError(error.message || 'An error occurred during the call');
       setCallState(CALL_STATES.ERROR);
+      startingCallRef.current = false;  // Reset on error
     });
 
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
+      // Clean up client on unmount
+      if (retellClientRef.current) {
+        try {
+          retellClientRef.current.stopCall();
+        } catch (e) {
+          // Ignore errors during cleanup
+        }
+      }
     };
   }, []);
 
   // Start a call
   const startCall = useCallback(async (scenario) => {
+    // Prevent concurrent call starts
+    if (startingCallRef.current) {
+      console.log('startCall already in progress, ignoring duplicate call');
+      return;
+    }
+    startingCallRef.current = true;
+
     try {
+      console.log('Starting call for scenario:', scenario.name);
       setCallState(CALL_STATES.CONNECTING);
       setError(null);
       setTranscript([]);
       setCallDuration(0);
 
       // Create training call via backend
-      const response = await fetch('/api/calls/create-training-call', {
+      const response = await authFetch('/api/calls/create-training-call', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -101,19 +129,24 @@ export function useRetellCall() {
       callIdRef.current = data.callId;
 
       // Start the web call
+      console.log('Starting Retell web call with access token');
       await retellClientRef.current.startCall({
         accessToken: data.accessToken,
         sampleRate: data.sampleRate || 24000,
-        captureDeviceId: 'default'
+        captureDeviceId: 'default',
+        playbackDeviceId: 'default',
+        emitRawAudioSamples: false
       });
+      console.log('Retell startCall completed successfully');
 
     } catch (err) {
       console.error('Error starting call:', err);
       setError(err.message);
       setCallState(CALL_STATES.ERROR);
+      startingCallRef.current = false;  // Reset on error
       throw err;
     }
-  }, []);
+  }, [authFetch]);
 
   // End the call
   const endCall = useCallback(async () => {
@@ -125,7 +158,7 @@ export function useRetellCall() {
 
       // End call on backend and get transcript
       if (callIdRef.current) {
-        const response = await fetch('/api/calls/end', {
+        const response = await authFetch('/api/calls/end', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ callId: callIdRef.current })
@@ -155,7 +188,7 @@ export function useRetellCall() {
         duration: callDuration
       };
     }
-  }, [callDuration, transcript]);
+  }, [authFetch, callDuration, transcript]);
 
   // Toggle mute
   const toggleMute = useCallback(() => {
@@ -177,6 +210,7 @@ export function useRetellCall() {
     setCallDuration(0);
     setIsMuted(false);
     callIdRef.current = null;
+    startingCallRef.current = false;  // Reset for retry
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }

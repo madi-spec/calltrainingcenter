@@ -1,0 +1,292 @@
+import { useState, useEffect } from 'react';
+import { useSearchParams, useNavigate, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Lock, Eye, EyeOff, User, UserPlus, AlertCircle, Check, Building2 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+
+export default function AcceptInvite() {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const { acceptInvitation } = useAuth();
+
+  const token = searchParams.get('token');
+
+  const [inviteData, setInviteData] = useState(null);
+  const [formData, setFormData] = useState({
+    fullName: '',
+    password: '',
+    confirmPassword: ''
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+
+  const passwordRequirements = [
+    { text: 'At least 8 characters', test: (p) => p.length >= 8 },
+    { text: 'Contains a number', test: (p) => /\d/.test(p) },
+    { text: 'Contains uppercase letter', test: (p) => /[A-Z]/.test(p) },
+    { text: 'Contains lowercase letter', test: (p) => /[a-z]/.test(p) }
+  ];
+
+  // Verify the invitation token
+  useEffect(() => {
+    const verifyToken = async () => {
+      if (!token) {
+        setError('Invalid invitation link');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/auth/verify-invite?token=${token}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Invalid or expired invitation');
+        }
+
+        setInviteData(data);
+        setFormData((prev) => ({ ...prev, fullName: data.full_name || '' }));
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    verifyToken();
+  }, [token]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setError('');
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    // Validate password
+    if (!passwordRequirements.every((req) => req.test(formData.password))) {
+      setError('Password does not meet requirements');
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    setSubmitting(true);
+
+    try {
+      await acceptInvitation(token, formData.password, formData.fullName);
+      navigate('/', { replace: true });
+    } catch (err) {
+      setError(err.message || 'Failed to accept invitation');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500 mx-auto mb-4"></div>
+          <p className="text-gray-400">Verifying invitation...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && !inviteData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-md text-center"
+        >
+          <div className="bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-700">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-red-500/10 rounded-full mb-4">
+              <AlertCircle className="w-8 h-8 text-red-400" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-100 mb-2">Invalid Invitation</h1>
+            <p className="text-gray-400 mb-6">{error}</p>
+            <Link
+              to="/auth/login"
+              className="inline-flex items-center justify-center py-3 px-6 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors"
+            >
+              Go to Login
+            </Link>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4 py-12">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full max-w-md"
+      >
+        <div className="bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-700">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-500/10 rounded-full mb-4">
+              <UserPlus className="w-8 h-8 text-primary-500" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-100">Join Your Team</h1>
+            <p className="text-gray-400 mt-2">
+              You've been invited to join{' '}
+              <span className="text-primary-400 font-medium">{inviteData?.organization_name}</span>
+            </p>
+          </div>
+
+          {/* Invite Info */}
+          <div className="mb-6 p-4 bg-gray-700/50 rounded-lg">
+            <div className="flex items-center gap-3">
+              <div className="flex-shrink-0 w-10 h-10 bg-primary-500/10 rounded-full flex items-center justify-center">
+                <Building2 className="w-5 h-5 text-primary-400" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-400">You're joining as</p>
+                <p className="text-gray-200 font-medium capitalize">{inviteData?.role || 'Team Member'}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Error Message */}
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center gap-3"
+            >
+              <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+              <p className="text-red-400 text-sm">{error}</p>
+            </motion.div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Full Name */}
+            <div>
+              <label htmlFor="fullName" className="block text-sm font-medium text-gray-300 mb-2">
+                Full Name
+              </label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <input
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="John Smith"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Email (Read-only) */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Email Address
+              </label>
+              <div className="py-3 px-4 bg-gray-700/50 border border-gray-600 rounded-lg text-gray-400">
+                {inviteData?.email}
+              </div>
+            </div>
+
+            {/* Password */}
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
+                Create Password
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="w-full pl-10 pr-12 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="Create a strong password"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+              {/* Password Requirements */}
+              <div className="mt-3 space-y-2">
+                {passwordRequirements.map((req, i) => (
+                  <div
+                    key={i}
+                    className={`flex items-center gap-2 text-sm ${
+                      req.test(formData.password) ? 'text-green-400' : 'text-gray-500'
+                    }`}
+                  >
+                    <Check className={`w-4 h-4 ${req.test(formData.password) ? 'opacity-100' : 'opacity-30'}`} />
+                    {req.text}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Confirm Password */}
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-2">
+                Confirm Password
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="Confirm your password"
+                  required
+                />
+              </div>
+              {formData.confirmPassword && formData.password !== formData.confirmPassword && (
+                <p className="mt-2 text-sm text-red-400">Passwords do not match</p>
+              )}
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={submitting}
+              className="w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+            >
+              {submitting ? (
+                <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+              ) : (
+                <>
+                  <UserPlus className="w-5 h-5" />
+                  Accept Invitation
+                </>
+              )}
+            </button>
+          </form>
+        </div>
+      </motion.div>
+    </div>
+  );
+}

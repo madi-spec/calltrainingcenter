@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import Anthropic from '@anthropic-ai/sdk';
@@ -5,11 +6,41 @@ import Retell from 'retell-sdk';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
+// Import route handlers
+import authRoutes from './routes/auth.js';
+import trainingRoutes from './routes/training.js';
+import assignmentsRoutes from './routes/assignments.js';
+import suitesRoutes from './routes/suites.js';
+import branchesRoutes from './routes/branches.js';
+import billingRoutes from './routes/billing.js';
+import reportsRoutes from './routes/reports.js';
+import gamificationRoutes from './routes/gamification.js';
+import notificationsRoutes from './routes/notifications.js';
+import usersRoutes from './routes/users.js';
+import productsRoutes from './routes/products.js';
+import teamsRoutes from './routes/teams.js';
+import coursesRoutes from './routes/courses.js';
+import modulesRoutes from './routes/modules.js';
+import practiceRoutes from './routes/practice.js';
+import organizationsRoutes from './routes/organizations.js';
+import invitationsRoutes from './routes/invitations.js';
+import generatedScenariosRoutes from './routes/generatedScenarios.js';
+
+// Import middleware and helpers
+import { optionalAuthMiddleware } from './lib/auth.js';
+import { createAdminClient, TABLES } from './lib/supabase.js';
+
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
+
+// Request logging
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} ${req.method} ${req.path}`);
+  next();
+});
 
 // ============ UTILITIES ============
 
@@ -33,7 +64,7 @@ function getNestedValue(obj, path) {
   return current;
 }
 
-// Default config (in-memory for serverless)
+// Default config (in-memory for serverless - will be replaced by org settings from DB)
 let configStore = {
   company: {
     name: 'Accel Pest & Termite Control',
@@ -48,7 +79,7 @@ let configStore = {
     valuePropositions: ['QualityPro accredited company', 'Same day service available', '98% customer satisfaction'],
     businessHours: 'Mon-Sat 7am-7pm'
   },
-  settings: { defaultVoiceId: '11labs-Adrian', callTimeout: 600000 }
+  settings: { defaultVoiceId: '11labs-Brian', callTimeout: 600000 }
 };
 
 // Scenarios data
@@ -62,7 +93,7 @@ const scenarios = [
     customerName: 'Margaret Thompson',
     personality: 'Direct, frustrated but reasonable, values being heard',
     emotionalState: 'Frustrated, considering leaving',
-    voiceId: '11labs-Dorothy',
+    voiceId: '11labs-Aria',
     situation: 'Margaret has been a {{company.name}} customer for 3 years but wants to cancel after seeing a competitor\'s lower price ($99/quarter vs your ${{company.pricing.quarterlyPrice}}/quarter). She\'s not angry, just practical about money.',
     customerBackground: 'Retired teacher, been with {{company.name}} for 3 years, always paid on time. Saw a mailer from a competitor offering $99/quarter service.',
     openingLine: 'Hi, I need to cancel my pest control service please.',
@@ -84,7 +115,7 @@ const scenarios = [
     customerName: 'David Martinez',
     personality: 'Hot-tempered, loud, but fair when truly heard',
     emotionalState: 'Extremely angry, feeling ignored',
-    voiceId: '11labs-Josh',
+    voiceId: '11labs-Jason',
     situation: 'David had a technician visit yesterday for ants. This morning he woke up to ants all over his kitchen counter - worse than before. This is the second time treatment hasn\'t worked.',
     customerBackground: 'Young professional, busy schedule. Had ant treatment 3 weeks ago that didn\'t work, technician came again yesterday, now ants are worse.',
     openingLine: 'I am SO done with you people! I need to speak to a manager RIGHT NOW!',
@@ -106,7 +137,7 @@ const scenarios = [
     customerName: 'Jennifer Walsh',
     personality: 'Analytical, comparison-focused, skeptical of sales pitches',
     emotionalState: 'Neutral, evaluating options',
-    voiceId: '11labs-Myra',
+    voiceId: '11labs-Jenny',
     situation: 'Jennifer is calling {{company.name}} as part of her research - she\'s getting quotes from 3 companies. She\'s focused purely on price.',
     customerBackground: 'New homeowner, first time hiring pest control. Has already called one competitor who quoted $89/quarter. Very analytical.',
     openingLine: 'Hi, I\'m just calling to get a quote for quarterly pest control service.',
@@ -128,7 +159,7 @@ const scenarios = [
     customerName: 'Michael Torres',
     personality: 'Friendly, new to pest control, asks lots of questions',
     emotionalState: 'Curious, slightly anxious about pest issue',
-    voiceId: '11labs-Adrian',
+    voiceId: '11labs-Josh',
     situation: 'Michael just moved into a new home and found some roaches in the kitchen. He\'s never hired pest control before and has basic questions.',
     customerBackground: 'First-time homeowner, 28 years old, just moved in last week. Found roaches and is a bit grossed out.',
     openingLine: 'Hi, um, I just moved into a new house and I\'ve been seeing some roaches. I\'ve never had to deal with this before - how does pest control work?',
@@ -150,7 +181,7 @@ const scenarios = [
     customerName: 'Karen Mitchell',
     personality: 'Panicked but cooperative, needs reassurance',
     emotionalState: 'Scared, anxious, needs immediate help',
-    voiceId: '11labs-Myra',
+    voiceId: '11labs-Jenny',
     situation: 'Karen can hear scratching and movement in her attic - she thinks there\'s an animal up there. She\'s home alone with her kids and is scared.',
     customerBackground: 'Existing customer, single mom with two young kids (ages 5 and 7). Home alone, scared of what might be in the attic.',
     openingLine: 'Oh thank god you answered! There\'s something in my attic - I can hear it moving around up there. I\'m here alone with my kids and I don\'t know what to do!',
@@ -186,63 +217,84 @@ function getRetellClient() {
 
 // ============ PROMPTS ============
 
-function buildAgentPrompt(scenario, company) {
-  const companyName = company.name || 'the pest control company';
-  const quarterlyPrice = company.pricing?.quarterlyPrice || '149';
-  const services = company.services?.join(', ') || 'pest control services';
-
-  return `You are playing the role of a customer calling ${companyName}. You are participating in a training simulation for customer service representatives.
+// Default prompt templates (can be overridden by organization settings)
+const DEFAULT_AGENT_PROMPT_TEMPLATE = `You are playing the role of a customer calling {{company.name}}. You are participating in a training simulation for customer service representatives.
 
 ## Your Character
-Name: ${scenario.customerName || 'Customer'}
-Personality: ${scenario.personality || 'Average customer'}
-Emotional State: ${scenario.emotionalState || 'Neutral'}
-Background: ${scenario.customerBackground || 'Regular customer'}
+Name: {{scenario.customerName}}
+Personality: {{scenario.personality}}
+Emotional State: {{scenario.emotionalState}}
+Background: {{scenario.customerBackground}}
 
 ## The Situation
-${scenario.situation || 'You are calling about a pest control issue.'}
+{{scenario.situation}}
 
 ## Your Goals
-${scenario.customerGoals || 'Get your issue resolved satisfactorily.'}
+{{scenario.customerGoals}}
 
 ## How to Behave
 - Stay in character throughout the call
 - React naturally to what the CSR says
-- ${scenario.escalationTriggers ? `Escalate if: ${scenario.escalationTriggers}` : 'Escalate if the CSR is dismissive or unhelpful'}
-- ${scenario.deescalationTriggers ? `Calm down if: ${scenario.deescalationTriggers}` : 'Calm down if the CSR shows genuine empathy'}
+- Escalate if: {{scenario.escalationTriggers}}
+- Calm down if: {{scenario.deescalationTriggers}}
 - Use natural speech patterns with occasional filler words
 - Don't be a pushover - advocate for yourself realistically
 
 ## Company Context
-- Company: ${companyName}
-- Services: ${services}
-- Quarterly price: $${quarterlyPrice}
-${company.guarantees ? `- Guarantee: ${company.guarantees[0]}` : ''}
+- Company: {{company.name}}
+- Services: {{company.services}}
+- Quarterly price: ${'$'}{{company.pricing.quarterlyPrice}}
+- Guarantee: {{company.guarantees}}
 
 ## Resolution Conditions
-${scenario.resolutionConditions || 'Accept a reasonable solution that addresses your concerns.'}
+{{scenario.resolutionConditions}}
 
 Remember: This is training - challenge the CSR but be fair.`;
-}
 
-function buildCoachingPrompt(transcript, context) {
-  const { scenario, company, callDuration } = context;
-  const companyName = company?.name || 'the company';
-
-  const system = `You are an expert CSR coach specializing in pest control customer service training.
+const DEFAULT_COACHING_SYSTEM_PROMPT = `You are an expert CSR coach specializing in pest control customer service training.
 Provide detailed, constructive feedback on call performance.
+You have deep knowledge of the company's products, services, and recommended objection responses.
 Always respond with valid JSON matching the exact schema provided.`;
 
-  const user = `Analyze this CSR training call and provide a comprehensive coaching scorecard.
+const DEFAULT_COACHING_USER_PROMPT = `Analyze this CSR training call and provide a comprehensive coaching scorecard.
 
 ## Call Context
-- Scenario: ${scenario?.name || 'Customer Service Call'}
-- Difficulty: ${scenario?.difficulty || 'Medium'}
-- Company: ${companyName}
-- Call Duration: ${callDuration ? Math.round(callDuration) + ' seconds' : 'Unknown'}
+- Scenario: {{scenario.name}}
+- Difficulty: {{scenario.difficulty}}
+- Company: {{company.name}}
+- Call Duration: {{callDuration}} seconds
+
+{{#if productContext}}
+## Company Products & Services
+
+### Service Packages
+{{#each productContext.packages}}
+- **{{name}}**: ${'$'}{{price}}/{{frequency}}
+  - Selling Points: {{sellingPoints}}
+{{/each}}
+
+### Key Objection Responses
+{{#each productContext.objections}}
+- Objection: "{{objection}}"
+  - Recommended Response: "{{response}}"
+{{/each}}
+
+### Competitor Information
+{{#each productContext.competitors}}
+- {{name}}: {{pricing}}
+  - Our Advantages: {{advantages}}
+{{/each}}
+{{/if}}
 
 ## Transcript
-${transcript}
+{{transcript}}
+
+## Scoring Guidelines
+When evaluating Product Knowledge, consider:
+- Did the CSR accurately describe service packages and pricing?
+- Did the CSR effectively use selling points when appropriate?
+- Did the CSR handle price objections using recommended responses?
+- Did the CSR differentiate from competitors when mentioned?
 
 Respond with JSON:
 {
@@ -250,18 +302,198 @@ Respond with JSON:
   "categories": {
     "empathyRapport": { "score": 0-100, "feedback": "Specific feedback", "keyMoments": [] },
     "problemResolution": { "score": 0-100, "feedback": "Specific feedback", "keyMoments": [] },
-    "productKnowledge": { "score": 0-100, "feedback": "Specific feedback", "keyMoments": [] },
+    "productKnowledge": { "score": 0-100, "feedback": "Feedback on product/service knowledge accuracy", "keyMoments": [] },
     "professionalism": { "score": 0-100, "feedback": "Specific feedback", "keyMoments": [] },
     "scenarioSpecific": { "score": 0-100, "feedback": "Specific feedback", "keyMoments": [] }
   },
   "strengths": [{ "title": "Strength", "description": "Why effective", "quote": "Quote" }],
-  "improvements": [{ "title": "Area", "issue": "What went wrong", "quote": "What they said", "alternative": "Better response for ${companyName}" }],
-  "keyMoment": { "timestamp": "When", "description": "What happened", "impact": "Effect", "betterApproach": "Alternative" },
+  "improvements": [{ "title": "Area", "issue": "What went wrong", "quote": "What they said", "alternative": "Better response for {{company.name}}" }],
+  "keyMoment": { "timestamp": "When", "description": "What happened", "impact": "Effect", "betterApproach": "Alternative using company products/services" },
   "summary": "2-3 sentence assessment",
   "nextSteps": ["Action 1", "Action 2", "Action 3"]
 }`;
 
+function buildAgentPrompt(scenario, company, customTemplate = null) {
+  const template = customTemplate || DEFAULT_AGENT_PROMPT_TEMPLATE;
+
+  // Build context for template replacement
+  const context = {
+    company: {
+      name: company.name || 'the pest control company',
+      services: company.services?.join(', ') || 'pest control services',
+      pricing: {
+        quarterlyPrice: company.pricing?.quarterlyPrice || '149'
+      },
+      guarantees: company.guarantees?.[0] || ''
+    },
+    scenario: {
+      customerName: scenario.customerName || 'Customer',
+      personality: scenario.personality || 'Average customer',
+      emotionalState: scenario.emotionalState || 'Neutral',
+      customerBackground: scenario.customerBackground || 'Regular customer',
+      situation: scenario.situation || 'You are calling about a pest control issue.',
+      customerGoals: scenario.customerGoals || 'Get your issue resolved satisfactorily.',
+      escalationTriggers: scenario.escalationTriggers || 'the CSR is dismissive or unhelpful',
+      deescalationTriggers: scenario.deescalationTriggers || 'the CSR shows genuine empathy',
+      resolutionConditions: scenario.resolutionConditions || 'Accept a reasonable solution that addresses your concerns.'
+    }
+  };
+
+  return processTemplate(template, context);
+}
+
+function buildCoachingPrompt(transcript, context, customTemplates = null) {
+  const { scenario, company, callDuration, productContext } = context;
+
+  const systemTemplate = customTemplates?.system || DEFAULT_COACHING_SYSTEM_PROMPT;
+  let userTemplate = customTemplates?.user || DEFAULT_COACHING_USER_PROMPT;
+
+  // Build product context section if available
+  let productSection = '';
+  if (productContext && productContext.hasProducts) {
+    productSection = `
+## Company Products & Services
+
+### Service Packages
+${productContext.packages?.map(pkg => `- **${pkg.name}**: $${pkg.price}/${pkg.frequency || 'service'}
+  - Selling Points: ${pkg.sellingPoints?.join(', ') || 'N/A'}`).join('\n') || 'No packages configured'}
+
+### Key Objection Responses
+${productContext.objections?.slice(0, 5).map(obj => `- Objection: "${obj.objection}"
+  - Recommended Response: "${obj.response}"`).join('\n') || 'No objection responses configured'}
+
+### Competitor Information
+${productContext.competitors?.map(comp => `- ${comp.name}: ${comp.pricing || 'Pricing unknown'}
+  - Our Advantages: ${comp.ourAdvantages?.join(', ') || 'N/A'}`).join('\n') || 'No competitor info configured'}
+${productContext.guidelines?.length > 0 ? `
+### Sales Guidelines
+${productContext.guidelines.map(g => `- **${g.title || g.type}**: ${g.content}`).join('\n')}` : ''}
+`;
+    // Replace the placeholder section with actual content
+    userTemplate = userTemplate.replace(/\{\{#if productContext\}\}[\s\S]*?\{\{\/if\}\}/g, productSection);
+  } else {
+    // Remove the productContext section if not available
+    userTemplate = userTemplate.replace(/\{\{#if productContext\}\}[\s\S]*?\{\{\/if\}\}/g, '');
+  }
+
+  // Build context for template replacement
+  const templateContext = {
+    company: {
+      name: company?.name || 'the company'
+    },
+    scenario: {
+      name: scenario?.name || 'Customer Service Call',
+      difficulty: scenario?.difficulty || 'Medium'
+    },
+    callDuration: callDuration ? Math.round(callDuration) : 'Unknown',
+    transcript: transcript
+  };
+
+  const system = processTemplate(systemTemplate, templateContext);
+  const user = processTemplate(userTemplate, templateContext);
+
   return { system, user };
+}
+
+/**
+ * Fetch product context for coaching analysis
+ */
+async function getProductContext(organizationId) {
+  if (!organizationId) return null;
+
+  try {
+    const adminClient = createAdminClient();
+
+    // Fetch packages with selling points
+    const { data: packages } = await adminClient
+      .from('service_packages')
+      .select(`
+        name,
+        recurring_price,
+        initial_price,
+        service_frequency,
+        selling_points:package_selling_points(point),
+        objections:package_objections(objection_text, recommended_response)
+      `)
+      .eq('organization_id', organizationId)
+      .eq('is_active', true)
+      .limit(5);
+
+    // Fetch competitors
+    const { data: competitors } = await adminClient
+      .from('competitor_info')
+      .select('name, typical_pricing, our_advantages')
+      .eq('organization_id', organizationId)
+      .eq('is_active', true)
+      .limit(5);
+
+    // Fetch sales guidelines
+    const { data: guidelines } = await adminClient
+      .from('sales_guidelines')
+      .select('guideline_type, title, content')
+      .eq('organization_id', organizationId)
+      .eq('is_active', true)
+      .limit(10);
+
+    // Collect all objections
+    const allObjections = [];
+    packages?.forEach(pkg => {
+      pkg.objections?.forEach(obj => {
+        allObjections.push({
+          objection: obj.objection_text,
+          response: obj.recommended_response
+        });
+      });
+    });
+
+    return {
+      hasProducts: (packages?.length || 0) > 0 || (guidelines?.length || 0) > 0,
+      packages: packages?.map(pkg => ({
+        name: pkg.name,
+        price: pkg.recurring_price || pkg.initial_price,
+        frequency: pkg.service_frequency,
+        sellingPoints: pkg.selling_points?.map(sp => sp.point) || []
+      })) || [],
+      objections: allObjections,
+      competitors: competitors?.map(c => ({
+        name: c.name,
+        pricing: c.typical_pricing,
+        ourAdvantages: c.our_advantages || []
+      })) || [],
+      guidelines: guidelines?.map(g => ({
+        type: g.guideline_type,
+        title: g.title,
+        content: g.content
+      })) || []
+    };
+  } catch (error) {
+    console.error('Error fetching product context:', error);
+    return null;
+  }
+}
+
+// ============ HELPER TO GET COMPANY CONFIG ============
+
+async function getCompanyConfig(req) {
+  // If authenticated, get org settings from database
+  if (req.organization) {
+    return {
+      name: req.organization.name,
+      phone: req.organization.phone,
+      website: req.organization.website,
+      logo: req.organization.logo_url,
+      colors: req.organization.colors,
+      services: req.organization.services,
+      serviceAreas: req.organization.service_areas,
+      pricing: req.organization.pricing,
+      guarantees: req.organization.guarantees,
+      valuePropositions: req.organization.value_propositions,
+      businessHours: req.organization.business_hours,
+      ...req.organization.settings
+    };
+  }
+  // Fallback to in-memory config
+  return configStore.company;
 }
 
 // ============ ROUTES ============
@@ -271,17 +503,64 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Get config
-app.get('/api/admin/current-config', (req, res) => {
-  res.json(configStore);
+// Mount modular routes
+app.use('/api/auth', authRoutes);
+app.use('/api/training', trainingRoutes);
+app.use('/api/assignments', assignmentsRoutes);
+app.use('/api/suites', suitesRoutes);
+app.use('/api/branches', branchesRoutes);
+app.use('/api/billing', billingRoutes);
+app.use('/api/reports', reportsRoutes);
+app.use('/api/gamification', gamificationRoutes);
+app.use('/api/notifications', notificationsRoutes);
+app.use('/api/users', usersRoutes);
+app.use('/api/products', productsRoutes);
+app.use('/api/teams', teamsRoutes);
+app.use('/api/courses', coursesRoutes);
+app.use('/api/modules', modulesRoutes);
+app.use('/api/practice', practiceRoutes);
+app.use('/api/organizations', organizationsRoutes);
+app.use('/api/generated-scenarios', generatedScenariosRoutes);
+app.use('/api/invitations', invitationsRoutes);
+
+// ============ LEGACY ROUTES (maintain backward compatibility) ============
+
+// Get config (with optional auth to get org-specific config)
+app.get('/api/admin/current-config', optionalAuthMiddleware, async (req, res) => {
+  const company = await getCompanyConfig(req);
+  res.json({ company, settings: configStore.settings });
 });
 
 // Update config
-app.post('/api/admin/apply-company', (req, res) => {
+app.post('/api/admin/apply-company', optionalAuthMiddleware, async (req, res) => {
   const { companyData } = req.body;
+
+  // If authenticated, save to organization
+  if (req.organization) {
+    try {
+      const adminClient = createAdminClient();
+      await adminClient
+        .from(TABLES.ORGANIZATIONS)
+        .update({
+          name: companyData.name,
+          phone: companyData.phone,
+          website: companyData.website,
+          logo_url: companyData.logo,
+          colors: companyData.colors,
+          services: companyData.services,
+          pricing: companyData.pricing
+        })
+        .eq('id', req.organization.id);
+    } catch (error) {
+      console.error('Error saving to database:', error);
+    }
+  }
+
+  // Also update in-memory for non-authenticated use
   if (companyData) {
     configStore.company = { ...configStore.company, ...companyData };
   }
+
   res.json({ success: true, config: configStore.company });
 });
 
@@ -336,8 +615,8 @@ app.post('/api/admin/scrape-company', async (req, res) => {
 });
 
 // Get scenarios
-app.get('/api/scenarios', (req, res) => {
-  const company = configStore.company;
+app.get('/api/scenarios', optionalAuthMiddleware, async (req, res) => {
+  const company = await getCompanyConfig(req);
   const processed = scenarios.map(s => ({
     ...s,
     situation: processTemplate(s.situation, { company }),
@@ -347,11 +626,11 @@ app.get('/api/scenarios', (req, res) => {
 });
 
 // Get single scenario
-app.get('/api/scenarios/:id', (req, res) => {
+app.get('/api/scenarios/:id', optionalAuthMiddleware, async (req, res) => {
   const scenario = scenarios.find(s => s.id === req.params.id);
   if (!scenario) return res.status(404).json({ error: 'Scenario not found' });
 
-  const company = configStore.company;
+  const company = await getCompanyConfig(req);
   const processed = {
     ...scenario,
     situation: processTemplate(scenario.situation, { company }),
@@ -360,44 +639,60 @@ app.get('/api/scenarios/:id', (req, res) => {
   res.json({ success: true, scenario: processed });
 });
 
-// Get voices
-app.get('/api/scenarios/meta/voices', (req, res) => {
-  res.json({
-    success: true,
-    voices: [
-      { id: '11labs-Adrian', name: 'Adrian', gender: 'male' },
-      { id: '11labs-Myra', name: 'Myra', gender: 'female' },
-      { id: '11labs-Dorothy', name: 'Dorothy', gender: 'female' },
-      { id: '11labs-Josh', name: 'Josh', gender: 'male' }
-    ]
-  });
+// Get voices from Retell
+app.get('/api/scenarios/meta/voices', async (req, res) => {
+  try {
+    const voices = await getRetellClient().voice.list();
+    res.json({
+      success: true,
+      voices: voices.map(v => ({
+        id: v.voice_id,
+        name: v.voice_name,
+        gender: v.gender,
+        provider: v.provider
+      }))
+    });
+  } catch (error) {
+    res.json({
+      success: true,
+      voices: [
+        { id: '11labs-Jason', name: 'Jason', gender: 'male' },
+        { id: '11labs-Josh', name: 'Josh', gender: 'male' },
+        { id: '11labs-Jenny', name: 'Jenny', gender: 'female' },
+        { id: '11labs-Aria', name: 'Aria', gender: 'female' }
+      ],
+      error: 'Could not fetch from Retell: ' + error.message
+    });
+  }
 });
 
-// Debug endpoint to check env vars
-app.get('/api/debug/env', (req, res) => {
-  const retellKey = process.env.RETELL_API_KEY || '';
-  const anthropicKey = process.env.ANTHROPIC_API_KEY || '';
-
-  res.json({
-    hasRetellKey: !!retellKey,
-    retellKeyLength: retellKey.length,
-    retellKeyPrefix: retellKey ? retellKey.substring(0, 10) : 'NOT SET',
-    retellKeyValid: retellKey.startsWith('key_'),
-    hasAnthropicKey: !!anthropicKey,
-    anthropicKeyLength: anthropicKey.length,
-    anthropicKeyPrefix: anthropicKey ? anthropicKey.substring(0, 15) : 'NOT SET',
-    anthropicKeyValid: anthropicKey.startsWith('sk-ant-'),
-    envVarNames: Object.keys(process.env).filter(k => k.includes('RETELL') || k.includes('ANTHROPIC'))
-  });
-});
+// Track active call creation to prevent duplicates
+const activeCallCreations = new Map();
 
 // Create training call
-app.post('/api/calls/create-training-call', async (req, res) => {
+app.post('/api/calls/create-training-call', optionalAuthMiddleware, async (req, res) => {
   try {
     const { scenario } = req.body;
     if (!scenario) return res.status(400).json({ error: 'Scenario is required' });
 
-    // Check for API key
+    // Use client IP + scenario ID to prevent rapid duplicate calls
+    const clientKey = `${req.ip || 'unknown'}-${scenario.id}`;
+    const now = Date.now();
+    const lastCall = activeCallCreations.get(clientKey);
+
+    if (lastCall && (now - lastCall) < 5000) {
+      console.log(`[DUPLICATE BLOCKED] Call creation blocked for ${clientKey} - too soon after last call`);
+      return res.status(429).json({ error: 'Please wait before starting another call' });
+    }
+    activeCallCreations.set(clientKey, now);
+
+    // Clean up old entries
+    for (const [key, timestamp] of activeCallCreations) {
+      if (now - timestamp > 60000) activeCallCreations.delete(key);
+    }
+
+    console.log(`[CALL CREATE] Creating call for scenario: ${scenario.name}`);
+
     const retellKey = process.env.RETELL_API_KEY || '';
     if (!retellKey) {
       return res.status(500).json({ error: 'RETELL_API_KEY not configured' });
@@ -410,7 +705,9 @@ app.post('/api/calls/create-training-call', async (req, res) => {
       });
     }
 
-    const company = configStore.company;
+    const company = await getCompanyConfig(req);
+    const customPrompts = req.organization?.settings?.customPrompts || null;
+
     const processedScenario = {
       ...scenario,
       systemPrompt: processTemplate(scenario.systemPrompt, { company }),
@@ -418,33 +715,33 @@ app.post('/api/calls/create-training-call', async (req, res) => {
       situation: processTemplate(scenario.situation, { company })
     };
 
-    const agentPrompt = buildAgentPrompt(processedScenario, company);
+    const agentPrompt = buildAgentPrompt(processedScenario, company, customPrompts?.agent);
 
-    console.log('Creating LLM with Retell...');
-    // Create LLM
+    // Build opening instruction into prompt to prevent echo from begin_message
+    const openingLine = processedScenario.openingLine || 'Hello?';
+    const promptWithOpening = agentPrompt + `\n\n## Opening Line\nWhen the call starts, begin by saying: "${openingLine}"`;
+
     const llm = await getRetellClient().llm.create({
       model: 'gpt-4o',
-      general_prompt: agentPrompt,
-      begin_message: processedScenario.openingLine || 'Hello?'
+      general_prompt: promptWithOpening
+      // Note: begin_message removed to prevent echo/overlap issues
     });
-    console.log('LLM created:', llm.llm_id);
 
-    console.log('Creating agent...');
-    // Create agent
     const agent = await getRetellClient().agent.create({
       agent_name: `CSR Training - ${processedScenario.name}`,
       response_engine: { type: 'retell-llm', llm_id: llm.llm_id },
-      voice_id: scenario.voiceId || '11labs-Adrian',
-      language: 'en-US'
+      voice_id: scenario.voiceId || '11labs-Brian',
+      language: 'en-US',
+      enable_backchannel: false,  // Disable to prevent echo/feedback
+      responsiveness: 1.0,  // Respond quickly without overlap
+      interruption_sensitivity: 0.8
     });
-    console.log('Agent created:', agent.agent_id);
 
-    console.log('Creating web call...');
-    // Create web call
     const webCall = await getRetellClient().call.createWebCall({
       agent_id: agent.agent_id
     });
-    console.log('Web call created:', webCall.call_id);
+
+    console.log(`[CALL CREATE SUCCESS] callId: ${webCall.call_id}, agentId: ${agent.agent_id}`);
 
     res.json({
       success: true,
@@ -454,44 +751,10 @@ app.post('/api/calls/create-training-call', async (req, res) => {
       sampleRate: webCall.sample_rate || 24000
     });
   } catch (error) {
-    console.error('Error creating call:', error);
-    const errorDetails = {
+    console.error('[CALL CREATE ERROR]', error);
+    res.status(500).json({
       error: error.message || 'Unknown error',
       type: error.constructor.name,
-      status: error.status || error.statusCode,
-      details: error.error || error.body || null,
-      stack: process.env.NODE_ENV !== 'production' ? error.stack : undefined,
-      retellKeyConfigured: !!process.env.RETELL_API_KEY,
-      retellKeyValid: (process.env.RETELL_API_KEY || '').startsWith('key_')
-    };
-    res.status(500).json(errorDetails);
-  }
-});
-
-// Test Retell connection
-app.get('/api/debug/test-retell', async (req, res) => {
-  try {
-    const retellKey = process.env.RETELL_API_KEY || '';
-    if (!retellKey.startsWith('key_')) {
-      return res.status(400).json({
-        success: false,
-        error: 'Invalid Retell API key format',
-        keyPrefix: retellKey.substring(0, 5),
-        expectedPrefix: 'key_'
-      });
-    }
-
-    // Try to list agents as a simple test
-    const agents = await getRetellClient().agent.list();
-    res.json({
-      success: true,
-      message: 'Retell connection successful',
-      agentCount: agents?.length || 0
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
       status: error.status || error.statusCode
     });
   }
@@ -523,13 +786,25 @@ app.post('/api/calls/end', async (req, res) => {
 });
 
 // Analyze transcript
-app.post('/api/analysis/analyze', async (req, res) => {
+app.post('/api/analysis/analyze', optionalAuthMiddleware, async (req, res) => {
   try {
     const { transcript, scenario, callDuration } = req.body;
     if (!transcript) return res.status(400).json({ error: 'Transcript is required' });
 
-    const company = configStore.company;
-    const { system, user } = buildCoachingPrompt(transcript, { scenario, company, callDuration });
+    const company = await getCompanyConfig(req);
+    const customPrompts = req.organization?.settings?.customPrompts || null;
+
+    // Fetch product context for authenticated users
+    let productContext = null;
+    if (req.organization?.id) {
+      productContext = await getProductContext(req.organization.id);
+    }
+
+    const { system, user } = buildCoachingPrompt(
+      transcript,
+      { scenario, company, callDuration, productContext },
+      customPrompts?.coaching
+    );
 
     const response = await getAnthropicClient().messages.create({
       model: 'claude-sonnet-4-20250514',
@@ -574,5 +849,291 @@ app.post('/api/admin/load-transcript', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Organization update endpoint
+app.patch('/api/organization', optionalAuthMiddleware, async (req, res) => {
+  try {
+    console.log('PATCH /api/organization - user:', req.user?.id, 'org:', req.organization?.id);
+    console.log('Update body:', JSON.stringify(req.body, null, 2));
+
+    if (!req.organization) {
+      console.log('No organization found on request');
+      return res.status(401).json({ error: 'Authentication required - no organization found' });
+    }
+
+    const adminClient = createAdminClient();
+    const { data, error } = await adminClient
+      .from(TABLES.ORGANIZATIONS)
+      .update(req.body)
+      .eq('id', req.organization.id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Database update error:', error);
+      throw error;
+    }
+
+    console.log('Organization updated successfully');
+    res.json({ organization: data });
+  } catch (error) {
+    console.error('Organization update error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ============ PROMPT VIEWER ENDPOINTS ============
+
+// Get prompt templates for admin viewing
+app.get('/api/admin/prompts', optionalAuthMiddleware, async (req, res) => {
+  try {
+    const company = await getCompanyConfig(req);
+
+    // Get a sample scenario to show template with real values
+    const sampleScenario = scenarios[0]; // Use "The Cancellation Save"
+    const processedScenario = {
+      ...sampleScenario,
+      systemPrompt: processTemplate(sampleScenario.systemPrompt, { company }),
+      customerBackground: processTemplate(sampleScenario.customerBackground, { company }),
+      situation: processTemplate(sampleScenario.situation, { company })
+    };
+
+    // Build the actual prompts as they would be used
+    const agentPrompt = buildAgentPrompt(processedScenario, company);
+    const coachingPrompts = buildCoachingPrompt(
+      '[Sample transcript would appear here]',
+      { scenario: processedScenario, company, callDuration: 300 }
+    );
+
+    res.json({
+      success: true,
+      prompts: {
+        agent: {
+          name: 'Scenario Agent Prompt',
+          description: 'This prompt defines how the AI customer behaves during training calls. It includes the customer persona, situation context, and behavioral guidelines.',
+          template: agentPrompt,
+          templateVariables: [
+            { name: '{{company.name}}', description: 'Your company name', value: company.name },
+            { name: '{{company.pricing.quarterlyPrice}}', description: 'Quarterly service price', value: company.pricing?.quarterlyPrice },
+            { name: '{{company.services}}', description: 'List of services offered', value: company.services?.join(', ') },
+            { name: '{{company.guarantees}}', description: 'Service guarantees', value: company.guarantees?.[0] }
+          ]
+        },
+        coaching: {
+          name: 'Coaching Analysis Prompt',
+          description: 'This prompt is used to analyze call transcripts and generate performance feedback and scores.',
+          systemPrompt: coachingPrompts.system,
+          userPrompt: coachingPrompts.user,
+          outputSchema: {
+            overallScore: '0-100 overall performance score',
+            categories: 'Scores and feedback for each category (empathy, resolution, knowledge, professionalism, scenario-specific)',
+            strengths: 'Array of things the CSR did well with quotes',
+            improvements: 'Array of areas to improve with alternative responses',
+            keyMoment: 'The most impactful moment in the call',
+            summary: 'Brief overall assessment',
+            nextSteps: 'Action items for improvement'
+          }
+        }
+      },
+      sampleScenario: {
+        id: processedScenario.id,
+        name: processedScenario.name,
+        customerName: processedScenario.customerName
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching prompts:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get prompt template with specific scenario
+app.get('/api/admin/prompts/:scenarioId', optionalAuthMiddleware, async (req, res) => {
+  try {
+    const scenario = scenarios.find(s => s.id === req.params.scenarioId);
+    if (!scenario) {
+      return res.status(404).json({ error: 'Scenario not found' });
+    }
+
+    const company = await getCompanyConfig(req);
+    const customPrompts = req.organization?.settings?.customPrompts || null;
+
+    const processedScenario = {
+      ...scenario,
+      systemPrompt: processTemplate(scenario.systemPrompt, { company }),
+      customerBackground: processTemplate(scenario.customerBackground, { company }),
+      situation: processTemplate(scenario.situation, { company })
+    };
+
+    const agentPrompt = buildAgentPrompt(processedScenario, company, customPrompts?.agent);
+    const coachingPrompts = buildCoachingPrompt(
+      '[Transcript would appear here]',
+      { scenario: processedScenario, company, callDuration: 300 },
+      customPrompts?.coaching
+    );
+
+    res.json({
+      success: true,
+      scenario: {
+        id: scenario.id,
+        name: scenario.name,
+        customerName: scenario.customerName,
+        difficulty: scenario.difficulty
+      },
+      prompts: {
+        agent: agentPrompt,
+        coachingSystem: coachingPrompts.system,
+        coachingUser: coachingPrompts.user
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching scenario prompt:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Save custom prompt templates
+app.post('/api/admin/prompts', optionalAuthMiddleware, async (req, res) => {
+  try {
+    if (!req.organization) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+
+    const { agentPrompt, coachingSystemPrompt, coachingUserPrompt } = req.body;
+
+    // Update organization settings with custom prompts
+    const currentSettings = req.organization.settings || {};
+    const updatedSettings = {
+      ...currentSettings,
+      customPrompts: {
+        agent: agentPrompt || null,
+        coaching: {
+          system: coachingSystemPrompt || null,
+          user: coachingUserPrompt || null
+        }
+      }
+    };
+
+    const adminClient = createAdminClient();
+    const { data, error } = await adminClient
+      .from(TABLES.ORGANIZATIONS)
+      .update({ settings: updatedSettings })
+      .eq('id', req.organization.id)
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    res.json({
+      success: true,
+      message: 'Custom prompts saved successfully',
+      settings: data.settings
+    });
+  } catch (error) {
+    console.error('Error saving custom prompts:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get default prompt templates (for reset functionality)
+app.get('/api/admin/prompts/defaults', optionalAuthMiddleware, (req, res) => {
+  res.json({
+    success: true,
+    defaults: {
+      agent: DEFAULT_AGENT_PROMPT_TEMPLATE,
+      coachingSystem: DEFAULT_COACHING_SYSTEM_PROMPT,
+      coachingUser: DEFAULT_COACHING_USER_PROMPT
+    }
+  });
+});
+
+// Get current custom prompts (raw templates, not processed)
+app.get('/api/admin/prompts/custom', optionalAuthMiddleware, async (req, res) => {
+  try {
+    const customPrompts = req.organization?.settings?.customPrompts || null;
+
+    res.json({
+      success: true,
+      hasCustomPrompts: !!customPrompts,
+      customPrompts: customPrompts || {
+        agent: null,
+        coaching: { system: null, user: null }
+      },
+      defaults: {
+        agent: DEFAULT_AGENT_PROMPT_TEMPLATE,
+        coachingSystem: DEFAULT_COACHING_SYSTEM_PROMPT,
+        coachingUser: DEFAULT_COACHING_USER_PROMPT
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching custom prompts:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Debug endpoints
+app.get('/api/debug/env', (req, res) => {
+  const retellKey = process.env.RETELL_API_KEY || '';
+  const anthropicKey = process.env.ANTHROPIC_API_KEY || '';
+
+  res.json({
+    hasRetellKey: !!retellKey,
+    retellKeyLength: retellKey.length,
+    retellKeyPrefix: retellKey ? retellKey.substring(0, 10) : 'NOT SET',
+    retellKeyValid: retellKey.startsWith('key_'),
+    hasAnthropicKey: !!anthropicKey,
+    anthropicKeyLength: anthropicKey.length,
+    anthropicKeyPrefix: anthropicKey ? anthropicKey.substring(0, 15) : 'NOT SET',
+    anthropicKeyValid: anthropicKey.startsWith('sk-ant-')
+  });
+});
+
+app.get('/api/debug/test-retell', async (req, res) => {
+  try {
+    const retellKey = process.env.RETELL_API_KEY || '';
+    if (!retellKey.startsWith('key_')) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid Retell API key format'
+      });
+    }
+
+    const agents = await getRetellClient().agent.list();
+    res.json({
+      success: true,
+      message: 'Retell connection successful',
+      agentCount: agents?.length || 0
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Error handling
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(500).json({
+    error: err.message,
+    stack: process.env.NODE_ENV !== 'production' ? err.stack : undefined
+  });
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ error: 'Not found' });
+});
+
+// Local development server
+const PORT = process.env.PORT || 3001;
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`API server running on http://localhost:${PORT}`);
+  });
+}
 
 export default app;

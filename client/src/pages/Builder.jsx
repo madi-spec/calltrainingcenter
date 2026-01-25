@@ -12,7 +12,7 @@ import {
   Play,
   Volume2
 } from 'lucide-react';
-import { useCompany } from '../context/CompanyContext';
+import { useOrganization } from '../context/OrganizationContext';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import Input, { Textarea, Select } from '../components/ui/Input';
@@ -56,7 +56,7 @@ const defaultScenario = {
 
 function Builder() {
   const navigate = useNavigate();
-  const { company } = useCompany();
+  const { organization: company } = useOrganization();
   const [scenario, setScenario] = useState(defaultScenario);
   const [voices, setVoices] = useState([]);
   const [saving, setSaving] = useState(false);

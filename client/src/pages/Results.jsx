@@ -34,14 +34,29 @@ function Results() {
 
   const { analysis, scenario, duration } = lastResults;
 
+  const isModuleScenario = scenario?.isGeneratedScenario && scenario?.moduleId;
+
   const handleTryAgain = () => {
     clearSession();
-    navigate(`/scenario/${scenario.id}`);
+    if (isModuleScenario) {
+      navigate(`/modules/${scenario.moduleId}`);
+    } else {
+      navigate(`/scenario/${scenario.id}`);
+    }
   };
 
   const handleNewScenario = () => {
     clearSession();
-    navigate('/');
+    if (isModuleScenario) {
+      navigate(`/modules/${scenario.moduleId}`);
+    } else {
+      navigate('/');
+    }
+  };
+
+  const handleBackToModule = () => {
+    clearSession();
+    navigate(`/modules/${scenario.moduleId}`);
   };
 
   const formatDuration = (seconds) => {
@@ -292,20 +307,41 @@ function Results() {
         transition={{ delay: 0.7 }}
         className="flex flex-col sm:flex-row gap-4 justify-center"
       >
-        <Button
-          variant="secondary"
-          size="lg"
-          onClick={handleNewScenario}
-        >
-          Try Different Scenario
-        </Button>
-        <Button
-          size="lg"
-          icon={RotateCcw}
-          onClick={handleTryAgain}
-        >
-          Practice Again
-        </Button>
+        {isModuleScenario ? (
+          <>
+            <Button
+              variant="secondary"
+              size="lg"
+              onClick={handleBackToModule}
+            >
+              Back to Module
+            </Button>
+            <Button
+              size="lg"
+              icon={RotateCcw}
+              onClick={handleNewScenario}
+            >
+              Next Scenario
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              variant="secondary"
+              size="lg"
+              onClick={handleNewScenario}
+            >
+              Try Different Scenario
+            </Button>
+            <Button
+              size="lg"
+              icon={RotateCcw}
+              onClick={handleTryAgain}
+            >
+              Practice Again
+            </Button>
+          </>
+        )}
       </motion.div>
     </div>
   );

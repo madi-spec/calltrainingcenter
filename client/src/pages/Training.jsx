@@ -12,7 +12,8 @@ import {
   Loader2
 } from 'lucide-react';
 import { useConfig } from '../context/ConfigContext';
-import { useCompany } from '../context/CompanyContext';
+import { useOrganization } from '../context/OrganizationContext';
+import { useAuth } from '../context/AuthContext';
 import { useRetellCall } from '../hooks/useRetellCall';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
@@ -20,7 +21,8 @@ import Card from '../components/ui/Card';
 function Training() {
   const navigate = useNavigate();
   const { currentScenario, setCurrentCall, setLastResults } = useConfig();
-  const { company } = useCompany();
+  const { organization: company } = useOrganization();
+  const { authFetch } = useAuth();
   const {
     callState,
     transcript,
@@ -37,6 +39,7 @@ function Training() {
   } = useRetellCall();
 
   const [analyzing, setAnalyzing] = useState(false);
+  const [callStarted, setCallStarted] = useState(false);
 
   // Redirect if no scenario selected
   useEffect(() => {
@@ -45,12 +48,13 @@ function Training() {
     }
   }, [currentScenario, navigate]);
 
-  // Start call when component mounts
+  // Start call when component mounts - only once
   useEffect(() => {
-    if (currentScenario && callState === 'idle') {
+    if (currentScenario && callState === 'idle' && !callStarted) {
+      setCallStarted(true);
       startCall(currentScenario);
     }
-  }, [currentScenario]);
+  }, [currentScenario, callState, callStarted, startCall]);
 
   const handleEndCall = async () => {
     const callData = await endCall();
@@ -59,7 +63,7 @@ function Training() {
     // Analyze the call
     setAnalyzing(true);
     try {
-      const response = await fetch('/api/analysis/analyze', {
+      const response = await authFetch('/api/analysis/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -71,12 +75,33 @@ function Training() {
 
       if (response.ok) {
         const data = await response.json();
-        setLastResults({
+        const results = {
           analysis: data.analysis,
           transcript: callData.transcript,
           scenario: currentScenario,
           duration: callData.duration
-        });
+        };
+        setLastResults(results);
+
+        // Update module progress if this is a generated scenario
+        if (currentScenario.isGeneratedScenario && currentScenario.moduleId) {
+          try {
+            const score = data.analysis?.overall_score || 0;
+            const won = score >= 70; // Consider "won" if score is 70+
+
+            await authFetch(`/api/modules/${currentScenario.moduleId}/complete-scenario`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                scenario_id: currentScenario.id,
+                won,
+                score
+              })
+            });
+          } catch (moduleErr) {
+            console.error('Error updating module progress:', moduleErr);
+          }
+        }
       }
     } catch (err) {
       console.error('Error analyzing call:', err);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Phone,
@@ -12,7 +12,8 @@ import {
   ArrowLeft
 } from 'lucide-react';
 import { useConfig } from '../context/ConfigContext';
-import { useCompany } from '../context/CompanyContext';
+import { useOrganization } from '../context/OrganizationContext';
+import { useAuth } from '../context/AuthContext';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import { DifficultyBadge, CategoryBadge } from '../components/ui/Badge';
@@ -20,19 +21,30 @@ import { DifficultyBadge, CategoryBadge } from '../components/ui/Badge';
 function PreCall() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { setCurrentScenario } = useConfig();
-  const { company } = useCompany();
+  const { organization: company } = useOrganization();
+  const { authFetch } = useAuth();
   const [scenario, setScenario] = useState(null);
   const [loading, setLoading] = useState(true);
   const [starting, setStarting] = useState(false);
 
+  // Check if this is a generated scenario from a module
+  const moduleContext = location.state?.moduleContext;
+  const isGeneratedScenario = !!location.state?.moduleId;
+
   useEffect(() => {
     fetchScenario();
-  }, [id]);
+  }, [id, authFetch, isGeneratedScenario]);
 
   const fetchScenario = async () => {
     try {
-      const response = await fetch(`/api/scenarios/${id}`);
+      // Use different endpoint for generated scenarios
+      const endpoint = isGeneratedScenario
+        ? `/api/generated-scenarios/${id}`
+        : `/api/scenarios/${id}`;
+
+      const response = await authFetch(endpoint);
       if (response.ok) {
         const data = await response.json();
         setScenario(data.scenario);
@@ -46,8 +58,21 @@ function PreCall() {
 
   const handleStartCall = async () => {
     setStarting(true);
-    setCurrentScenario(scenario);
+    // Include module context for tracking progress after call
+    setCurrentScenario({
+      ...scenario,
+      moduleId: location.state?.moduleId,
+      isGeneratedScenario
+    });
     navigate('/training');
+  };
+
+  const handleBack = () => {
+    if (isGeneratedScenario && location.state?.moduleId) {
+      navigate(`/modules/${location.state.moduleId}`);
+    } else {
+      navigate('/');
+    }
   };
 
   if (loading) {
@@ -78,11 +103,11 @@ function PreCall() {
       <motion.button
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
-        onClick={() => navigate('/')}
+        onClick={handleBack}
         className="flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
-        Back to scenarios
+        {isGeneratedScenario ? 'Back to module' : 'Back to scenarios'}
       </motion.button>
 
       {/* Header */}

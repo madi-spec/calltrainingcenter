@@ -90,18 +90,34 @@ export default function CompanyInfoStep({ data, onComplete, authFetch, organizat
       if (response.ok && result.extracted) {
         const extracted = result.extracted;
 
+        console.log('[COMPANY] Extracted data:', {
+          logo_url: extracted.logo_url,
+          brand_colors: extracted.brand_colors
+        });
+
         // Update form with extracted data
-        setFormData(prev => ({
-          ...prev,
-          name: extracted.name || prev.name,
-          phone: extracted.phone || prev.phone,
-          address: extracted.address || prev.address,
-          services: extracted.services?.length > 0 ? extracted.services : prev.services,
-          guarantees: extracted.guarantees?.length > 0 ? extracted.guarantees : prev.guarantees,
-          logo_url: extracted.logo_url || prev.logo_url,
-          brand_colors: extracted.brand_colors || prev.brand_colors,
-          tagline: extracted.tagline || prev.tagline
-        }));
+        setFormData(prev => {
+          const newData = {
+            ...prev,
+            name: extracted.name || prev.name,
+            phone: extracted.phone || prev.phone,
+            address: extracted.address || prev.address,
+            services: extracted.services?.length > 0 ? extracted.services : prev.services,
+            guarantees: extracted.guarantees?.length > 0 ? extracted.guarantees : prev.guarantees,
+            logo_url: extracted.logo_url || prev.logo_url,
+            brand_colors: extracted.brand_colors ? {
+              primary: extracted.brand_colors.primary || prev.brand_colors?.primary || '',
+              secondary: extracted.brand_colors.secondary || prev.brand_colors?.secondary || '',
+              accent: extracted.brand_colors.accent || prev.brand_colors?.accent || ''
+            } : prev.brand_colors,
+            tagline: extracted.tagline || prev.tagline
+          };
+          console.log('[COMPANY] Updated form data:', {
+            logo_url: newData.logo_url,
+            brand_colors: newData.brand_colors
+          });
+          return newData;
+        });
 
         // Store extracted packages for the Packages step
         if (extracted.packages?.length > 0) {

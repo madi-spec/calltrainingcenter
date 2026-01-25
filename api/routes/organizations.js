@@ -705,6 +705,7 @@ Extract all available information and return ONLY valid JSON (no markdown, no ex
   "service_areas": ["Cities or regions served"],
   "value_propositions": ["Key selling points, differentiators, or unique benefits mentioned"],
   "business_hours": "Business hours if found",
+  "logo_url": "Full URL to the company logo if you can identify it from image references",
   "brand_colors": {
     "primary": "Primary brand color as hex code (e.g., #1a5f2c) - look for header backgrounds, buttons, logos",
     "secondary": "Secondary brand color as hex code if visible",
@@ -745,26 +746,29 @@ Important:
       return res.status(500).json({ error: 'Failed to parse website data' });
     }
 
-    // Add logo URL extracted from HTML (prefer HTML extraction over AI guess)
+    // Add logo URL - prefer HTML extraction over AI guess
     if (logoUrl) {
       extracted.logo_url = logoUrl;
+    } else if (!extracted.logo_url) {
+      extracted.logo_url = null;
     }
 
-    // Merge brand colors - prefer HTML-extracted colors, fall back to AI-extracted
-    if (extracted.brand_colors || brandColors.primary) {
-      extracted.brand_colors = {
-        primary: brandColors.primary || extracted.brand_colors?.primary || null,
-        secondary: brandColors.secondary || extracted.brand_colors?.secondary || null,
-        accent: brandColors.accent || extracted.brand_colors?.accent || null
-      };
-    }
+    // Merge brand colors - prefer logo-extracted colors, fall back to AI-extracted
+    const finalBrandColors = {
+      primary: brandColors.primary || extracted.brand_colors?.primary || null,
+      secondary: brandColors.secondary || extracted.brand_colors?.secondary || null,
+      accent: brandColors.accent || extracted.brand_colors?.accent || null
+    };
+    extracted.brand_colors = finalBrandColors;
 
     console.log('[SCRAPE] Extraction complete:', {
       name: extracted.name,
       servicesCount: extracted.services?.length,
       packagesCount: extracted.packages?.length,
       logoUrl: extracted.logo_url,
-      brandColors: extracted.brand_colors
+      brandColors: extracted.brand_colors,
+      logoSource: logoUrl ? 'HTML' : (extracted.logo_url ? 'AI' : 'none'),
+      colorSource: brandColors.primary ? 'logo-vision' : (extracted.brand_colors?.primary ? 'AI' : 'none')
     });
 
     res.json({

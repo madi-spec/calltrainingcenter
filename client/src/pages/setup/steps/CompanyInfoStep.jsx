@@ -90,13 +90,34 @@ export default function CompanyInfoStep({ data, onComplete, authFetch, organizat
       if (response.ok && result.extracted) {
         const extracted = result.extracted;
 
+        console.log('[COMPANY] Raw API response:', JSON.stringify(result, null, 2));
         console.log('[COMPANY] Extracted data:', {
           logo_url: extracted.logo_url,
-          brand_colors: extracted.brand_colors
+          logo_url_type: typeof extracted.logo_url,
+          brand_colors: extracted.brand_colors,
+          brand_colors_type: typeof extracted.brand_colors
         });
 
         // Update form with extracted data
         setFormData(prev => {
+          // Handle brand colors - ensure we have valid hex codes
+          const newBrandColors = {
+            primary: (extracted.brand_colors?.primary && extracted.brand_colors.primary !== 'null')
+              ? extracted.brand_colors.primary
+              : prev.brand_colors?.primary || '',
+            secondary: (extracted.brand_colors?.secondary && extracted.brand_colors.secondary !== 'null')
+              ? extracted.brand_colors.secondary
+              : prev.brand_colors?.secondary || '',
+            accent: (extracted.brand_colors?.accent && extracted.brand_colors.accent !== 'null')
+              ? extracted.brand_colors.accent
+              : prev.brand_colors?.accent || ''
+          };
+
+          // Handle logo URL
+          const newLogoUrl = (extracted.logo_url && extracted.logo_url !== 'null' && extracted.logo_url !== '')
+            ? extracted.logo_url
+            : prev.logo_url;
+
           const newData = {
             ...prev,
             name: extracted.name || prev.name,
@@ -104,12 +125,8 @@ export default function CompanyInfoStep({ data, onComplete, authFetch, organizat
             address: extracted.address || prev.address,
             services: extracted.services?.length > 0 ? extracted.services : prev.services,
             guarantees: extracted.guarantees?.length > 0 ? extracted.guarantees : prev.guarantees,
-            logo_url: extracted.logo_url || prev.logo_url,
-            brand_colors: extracted.brand_colors ? {
-              primary: extracted.brand_colors.primary || prev.brand_colors?.primary || '',
-              secondary: extracted.brand_colors.secondary || prev.brand_colors?.secondary || '',
-              accent: extracted.brand_colors.accent || prev.brand_colors?.accent || ''
-            } : prev.brand_colors,
+            logo_url: newLogoUrl,
+            brand_colors: newBrandColors,
             tagline: extracted.tagline || prev.tagline
           };
           console.log('[COMPANY] Updated form data:', {

@@ -467,8 +467,9 @@ Extract all available information and return ONLY valid JSON (no markdown, no ex
     {
       "name": "Package/Plan name",
       "description": "What's included",
-      "price": "Price if mentioned",
-      "frequency": "monthly/quarterly/annual/one-time"
+      "initial_price": "One-time setup/initial price if mentioned (number only, e.g., 99)",
+      "recurring_price": "Recurring price if mentioned (number only, e.g., 49)",
+      "frequency": "monthly/quarterly/bi-monthly/annually/one-time - the billing frequency for recurring_price"
     }
   ],
   "competitors_mentioned": ["Any competitor names mentioned"],
@@ -486,8 +487,12 @@ Extract all available information and return ONLY valid JSON (no markdown, no ex
 Important:
 - Extract actual data found on the website, don't make up information
 - For services, be specific to pest control (e.g., "Ant Control", "Bed Bug Treatment", not generic terms)
-- For packages, extract any pricing plans, service tiers, or subscription options
-- For brand_colors, try to identify the dominant colors used in the website design (headers, buttons, CTAs)
+- For packages: extract pricing plans, service tiers, or subscription options
+  - initial_price is the one-time setup fee (if any)
+  - recurring_price is the ongoing monthly/quarterly/annual price
+  - frequency should match the recurring_price billing cycle (monthly, quarterly, bi-monthly, annually)
+  - If only one price is shown, use it as recurring_price
+- For brand_colors, extract hex codes (e.g., #ff0000) for the dominant colors in headers, buttons, and CTAs
 - Return null for fields where no information was found
 - Return valid JSON only`
       }]

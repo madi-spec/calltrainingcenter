@@ -1077,8 +1077,15 @@ app.get('/api/admin/prompts/custom', optionalAuthMiddleware, async (req, res) =>
 app.get('/api/debug/env', (req, res) => {
   const retellKey = process.env.RETELL_API_KEY || '';
   const anthropicKey = process.env.ANTHROPIC_API_KEY || '';
+  const clerkSecretKey = process.env.CLERK_SECRET_KEY || '';
+  const supabaseUrl = process.env.SUPABASE_URL || '';
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
   res.json({
+    hasClerkSecretKey: !!clerkSecretKey,
+    clerkSecretKeyLength: clerkSecretKey.length,
+    clerkSecretKeyPrefix: clerkSecretKey ? clerkSecretKey.substring(0, 10) : 'NOT SET',
+    clerkSecretKeyValid: clerkSecretKey.startsWith('sk_'),
     hasRetellKey: !!retellKey,
     retellKeyLength: retellKey.length,
     retellKeyPrefix: retellKey ? retellKey.substring(0, 10) : 'NOT SET',
@@ -1086,7 +1093,11 @@ app.get('/api/debug/env', (req, res) => {
     hasAnthropicKey: !!anthropicKey,
     anthropicKeyLength: anthropicKey.length,
     anthropicKeyPrefix: anthropicKey ? anthropicKey.substring(0, 15) : 'NOT SET',
-    anthropicKeyValid: anthropicKey.startsWith('sk-ant-')
+    anthropicKeyValid: anthropicKey.startsWith('sk-ant-'),
+    hasSupabaseUrl: !!supabaseUrl,
+    supabaseUrlPrefix: supabaseUrl ? supabaseUrl.substring(0, 30) : 'NOT SET',
+    hasSupabaseServiceKey: !!supabaseServiceKey,
+    supabaseServiceKeyLength: supabaseServiceKey.length
   });
 });
 

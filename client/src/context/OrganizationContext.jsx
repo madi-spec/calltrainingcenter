@@ -61,16 +61,29 @@ export function OrganizationProvider({ children }) {
 
   // Fetch organization directly from API
   const fetchOrganization = useCallback(async () => {
-    if (!isAuthenticated) return null;
+    console.log('[ORG] fetchOrganization called, isAuthenticated:', isAuthenticated);
+    if (!isAuthenticated) {
+      console.log('[ORG] Not authenticated, returning null');
+      return null;
+    }
 
     try {
+      console.log('[ORG] Fetching from /api/organizations/current...');
       const response = await authFetch('/api/organizations/current');
+      console.log('[ORG] API response status:', response.status);
       if (response.ok) {
         const data = await response.json();
+        console.log('[ORG] Fetched org data:', {
+          name: data.organization?.name,
+          logo_url: data.organization?.logo_url,
+          brand_colors: data.organization?.brand_colors
+        });
         return data.organization;
+      } else {
+        console.error('[ORG] API response not ok:', response.status);
       }
     } catch (err) {
-      console.error('Error fetching organization:', err);
+      console.error('[ORG] Error fetching organization:', err);
     }
     return null;
   }, [isAuthenticated, authFetch]);
@@ -367,11 +380,15 @@ export function OrganizationProvider({ children }) {
 
     // First, refresh the auth profile (which includes org data)
     if (refreshProfile) {
+      console.log('[ORG] Refreshing auth profile...');
       await refreshProfile();
     }
 
     // Also fetch organization data directly to ensure we have the latest
+    console.log('[ORG] Fetching organization data...');
     const orgData = await fetchOrganization();
+    console.log('[ORG] fetchOrganization returned:', orgData ? 'data' : 'null');
+
     if (orgData) {
       const mergedOrg = processOrgData(orgData);
       if (mergedOrg) {
@@ -382,7 +399,12 @@ export function OrganizationProvider({ children }) {
         });
         setOrganization(mergedOrg);
         applyBrandColors(mergedOrg.colors);
+        console.log('[ORG] Organization state updated and colors applied');
+      } else {
+        console.warn('[ORG] processOrgData returned null');
       }
+    } else {
+      console.warn('[ORG] No org data returned from fetchOrganization');
     }
   }, [refreshProfile, fetchOrganization, processOrgData, applyBrandColors]);
 

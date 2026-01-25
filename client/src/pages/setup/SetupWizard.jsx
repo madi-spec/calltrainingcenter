@@ -137,6 +137,10 @@ export default function SetupWizard() {
     try {
       // Mark organization setup as complete
       console.log('[SETUP] Completing setup with data:', stepData);
+      console.log('[SETUP] Company data being sent:', {
+        logo_url: stepData?.company?.logo_url,
+        brand_colors: stepData?.company?.brand_colors
+      });
       const response = await authFetch('/api/organizations/complete-setup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

@@ -114,30 +114,153 @@ function extractBrandColors(html) {
     accent: null
   };
 
-  // Look for theme-color meta tag
+  // Helper to validate and normalize hex colors
+  const normalizeColor = (color) => {
+    if (!color) return null;
+    color = color.trim();
+
+    // Already a valid hex color
+    if (/^#[0-9a-fA-F]{6}$/i.test(color)) return color.toLowerCase();
+    if (/^#[0-9a-fA-F]{3}$/i.test(color)) {
+      // Expand 3-digit hex to 6-digit
+      return `#${color[1]}${color[1]}${color[2]}${color[2]}${color[3]}${color[3]}`.toLowerCase();
+    }
+
+    // Try to extract hex from string
+    const hexMatch = color.match(/#[0-9a-fA-F]{6}|#[0-9a-fA-F]{3}/i);
+    if (hexMatch) return normalizeColor(hexMatch[0]);
+
+    // Skip common non-brand colors
+    const skipColors = ['transparent', 'inherit', 'initial', 'none', 'white', 'black', '#fff', '#000', '#ffffff', '#000000'];
+    if (skipColors.includes(color.toLowerCase())) return null;
+
+    return null;
+  };
+
+  // Collect all potential brand colors with weights
+  const colorCandidates = [];
+
+  // 1. Theme-color meta tag (high priority)
   const themeColorMatch = html.match(/<meta[^>]*name=["']theme-color["'][^>]*content=["']([^"']+)["']/i) ||
                           html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*name=["']theme-color["']/i);
   if (themeColorMatch) {
-    colors.primary = themeColorMatch[1];
+    const color = normalizeColor(themeColorMatch[1]);
+    if (color) colorCandidates.push({ color, weight: 100, source: 'theme-color' });
   }
 
-  // Look for CSS custom properties (common in modern sites)
-  const primaryVarMatch = html.match(/--(?:primary|brand|main)(?:-color)?:\s*([#\w(),.%\s]+);/i);
-  if (primaryVarMatch) {
-    colors.primary = primaryVarMatch[1].trim();
+  // 2. CSS custom properties (high priority)
+  const cssVarPatterns = [
+    { pattern: /--(?:primary|brand|main)(?:-color)?:\s*([^;]+);/gi, weight: 90, type: 'primary' },
+    { pattern: /--(?:secondary)(?:-color)?:\s*([^;]+);/gi, weight: 80, type: 'secondary' },
+    { pattern: /--(?:accent|highlight|cta)(?:-color)?:\s*([^;]+);/gi, weight: 70, type: 'accent' },
+    { pattern: /--(?:color-primary|primary-500|brand-500):\s*([^;]+);/gi, weight: 85, type: 'primary' },
+  ];
+
+  for (const { pattern, weight, type } of cssVarPatterns) {
+    let match;
+    while ((match = pattern.exec(html)) !== null) {
+      const color = normalizeColor(match[1]);
+      if (color) colorCandidates.push({ color, weight, source: `css-var-${type}`, type });
+    }
   }
 
-  const secondaryVarMatch = html.match(/--(?:secondary|accent)(?:-color)?:\s*([#\w(),.%\s]+);/i);
-  if (secondaryVarMatch) {
-    colors.secondary = secondaryVarMatch[1].trim();
+  // 3. Button and CTA colors (medium-high priority)
+  const buttonPatterns = [
+    /\.(?:btn|button|cta)[^{]*\{[^}]*background(?:-color)?:\s*([^;]+);/gi,
+    /button[^{]*\{[^}]*background(?:-color)?:\s*([^;]+);/gi,
+    /\.(?:primary|main|brand)[^{]*\{[^}]*background(?:-color)?:\s*([^;]+);/gi,
+  ];
+
+  for (const pattern of buttonPatterns) {
+    let match;
+    while ((match = pattern.exec(html)) !== null) {
+      const color = normalizeColor(match[1]);
+      if (color) colorCandidates.push({ color, weight: 60, source: 'button' });
+    }
   }
 
-  // Look for common header/button background colors in inline styles
-  const headerBgMatch = html.match(/(?:header|nav)[^{]*\{[^}]*background(?:-color)?:\s*([#\w(),.%\s]+);/i);
-  if (headerBgMatch && !colors.primary) {
-    colors.primary = headerBgMatch[1].trim();
+  // 4. Header and nav colors (medium priority)
+  const headerPatterns = [
+    /(?:header|\.header|#header)[^{]*\{[^}]*background(?:-color)?:\s*([^;]+);/gi,
+    /(?:nav|\.nav|\.navbar|\.navigation)[^{]*\{[^}]*background(?:-color)?:\s*([^;]+);/gi,
+    /\.(?:top-bar|topbar|site-header)[^{]*\{[^}]*background(?:-color)?:\s*([^;]+);/gi,
+  ];
+
+  for (const pattern of headerPatterns) {
+    let match;
+    while ((match = pattern.exec(html)) !== null) {
+      const color = normalizeColor(match[1]);
+      if (color) colorCandidates.push({ color, weight: 50, source: 'header' });
+    }
   }
 
+  // 5. Link colors (often brand color)
+  const linkMatch = html.match(/\ba\b[^{]*\{[^}]*color:\s*([^;]+);/i);
+  if (linkMatch) {
+    const color = normalizeColor(linkMatch[1]);
+    if (color) colorCandidates.push({ color, weight: 40, source: 'link' });
+  }
+
+  // 6. Inline styles on key elements
+  const inlinePatterns = [
+    /style=["'][^"']*background(?:-color)?:\s*([#][0-9a-fA-F]{3,6})[^"']*/gi,
+    /style=["'][^"']*(?:^|;)\s*color:\s*([#][0-9a-fA-F]{3,6})[^"']*/gi,
+  ];
+
+  for (const pattern of inlinePatterns) {
+    let match;
+    while ((match = pattern.exec(html)) !== null) {
+      const color = normalizeColor(match[1]);
+      if (color) colorCandidates.push({ color, weight: 30, source: 'inline' });
+    }
+  }
+
+  // 7. Count color frequency in the HTML (lower weight but useful for common colors)
+  const hexColorMatches = html.match(/#[0-9a-fA-F]{6}|#[0-9a-fA-F]{3}(?=[^0-9a-fA-F])/gi) || [];
+  const colorCounts = {};
+  for (const hex of hexColorMatches) {
+    const color = normalizeColor(hex);
+    if (color) {
+      colorCounts[color] = (colorCounts[color] || 0) + 1;
+    }
+  }
+
+  // Add frequent colors with frequency-based weight
+  for (const [color, count] of Object.entries(colorCounts)) {
+    if (count >= 3) {
+      colorCandidates.push({ color, weight: Math.min(count * 5, 35), source: 'frequency' });
+    }
+  }
+
+  // Sort by weight and deduplicate
+  colorCandidates.sort((a, b) => b.weight - a.weight);
+
+  console.log('[COLORS] Extracted candidates:', colorCandidates.slice(0, 10));
+
+  // Assign colors - skip similar colors for variety
+  const usedColors = [];
+  const isSimilar = (c1, c2) => {
+    if (!c1 || !c2) return false;
+    // Simple check - same color
+    return c1 === c2;
+  };
+
+  for (const candidate of colorCandidates) {
+    if (!colors.primary && !usedColors.some(c => isSimilar(c, candidate.color))) {
+      colors.primary = candidate.color;
+      usedColors.push(candidate.color);
+    } else if (!colors.secondary && !usedColors.some(c => isSimilar(c, candidate.color))) {
+      colors.secondary = candidate.color;
+      usedColors.push(candidate.color);
+    } else if (!colors.accent && !usedColors.some(c => isSimilar(c, candidate.color))) {
+      colors.accent = candidate.color;
+      usedColors.push(candidate.color);
+    }
+
+    if (colors.primary && colors.secondary && colors.accent) break;
+  }
+
+  console.log('[COLORS] Final extracted colors:', colors);
   return colors;
 }
 

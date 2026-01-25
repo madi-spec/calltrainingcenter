@@ -248,16 +248,25 @@ Background: {{scenario.customerBackground}}
 - Use natural speech patterns with occasional filler words
 - Don't be a pushover - advocate for yourself realistically
 
-## Company Context
+## Company Context (What You Know About the Company)
 - Company: {{company.name}}
-- Services: {{company.services}}
-- Quarterly price: ${'$'}{{company.pricing.quarterlyPrice}}
-- Guarantee: {{company.guarantees}}
+- Phone: {{company.phone}}
+- Services offered: {{company.services}}
+- Guarantees: {{company.guarantees}}
+- What makes them different: {{company.valuePropositions}}
+
+## Pricing Information (What You Might Ask About)
+- Monthly pricing starts around: ${'$'}{{company.pricing.monthlyPrice}}/month
+- Initial service fee: ${'$'}{{company.pricing.initialPrice}}
+- Price range: {{company.pricing.priceRange}}
+
+## Service Packages Available
+{{company.packages}}
 
 ## Resolution Conditions
 {{scenario.resolutionConditions}}
 
-Remember: This is training - challenge the CSR but be fair.`;
+Remember: This is training - challenge the CSR but be fair. Ask about specific packages and pricing when relevant to your scenario.`;
 
 const DEFAULT_COACHING_SYSTEM_PROMPT = `You are an expert CSR coach specializing in pest control customer service training.
 Provide detailed, constructive feedback on call performance.
@@ -324,15 +333,48 @@ Respond with JSON:
 function buildAgentPrompt(scenario, company, customTemplate = null) {
   const template = customTemplate || DEFAULT_AGENT_PROMPT_TEMPLATE;
 
+  // Build services list
+  const servicesList = Array.isArray(company.services)
+    ? company.services.join(', ')
+    : (company.services || 'pest control services');
+
+  // Build guarantees list
+  const guaranteesList = Array.isArray(company.guarantees)
+    ? company.guarantees.join(', ')
+    : (company.guarantees || 'satisfaction guaranteed');
+
+  // Build package details for prompt
+  const packages = company.packages || [];
+  const packageDetails = packages.length > 0
+    ? packages.map(pkg => {
+        let price = '';
+        if (pkg.recurringPrice) {
+          price = `$${pkg.recurringPrice}/${pkg.frequency || 'month'}`;
+          if (pkg.initialPrice) price = `$${pkg.initialPrice} initial + ${price}`;
+        }
+        return `${pkg.name}: ${pkg.description || 'No description'} ${price ? `(${price})` : ''}`;
+      }).join('\n    ')
+    : 'Standard packages available';
+
   // Build context for template replacement
   const context = {
     company: {
       name: company.name || 'the pest control company',
-      services: company.services?.join(', ') || 'pest control services',
+      phone: company.phone || '',
+      services: servicesList,
       pricing: {
-        quarterlyPrice: company.pricing?.quarterlyPrice || '149'
+        quarterlyPrice: company.pricing?.quarterlyPrice || '149',
+        monthlyPrice: company.pricing?.monthlyPrice || '49',
+        initialPrice: company.pricing?.initialPrice || '199',
+        priceRange: company.pricing?.priceRange || ''
       },
-      guarantees: company.guarantees?.[0] || ''
+      packages: packageDetails,
+      packageSummary: company.packageSummary || 'Standard packages available',
+      guarantees: guaranteesList,
+      valuePropositions: Array.isArray(company.valuePropositions)
+        ? company.valuePropositions.join(', ')
+        : (company.valuePropositions || ''),
+      tagline: company.tagline || ''
     },
     scenario: {
       customerName: scenario.customerName || 'Customer',
@@ -485,23 +527,117 @@ async function getProductContext(organizationId) {
 async function getCompanyConfig(req) {
   // If authenticated, get org settings from database
   if (req.organization) {
+    const org = req.organization;
+    const packages = org.pricing?.packages || [];
+
+    // Transform packages into pricing info for prompts
+    const pricing = buildPricingFromPackages(packages);
+
+    // Build a text summary of packages for prompts
+    const packageSummary = buildPackageSummary(packages);
+
     return {
-      name: req.organization.name,
-      phone: req.organization.phone,
-      website: req.organization.website,
-      logo: req.organization.logo_url,
-      colors: req.organization.colors,
-      services: req.organization.services,
-      serviceAreas: req.organization.service_areas,
-      pricing: req.organization.pricing,
-      guarantees: req.organization.guarantees,
-      valuePropositions: req.organization.value_propositions,
-      businessHours: req.organization.business_hours,
-      ...req.organization.settings
+      name: org.name,
+      phone: org.phone,
+      website: org.website,
+      logo: org.logo_url,
+      colors: org.colors,
+      services: org.services || [],
+      serviceAreas: org.service_areas || [],
+      pricing,
+      packages,
+      packageSummary,
+      guarantees: org.guarantees || [],
+      valuePropositions: org.value_propositions || [],
+      businessHours: org.business_hours,
+      tagline: org.tagline,
+      ...org.settings
     };
   }
   // Fallback to in-memory config
   return configStore.company;
+}
+
+/**
+ * Build pricing object from packages array for backward compatibility with prompts
+ */
+function buildPricingFromPackages(packages) {
+  if (!packages || packages.length === 0) {
+    return { quarterlyPrice: '149', initialPrice: '199', hasPublicPricing: false };
+  }
+
+  // Find representative prices from packages
+  let monthlyPrice = null;
+  let quarterlyPrice = null;
+  let initialPrice = null;
+  let lowestRecurring = null;
+  let highestRecurring = null;
+
+  for (const pkg of packages) {
+    const recurring = parseFloat(pkg.recurringPrice) || 0;
+    const initial = parseFloat(pkg.initialPrice) || 0;
+
+    if (initial && !initialPrice) {
+      initialPrice = initial;
+    }
+
+    if (recurring > 0) {
+      if (!lowestRecurring || recurring < lowestRecurring) lowestRecurring = recurring;
+      if (!highestRecurring || recurring > highestRecurring) highestRecurring = recurring;
+
+      if (pkg.frequency === 'monthly' && !monthlyPrice) {
+        monthlyPrice = recurring;
+      } else if (pkg.frequency === 'quarterly' && !quarterlyPrice) {
+        quarterlyPrice = recurring;
+      }
+    }
+  }
+
+  // If no quarterly found but we have monthly, estimate quarterly
+  if (!quarterlyPrice && monthlyPrice) {
+    quarterlyPrice = monthlyPrice * 3;
+  }
+
+  // If no monthly found but we have quarterly, estimate monthly
+  if (!monthlyPrice && quarterlyPrice) {
+    monthlyPrice = Math.round(quarterlyPrice / 3);
+  }
+
+  return {
+    hasPublicPricing: true,
+    monthlyPrice: monthlyPrice ? String(monthlyPrice) : null,
+    quarterlyPrice: quarterlyPrice ? String(quarterlyPrice) : (lowestRecurring ? String(lowestRecurring) : '149'),
+    initialPrice: initialPrice ? String(initialPrice) : '199',
+    priceRange: lowestRecurring && highestRecurring
+      ? `$${lowestRecurring} - $${highestRecurring}/month`
+      : null
+  };
+}
+
+/**
+ * Build a text summary of packages for use in prompts
+ */
+function buildPackageSummary(packages) {
+  if (!packages || packages.length === 0) {
+    return 'Standard pest control packages available.';
+  }
+
+  const summaries = packages
+    .filter(pkg => pkg.name && (pkg.recurringPrice || pkg.description))
+    .map(pkg => {
+      let priceStr = '';
+      if (pkg.recurringPrice) {
+        priceStr = `$${pkg.recurringPrice}/${pkg.frequency || 'month'}`;
+        if (pkg.initialPrice) {
+          priceStr += ` (initial: $${pkg.initialPrice})`;
+        }
+      }
+      return `- ${pkg.name}: ${pkg.description || 'No description'}${priceStr ? ' - ' + priceStr : ''}`;
+    });
+
+  return summaries.length > 0
+    ? `Available packages:\n${summaries.join('\n')}`
+    : 'Standard pest control packages available.';
 }
 
 // ============ ROUTES ============

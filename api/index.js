@@ -159,7 +159,7 @@ const scenarios = [
     customerName: 'Michael Torres',
     personality: 'Friendly, new to pest control, asks lots of questions',
     emotionalState: 'Curious, slightly anxious about pest issue',
-    voiceId: '11labs-Josh',
+    voiceId: '11labs-Adrian',
     situation: 'Michael just moved into a new home and found some roaches in the kitchen. He\'s never hired pest control before and has basic questions.',
     customerBackground: 'First-time homeowner, 28 years old, just moved in last week. Found roaches and is a bit grossed out.',
     openingLine: 'Hi, um, I just moved into a new house and I\'ve been seeing some roaches. I\'ve never had to deal with this before - how does pest control work?',
@@ -656,10 +656,10 @@ app.get('/api/scenarios/meta/voices', async (req, res) => {
     res.json({
       success: true,
       voices: [
-        { id: '11labs-Jason', name: 'Jason', gender: 'male' },
-        { id: '11labs-Josh', name: 'Josh', gender: 'male' },
-        { id: '11labs-Jenny', name: 'Jenny', gender: 'female' },
-        { id: '11labs-Aria', name: 'Aria', gender: 'female' }
+        { id: '11labs-Adrian', name: 'Adrian', gender: 'male' },
+        { id: '11labs-Brian', name: 'Brian', gender: 'male' },
+        { id: '11labs-Aria', name: 'Aria', gender: 'female' },
+        { id: '11labs-Sarah', name: 'Sarah', gender: 'female' }
       ],
       error: 'Could not fetch from Retell: ' + error.message
     });

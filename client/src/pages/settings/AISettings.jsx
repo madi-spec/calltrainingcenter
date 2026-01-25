@@ -29,13 +29,10 @@ const AI_MODELS = [
 ];
 
 const VOICE_OPTIONS = [
+  { id: '11labs-Adrian', name: 'Adrian', gender: 'Male', accent: 'American' },
   { id: '11labs-Brian', name: 'Brian', gender: 'Male', accent: 'American' },
-  { id: '11labs-Jenny', name: 'Jenny', gender: 'Female', accent: 'American' },
-  { id: '11labs-Dorothy', name: 'Dorothy', gender: 'Female', accent: 'American' },
-  { id: '11labs-Jason', name: 'Jason', gender: 'Male', accent: 'American' },
-  { id: '11labs-Josh', name: 'Josh', gender: 'Male', accent: 'American' },
-  { id: '11labs-Charlotte', name: 'Charlotte', gender: 'Female', accent: 'British' },
-  { id: '11labs-Lily', name: 'Lily', gender: 'Female', accent: 'British' }
+  { id: '11labs-Aria', name: 'Aria', gender: 'Female', accent: 'American' },
+  { id: '11labs-Sarah', name: 'Sarah', gender: 'Female', accent: 'American' }
 ];
 
 export default function AISettings() {

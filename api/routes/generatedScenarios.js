@@ -109,8 +109,8 @@ router.get('/:id', authMiddleware, tenantMiddleware, async (req, res) => {
  */
 function getVoiceForProfile(profile) {
   // Available Retell 11labs voices (American accents only)
-  const femaleVoices = ['11labs-Jenny', '11labs-Aria'];
-  const maleVoices = ['11labs-Jason', '11labs-Josh'];
+  const femaleVoices = ['11labs-Aria', '11labs-Sarah'];
+  const maleVoices = ['11labs-Adrian', '11labs-Brian'];
 
   const gender = profile.gender?.toLowerCase();
 

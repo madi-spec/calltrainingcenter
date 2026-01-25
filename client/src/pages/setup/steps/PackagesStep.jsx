@@ -184,22 +184,10 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
   const handleSubmit = async () => {
     setSaving(true);
     try {
-      // Save each package to the API
-      for (const pkg of packages) {
-        await authFetch('/api/products/packages', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: pkg.name,
-            description: pkg.description,
-            initial_price: pkg.initialPrice,
-            recurring_price: pkg.recurringPrice,
-            service_frequency: pkg.frequency,
-            selling_points: pkg.sellingPoints
-          })
-        });
-      }
-
+      // During setup, we just pass packages to complete-setup which stores them
+      // in the organization's pricing field. Individual package records
+      // require service_line_id which isn't set up yet during initial setup.
+      console.log('[PACKAGES] Saving packages:', packages);
       onComplete({ packages });
     } catch (error) {
       console.error('Failed to save packages:', error);

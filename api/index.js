@@ -26,6 +26,14 @@ import organizationsRoutes from './routes/organizations.js';
 import invitationsRoutes from './routes/invitations.js';
 import generatedScenariosRoutes from './routes/generatedScenarios.js';
 
+// Import services
+import {
+  refreshVoiceCache,
+  getAvailableVoices,
+  getVoiceCacheInfo,
+  getValidVoiceId
+} from './services/voiceService.js';
+
 // Import middleware and helpers
 import { optionalAuthMiddleware } from './lib/auth.js';
 import { createAdminClient, TABLES } from './lib/supabase.js';
@@ -639,29 +647,44 @@ app.get('/api/scenarios/:id', optionalAuthMiddleware, async (req, res) => {
   res.json({ success: true, scenario: processed });
 });
 
-// Get voices from Retell
+// Get voices from Retell (uses cache from voiceService)
 app.get('/api/scenarios/meta/voices', async (req, res) => {
   try {
-    const voices = await getRetellClient().voice.list();
+    // Force refresh if requested
+    if (req.query.refresh === 'true') {
+      await refreshVoiceCache();
+    }
+
+    const voices = await getAvailableVoices();
+    const cacheInfo = getVoiceCacheInfo();
     res.json({
       success: true,
-      voices: voices.map(v => ({
-        id: v.voice_id,
-        name: v.voice_name,
-        gender: v.gender,
-        provider: v.provider
-      }))
+      voices,
+      cached: cacheInfo.lastFetched,
+      error: cacheInfo.error
     });
   } catch (error) {
+    res.status(500).json({
+      success: false,
+      voices: [],
+      error: 'Failed to get voices: ' + error.message
+    });
+  }
+});
+
+// Force refresh voice cache
+app.post('/api/scenarios/meta/voices/refresh', async (req, res) => {
+  try {
+    const voices = await refreshVoiceCache();
     res.json({
       success: true,
-      voices: [
-        { id: '11labs-Adrian', name: 'Adrian', gender: 'male' },
-        { id: '11labs-Brian', name: 'Brian', gender: 'male' },
-        { id: '11labs-Aria', name: 'Aria', gender: 'female' },
-        { id: '11labs-Sarah', name: 'Sarah', gender: 'female' }
-      ],
-      error: 'Could not fetch from Retell: ' + error.message
+      voices,
+      message: `Refreshed ${voices.length} voices`
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to refresh voices: ' + error.message
     });
   }
 });
@@ -727,10 +750,15 @@ app.post('/api/calls/create-training-call', optionalAuthMiddleware, async (req, 
       // Note: begin_message removed to prevent echo/overlap issues
     });
 
+    // Validate voice ID exists in Retell, fall back to first available if not
+    const requestedVoice = scenario.voiceId || '11labs-Brian';
+    const validVoiceId = await getValidVoiceId(requestedVoice);
+    console.log(`[CALL] Using voice: ${validVoiceId} (requested: ${requestedVoice})`);
+
     const agent = await getRetellClient().agent.create({
       agent_name: `CSR Training - ${processedScenario.name}`,
       response_engine: { type: 'retell-llm', llm_id: llm.llm_id },
-      voice_id: scenario.voiceId || '11labs-Brian',
+      voice_id: validVoiceId,
       language: 'en-US',
       enable_backchannel: false,  // Disable to prevent echo/feedback
       responsiveness: 1.0,  // Respond quickly without overlap

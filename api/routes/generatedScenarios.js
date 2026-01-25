@@ -7,6 +7,7 @@
 import { Router } from 'express';
 import { authMiddleware, tenantMiddleware } from '../lib/auth.js';
 import { createAdminClient } from '../lib/supabase.js';
+import { getVoiceForProfile as getVoiceFromService } from '../services/voiceService.js';
 
 const router = Router();
 
@@ -85,7 +86,7 @@ router.get('/:id', authMiddleware, tenantMiddleware, async (req, res) => {
       willClose: genScenario.will_close,
 
       // Voice settings - use valid Retell voice IDs based on gender
-      voiceId: profile.voice_id || getVoiceForProfile(profile),
+      voiceId: profile.voice_id || await getVoiceForProfile(profile),
 
       // Company context
       company: {
@@ -106,23 +107,12 @@ router.get('/:id', authMiddleware, tenantMiddleware, async (req, res) => {
 
 /**
  * Get a valid Retell voice ID based on customer profile
+ * Now uses the voice service which caches available voices from Retell
  */
-function getVoiceForProfile(profile) {
-  // Available Retell 11labs voices (American accents only)
-  const femaleVoices = ['11labs-Aria', '11labs-Sarah'];
-  const maleVoices = ['11labs-Adrian', '11labs-Brian'];
-
-  const gender = profile.gender?.toLowerCase();
-
-  if (gender === 'female' || gender === 'f') {
-    return femaleVoices[Math.floor(Math.random() * femaleVoices.length)];
-  } else if (gender === 'male' || gender === 'm') {
-    return maleVoices[Math.floor(Math.random() * maleVoices.length)];
-  }
-
-  // Random selection if gender not specified
-  const allVoices = [...femaleVoices, ...maleVoices];
-  return allVoices[Math.floor(Math.random() * allVoices.length)];
+async function getVoiceForProfile(profile) {
+  const voiceId = await getVoiceFromService(profile);
+  // Fallback if voice service returns null
+  return voiceId || 'default';
 }
 
 /**

@@ -28,19 +28,41 @@ const AI_MODELS = [
   { id: 'claude-3-5-haiku-20241022', name: 'Claude 3.5 Haiku', description: 'Fastest, budget-friendly' }
 ];
 
-const VOICE_OPTIONS = [
-  { id: '11labs-Adrian', name: 'Adrian', gender: 'Male', accent: 'American' },
-  { id: '11labs-Brian', name: 'Brian', gender: 'Male', accent: 'American' },
-  { id: '11labs-Aria', name: 'Aria', gender: 'Female', accent: 'American' },
-  { id: '11labs-Sarah', name: 'Sarah', gender: 'Female', accent: 'American' }
-];
-
 export default function AISettings() {
   const { authFetch } = useAuth();
   const { settings, updateAIConfig } = useOrganization();
   const notifications = useNotifications();
   const showSuccess = notifications?.showSuccess || ((title, msg) => console.log('Success:', title, msg));
   const showError = notifications?.showError || ((title, msg) => console.error('Error:', title, msg));
+
+  // Dynamic voice options from Retell
+  const [voiceOptions, setVoiceOptions] = useState([]);
+  const [voicesLoading, setVoicesLoading] = useState(true);
+
+  // Fetch available voices from Retell
+  useEffect(() => {
+    const fetchVoices = async () => {
+      try {
+        const response = await authFetch('/api/scenarios/meta/voices');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.voices && data.voices.length > 0) {
+            setVoiceOptions(data.voices.map(v => ({
+              id: v.id,
+              name: v.name,
+              gender: v.gender === 'male' ? 'Male' : v.gender === 'female' ? 'Female' : 'Unknown',
+              provider: v.provider
+            })));
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch voices:', error);
+      } finally {
+        setVoicesLoading(false);
+      }
+    };
+    fetchVoices();
+  }, [authFetch]);
 
   const [formData, setFormData] = useState({
     aiModel: 'claude-sonnet-4-20250514',
@@ -433,27 +455,40 @@ export default function AISettings() {
           <label className="block text-sm font-medium text-gray-300 mb-3">
             Default Voice
           </label>
-          <div className="grid md:grid-cols-4 gap-3">
-            {VOICE_OPTIONS.map((voice) => (
-              <button
-                key={voice.id}
-                onClick={() => handleChange('voicePreferences', {
-                  ...formData.voicePreferences,
-                  defaultVoiceId: voice.id
-                })}
-                className={`p-3 rounded-lg border text-left transition-colors ${
-                  formData.voicePreferences.defaultVoiceId === voice.id
-                    ? 'border-primary-500 bg-primary-500/10'
-                    : 'border-gray-700 hover:border-gray-600'
-                }`}
-              >
-                <p className="font-medium text-gray-100">{voice.name}</p>
-                <p className="text-xs text-gray-400 mt-1">
-                  {voice.gender} - {voice.accent}
-                </p>
-              </button>
-            ))}
-          </div>
+          {voicesLoading ? (
+            <div className="flex items-center gap-2 text-gray-400">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span>Loading available voices...</span>
+            </div>
+          ) : voiceOptions.length === 0 ? (
+            <div className="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+              <p className="text-yellow-400 text-sm">
+                No voices found in your Retell account. Please check your Retell configuration.
+              </p>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-4 gap-3">
+              {voiceOptions.map((voice) => (
+                <button
+                  key={voice.id}
+                  onClick={() => handleChange('voicePreferences', {
+                    ...formData.voicePreferences,
+                    defaultVoiceId: voice.id
+                  })}
+                  className={`p-3 rounded-lg border text-left transition-colors ${
+                    formData.voicePreferences.defaultVoiceId === voice.id
+                      ? 'border-primary-500 bg-primary-500/10'
+                      : 'border-gray-700 hover:border-gray-600'
+                  }`}
+                >
+                  <p className="font-medium text-gray-100">{voice.name}</p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    {voice.gender} {voice.provider ? `(${voice.provider})` : ''}
+                  </p>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </motion.div>
 

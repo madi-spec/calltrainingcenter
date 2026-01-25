@@ -5,7 +5,8 @@ import { createClient } from '@supabase/supabase-js';
 // Initialize Supabase client (for database only, not auth)
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+// Use empty string for same-origin API calls in production (Vercel serves both frontend and API)
+const apiUrl = import.meta.env.VITE_API_URL || '';
 
 const supabase = supabaseUrl && supabaseAnonKey
   ? createClient(supabaseUrl, supabaseAnonKey)

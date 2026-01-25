@@ -264,6 +264,96 @@ function extractBrandColors(html) {
   return colors;
 }
 
+/**
+ * Extract brand colors from logo using Claude Vision
+ */
+async function extractColorsFromLogo(logoUrl, anthropicClient) {
+  try {
+    // Fetch the logo image
+    const imageResponse = await fetch(logoUrl, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CSRTrainingBot/1.0)' },
+      signal: AbortSignal.timeout(10000)
+    });
+
+    if (!imageResponse.ok) {
+      throw new Error(`Failed to fetch logo: ${imageResponse.status}`);
+    }
+
+    const contentType = imageResponse.headers.get('content-type') || 'image/png';
+    const imageBuffer = await imageResponse.arrayBuffer();
+    const base64Image = Buffer.from(imageBuffer).toString('base64');
+
+    // Determine media type
+    let mediaType = 'image/png';
+    if (contentType.includes('jpeg') || contentType.includes('jpg')) {
+      mediaType = 'image/jpeg';
+    } else if (contentType.includes('gif')) {
+      mediaType = 'image/gif';
+    } else if (contentType.includes('webp')) {
+      mediaType = 'image/webp';
+    } else if (contentType.includes('svg')) {
+      // SVG needs special handling - skip for now
+      throw new Error('SVG logos not supported for color extraction');
+    }
+
+    // Use Claude Vision to analyze the logo
+    const message = await anthropicClient.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 500,
+      messages: [{
+        role: 'user',
+        content: [
+          {
+            type: 'image',
+            source: {
+              type: 'base64',
+              media_type: mediaType,
+              data: base64Image
+            }
+          },
+          {
+            type: 'text',
+            text: `Analyze this company logo and extract the brand colors.
+
+Return ONLY valid JSON with the hex color codes (e.g., #ff0000):
+{
+  "primary": "The main/dominant brand color in the logo (hex code)",
+  "secondary": "A secondary color if present (hex code or null)",
+  "accent": "An accent/highlight color if present (hex code or null)"
+}
+
+Important:
+- Return actual hex codes like #e00b40, not color names
+- primary should be the most prominent/dominant color
+- If the logo is mostly one color, use that as primary
+- Ignore white, black, and gray unless they are clearly the brand color
+- Return null for colors that aren't clearly present`
+          }
+        ]
+      }]
+    });
+
+    const responseText = message.content[0].text;
+    console.log('[COLORS] Claude Vision response:', responseText);
+
+    // Parse the response
+    const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      const colors = JSON.parse(jsonMatch[0]);
+      return {
+        primary: colors.primary || null,
+        secondary: colors.secondary || null,
+        accent: colors.accent || null
+      };
+    }
+
+    throw new Error('Failed to parse color response');
+  } catch (error) {
+    console.error('[COLORS] Logo color extraction failed:', error.message);
+    throw error;
+  }
+}
+
 const router = Router();
 
 /**
@@ -516,12 +606,28 @@ router.post('/scrape-website', authMiddleware, tenantMiddleware, requireRole('ad
 
     const homepageHtml = await homepageResponse.text();
 
-    // Extract logo and brand colors from HTML before stripping tags
+    // Extract logo URL from HTML
     const logoUrl = extractLogoUrl(homepageHtml, baseUrl);
-    const brandColors = extractBrandColors(homepageHtml);
-
     console.log(`[SCRAPE] Extracted logo: ${logoUrl}`);
-    console.log(`[SCRAPE] Extracted brand colors:`, brandColors);
+
+    // Extract brand colors from logo using Claude Vision
+    let brandColors = { primary: null, secondary: null, accent: null };
+    if (logoUrl) {
+      try {
+        console.log(`[SCRAPE] Analyzing logo for brand colors: ${logoUrl}`);
+        brandColors = await extractColorsFromLogo(logoUrl, anthropic);
+        console.log(`[SCRAPE] Colors from logo:`, brandColors);
+      } catch (logoError) {
+        console.error(`[SCRAPE] Failed to extract colors from logo:`, logoError.message);
+        // Fall back to HTML extraction
+        brandColors = extractBrandColors(homepageHtml);
+        console.log(`[SCRAPE] Fallback to HTML colors:`, brandColors);
+      }
+    } else {
+      // No logo found, try HTML extraction
+      brandColors = extractBrandColors(homepageHtml);
+      console.log(`[SCRAPE] No logo, using HTML colors:`, brandColors);
+    }
 
     const homepageText = homepageHtml
       .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')

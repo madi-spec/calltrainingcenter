@@ -1115,11 +1115,35 @@ app.get('/api/debug/test-auth', async (req, res) => {
       const payload = await verifyToken(token, {
         secretKey: process.env.CLERK_SECRET_KEY
       });
+
+      // Now try to fetch user from database
+      const adminClient = createAdminClient();
+      const { data: user, error: userError } = await adminClient
+        .from('users')
+        .select(`
+          *,
+          organization:organizations(*),
+          branch:branches(*)
+        `)
+        .eq('clerk_id', payload.sub)
+        .single();
+
       res.json({
         success: true,
         clerkUserId: payload.sub,
         tokenExp: payload.exp,
-        tokenIat: payload.iat
+        tokenIat: payload.iat,
+        dbLookup: {
+          userFound: !!user,
+          userError: userError?.message || null,
+          userId: user?.id,
+          userEmail: user?.email,
+          userRole: user?.role,
+          userStatus: user?.status,
+          hasOrganization: !!user?.organization,
+          organizationId: user?.organization?.id,
+          organizationName: user?.organization?.name
+        }
       });
     } catch (verifyError) {
       res.json({
@@ -1131,7 +1155,7 @@ app.get('/api/debug/test-auth', async (req, res) => {
       });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message, stack: error.stack });
   }
 });
 

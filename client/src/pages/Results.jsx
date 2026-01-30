@@ -57,23 +57,47 @@ function Results() {
 
   // Fallback to synchronous analysis
   const runSyncAnalysis = useCallback(async () => {
-    if (!lastResults?.transcript || usingSyncFallback) return;
+    if (usingSyncFallback) return;
 
     setUsingSyncFallback(true);
     console.log('Falling back to synchronous analysis...');
+    console.log('lastResults:', lastResults);
 
     try {
       // Format transcript for analysis
-      const transcript = lastResults.transcript;
+      const transcript = lastResults?.transcript;
       let transcriptText = '';
-      if (transcript?.raw) {
+
+      console.log('Transcript object:', transcript);
+      console.log('Transcript type:', typeof transcript);
+
+      if (transcript?.raw && transcript.raw.length > 0) {
         transcriptText = transcript.raw;
-      } else if (transcript?.formatted && Array.isArray(transcript.formatted)) {
+        console.log('Using raw transcript, length:', transcriptText.length);
+      } else if (transcript?.formatted && Array.isArray(transcript.formatted) && transcript.formatted.length > 0) {
         transcriptText = transcript.formatted
           .map(entry => `${entry.role === 'agent' ? 'Customer' : 'CSR'}: ${entry.content}`)
           .join('\n');
-      } else if (typeof transcript === 'string') {
+        console.log('Using formatted transcript, length:', transcriptText.length);
+      } else if (Array.isArray(transcript) && transcript.length > 0) {
+        // Direct array from Retell
+        transcriptText = transcript
+          .map(entry => `${entry.role === 'agent' ? 'Customer' : 'CSR'}: ${entry.content}`)
+          .join('\n');
+        console.log('Using direct array transcript, length:', transcriptText.length);
+      } else if (typeof transcript === 'string' && transcript.length > 0) {
         transcriptText = transcript;
+        console.log('Using string transcript, length:', transcriptText.length);
+      }
+
+      if (!transcriptText || transcriptText.length < 10) {
+        console.error('No valid transcript found for analysis');
+        setLastResults(prev => ({
+          ...prev,
+          analysisStatus: 'failed',
+          analysisError: 'No transcript available for analysis'
+        }));
+        return;
       }
 
       const response = await authFetch('/api/analysis/analyze', {

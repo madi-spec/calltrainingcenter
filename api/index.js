@@ -1246,7 +1246,12 @@ app.get('/api/analysis/status/:analysisId', optionalAuthMiddleware, (req, res) =
 app.post('/api/analysis/analyze', optionalAuthMiddleware, async (req, res) => {
   try {
     const { transcript, scenario, callDuration } = req.body;
-    if (!transcript) return res.status(400).json({ error: 'Transcript is required' });
+    console.log('[ANALYSIS] Received request, transcript length:', transcript?.length || 0, 'type:', typeof transcript);
+
+    if (!transcript || transcript.length < 10) {
+      console.log('[ANALYSIS] Transcript too short or missing');
+      return res.status(400).json({ error: 'Transcript is required and must have content' });
+    }
 
     const company = await getCompanyConfig(req);
     const customPrompts = req.organization?.settings?.customPrompts || null;

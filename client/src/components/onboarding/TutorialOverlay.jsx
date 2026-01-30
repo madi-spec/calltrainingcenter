@@ -198,7 +198,7 @@ export default function TutorialOverlay() {
             className="fixed inset-0 z-[10000]"
             onClick={(e) => {
               // Allow clicks on the target element
-              if (targetRect) {
+              if (targetRect && currentStep) {
                 const { clientX, clientY } = e;
                 const isInTarget =
                   clientX >= targetRect.left &&
@@ -206,8 +206,26 @@ export default function TutorialOverlay() {
                   clientY >= targetRect.top &&
                   clientY <= targetRect.bottom;
                 if (isInTarget) {
-                  // Let the click through, then advance tutorial
-                  setTimeout(handleNext, 300);
+                  // Find the actual target element and trigger click
+                  const target = document.querySelector(currentStep.target);
+                  if (target) {
+                    // Try to find a clickable element: link, button, or element with cursor-pointer
+                    const clickable =
+                      target.querySelector('a, button, [role="button"]') ||
+                      target.querySelector('[class*="cursor-pointer"]') ||
+                      target.firstElementChild ||
+                      target;
+
+                    // Dispatch a real click event that will trigger React handlers
+                    const clickEvent = new MouseEvent('click', {
+                      bubbles: true,
+                      cancelable: true,
+                      view: window
+                    });
+                    clickable.dispatchEvent(clickEvent);
+                  }
+                  // Advance tutorial after a short delay
+                  setTimeout(handleNext, 400);
                   return;
                 }
               }

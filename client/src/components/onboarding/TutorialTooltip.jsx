@@ -14,7 +14,10 @@ export default function TutorialTooltip({
   progress,
   canGoBack = true
 }) {
-  if (!step || !targetRect) return null;
+  if (!step) return null;
+
+  // If target element not found, show a centered fallback tooltip
+  const showFallback = !targetRect;
 
   // Calculate tooltip position based on target element
   const getTooltipStyle = () => {
@@ -62,7 +65,15 @@ export default function TutorialTooltip({
     return { top, left, width: tooltipWidth };
   };
 
-  const style = getTooltipStyle();
+  // Use centered style for fallback, otherwise calculate position
+  const style = showFallback
+    ? {
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 320
+      }
+    : getTooltipStyle();
 
   // Arrow position based on tooltip position
   const getArrowStyle = () => {
@@ -114,11 +125,13 @@ export default function TutorialTooltip({
       className="fixed z-[10001] bg-gray-800 rounded-xl border border-blue-500/50 shadow-xl shadow-blue-500/10"
       style={style}
     >
-      {/* Arrow */}
-      <div
-        className="absolute w-4 h-4 bg-gray-800"
-        style={getArrowStyle()}
-      />
+      {/* Arrow - only show when we have a target */}
+      {!showFallback && (
+        <div
+          className="absolute w-4 h-4 bg-gray-800"
+          style={getArrowStyle()}
+        />
+      )}
 
       {/* Content */}
       <div className="p-4">
@@ -140,6 +153,13 @@ export default function TutorialTooltip({
         <p className="text-gray-300 text-sm mb-4">
           {step.description}
         </p>
+
+        {/* Fallback message when element not found */}
+        {showFallback && (
+          <p className="text-yellow-400 text-xs mb-4 bg-yellow-400/10 p-2 rounded-lg">
+            The highlighted element isn't visible yet. Click "Next" to continue or navigate to the correct page.
+          </p>
+        )}
 
         {/* Progress bar */}
         {progress && (

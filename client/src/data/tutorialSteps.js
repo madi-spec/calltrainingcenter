@@ -31,8 +31,8 @@ export const TUTORIAL_STEPS = [
     target: '[data-tutorial="dashboard-stats"]',
     title: 'Your Dashboard',
     description: 'This is your personal dashboard. Track your training progress, streaks, points, and recent activity all in one place.',
-    position: 'bottom',
-    highlightPadding: 12
+    position: 'right',
+    highlightPadding: 8
   },
   {
     id: 'scenarios',
@@ -61,7 +61,8 @@ export const TUTORIAL_STEPS = [
     target: '[data-tutorial="pre-call-info"]',
     title: 'Pre-Call Briefing',
     description: 'Before each call, review the scenario details, customer background, and your objectives. This prepares you for the conversation.',
-    position: 'left',
+    position: 'bottom',
+    highlightPadding: 8,
     action: {
       type: 'navigate-to-scenario'
     }
@@ -81,7 +82,7 @@ export const TUTORIAL_STEPS = [
     target: '[data-tutorial="gamification"]',
     title: 'Points & Achievements',
     description: 'Earn points for completing training sessions. Build your streak by practicing daily, and unlock badges as you improve!',
-    position: 'left',
+    position: 'top',
     highlightPadding: 8,
     action: {
       type: 'navigate',

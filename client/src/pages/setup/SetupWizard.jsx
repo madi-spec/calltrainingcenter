@@ -25,7 +25,6 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { useOrganization } from '../../context/OrganizationContext';
 import { useNotifications } from '../../context/NotificationContext';
-import { useTutorial } from '../../context/TutorialContext';
 import CompanyInfoStep from './steps/CompanyInfoStep';
 import ServiceLinesStep from './steps/ServiceLinesStep';
 import PackagesStep from './steps/PackagesStep';
@@ -143,19 +142,11 @@ const STEPS = [
 export default function SetupWizard() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { authFetch, role, profile } = useAuth();
+  const { authFetch, role } = useAuth();
   const { organization, refreshOrganization } = useOrganization();
   const notifications = useNotifications();
   const showSuccess = notifications?.showSuccess || (() => {});
   const showError = notifications?.showError || (() => {});
-
-  // Tutorial - will start after setup completion for new users
-  let tutorial = null;
-  try {
-    tutorial = useTutorial();
-  } catch (e) {
-    // Tutorial context not available (e.g., direct URL access)
-  }
 
   const [currentStep, setCurrentStep] = useState(0);
   const [stepData, setStepData] = useState({});
@@ -293,17 +284,7 @@ export default function SetupWizard() {
           // Continue anyway
         }
         showSuccess('Setup Complete', 'Your organization is ready to go!');
-
-        // Start tutorial for new users after setup
-        if (isNewUser && tutorial?.startTutorial) {
-          navigate('/dashboard');
-          // Small delay to let dashboard render before starting tutorial
-          setTimeout(() => {
-            tutorial.startTutorial();
-          }, 500);
-        } else {
-          navigate('/dashboard');
-        }
+        navigate('/dashboard');
       } else {
         let errorMessage = 'Failed to complete setup';
         try {

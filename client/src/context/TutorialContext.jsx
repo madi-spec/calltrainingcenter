@@ -43,6 +43,13 @@ export function TutorialProvider({ children }) {
 
         // Check if user has completed onboarding
         if (profile) {
+          // Skip tutorial entirely for super_admins - they use the setup wizard instead
+          if (profile.role === 'super_admin') {
+            setIsActive(false);
+            setIsLoading(false);
+            return;
+          }
+
           if (profile.onboarding_completed) {
             // Don't auto-start for users who completed
             if (!stored?.isActive) {
@@ -54,7 +61,7 @@ export function TutorialProvider({ children }) {
             if (progress.steps_completed) {
               setCompletedSteps(progress.steps_completed);
             }
-            // Auto-start for new users
+            // Auto-start for new users (trainees/managers only)
             if (!progress.started_at && !stored) {
               setIsActive(true);
               setCurrentStep(TUTORIAL_STEPS[0]);

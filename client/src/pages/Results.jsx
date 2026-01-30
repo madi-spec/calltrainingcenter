@@ -38,6 +38,13 @@ function Results() {
   const [pollFailures, setPollFailures] = useState(0);
   const [usingSyncFallback, setUsingSyncFallback] = useState(false);
 
+  // Debug: Log whenever lastResults changes
+  useEffect(() => {
+    console.log('lastResults changed:', lastResults);
+    console.log('analysisStatus:', lastResults?.analysisStatus);
+    console.log('analysis:', lastResults?.analysis);
+  }, [lastResults]);
+
   // Try to recover results from sessionStorage if not in context
   useEffect(() => {
     if (!lastResults && !recoveredFromStorage) {
@@ -122,11 +129,17 @@ function Results() {
       if (response.ok) {
         const data = await response.json();
         console.log('Analysis successful, score:', data.analysis?.overallScore);
-        setLastResults(prev => ({
-          ...prev,
-          analysis: data.analysis,
-          analysisStatus: 'completed'
-        }));
+        console.log('Full analysis data:', data.analysis);
+        setLastResults(prev => {
+          console.log('setLastResults called with prev:', prev);
+          const newResults = {
+            ...prev,
+            analysis: data.analysis,
+            analysisStatus: 'completed'
+          };
+          console.log('setLastResults returning:', newResults);
+          return newResults;
+        });
       } else {
         const errorText = await response.text();
         console.error('Analysis failed with status:', response.status, 'Error:', errorText);

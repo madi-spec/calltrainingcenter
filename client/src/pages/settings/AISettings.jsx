@@ -20,7 +20,12 @@ import {
   Shield,
   Zap,
   Users,
-  HelpCircle
+  HelpCircle,
+  Plus,
+  Trash2,
+  CheckCircle,
+  XCircle,
+  ListChecks
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useOrganization } from '../../context/OrganizationContext';
@@ -199,6 +204,18 @@ export default function AISettings() {
   const [hasCustomPrompts, setHasCustomPrompts] = useState({ agent: false, coaching: false });
   const [promptsLoading, setPromptsLoading] = useState(true);
 
+  // Scoring criteria state
+  const [scoringCriteria, setScoringCriteria] = useState({
+    requiredPhrases: [],
+    prohibitedPhrases: [],
+    customCriteria: []
+  });
+  const [criteriaExpanded, setCriteriaExpanded] = useState(false);
+  const [savingCriteria, setSavingCriteria] = useState(false);
+  const [newRequired, setNewRequired] = useState({ phrase: '', description: '', impact: 'medium' });
+  const [newProhibited, setNewProhibited] = useState({ phrase: '', description: '', impact: 'medium' });
+  const [newCustom, setNewCustom] = useState({ criterion: '', category: 'scenarioSpecific', impact: 'medium' });
+
   // Fetch voices
   useEffect(() => {
     const fetchVoices = async () => {
@@ -254,6 +271,10 @@ export default function AISettings() {
           }
           if (data.customPrompts?.coachingWizardAnswers) {
             setCoachingWizardAnswers(data.customPrompts.coachingWizardAnswers);
+          }
+          // Load scoring criteria
+          if (data.customPrompts?.scoringCriteria) {
+            setScoringCriteria(data.customPrompts.scoringCriteria);
           }
         }
       } catch (error) {
@@ -624,6 +645,66 @@ Respond with JSON in this exact format:
       }
     } catch (error) {
       showError('Error', error.message || 'Failed to reset configuration');
+    }
+  };
+
+  // Scoring criteria management
+  const addRequiredPhrase = () => {
+    if (!newRequired.phrase.trim()) return;
+    setScoringCriteria(prev => ({
+      ...prev,
+      requiredPhrases: [...prev.requiredPhrases, { ...newRequired }]
+    }));
+    setNewRequired({ phrase: '', description: '', impact: 'medium' });
+  };
+
+  const addProhibitedPhrase = () => {
+    if (!newProhibited.phrase.trim()) return;
+    setScoringCriteria(prev => ({
+      ...prev,
+      prohibitedPhrases: [...prev.prohibitedPhrases, { ...newProhibited }]
+    }));
+    setNewProhibited({ phrase: '', description: '', impact: 'medium' });
+  };
+
+  const addCustomCriterion = () => {
+    if (!newCustom.criterion.trim()) return;
+    setScoringCriteria(prev => ({
+      ...prev,
+      customCriteria: [...prev.customCriteria, { ...newCustom }]
+    }));
+    setNewCustom({ criterion: '', category: 'scenarioSpecific', impact: 'medium' });
+  };
+
+  const removeItem = (type, index) => {
+    setScoringCriteria(prev => ({
+      ...prev,
+      [type]: prev[type].filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleSaveCriteria = async () => {
+    setSavingCriteria(true);
+    try {
+      const response = await authFetch('/api/admin/prompts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          scoringCriteria,
+          preserveAgent: true,
+          preserveCoaching: true
+        })
+      });
+
+      if (response?.ok) {
+        showSuccess('Criteria Saved', 'Custom scoring criteria have been saved');
+      } else {
+        throw new Error('Failed to save criteria');
+      }
+    } catch (error) {
+      showError('Error', error.message || 'Failed to save scoring criteria');
+    } finally {
+      setSavingCriteria(false);
     }
   };
 
@@ -999,6 +1080,268 @@ Respond with JSON in this exact format:
             </div>
           </div>
         )}
+      </motion.div>
+
+      {/* Custom Scoring Criteria (Collapsible) */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25 }}
+        className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden"
+      >
+        <button
+          onClick={() => setCriteriaExpanded(!criteriaExpanded)}
+          className="w-full p-6 flex items-center justify-between hover:bg-gray-750 transition-colors"
+        >
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-orange-500/10 rounded-lg">
+              <ListChecks className="w-6 h-6 text-orange-400" />
+            </div>
+            <div className="text-left">
+              <h2 className="text-lg font-semibold text-gray-100">Custom Scoring Criteria</h2>
+              <p className="text-sm text-gray-400">
+                Define specific behaviors that impact scores
+                {(scoringCriteria.requiredPhrases.length > 0 || scoringCriteria.prohibitedPhrases.length > 0) && (
+                  <span className="ml-2 text-orange-400">
+                    ({scoringCriteria.requiredPhrases.length + scoringCriteria.prohibitedPhrases.length + scoringCriteria.customCriteria.length} rules)
+                  </span>
+                )}
+              </p>
+            </div>
+          </div>
+          {criteriaExpanded ? (
+            <ChevronUp className="w-5 h-5 text-gray-400" />
+          ) : (
+            <ChevronDown className="w-5 h-5 text-gray-400" />
+          )}
+        </button>
+
+        <AnimatePresence>
+          {criteriaExpanded && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="p-6 pt-0 border-t border-gray-700 space-y-6">
+                {/* Required Phrases Section */}
+                <div>
+                  <h3 className="flex items-center gap-2 text-sm font-medium text-green-400 mb-3">
+                    <CheckCircle className="w-4 h-4" />
+                    Required Behaviors (Reward if present)
+                  </h3>
+                  <p className="text-xs text-gray-500 mb-3">
+                    CSRs will be rewarded when they include these phrases or behaviors
+                  </p>
+
+                  {/* Existing items */}
+                  {scoringCriteria.requiredPhrases.map((item, index) => (
+                    <div key={index} className="flex items-center gap-2 mb-2 p-2 bg-green-500/10 rounded-lg">
+                      <div className="flex-1">
+                        <span className="text-sm text-green-300">"{item.phrase}"</span>
+                        {item.description && (
+                          <span className="text-xs text-gray-500 ml-2">- {item.description}</span>
+                        )}
+                      </div>
+                      <span className={`text-xs px-2 py-0.5 rounded ${
+                        item.impact === 'high' ? 'bg-green-500/20 text-green-400' :
+                        item.impact === 'low' ? 'bg-gray-500/20 text-gray-400' :
+                        'bg-yellow-500/20 text-yellow-400'
+                      }`}>
+                        {item.impact}
+                      </span>
+                      <button
+                        onClick={() => removeItem('requiredPhrases', index)}
+                        className="p-1 text-gray-500 hover:text-red-400"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+
+                  {/* Add new form */}
+                  <div className="flex gap-2 mt-3">
+                    <input
+                      type="text"
+                      placeholder="Phrase or behavior..."
+                      value={newRequired.phrase}
+                      onChange={(e) => setNewRequired(prev => ({ ...prev, phrase: e.target.value }))}
+                      className="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-100 placeholder-gray-500"
+                    />
+                    <select
+                      value={newRequired.impact}
+                      onChange={(e) => setNewRequired(prev => ({ ...prev, impact: e.target.value }))}
+                      className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-100"
+                    >
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                    </select>
+                    <button
+                      onClick={addRequiredPhrase}
+                      disabled={!newRequired.phrase.trim()}
+                      className="px-3 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-700 text-white rounded-lg"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Prohibited Phrases Section */}
+                <div>
+                  <h3 className="flex items-center gap-2 text-sm font-medium text-red-400 mb-3">
+                    <XCircle className="w-4 h-4" />
+                    Prohibited Behaviors (Penalize if present)
+                  </h3>
+                  <p className="text-xs text-gray-500 mb-3">
+                    CSRs will be penalized when they use these phrases or behaviors
+                  </p>
+
+                  {/* Existing items */}
+                  {scoringCriteria.prohibitedPhrases.map((item, index) => (
+                    <div key={index} className="flex items-center gap-2 mb-2 p-2 bg-red-500/10 rounded-lg">
+                      <div className="flex-1">
+                        <span className="text-sm text-red-300">"{item.phrase}"</span>
+                        {item.description && (
+                          <span className="text-xs text-gray-500 ml-2">- {item.description}</span>
+                        )}
+                      </div>
+                      <span className={`text-xs px-2 py-0.5 rounded ${
+                        item.impact === 'high' ? 'bg-red-500/20 text-red-400' :
+                        item.impact === 'low' ? 'bg-gray-500/20 text-gray-400' :
+                        'bg-yellow-500/20 text-yellow-400'
+                      }`}>
+                        {item.impact}
+                      </span>
+                      <button
+                        onClick={() => removeItem('prohibitedPhrases', index)}
+                        className="p-1 text-gray-500 hover:text-red-400"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+
+                  {/* Add new form */}
+                  <div className="flex gap-2 mt-3">
+                    <input
+                      type="text"
+                      placeholder="Phrase to avoid..."
+                      value={newProhibited.phrase}
+                      onChange={(e) => setNewProhibited(prev => ({ ...prev, phrase: e.target.value }))}
+                      className="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-100 placeholder-gray-500"
+                    />
+                    <select
+                      value={newProhibited.impact}
+                      onChange={(e) => setNewProhibited(prev => ({ ...prev, impact: e.target.value }))}
+                      className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-100"
+                    >
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                    </select>
+                    <button
+                      onClick={addProhibitedPhrase}
+                      disabled={!newProhibited.phrase.trim()}
+                      className="px-3 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-700 text-white rounded-lg"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Custom Criteria Section */}
+                <div>
+                  <h3 className="flex items-center gap-2 text-sm font-medium text-blue-400 mb-3">
+                    <Target className="w-4 h-4" />
+                    Custom Success Criteria
+                  </h3>
+                  <p className="text-xs text-gray-500 mb-3">
+                    Additional criteria specific to your business
+                  </p>
+
+                  {/* Existing items */}
+                  {scoringCriteria.customCriteria.map((item, index) => (
+                    <div key={index} className="flex items-center gap-2 mb-2 p-2 bg-blue-500/10 rounded-lg">
+                      <div className="flex-1">
+                        <span className="text-sm text-blue-300">{item.criterion}</span>
+                        <span className="text-xs text-gray-500 ml-2">({item.category})</span>
+                      </div>
+                      <span className={`text-xs px-2 py-0.5 rounded ${
+                        item.impact === 'high' ? 'bg-blue-500/20 text-blue-400' :
+                        item.impact === 'low' ? 'bg-gray-500/20 text-gray-400' :
+                        'bg-yellow-500/20 text-yellow-400'
+                      }`}>
+                        {item.impact}
+                      </span>
+                      <button
+                        onClick={() => removeItem('customCriteria', index)}
+                        className="p-1 text-gray-500 hover:text-red-400"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+
+                  {/* Add new form */}
+                  <div className="flex gap-2 mt-3">
+                    <input
+                      type="text"
+                      placeholder="Success criterion..."
+                      value={newCustom.criterion}
+                      onChange={(e) => setNewCustom(prev => ({ ...prev, criterion: e.target.value }))}
+                      className="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-100 placeholder-gray-500"
+                    />
+                    <select
+                      value={newCustom.category}
+                      onChange={(e) => setNewCustom(prev => ({ ...prev, category: e.target.value }))}
+                      className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-100"
+                    >
+                      <option value="empathyRapport">Empathy</option>
+                      <option value="problemResolution">Resolution</option>
+                      <option value="productKnowledge">Knowledge</option>
+                      <option value="professionalism">Professional</option>
+                      <option value="scenarioSpecific">General</option>
+                    </select>
+                    <select
+                      value={newCustom.impact}
+                      onChange={(e) => setNewCustom(prev => ({ ...prev, impact: e.target.value }))}
+                      className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-100"
+                    >
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                    </select>
+                    <button
+                      onClick={addCustomCriterion}
+                      disabled={!newCustom.criterion.trim()}
+                      className="px-3 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 text-white rounded-lg"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Save button */}
+                <div className="flex justify-end pt-4 border-t border-gray-700">
+                  <button
+                    onClick={handleSaveCriteria}
+                    disabled={savingCriteria}
+                    className="flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 disabled:bg-gray-700 text-white font-medium rounded-lg transition-colors"
+                  >
+                    {savingCriteria ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Save className="w-4 h-4" />
+                    )}
+                    Save Scoring Criteria
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
 
       {/* Voice Preferences (Collapsible) */}

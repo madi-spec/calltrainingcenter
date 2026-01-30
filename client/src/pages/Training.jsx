@@ -38,7 +38,6 @@ function Training() {
     reset
   } = useRetellCall();
 
-  const [analyzing, setAnalyzing] = useState(false);
   const [callStarted, setCallStarted] = useState(false);
 
   // Redirect if no scenario selected
@@ -60,53 +59,44 @@ function Training() {
     const callData = await endCall();
     setCurrentCall(callData);
 
-    // Analyze the call
-    setAnalyzing(true);
+    // Start async analysis - don't wait for it to complete
+    const analysisId = `analysis_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
     try {
-      const response = await authFetch('/api/analysis/analyze', {
+      // Fire off the analysis request (don't await the full response)
+      authFetch('/api/analysis/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           transcript: formatTranscriptForAnalysis(callData.transcript),
           scenario: currentScenario,
-          callDuration: callData.duration
+          callDuration: callData.duration,
+          sessionId: analysisId
         })
-      });
+      }).catch(err => console.error('Error starting analysis:', err));
 
-      if (response.ok) {
-        const data = await response.json();
-        const results = {
-          analysis: data.analysis,
-          transcript: callData.transcript,
-          scenario: currentScenario,
-          duration: callData.duration
-        };
-        setLastResults(results);
+      // Store pending results with analysis ID for Results page to poll
+      const pendingResults = {
+        analysisId,
+        analysisStatus: 'processing',
+        transcript: callData.transcript,
+        scenario: currentScenario,
+        duration: callData.duration
+      };
+      setLastResults(pendingResults);
 
-        // Update module progress if this is a generated scenario
-        if (currentScenario.isGeneratedScenario && currentScenario.moduleId) {
-          try {
-            const score = data.analysis?.overall_score || 0;
-            const won = score >= 70; // Consider "won" if score is 70+
-
-            await authFetch(`/api/modules/${currentScenario.moduleId}/complete-scenario`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                scenario_id: currentScenario.id,
-                won,
-                score
-              })
-            });
-          } catch (moduleErr) {
-            console.error('Error updating module progress:', moduleErr);
-          }
-        }
-      }
     } catch (err) {
-      console.error('Error analyzing call:', err);
+      console.error('Error starting analysis:', err);
+      // Still navigate with what we have
+      setLastResults({
+        transcript: callData.transcript,
+        scenario: currentScenario,
+        duration: callData.duration,
+        analysisStatus: 'failed'
+      });
     }
 
+    // Navigate immediately - Results page will handle polling
     navigate('/results');
   };
 
@@ -282,8 +272,8 @@ function Training() {
             </motion.div>
           )}
 
-          {/* Ending/Analyzing State */}
-          {(isEnding || analyzing) && (
+          {/* Ending State */}
+          {isEnding && (
             <motion.div
               key="ending"
               initial={{ opacity: 0, scale: 0.9 }}
@@ -292,14 +282,8 @@ function Training() {
               className="text-center"
             >
               <Loader2 className="w-16 h-16 text-blue-500 mx-auto mb-6 animate-spin" />
-              <h2 className="text-2xl font-bold text-white mb-2">
-                {analyzing ? 'Analyzing Your Performance...' : 'Ending Call...'}
-              </h2>
-              <p className="text-gray-400">
-                {analyzing
-                  ? 'Our AI coach is reviewing your conversation'
-                  : 'Saving transcript and preparing analysis'}
-              </p>
+              <h2 className="text-2xl font-bold text-white mb-2">Ending Call...</h2>
+              <p className="text-gray-400">Saving your conversation</p>
             </motion.div>
           )}
 

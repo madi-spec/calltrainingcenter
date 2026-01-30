@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -11,9 +11,15 @@ import {
   Clock,
   RotateCcw,
   BarChart2,
-  Play
+  Play,
+  Loader2,
+  CheckCircle2,
+  Brain,
+  FileText,
+  BarChart
 } from 'lucide-react';
 import { useConfig } from '../context/ConfigContext';
+import { useAuth } from '../context/AuthContext';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import ScoreRing from '../components/coaching/ScoreRing';
@@ -23,7 +29,86 @@ import ShareButton from '../components/social/ShareButton';
 
 function Results() {
   const navigate = useNavigate();
-  const { lastResults, clearSession } = useConfig();
+  const { lastResults, setLastResults, clearSession } = useConfig();
+  const { authFetch } = useAuth();
+
+  const [analysisProgress, setAnalysisProgress] = useState(0);
+  const [currentStep, setCurrentStep] = useState('processing');
+
+  // Poll for analysis completion
+  const pollAnalysis = useCallback(async () => {
+    if (!lastResults?.analysisId || lastResults?.analysis) return;
+
+    try {
+      const response = await authFetch(`/api/analysis/status/${lastResults.analysisId}`);
+      if (response.ok) {
+        const data = await response.json();
+
+        if (data.status === 'completed') {
+          // Update results with completed analysis
+          setLastResults(prev => ({
+            ...prev,
+            analysis: data.analysis,
+            analysisStatus: 'completed'
+          }));
+
+          // Update module progress if this is a generated scenario
+          if (lastResults.scenario?.isGeneratedScenario && lastResults.scenario?.moduleId) {
+            try {
+              const score = data.analysis?.overallScore || 0;
+              const won = score >= 70;
+
+              await authFetch(`/api/modules/${lastResults.scenario.moduleId}/complete-scenario`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  scenario_id: lastResults.scenario.id,
+                  won,
+                  score
+                })
+              });
+            } catch (moduleErr) {
+              console.error('Error updating module progress:', moduleErr);
+            }
+          }
+        } else if (data.status === 'failed') {
+          setLastResults(prev => ({
+            ...prev,
+            analysisStatus: 'failed',
+            analysisError: data.error
+          }));
+        } else {
+          // Still processing - update progress
+          const elapsed = data.elapsedMs || 0;
+          const estimated = data.estimatedTotalMs || 15000;
+          setAnalysisProgress(Math.min(95, (elapsed / estimated) * 100));
+        }
+      }
+    } catch (err) {
+      console.error('Error polling analysis:', err);
+    }
+  }, [lastResults?.analysisId, lastResults?.analysis, lastResults?.scenario, authFetch, setLastResults]);
+
+  // Start polling when we have an analysis in progress
+  useEffect(() => {
+    if (lastResults?.analysisStatus === 'processing' && lastResults?.analysisId) {
+      const interval = setInterval(pollAnalysis, 2000);
+      pollAnalysis(); // Initial poll
+
+      // Animate through steps
+      const steps = ['processing', 'analyzing', 'scoring', 'generating'];
+      let stepIndex = 0;
+      const stepInterval = setInterval(() => {
+        stepIndex = (stepIndex + 1) % steps.length;
+        setCurrentStep(steps[stepIndex]);
+      }, 3000);
+
+      return () => {
+        clearInterval(interval);
+        clearInterval(stepInterval);
+      };
+    }
+  }, [lastResults?.analysisStatus, lastResults?.analysisId, pollAnalysis]);
 
   // Redirect if no results
   useEffect(() => {
@@ -36,9 +121,116 @@ function Results() {
     return null;
   }
 
-  const { analysis, scenario, duration } = lastResults;
+  const { analysis, scenario, duration, analysisStatus } = lastResults;
 
   const isModuleScenario = scenario?.isGeneratedScenario && scenario?.moduleId;
+
+  // Show loading state while analysis is in progress
+  if (analysisStatus === 'processing') {
+    const steps = [
+      { id: 'processing', label: 'Processing transcript', icon: FileText },
+      { id: 'analyzing', label: 'Analyzing conversation', icon: Brain },
+      { id: 'scoring', label: 'Calculating scores', icon: BarChart },
+      { id: 'generating', label: 'Generating feedback', icon: Lightbulb }
+    ];
+
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center"
+        >
+          {/* Animated loader */}
+          <div className="relative w-32 h-32 mx-auto mb-8">
+            <motion.div
+              className="absolute inset-0 rounded-full border-4 border-primary-500/20"
+            />
+            <motion.div
+              className="absolute inset-0 rounded-full border-4 border-transparent border-t-primary-500"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+            />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Brain className="w-12 h-12 text-primary-400" />
+            </div>
+          </div>
+
+          <h2 className="text-2xl font-bold text-white mb-2">
+            Analyzing Your Performance
+          </h2>
+          <p className="text-gray-400 mb-8">
+            Our AI coach is reviewing your conversation and preparing detailed feedback
+          </p>
+
+          {/* Progress bar */}
+          <div className="w-full bg-gray-700 rounded-full h-2 mb-6 overflow-hidden">
+            <motion.div
+              className="h-full bg-gradient-to-r from-primary-500 to-purple-500"
+              initial={{ width: 0 }}
+              animate={{ width: `${analysisProgress}%` }}
+              transition={{ duration: 0.5 }}
+            />
+          </div>
+
+          {/* Progress steps */}
+          <div className="grid grid-cols-2 gap-4 text-left">
+            {steps.map((step, index) => {
+              const StepIcon = step.icon;
+              const isActive = currentStep === step.id;
+              const isPast = steps.findIndex(s => s.id === currentStep) > index;
+
+              return (
+                <motion.div
+                  key={step.id}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${
+                    isActive ? 'bg-primary-500/10 border border-primary-500/30' :
+                    isPast ? 'bg-green-500/10' : 'bg-gray-800'
+                  }`}
+                >
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                    isPast ? 'bg-green-500/20' : isActive ? 'bg-primary-500/20' : 'bg-gray-700'
+                  }`}>
+                    {isPast ? (
+                      <CheckCircle2 className="w-4 h-4 text-green-400" />
+                    ) : isActive ? (
+                      <Loader2 className="w-4 h-4 text-primary-400 animate-spin" />
+                    ) : (
+                      <StepIcon className="w-4 h-4 text-gray-500" />
+                    )}
+                  </div>
+                  <span className={`text-sm ${
+                    isPast ? 'text-green-400' : isActive ? 'text-primary-400' : 'text-gray-500'
+                  }`}>
+                    {step.label}
+                  </span>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Call summary while waiting */}
+          <div className="mt-8 p-4 bg-gray-800 rounded-lg border border-gray-700">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-gray-400">Scenario</span>
+              <span className="text-white">{scenario?.name}</span>
+            </div>
+            <div className="flex items-center justify-between text-sm mt-2">
+              <span className="text-gray-400">Call Duration</span>
+              <span className="text-white">{formatDuration(duration)}</span>
+            </div>
+            <div className="flex items-center justify-between text-sm mt-2">
+              <span className="text-gray-400">Customer</span>
+              <span className="text-white">{scenario?.customerName}</span>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
 
   const handleTryAgain = () => {
     clearSession();

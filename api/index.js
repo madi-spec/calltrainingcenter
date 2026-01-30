@@ -408,7 +408,7 @@ function buildAgentPrompt(scenario, company, customTemplate = null) {
 }
 
 function buildCoachingPrompt(transcript, context, customTemplates = null) {
-  const { scenario, company, callDuration, productContext } = context;
+  const { scenario, company, callDuration, productContext, scoringCriteria } = context;
 
   const systemTemplate = customTemplates?.system || DEFAULT_COACHING_SYSTEM_PROMPT;
   let userTemplate = customTemplates?.user || DEFAULT_COACHING_USER_PROMPT;
@@ -439,6 +439,54 @@ ${productContext.guidelines.map(g => `- **${g.title || g.type}**: ${g.content}`)
   } else {
     // Remove the productContext section if not available
     userTemplate = userTemplate.replace(/\{\{#if productContext\}\}[\s\S]*?\{\{\/if\}\}/g, '');
+  }
+
+  // Build custom scoring criteria section if available
+  let scoringSection = '';
+  if (scoringCriteria) {
+    const { requiredPhrases, prohibitedPhrases, customCriteria } = scoringCriteria;
+
+    if (requiredPhrases?.length > 0 || prohibitedPhrases?.length > 0 || customCriteria?.length > 0) {
+      scoringSection = `
+
+## Company-Specific Scoring Criteria
+
+IMPORTANT: These criteria MUST be factored into the scoring. Check for each one explicitly.
+`;
+
+      if (requiredPhrases?.length > 0) {
+        scoringSection += `
+### Required Behaviors/Phrases (REWARD if present, PENALIZE if missing)
+${requiredPhrases.map(p => `- "${p.phrase}" - ${p.description || 'Required'} (Impact: ${p.impact || 'medium'})`).join('\n')}
+`;
+      }
+
+      if (prohibitedPhrases?.length > 0) {
+        scoringSection += `
+### Prohibited Behaviors/Phrases (PENALIZE if present)
+${prohibitedPhrases.map(p => `- "${p.phrase}" - ${p.description || 'Prohibited'} (Impact: ${p.impact || 'medium'})`).join('\n')}
+`;
+      }
+
+      if (customCriteria?.length > 0) {
+        scoringSection += `
+### Additional Success Criteria
+${customCriteria.map(c => `- ${c.criterion} (Category: ${c.category || 'scenarioSpecific'}, Impact: ${c.impact || 'medium'})`).join('\n')}
+`;
+      }
+
+      scoringSection += `
+In your analysis, explicitly note which company-specific criteria were met or missed.
+`;
+    }
+  }
+
+  // Append scoring section before the JSON format instructions
+  if (scoringSection) {
+    userTemplate = userTemplate.replace(
+      /Respond with JSON in this exact format:/,
+      `${scoringSection}\nRespond with JSON in this exact format:`
+    );
   }
 
   // Build context for template replacement
@@ -988,7 +1036,122 @@ app.post('/api/calls/end', async (req, res) => {
   }
 });
 
-// Analyze transcript
+// In-memory store for pending analyses (in production, use Redis or database)
+const pendingAnalyses = new Map();
+
+// Start async analysis - returns immediately with session ID
+app.post('/api/analysis/start', optionalAuthMiddleware, async (req, res) => {
+  try {
+    const { transcript, scenario, callDuration, sessionId } = req.body;
+    if (!transcript) return res.status(400).json({ error: 'Transcript is required' });
+
+    const analysisId = sessionId || `analysis_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    // Store pending analysis
+    pendingAnalyses.set(analysisId, {
+      status: 'processing',
+      startedAt: Date.now(),
+      transcript,
+      scenario,
+      callDuration
+    });
+
+    // Return immediately
+    res.json({
+      success: true,
+      analysisId,
+      status: 'processing',
+      message: 'Analysis started'
+    });
+
+    // Run analysis in background
+    (async () => {
+      try {
+        const company = await getCompanyConfig(req);
+        const customPrompts = req.organization?.settings?.customPrompts || null;
+        const scoringCriteria = customPrompts?.scoringCriteria || null;
+
+        let productContext = null;
+        if (req.organization?.id) {
+          productContext = await getProductContext(req.organization.id);
+        }
+
+        const { system, user } = buildCoachingPrompt(
+          transcript,
+          { scenario, company, callDuration, productContext, scoringCriteria },
+          customPrompts?.coaching
+        );
+
+        const response = await getAnthropicClient().messages.create({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 4096,
+          system,
+          messages: [{ role: 'user', content: user }]
+        });
+
+        const content = response.content[0].text;
+        const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/) || [null, content];
+        const analysis = JSON.parse(jsonMatch[1].trim());
+
+        pendingAnalyses.set(analysisId, {
+          status: 'completed',
+          completedAt: Date.now(),
+          analysis
+        });
+
+        // Clean up after 10 minutes
+        setTimeout(() => pendingAnalyses.delete(analysisId), 600000);
+      } catch (error) {
+        console.error('Background analysis error:', error);
+        pendingAnalyses.set(analysisId, {
+          status: 'failed',
+          error: error.message
+        });
+      }
+    })();
+
+  } catch (error) {
+    console.error('Analysis start error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Check analysis status
+app.get('/api/analysis/status/:analysisId', optionalAuthMiddleware, (req, res) => {
+  const { analysisId } = req.params;
+  const analysis = pendingAnalyses.get(analysisId);
+
+  if (!analysis) {
+    return res.status(404).json({ error: 'Analysis not found', status: 'not_found' });
+  }
+
+  if (analysis.status === 'completed') {
+    return res.json({
+      success: true,
+      status: 'completed',
+      analysis: analysis.analysis
+    });
+  }
+
+  if (analysis.status === 'failed') {
+    return res.json({
+      success: false,
+      status: 'failed',
+      error: analysis.error
+    });
+  }
+
+  // Still processing
+  const elapsed = Date.now() - analysis.startedAt;
+  res.json({
+    success: true,
+    status: 'processing',
+    elapsedMs: elapsed,
+    estimatedTotalMs: 15000 // Rough estimate
+  });
+});
+
+// Legacy sync analyze endpoint (still works for backwards compatibility)
 app.post('/api/analysis/analyze', optionalAuthMiddleware, async (req, res) => {
   try {
     const { transcript, scenario, callDuration } = req.body;
@@ -996,6 +1159,7 @@ app.post('/api/analysis/analyze', optionalAuthMiddleware, async (req, res) => {
 
     const company = await getCompanyConfig(req);
     const customPrompts = req.organization?.settings?.customPrompts || null;
+    const scoringCriteria = customPrompts?.scoringCriteria || null;
 
     // Fetch product context for authenticated users
     let productContext = null;
@@ -1005,7 +1169,7 @@ app.post('/api/analysis/analyze', optionalAuthMiddleware, async (req, res) => {
 
     const { system, user } = buildCoachingPrompt(
       transcript,
-      { scenario, company, callDuration, productContext },
+      { scenario, company, callDuration, productContext, scoringCriteria },
       customPrompts?.coaching
     );
 
@@ -1208,6 +1372,7 @@ app.post('/api/admin/prompts', optionalAuthMiddleware, async (req, res) => {
       coachingUserPrompt,
       agentWizardAnswers,
       coachingWizardAnswers,
+      scoringCriteria,
       preserveAgent,
       preserveCoaching
     } = req.body;
@@ -1224,7 +1389,8 @@ app.post('/api/admin/prompts', optionalAuthMiddleware, async (req, res) => {
         system: preserveCoaching ? currentCustomPrompts.coaching?.system : (coachingSystemPrompt !== undefined ? coachingSystemPrompt : currentCustomPrompts.coaching?.system),
         user: preserveCoaching ? currentCustomPrompts.coaching?.user : (coachingUserPrompt !== undefined ? coachingUserPrompt : currentCustomPrompts.coaching?.user)
       },
-      coachingWizardAnswers: preserveCoaching ? currentCustomPrompts.coachingWizardAnswers : (coachingWizardAnswers !== undefined ? coachingWizardAnswers : currentCustomPrompts.coachingWizardAnswers)
+      coachingWizardAnswers: preserveCoaching ? currentCustomPrompts.coachingWizardAnswers : (coachingWizardAnswers !== undefined ? coachingWizardAnswers : currentCustomPrompts.coachingWizardAnswers),
+      scoringCriteria: scoringCriteria !== undefined ? scoringCriteria : currentCustomPrompts.scoringCriteria
     };
 
     const updatedSettings = {

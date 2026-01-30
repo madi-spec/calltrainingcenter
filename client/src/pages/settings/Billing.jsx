@@ -11,7 +11,11 @@ import {
   Users,
   Sparkles,
   Star,
-  Plus
+  Plus,
+  Gift,
+  Loader2,
+  CheckCircle2,
+  Tag
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useOrganization } from '../../context/OrganizationContext';
@@ -87,13 +91,19 @@ export default function Billing() {
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [portalLoading, setPortalLoading] = useState(false);
+  const [promoCode, setPromoCode] = useState('');
+  const [promoLoading, setPromoLoading] = useState(false);
+  const [promoError, setPromoError] = useState('');
+  const [promoSuccess, setPromoSuccess] = useState('');
+  const [promoStatus, setPromoStatus] = useState(null);
 
   useEffect(() => {
     const fetchBillingData = async () => {
       try {
-        const [usageRes, invoicesRes] = await Promise.all([
+        const [usageRes, invoicesRes, promoRes] = await Promise.all([
           authFetch('/api/billing/usage'),
-          authFetch('/api/billing/invoices')
+          authFetch('/api/billing/invoices'),
+          authFetch('/api/billing/promo-status')
         ]);
 
         if (usageRes.ok) {
@@ -105,6 +115,11 @@ export default function Billing() {
           const data = await invoicesRes.json();
           setInvoices(data.invoices || []);
         }
+
+        if (promoRes.ok) {
+          const data = await promoRes.json();
+          setPromoStatus(data);
+        }
       } catch (error) {
         // Silent fail - billing data may not be available
       } finally {
@@ -114,6 +129,39 @@ export default function Billing() {
 
     fetchBillingData();
   }, [authFetch]);
+
+  const handleRedeemPromo = async (e) => {
+    e.preventDefault();
+    if (!promoCode.trim()) return;
+
+    setPromoLoading(true);
+    setPromoError('');
+    setPromoSuccess('');
+
+    try {
+      const response = await authFetch('/api/billing/redeem-promo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: promoCode.trim() })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setPromoSuccess(data.message);
+        setPromoCode('');
+        showSuccess('Promo Applied!', data.message);
+        // Refresh the page to show updated plan
+        setTimeout(() => window.location.reload(), 1500);
+      } else {
+        setPromoError(data.error || 'Failed to redeem promo code');
+      }
+    } catch (error) {
+      setPromoError('An error occurred. Please try again.');
+    } finally {
+      setPromoLoading(false);
+    }
+  };
 
   const handleManageBilling = async () => {
     setPortalLoading(true);
@@ -208,6 +256,82 @@ export default function Billing() {
           <ExternalLink className="w-4 h-4" />
         </button>
       </div>
+
+      {/* Active Promo Banner */}
+      {promoStatus?.hasPromo && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-xl p-4"
+        >
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-green-500/20 rounded-lg">
+              <Gift className="w-5 h-5 text-green-400" />
+            </div>
+            <div className="flex-1">
+              <p className="text-green-400 font-medium">Promo Active: {promoStatus.promoCode}</p>
+              <p className="text-sm text-green-300/70">
+                {promoStatus.daysRemaining} days remaining on your free Enterprise trial
+              </p>
+            </div>
+            <CheckCircle2 className="w-6 h-6 text-green-400" />
+          </div>
+        </motion.div>
+      )}
+
+      {/* Promo Code Entry */}
+      {!promoStatus?.hasPromo && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-xl p-5"
+        >
+          <div className="flex flex-col md:flex-row md:items-center gap-4">
+            <div className="flex items-center gap-3 flex-1">
+              <div className="p-2 bg-purple-500/20 rounded-lg">
+                <Tag className="w-5 h-5 text-purple-400" />
+              </div>
+              <div>
+                <p className="text-gray-100 font-medium">Have a promo code?</p>
+                <p className="text-sm text-gray-400">Enter your code to unlock special access</p>
+              </div>
+            </div>
+            <form onSubmit={handleRedeemPromo} className="flex gap-2 flex-1 md:max-w-md">
+              <input
+                type="text"
+                value={promoCode}
+                onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                placeholder="Enter promo code"
+                className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:border-purple-500 uppercase"
+              />
+              <button
+                type="submit"
+                disabled={promoLoading || !promoCode.trim()}
+                className="px-5 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-700 disabled:text-gray-500 text-white font-medium rounded-lg transition-colors flex items-center gap-2"
+              >
+                {promoLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Gift className="w-4 h-4" />
+                )}
+                Apply
+              </button>
+            </form>
+          </div>
+          {promoError && (
+            <div className="mt-3 flex items-center gap-2 text-red-400 text-sm">
+              <AlertCircle className="w-4 h-4" />
+              {promoError}
+            </div>
+          )}
+          {promoSuccess && (
+            <div className="mt-3 flex items-center gap-2 text-green-400 text-sm">
+              <CheckCircle2 className="w-4 h-4" />
+              {promoSuccess}
+            </div>
+          )}
+        </motion.div>
+      )}
 
       {/* Current Plan & Usage */}
       <div className="grid md:grid-cols-2 gap-6">

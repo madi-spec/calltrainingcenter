@@ -317,6 +317,49 @@ export async function handleWebhookEvent(event) {
   switch (event.type) {
     case 'checkout.session.completed': {
       const session = event.data.object;
+
+      // Check if this is a one-time purchase of training hours
+      if (session.metadata?.purchase_type === 'training_hours') {
+        const organizationId = session.metadata.organization_id;
+        const purchasedHours = parseInt(session.metadata.hours, 10);
+
+        if (organizationId && purchasedHours > 0) {
+          // Get current org data
+          const { data: org } = await adminClient
+            .from(TABLES.ORGANIZATIONS)
+            .select('training_hours_included')
+            .eq('id', organizationId)
+            .single();
+
+          if (org) {
+            // Add purchased hours to included hours
+            const newIncluded = (org.training_hours_included || 0) + purchasedHours;
+            await adminClient
+              .from(TABLES.ORGANIZATIONS)
+              .update({ training_hours_included: newIncluded })
+              .eq('id', organizationId);
+
+            // Record the purchase for tracking
+            await adminClient
+              .from(TABLES.HOUR_PURCHASES)
+              .insert({
+                organization_id: organizationId,
+                stripe_session_id: session.id,
+                stripe_payment_intent_id: session.payment_intent,
+                hours_purchased: purchasedHours,
+                amount_paid: session.amount_total,
+                currency: session.currency,
+                status: 'completed',
+                completed_at: new Date()
+              });
+
+            console.log(`Added ${purchasedHours} training hours to org ${organizationId}. New total: ${newIncluded}`);
+          }
+        }
+        break;
+      }
+
+      // Handle subscription checkout
       const organizationId = session.subscription_data?.metadata?.organization_id;
       const planId = session.subscription_data?.metadata?.plan_id;
 

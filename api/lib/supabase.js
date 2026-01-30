@@ -129,6 +129,8 @@ export const TABLES = {
   TRAINING_ASSIGNMENTS: 'training_assignments',
   USAGE_RECORDS: 'usage_records',
   INVOICES: 'invoices',
+  HOUR_PURCHASES: 'hour_purchases',
+  PROMO_REDEMPTIONS: 'promo_redemptions',
   BADGES: 'badges',
   USER_BADGES: 'user_badges',
   POINT_TRANSACTIONS: 'point_transactions',

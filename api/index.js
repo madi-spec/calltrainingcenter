@@ -57,6 +57,12 @@ const app = express();
 
 // Middleware
 app.use(cors());
+
+// Stripe webhook needs raw body for signature verification
+// This route must be registered BEFORE the json parser
+app.use('/api/billing/webhook', express.raw({ type: 'application/json' }));
+
+// JSON parser for all other routes
 app.use(express.json({ limit: '10mb' }));
 
 // Request logging

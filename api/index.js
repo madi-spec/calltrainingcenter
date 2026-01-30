@@ -1046,6 +1046,7 @@ app.post('/api/calls/create-training-call', optionalAuthMiddleware, async (req, 
     // Create training session in database
     let sessionId = null;
     console.log(`[CALL] User ID: ${req.user?.id}, Org ID: ${req.organization?.id}`);
+    let sessionError = null;
     if (req.user?.id && req.organization?.id) {
       console.log('[CALL] Creating training session...');
       try {
@@ -1058,32 +1059,40 @@ app.post('/api/calls/create-training-call', optionalAuthMiddleware, async (req, 
           .eq('user_id', req.user.id)
           .eq('scenario_id', scenario.id);
 
+        console.log('[CALL] Attempt count:', count);
+
+        const insertData = {
+          organization_id: req.organization.id,
+          user_id: req.user.id,
+          scenario_id: scenario.id,
+          scenario_name: scenario.name,
+          retell_call_id: webCall.call_id,
+          attempt_number: (count || 0) + 1,
+          status: 'in_progress',
+          started_at: new Date().toISOString()
+        };
+        console.log('[CALL] Insert data:', JSON.stringify(insertData));
+
         const { data: session, error } = await adminClient
           .from(TABLES.TRAINING_SESSIONS)
-          .insert({
-            organization_id: req.organization.id,
-            user_id: req.user.id,
-            scenario_id: scenario.id,
-            scenario_name: scenario.name,
-            retell_call_id: webCall.call_id,
-            attempt_number: (count || 0) + 1,
-            status: 'in_progress',
-            started_at: new Date().toISOString()
-          })
+          .insert(insertData)
           .select()
           .single();
 
         if (error) {
           console.error('[CALL] Error creating training session:', error);
+          sessionError = error.message || JSON.stringify(error);
         } else {
           sessionId = session.id;
           console.log(`[CALL] Created training session: ${sessionId}`);
         }
       } catch (dbError) {
         console.error('[CALL] Database error creating session:', dbError);
+        sessionError = dbError.message || 'Unknown database error';
       }
     } else {
       console.log('[CALL] Skipping session creation - no user or org ID');
+      sessionError = 'No user or org ID';
     }
 
     res.json({
@@ -1098,7 +1107,8 @@ app.post('/api/calls/create-training-call', optionalAuthMiddleware, async (req, 
         hasUser: !!req.user?.id,
         hasOrg: !!req.organization?.id,
         userId: req.user?.id ? req.user.id.substring(0, 8) + '...' : null,
-        orgId: req.organization?.id ? req.organization.id.substring(0, 8) + '...' : null
+        orgId: req.organization?.id ? req.organization.id.substring(0, 8) + '...' : null,
+        sessionError
       }
     });
   } catch (error) {

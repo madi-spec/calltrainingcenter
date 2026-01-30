@@ -9,10 +9,6 @@ import {
   BarChart3,
   Trophy,
   Settings,
-  Users,
-  Building2,
-  CreditCard,
-  Sparkles,
   Menu,
   X,
   LogOut,
@@ -111,10 +107,6 @@ function Layout({ children }) {
   const settingsItems = [
     { to: '/setup', icon: Wand2, label: 'Setup Wizard', roles: ['admin', 'super_admin'] },
     { to: '/settings', icon: Settings, label: 'Settings', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
-    { to: '/settings/team', icon: Users, label: 'Team', roles: ['manager', 'admin', 'super_admin'] },
-    { to: '/settings/branches', icon: Building2, label: 'Branches', roles: ['admin', 'super_admin'] },
-    { to: '/settings/billing', icon: CreditCard, label: 'Billing', roles: ['admin', 'super_admin'] },
-    { to: '/settings/ai', icon: Sparkles, label: 'AI Settings', roles: ['admin', 'super_admin'] },
   ];
 
   const filteredNavItems = navItems.filter(item => item.roles.includes(role || 'trainee'));

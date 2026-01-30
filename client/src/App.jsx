@@ -38,6 +38,7 @@ const AISettings = lazy(() => import('./pages/settings/AISettings'));
 const TeamSettings = lazy(() => import('./pages/settings/Team'));
 const BranchSettings = lazy(() => import('./pages/settings/Branches'));
 const ProfileSettings = lazy(() => import('./pages/settings/Profile'));
+const NotificationSettings = lazy(() => import('./pages/settings/Notifications'));
 const SetupWizard = lazy(() => import('./pages/setup/SetupWizard'));
 const PreCallWarmup = lazy(() => import('./pages/warmup/PreCallWarmup'));
 const MicroPractice = lazy(() => import('./pages/micro/MicroPractice'));
@@ -191,6 +192,7 @@ function App() {
                     {/* Settings */}
                     <Route path="/settings" element={<Settings />} />
                     <Route path="/settings/profile" element={<ProfileSettings />} />
+                    <Route path="/settings/notifications" element={<NotificationSettings />} />
                     <Route
                       path="/settings/billing"
                       element={

@@ -51,18 +51,6 @@ export function RoleProtectedRoute({ children, allowedRoles }) {
   const { loading, profile, role } = useAuth();
   const location = useLocation();
 
-  // Debug logging
-  console.log('[ROLE CHECK]', {
-    isLoaded,
-    isSignedIn,
-    loading,
-    hasProfile: !!profile,
-    profileRole: profile?.role,
-    contextRole: role,
-    allowedRoles,
-    path: location.pathname
-  });
-
   if (!isLoaded || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900">
@@ -82,7 +70,6 @@ export function RoleProtectedRoute({ children, allowedRoles }) {
   const effectiveRole = role || profile?.role;
 
   if (!effectiveRole || !allowedRoles.includes(effectiveRole)) {
-    console.log('[ROLE CHECK] Access denied - effectiveRole:', effectiveRole);
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900">
         <div className="text-center">

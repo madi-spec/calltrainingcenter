@@ -221,30 +221,31 @@ function Layout({ children }) {
             </div>
           </nav>
 
-          {/* Dev Role Switcher */}
-          <div className={`px-3 py-2 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
-            <p className="px-3 mb-2 text-xs font-semibold text-yellow-500 uppercase tracking-wider flex items-center gap-1">
-              <span>Dev Mode</span>
-            </p>
-            <div className="px-3">
-              <select
-                value={roleOverride || ''}
-                onChange={(e) => setRoleOverride(e.target.value || null)}
-                className={`w-full px-3 py-1.5 ${isDark ? 'bg-gray-700 border-gray-600 text-gray-200' : 'bg-gray-100 border-gray-300 text-gray-800'} border rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500`}
-              >
-                <option value="">Use actual role ({actualRole || 'trainee'})</option>
-                <option value="trainee">View as: Trainee</option>
-                <option value="manager">View as: Manager</option>
-                <option value="admin">View as: Admin</option>
-                <option value="owner">View as: Owner</option>
-              </select>
-              {roleOverride && (
-                <p className="text-xs text-yellow-400 mt-1">
-                  Viewing as {roleOverride} (actual: {actualRole})
-                </p>
-              )}
+          {/* Role Switcher - Only visible to admins/owners */}
+          {(actualRole === 'admin' || actualRole === 'owner') && (
+            <div className={`px-3 py-2 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+              <p className="px-3 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1">
+                <span>View As</span>
+              </p>
+              <div className="px-3">
+                <select
+                  value={roleOverride || ''}
+                  onChange={(e) => setRoleOverride(e.target.value || null)}
+                  className={`w-full px-3 py-1.5 ${isDark ? 'bg-gray-700 border-gray-600 text-gray-200' : 'bg-gray-100 border-gray-300 text-gray-800'} border rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500`}
+                >
+                  <option value="">Your view ({actualRole || 'trainee'})</option>
+                  <option value="trainee">View as: Trainee</option>
+                  <option value="manager">View as: Manager</option>
+                  <option value="admin">View as: Admin</option>
+                </select>
+                {roleOverride && (
+                  <p className="text-xs text-gray-400 mt-1">
+                    Viewing as {roleOverride}
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* User section */}
           <div className={`p-3 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>

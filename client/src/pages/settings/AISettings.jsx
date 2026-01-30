@@ -418,7 +418,7 @@ ${deescalations.map(d => `- ${deescalationMap[d]}`).join('\n')}
 ## Company Context (use naturally when relevant)
 - Company: {{company.name}}
 - Services: {{company.services}}
-- Quarterly price: ${{company.pricing.quarterlyPrice}}
+- Quarterly price: \${{company.pricing.quarterlyPrice}}
 {{#if company.guarantees}}- Guarantee: {{company.guarantees}}{{/if}}
 
 ## Key Points to Mention

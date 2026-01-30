@@ -1092,7 +1092,14 @@ app.post('/api/calls/create-training-call', optionalAuthMiddleware, async (req, 
       agentId: agent.agent_id,
       accessToken: webCall.access_token,
       sampleRate: webCall.sample_rate || 24000,
-      sessionId
+      sessionId,
+      // Debug info
+      _debug: {
+        hasUser: !!req.user?.id,
+        hasOrg: !!req.organization?.id,
+        userId: req.user?.id ? req.user.id.substring(0, 8) + '...' : null,
+        orgId: req.organization?.id ? req.organization.id.substring(0, 8) + '...' : null
+      }
     });
   } catch (error) {
     console.error('[CALL CREATE ERROR]', error);

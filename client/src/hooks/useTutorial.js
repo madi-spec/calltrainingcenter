@@ -1,3 +1,4 @@
 // Re-export from context for backwards compatibility
-export { useTutorial } from '../context/TutorialContext';
-export default { useTutorial };
+import { useTutorial } from '../context/TutorialContext';
+export { useTutorial };
+export default useTutorial;

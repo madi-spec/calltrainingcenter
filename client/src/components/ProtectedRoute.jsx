@@ -41,12 +41,25 @@ export function ProtectedRoute({ children }) {
     );
   }
 
-  // Check if setup wizard is needed for new super_admins
-  // Redirect to /setup if onboarding not completed
+  // Check if super_admin needs to complete initial company info
+  // Redirect to /onboarding if no website set yet
+  const needsOnboarding = profile?.role === 'super_admin' &&
+    organization &&
+    !organization.website &&
+    location.pathname !== '/onboarding';
+
+  if (needsOnboarding) {
+    return <Navigate to="/onboarding" replace />;
+  }
+
+  // Check if setup wizard is needed for super_admins
+  // Redirect to /setup if onboarding not completed (but website is set)
   const needsSetup = profile?.role === 'super_admin' &&
     organization &&
+    organization.website &&
     !organization.onboarding_completed &&
     location.pathname !== '/setup' &&
+    location.pathname !== '/onboarding' &&
     !location.pathname.startsWith('/settings');
 
   if (needsSetup) {

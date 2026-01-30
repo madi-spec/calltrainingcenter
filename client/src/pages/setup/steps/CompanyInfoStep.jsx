@@ -225,7 +225,7 @@ export default function CompanyInfoStep({ data, onComplete, authFetch, organizat
               value={formData.website}
               onChange={handleChange}
               className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-lg"
-              placeholder="go-forth.com"
+              placeholder="yourcompany.com"
             />
           </div>
           <button

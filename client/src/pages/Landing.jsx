@@ -2,81 +2,83 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Phone,
-  Target,
-  TrendingUp,
-  Users,
   Zap,
-  Shield,
-  BarChart3,
-  Award,
   CheckCircle2,
   ArrowRight,
   Play,
-  Star
+  Users,
+  DollarSign,
+  Activity,
+  Clock,
+  Mic,
+  UserCog,
+  Sparkles,
+  Target,
+  BarChart3,
+  Settings
 } from 'lucide-react';
 
 function Landing() {
-  const features = [
-    {
-      icon: Phone,
-      title: 'AI-Powered Role Play',
-      description: 'Practice with realistic AI customers that adapt to your responses and challenge your skills.'
-    },
-    {
-      icon: Target,
-      title: 'Instant Feedback',
-      description: 'Get detailed performance analysis and coaching tips after every call simulation.'
-    },
-    {
-      icon: TrendingUp,
-      title: 'Track Progress',
-      description: 'Monitor improvement over time with comprehensive analytics and skill assessments.'
-    },
+  const problems = [
     {
       icon: Users,
-      title: 'Team Management',
-      description: 'Assign training, track team performance, and identify coaching opportunities.'
+      title: 'Awkward Role-Play',
+      description: "Managers don't have time, and role-playing with coworkers never feels real enough to build genuine skills."
     },
     {
-      icon: Zap,
+      icon: DollarSign,
+      title: 'Learning on Real Calls',
+      description: 'Every fumbled cancellation call costs you $300-500 in lifetime value. Mistakes are expensive.'
+    },
+    {
+      icon: Activity,
+      title: 'Inconsistent Training',
+      description: "New hires sink or swim. Top performers can't transfer their skills to the rest of the team."
+    }
+  ];
+
+  const solutions = [
+    {
+      number: 1,
+      title: 'Realistic Voice Calls',
+      description: 'Your CSR talks to an AI customer who responds naturally, gets frustrated when dismissed, and calms down when heard.'
+    },
+    {
+      number: 2,
+      title: 'Personalized to Your Company',
+      description: 'AI customers mention your company name, your pricing, your guarantees. Training feels real because it references real details.'
+    },
+    {
+      number: 3,
+      title: 'Instant AI Coaching',
+      description: "After every call, detailed feedback shows what worked, what didn't, and exactly what to say differently next time."
+    },
+    {
+      number: 4,
+      title: 'Unlimited Practice',
+      description: 'CSRs can repeat difficult scenarios until they master them. No manager time required. Practice at 2am if they want.'
+    },
+    {
+      number: 5,
       title: 'Custom Scenarios',
-      description: 'Create training scenarios tailored to your products, services, and common objections.'
+      description: 'Build scenarios from your actual call recordings. Had a brutal complaint last week? Turn it into a training exercise.'
     },
     {
-      icon: Shield,
-      title: 'Safe Environment',
-      description: 'Let reps make mistakes and learn without risking real customer relationships.'
+      number: 6,
+      title: 'Team Analytics',
+      description: 'See who\'s improving, who needs help, and track skills like empathy, product knowledge, and save rate over time.'
     }
   ];
 
-  const benefits = [
-    'Reduce new hire ramp time by 40%',
-    'Increase close rates by 25%',
-    'Cut training costs by 60%',
-    'Practice anytime, anywhere',
-    'Consistent training quality',
-    'Real-time performance insights'
-  ];
-
-  const testimonials = [
-    {
-      quote: "Our team's confidence on calls has skyrocketed. The AI scenarios feel incredibly real.",
-      author: 'Sarah M.',
-      role: 'Sales Manager',
-      company: 'Home Services Co.'
-    },
-    {
-      quote: "We cut our training time in half while improving first-call resolution rates.",
-      author: 'Mike R.',
-      role: 'Operations Director',
-      company: 'Comfort Air HVAC'
-    },
-    {
-      quote: "The instant feedback helps our reps improve faster than any traditional training method.",
-      author: 'Jennifer L.',
-      role: 'Training Coordinator',
-      company: 'ProPest Solutions'
-    }
+  const scenarios = [
+    { difficulty: 'hard', title: 'The Cancellation Save', description: 'Long-time customer found a competitor $30/month cheaper.' },
+    { difficulty: 'hard', title: 'Furious Callback', description: 'Customer paid 5 days ago and just found roaches in the kitchen.' },
+    { difficulty: 'hard', title: 'Warranty Dispute', description: 'Termite customer thinks their warranty covers everything.' },
+    { difficulty: 'medium', title: 'Price Shopper', description: 'New homeowner got a $99 quote from a competitor.' },
+    { difficulty: 'medium', title: 'Upsell Opportunity', description: 'Happy customer mentions a mosquito problem before a party.' },
+    { difficulty: 'medium', title: 'Missed Appointment', description: 'Tech was 75 minutes late. Customer missed an event waiting.' },
+    { difficulty: 'medium', title: 'Wildlife Emergency', description: 'Panicked homeowner has a squirrel in their attic right now.' },
+    { difficulty: 'easy', title: 'New Customer Inquiry', description: 'First-time buyer, ants in the kitchen. Never had pest control.' }
   ];
 
   const plans = [
@@ -85,16 +87,30 @@ function Landing() {
       tier: 'Try It',
       price: 149,
       description: 'Perfect for testing with a small team',
-      features: ['5 training hours/month', '3 team members', '8 standard scenarios', 'Basic coaching scorecards', 'Email support'],
-      cta: 'Start Free Trial'
+      features: [
+        { text: '5 training hours/month', note: null },
+        { text: '3 team members', note: null },
+        { text: '8 standard scenarios', note: null },
+        { text: 'Basic coaching scorecards', note: null },
+        { text: 'Email support', note: null }
+      ],
+      cta: 'Start Free Trial',
+      ctaStyle: 'ghost'
     },
     {
       name: 'Pro',
       tier: 'Build Your Team',
       price: 349,
       description: 'Everything you need to train a winning team',
-      features: ['12 training hours/month', '10 team members', 'All scenarios + custom builder', 'Team trends & leaderboards', 'Priority support'],
+      features: [
+        { text: '12 training hours/month', note: null },
+        { text: '10 team members', note: null },
+        { text: 'All scenarios + custom builder', note: null },
+        { text: 'Team trends & leaderboards', note: null },
+        { text: 'Priority support', note: null }
+      ],
       cta: 'Start Free Trial',
+      ctaStyle: 'primary',
       popular: true
     },
     {
@@ -102,35 +118,66 @@ function Landing() {
       tier: 'Scale It',
       price: 699,
       description: 'For multi-location operations',
-      features: ['25 training hours/month', 'Unlimited team members', 'All scenarios + custom development', 'Full analytics + API access', 'Dedicated success manager'],
-      cta: 'Contact Sales'
+      features: [
+        { text: '25 training hours/month', note: null },
+        { text: 'Unlimited team members', note: null },
+        { text: 'All scenarios + custom development', note: null },
+        { text: 'Full analytics + API access', note: null },
+        { text: 'Dedicated success manager', note: null }
+      ],
+      cta: 'Contact Sales',
+      ctaStyle: 'ghost'
     }
   ];
 
+  const testimonials = [
+    {
+      quote: "We used to lose 3-4 customers a month to competitors. After training with SellEveryCall, our CSRs actually look forward to cancellation calls. Save rate is up 52%.",
+      author: 'Jason Martinez',
+      role: 'Owner, Martinez Pest Solutions',
+      initials: 'JM'
+    },
+    {
+      quote: "New hires used to take 3 months to get comfortable on the phones. Now they're confident in 3 weeks. The AI feedback is better than anything I could give them.",
+      author: 'Sarah Brooks',
+      role: 'Operations Manager, Brooks Pest Control',
+      initials: 'SB'
+    }
+  ];
+
+  const getDifficultyColor = (difficulty) => {
+    switch (difficulty) {
+      case 'hard': return 'bg-red-500/10 text-red-400';
+      case 'medium': return 'bg-yellow-500/10 text-yellow-400';
+      case 'easy': return 'bg-green-500/10 text-green-400';
+      default: return 'bg-gray-500/10 text-gray-400';
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div className="min-h-screen bg-gray-50 text-gray-900">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-950/80 backdrop-blur-lg border-b border-gray-800">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-50/80 backdrop-blur-lg border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                <Phone className="w-5 h-5 text-white" />
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-500 to-orange-400 flex items-center justify-center">
+                <Clock className="w-4 h-4 text-white" />
               </div>
-              <span className="text-xl font-bold">SellEveryCall</span>
+              <span className="text-lg font-semibold">SellEveryCall</span>
             </div>
             <div className="hidden md:flex items-center gap-8">
-              <a href="#features" className="text-gray-400 hover:text-white transition-colors">Features</a>
-              <a href="#pricing" className="text-gray-400 hover:text-white transition-colors">Pricing</a>
-              <a href="#testimonials" className="text-gray-400 hover:text-white transition-colors">Testimonials</a>
+              <a href="#features" className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">Features</a>
+              <a href="#scenarios" className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">Scenarios</a>
+              <a href="#pricing" className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">Pricing</a>
             </div>
             <div className="flex items-center gap-4">
-              <Link to="/auth/login" className="text-gray-400 hover:text-white transition-colors">
+              <Link to="/auth/login" className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
                 Log In
               </Link>
               <Link
                 to="/auth/signup"
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium transition-colors"
+                className="px-4 py-2 bg-gradient-to-r from-pink-500 to-orange-400 hover:from-pink-600 hover:to-orange-500 rounded-lg font-medium text-white text-sm transition-all shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40"
               >
                 Start Free Trial
               </Link>
@@ -140,170 +187,173 @@ function Landing() {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4">
-        <div className="max-w-7xl mx-auto">
+      <section className="pt-32 pb-20 px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-transparent to-orange-400/10 pointer-events-none" />
+        <div className="max-w-4xl mx-auto text-center relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-sm mb-6">
-              <Zap className="w-4 h-4" />
-              AI-Powered CSR Training Platform
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-full text-gray-500 text-sm mb-8 shadow-sm">
+              <div className="w-5 h-5 rounded-full bg-gradient-to-br from-pink-500 to-orange-400 flex items-center justify-center">
+                <Zap className="w-2.5 h-2.5 text-white" />
+              </div>
+              AI-Powered CSR Training
             </div>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
-              Train Your Team to Sell Every Call
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight">
+              Train Like It's Real.
+              <br />
+              <span className="bg-gradient-to-r from-pink-500 via-orange-400 to-yellow-400 bg-clip-text text-transparent">
+                Win When It Is.
+              </span>
             </h1>
-            <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
-              Transform your customer service reps into confident closers with AI-powered call simulations, instant feedback, and personalized coaching.
+            <p className="text-lg text-gray-500 mb-10 max-w-2xl mx-auto leading-relaxed">
+              Give your CSRs unlimited practice with AI customers that push back, complain, and try to cancel—so your team is ready for anything.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
               <Link
                 to="/auth/signup"
-                className="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-700 rounded-xl font-semibold text-lg transition-all hover:scale-105 flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-pink-500 to-orange-400 hover:from-pink-600 hover:to-orange-500 rounded-xl font-semibold text-white transition-all shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 flex items-center justify-center gap-2"
               >
                 Start Free Trial
                 <ArrowRight className="w-5 h-5" />
               </Link>
-              <button className="w-full sm:w-auto px-8 py-4 bg-gray-800 hover:bg-gray-700 rounded-xl font-semibold text-lg transition-colors flex items-center justify-center gap-2">
+              <button className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-gray-50 border border-gray-200 rounded-xl font-semibold text-gray-900 transition-colors flex items-center justify-center gap-2">
                 <Play className="w-5 h-5" />
                 Watch Demo
               </button>
             </div>
-            <p className="text-gray-500 text-sm mt-4">No credit card required. 14-day free trial.</p>
-          </motion.div>
 
-          {/* Hero Image/Mockup */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mt-16 relative"
-          >
-            <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent z-10 pointer-events-none" />
-            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl border border-gray-700 shadow-2xl overflow-hidden">
-              <div className="bg-gray-800 px-4 py-3 flex items-center gap-2 border-b border-gray-700">
-                <div className="w-3 h-3 rounded-full bg-red-500" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                <div className="w-3 h-3 rounded-full bg-green-500" />
+            {/* Stats */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-12 pt-12 border-t border-gray-200">
+              <div className="text-center">
+                <div className="text-5xl font-semibold text-gray-900 tracking-tight">47%</div>
+                <div className="text-sm text-gray-500 mt-1">Higher save rate</div>
               </div>
-              <div className="p-8 text-center">
-                <div className="flex items-center justify-center gap-8 flex-wrap">
-                  <div className="text-center">
-                    <div className="text-4xl font-bold text-blue-400">47%</div>
-                    <div className="text-gray-500 text-sm">Higher Save Rate</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-4xl font-bold text-green-400">3.2x</div>
-                    <div className="text-gray-500 text-sm">Faster Ramp-up</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-4xl font-bold text-purple-400">89%</div>
-                    <div className="text-gray-500 text-sm">CSR Preference</div>
-                  </div>
-                </div>
+              <div className="text-center">
+                <div className="text-5xl font-semibold text-gray-900 tracking-tight">3.2x</div>
+                <div className="text-sm text-gray-500 mt-1">Faster ramp-up</div>
+              </div>
+              <div className="text-center">
+                <div className="text-5xl font-semibold text-gray-900 tracking-tight">89%</div>
+                <div className="text-sm text-gray-500 mt-1">CSR preference</div>
               </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-20 px-4 bg-gray-900/50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Everything You Need to Train Winners</h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              A complete platform for training, tracking, and improving your customer service team's performance.
+      {/* Trust Bar */}
+      <section className="py-12 px-4 border-y border-gray-200 bg-white">
+        <div className="max-w-5xl mx-auto text-center">
+          <div className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-8">
+            Trusted by leading service companies
+          </div>
+          <div className="flex items-center justify-center gap-12 flex-wrap opacity-50">
+            <span className="text-lg font-semibold text-gray-900">Terminix</span>
+            <span className="text-lg font-semibold text-gray-900">Orkin</span>
+            <span className="text-lg font-semibold text-gray-900">Rentokil</span>
+            <span className="text-lg font-semibold text-gray-900">Aptive</span>
+            <span className="text-lg font-semibold text-gray-900">Massey Services</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Problem Section */}
+      <section className="py-24 px-4 bg-gray-900 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-transparent to-purple-500/10 pointer-events-none" />
+        <div className="max-w-5xl mx-auto relative">
+          <div className="mb-12">
+            <p className="text-pink-400 text-xs font-semibold uppercase tracking-wider mb-4">The Problem</p>
+            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-5">
+              Every lost customer started<br />with a phone call
+            </h2>
+            <p className="text-lg text-gray-400 max-w-xl">
+              Your CSRs handle angry customers, price shoppers, and cancellation threats every day. But how do they practice for those moments?
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
+          <div className="grid md:grid-cols-3 gap-6">
+            {problems.map((problem, index) => (
               <motion.div
-                key={feature.title}
+                key={problem.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-gray-800/50 border border-gray-700 rounded-xl p-6 hover:border-blue-500/50 transition-colors"
+                className="bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 hover:border-white/20 transition-all"
               >
-                <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-4">
-                  <feature.icon className="w-6 h-6 text-blue-400" />
+                <div className="w-12 h-12 bg-gradient-to-br from-pink-500/20 to-orange-400/20 rounded-xl flex items-center justify-center mb-5">
+                  <problem.icon className="w-6 h-6 text-pink-400" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-gray-400">{feature.description}</p>
+                <h3 className="text-lg font-semibold mb-3">{problem.title}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">{problem.description}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Benefits Section */}
-      <section className="py-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                Why Companies Choose SellEveryCall
-              </h2>
-              <p className="text-gray-400 mb-8">
-                Traditional training methods are expensive, inconsistent, and hard to scale. Our AI-powered platform delivers measurable results at a fraction of the cost.
-              </p>
-              <div className="grid sm:grid-cols-2 gap-4">
-                {benefits.map((benefit, index) => (
-                  <div key={index} className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
-                    <span className="text-gray-300">{benefit}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-gray-700 rounded-2xl p-8">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center">
-                  <BarChart3 className="w-8 h-8 text-blue-400" />
-                </div>
-                <div>
-                  <div className="text-3xl font-bold">250%</div>
-                  <div className="text-gray-400">Average ROI</div>
-                </div>
-              </div>
-              <p className="text-gray-400">
-                Companies using SellEveryCall see an average 250% return on investment within the first 6 months through improved conversion rates and reduced training costs.
-              </p>
-            </div>
+      {/* Solution Section */}
+      <section id="features" className="py-24 px-4 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-16 max-w-xl">
+            <p className="text-pink-500 text-xs font-semibold uppercase tracking-wider mb-4">The Solution</p>
+            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-gray-900 mb-5">
+              AI customers that train your team
+            </h2>
+            <p className="text-lg text-gray-500">
+              SellEveryCall creates realistic voice conversations with AI customers who behave like real callers—complete with emotions, objections, and attitudes.
+            </p>
           </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 px-4 bg-gray-900/50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Trusted by Sales Teams Everywhere</h2>
-            <p className="text-gray-400">See what our customers have to say</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {solutions.map((solution, index) => (
               <motion.div
-                key={index}
+                key={solution.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-gray-800/50 border border-gray-700 rounded-xl p-6"
+                className="bg-white border border-gray-200 rounded-2xl p-8 hover:border-purple-300 hover:shadow-lg hover:-translate-y-0.5 transition-all"
               >
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-                  ))}
+                <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-orange-400 rounded-lg flex items-center justify-center text-white text-sm font-semibold mb-5">
+                  {solution.number}
                 </div>
-                <p className="text-gray-300 mb-6">"{testimonial.quote}"</p>
-                <div>
-                  <div className="font-semibold">{testimonial.author}</div>
-                  <div className="text-sm text-gray-400">{testimonial.role}, {testimonial.company}</div>
-                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">{solution.title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">{solution.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Scenarios Section */}
+      <section id="scenarios" className="py-24 px-4 bg-white border-t border-gray-200">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16 max-w-xl mx-auto">
+            <p className="text-pink-500 text-xs font-semibold uppercase tracking-wider mb-4">Training Scenarios</p>
+            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-gray-900 mb-5">
+              8 built-in scenarios ready to go
+            </h2>
+            <p className="text-lg text-gray-500">
+              Start training immediately with scenarios designed by industry experts.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {scenarios.map((scenario, index) => (
+              <motion.div
+                key={scenario.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                viewport={{ once: true }}
+                className="bg-gray-50 border border-gray-200 rounded-xl p-6 hover:border-purple-300 transition-colors"
+              >
+                <span className={`inline-block px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wide mb-4 ${getDifficultyColor(scenario.difficulty)}`}>
+                  {scenario.difficulty}
+                </span>
+                <h3 className="font-semibold text-gray-900 mb-2">{scenario.title}</h3>
+                <p className="text-sm text-gray-500">{scenario.description}</p>
               </motion.div>
             ))}
           </div>
@@ -311,13 +361,20 @@ function Landing() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Simple, Transparent Pricing</h2>
-            <p className="text-gray-400">Platform access plus training hours. Scale as you grow.</p>
+      <section id="pricing" className="py-24 px-4 bg-gray-50 border-t border-gray-200">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12 max-w-xl mx-auto">
+            <p className="text-pink-500 text-xs font-semibold uppercase tracking-wider mb-4">Pricing</p>
+            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-gray-900 mb-5">
+              Simple, transparent pricing
+            </h2>
+            <p className="text-lg text-gray-500">
+              Platform access plus training hours. Scale as you grow.
+            </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16">
+
+          {/* Pricing Cards */}
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16">
             {plans.map((plan, index) => (
               <motion.div
                 key={plan.name}
@@ -325,46 +382,48 @@ function Landing() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className={`relative bg-gray-800/50 border rounded-2xl p-8 ${
-                  plan.popular ? 'border-blue-500 ring-2 ring-blue-500/20' : 'border-gray-700'
+                className={`relative bg-white rounded-2xl p-10 ${
+                  plan.popular
+                    ? 'border-2 border-transparent bg-gradient-to-br from-pink-500 to-orange-400 p-[2px]'
+                    : 'border border-gray-200'
                 }`}
               >
                 {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <span className="px-4 py-1 bg-blue-500 rounded-full text-sm font-medium">
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+                    <span className="px-4 py-1.5 bg-gradient-to-r from-pink-500 to-orange-400 rounded-full text-xs font-semibold text-white">
                       Most Popular
                     </span>
                   </div>
                 )}
-                <div className="mb-6">
-                  <p className="text-blue-400 text-xs font-semibold uppercase tracking-wider mb-1">{plan.name}</p>
-                  <h3 className="text-xl font-semibold mb-1">{plan.tier}</h3>
-                  <p className="text-gray-400 text-sm">{plan.description}</p>
-                </div>
-                <div className="mb-6">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-bold">${plan.price}</span>
-                    <span className="text-gray-400">/month</span>
+                <div className={plan.popular ? 'bg-white rounded-[14px] p-8 h-full' : ''}>
+                  <div className="mb-8">
+                    <p className="text-purple-400 text-xs font-semibold uppercase tracking-wider mb-1">{plan.name}</p>
+                    <h3 className="text-2xl font-semibold text-gray-900 mb-1">{plan.tier}</h3>
+                    <p className="text-sm text-gray-500">{plan.description}</p>
                   </div>
+                  <div className="mb-8">
+                    <span className="text-5xl font-semibold text-gray-900 tracking-tight">${plan.price}</span>
+                    <span className="text-gray-500">/month</span>
+                  </div>
+                  <ul className="space-y-3 mb-8">
+                    {plan.features.map((feature, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                        <span className="text-sm text-gray-700">{feature.text}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    to="/auth/signup"
+                    className={`block w-full py-3.5 rounded-lg font-semibold text-center transition-all ${
+                      plan.ctaStyle === 'primary'
+                        ? 'bg-gradient-to-r from-pink-500 to-orange-400 hover:from-pink-600 hover:to-orange-500 text-white shadow-lg shadow-pink-500/25'
+                        : 'bg-white hover:bg-gray-50 border border-gray-200 text-gray-900'
+                    }`}
+                  >
+                    {plan.cta}
+                  </Link>
                 </div>
-                <ul className="space-y-3 mb-8">
-                  {plan.features.map((feature, i) => (
-                    <li key={i} className="flex items-center gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
-                      <span className="text-gray-300 text-sm">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  to="/auth/signup"
-                  className={`block w-full py-3 rounded-xl font-semibold text-center transition-colors ${
-                    plan.popular
-                      ? 'bg-blue-600 hover:bg-blue-700'
-                      : 'bg-gray-700 hover:bg-gray-600'
-                  }`}
-                >
-                  {plan.cta}
-                </Link>
               </motion.div>
             ))}
           </div>
@@ -375,90 +434,167 @@ function Landing() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="bg-gray-800/50 border border-gray-700 rounded-2xl p-8 max-w-4xl mx-auto"
+            className="bg-white border border-gray-200 rounded-2xl p-10 max-w-5xl mx-auto"
           >
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-10">
               <div>
-                <h3 className="text-xl font-semibold mb-1">Need more training hours?</h3>
-                <p className="text-gray-400 text-sm">Purchase hour blocks anytime. They never expire.</p>
+                <h3 className="text-2xl font-semibold text-gray-900 mb-2">Need more training hours?</h3>
+                <p className="text-gray-500">Purchase hour blocks anytime. They never expire.</p>
               </div>
             </div>
-            <div className="grid md:grid-cols-3 gap-4">
-              <div className="bg-gray-900/50 border border-gray-700 rounded-xl p-5">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-semibold">5-Hour Block</h4>
-                  <span className="text-xs text-gray-500">~60 calls</span>
+            <div className="grid md:grid-cols-3 gap-5">
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-6">
+                <div className="flex items-center justify-between mb-5">
+                  <h4 className="font-semibold text-gray-900">5-Hour Block</h4>
+                  <span className="text-xs text-gray-500">~60 training calls</span>
                 </div>
                 <div className="space-y-2 text-sm">
-                  <div className="flex justify-between"><span className="text-gray-400">Starter</span><span className="font-medium">$145</span></div>
-                  <div className="flex justify-between"><span className="text-gray-400">Pro</span><span className="font-medium">$125</span></div>
-                  <div className="flex justify-between"><span className="text-gray-400">Enterprise</span><span className="font-medium">$115</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">Starter</span><span className="font-semibold text-gray-900">$145</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">Pro</span><span className="font-semibold text-gray-900">$125</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">Enterprise</span><span className="font-semibold text-gray-900">$115</span></div>
                 </div>
               </div>
-              <div className="bg-gray-900/50 border border-gray-700 rounded-xl p-5">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-semibold">10-Hour Block</h4>
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-6">
+                <div className="flex items-center justify-between mb-5">
+                  <h4 className="font-semibold text-gray-900">10-Hour Block</h4>
                   <span className="text-xs text-gray-500">~120 calls · 4% off</span>
                 </div>
                 <div className="space-y-2 text-sm">
-                  <div className="flex justify-between"><span className="text-gray-400">Starter</span><span className="font-medium">$279</span></div>
-                  <div className="flex justify-between"><span className="text-gray-400">Pro</span><span className="font-medium">$239</span></div>
-                  <div className="flex justify-between"><span className="text-gray-400">Enterprise</span><span className="font-medium">$219</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">Starter</span><span className="font-semibold text-gray-900">$279</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">Pro</span><span className="font-semibold text-gray-900">$239</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">Enterprise</span><span className="font-semibold text-gray-900">$219</span></div>
                 </div>
               </div>
-              <div className="bg-gray-900/50 border border-gray-700 rounded-xl p-5">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-semibold">25-Hour Block</h4>
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-6">
+                <div className="flex items-center justify-between mb-5">
+                  <h4 className="font-semibold text-gray-900">25-Hour Block</h4>
                   <span className="text-xs text-gray-500">~300 calls · 7% off</span>
                 </div>
                 <div className="space-y-2 text-sm">
-                  <div className="flex justify-between"><span className="text-gray-400">Starter</span><span className="font-medium">$675</span></div>
-                  <div className="flex justify-between"><span className="text-gray-400">Pro</span><span className="font-medium">$575</span></div>
-                  <div className="flex justify-between"><span className="text-gray-400">Enterprise</span><span className="font-medium">$525</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">Starter</span><span className="font-semibold text-gray-900">$675</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">Pro</span><span className="font-semibold text-gray-900">$575</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">Enterprise</span><span className="font-semibold text-gray-900">$525</span></div>
                 </div>
+              </div>
+            </div>
+
+            {/* Rollover Banner */}
+            <div className="mt-10 bg-gradient-to-r from-pink-500/10 to-orange-400/10 border border-pink-500/20 rounded-xl p-6 flex items-start gap-4">
+              <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-orange-400 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Clock className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-1">Annual plans: All hours upfront</h4>
+                <p className="text-sm text-gray-600">
+                  Monthly plans reset each month. Annual plans give you all your hours immediately—perfect for heavy onboarding months or pre-season training pushes. Purchased hour blocks never expire on any plan.
+                </p>
               </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-blue-500/20 rounded-3xl p-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Ready to Transform Your Team?
+      {/* Testimonials Section */}
+      <section className="py-24 px-4 bg-gray-900 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-transparent to-purple-500/10 pointer-events-none" />
+        <div className="max-w-4xl mx-auto relative">
+          <div className="text-center mb-16">
+            <p className="text-pink-400 text-xs font-semibold uppercase tracking-wider mb-4">Testimonials</p>
+            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">
+              What customers are saying
             </h2>
-            <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
-              Join hundreds of companies using SellEveryCall to build confident, high-performing customer service teams.
-            </p>
-            <Link
-              to="/auth/signup"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 hover:bg-blue-700 rounded-xl font-semibold text-lg transition-all hover:scale-105"
-            >
-              Start Your Free Trial
-              <ArrowRight className="w-5 h-5" />
-            </Link>
+          </div>
+          <div className="space-y-6">
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-white/5 border border-white/10 rounded-2xl p-10"
+              >
+                <p className="text-xl leading-relaxed mb-8 text-gray-200">"{testimonial.quote}"</p>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-orange-400 rounded-full flex items-center justify-center font-semibold">
+                    {testimonial.initials}
+                  </div>
+                  <div>
+                    <div className="font-semibold">{testimonial.author}</div>
+                    <div className="text-sm text-gray-400">{testimonial.role}</div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
+      {/* CTA Section */}
+      <section className="py-24 px-4 bg-gradient-to-r from-pink-500 via-orange-400 to-yellow-400 relative overflow-hidden">
+        <div className="max-w-2xl mx-auto text-center relative">
+          <h2 className="text-3xl md:text-4xl font-semibold text-white mb-5 tracking-tight">
+            Ready to stop losing customers to bad calls?
+          </h2>
+          <p className="text-lg text-white/90 mb-10">
+            Start your free trial today. No credit card required. See results in your first week.
+          </p>
+          <Link
+            to="/auth/signup"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-white hover:bg-gray-50 rounded-xl font-semibold text-gray-900 transition-colors shadow-lg"
+          >
+            Start Free Trial
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="py-12 px-4 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                <Phone className="w-4 h-4 text-white" />
+      <footer className="py-16 px-4 bg-gray-900 text-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-12 mb-16">
+            <div className="md:col-span-1">
+              <div className="flex items-center gap-2 mb-5">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-500 to-orange-400 flex items-center justify-center">
+                  <Clock className="w-4 h-4 text-white" />
+                </div>
+                <span className="font-semibold">SellEveryCall</span>
               </div>
-              <span className="font-semibold">SellEveryCall</span>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                Train like it's real. Win when it is.
+              </p>
+              <p className="text-sm text-gray-400 leading-relaxed mt-2">
+                AI-powered CSR training built for service companies.
+              </p>
             </div>
-            <div className="flex items-center gap-6 text-gray-400 text-sm">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-white transition-colors">Contact</a>
+            <div>
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-5">Product</h4>
+              <div className="space-y-3">
+                <a href="#features" className="block text-sm text-gray-400 hover:text-white transition-colors">Features</a>
+                <a href="#scenarios" className="block text-sm text-gray-400 hover:text-white transition-colors">Scenarios</a>
+                <a href="#pricing" className="block text-sm text-gray-400 hover:text-white transition-colors">Pricing</a>
+              </div>
             </div>
-            <div className="text-gray-500 text-sm">
+            <div>
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-5">Resources</h4>
+              <div className="space-y-3">
+                <a href="#" className="block text-sm text-gray-400 hover:text-white transition-colors">Help Center</a>
+                <a href="#" className="block text-sm text-gray-400 hover:text-white transition-colors">Blog</a>
+                <a href="#" className="block text-sm text-gray-400 hover:text-white transition-colors">Case Studies</a>
+              </div>
+            </div>
+            <div>
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-5">Company</h4>
+              <div className="space-y-3">
+                <a href="#" className="block text-sm text-gray-400 hover:text-white transition-colors">About</a>
+                <a href="#" className="block text-sm text-gray-400 hover:text-white transition-colors">Contact</a>
+                <a href="#" className="block text-sm text-gray-400 hover:text-white transition-colors">Privacy</a>
+                <a href="#" className="block text-sm text-gray-400 hover:text-white transition-colors">Terms</a>
+              </div>
+            </div>
+          </div>
+          <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="text-sm text-gray-500">
               © {new Date().getFullYear()} SellEveryCall. All rights reserved.
             </div>
           </div>

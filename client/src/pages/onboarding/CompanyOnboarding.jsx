@@ -3,12 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Building2, Phone, Globe, ArrowRight, Loader2, Sparkles } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { useOrganization } from '../../context/OrganizationContext';
 
 export default function CompanyOnboarding() {
   const navigate = useNavigate();
-  const { authFetch, profile, refreshProfile } = useAuth();
-  const { refreshOrganization } = useOrganization();
+  const { authFetch, refreshProfile } = useAuth();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -66,11 +64,10 @@ export default function CompanyOnboarding() {
         throw new Error(data.error || 'Failed to save company info');
       }
 
-      // Refresh both organization and auth profile data
-      await Promise.all([
-        refreshOrganization(),
-        refreshProfile()
-      ]);
+      // Refresh auth profile first (this includes organization data)
+      console.log('[Onboarding] Refreshing profile...');
+      await refreshProfile();
+      console.log('[Onboarding] Profile refreshed, navigating to setup...');
 
       // Navigate to setup wizard with auto-scrape enabled
       navigate('/setup', {

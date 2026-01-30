@@ -225,8 +225,10 @@ export function AuthProvider({ children }) {
   // Refresh profile from database (via API to avoid RLS issues)
   const refreshProfile = useCallback(async () => {
     if (user) {
+      console.log('[AUTH] refreshProfile called, fetching via API...');
       // Use the sync-user API to get fresh profile data
       const userProfile = await syncUserToDatabase();
+      console.log('[AUTH] refreshProfile result:', userProfile ? { email: userProfile.email, org_website: userProfile.organization?.website } : 'null');
       if (userProfile) {
         setProfile(userProfile);
       }

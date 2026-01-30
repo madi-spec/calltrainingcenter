@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Search, Filter, Phone, Heart, ChevronRight } from 'lucide-react';
+import { Search, Filter, Phone, Heart, ChevronRight, Plus } from 'lucide-react';
 import { useOrganization } from '../context/OrganizationContext';
 import { useAuth } from '../context/AuthContext';
 import Input from '../components/ui/Input';
@@ -9,7 +9,8 @@ import ScenarioGrid from '../components/scenarios/ScenarioGrid';
 
 function Home() {
   const { organization: company } = useOrganization();
-  const { authFetch } = useAuth();
+  const { authFetch, role } = useAuth();
+  const canCreate = ['manager', 'admin', 'owner'].includes(role);
   const [scenarios, setScenarios] = useState([]);
   const [bookmarkedIds, setBookmarkedIds] = useState(new Set());
   const [loading, setLoading] = useState(true);
@@ -144,6 +145,15 @@ function Home() {
             >
               View All
               <ChevronRight className="w-4 h-4" />
+            </Link>
+          )}
+          {canCreate && (
+            <Link
+              to="/builder"
+              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm font-medium transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              Create Scenario
             </Link>
           )}
         </div>

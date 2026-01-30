@@ -540,34 +540,38 @@ async function getProductContext(organizationId) {
 // ============ HELPER TO GET COMPANY CONFIG ============
 
 async function getCompanyConfig(req) {
-  // If authenticated, get org settings from database
-  if (req.organization) {
-    const org = req.organization;
-    const packages = org.pricing?.packages || [];
+  try {
+    // If authenticated, get org settings from database
+    if (req.organization) {
+      const org = req.organization;
+      const packages = org.pricing?.packages || [];
 
-    // Transform packages into pricing info for prompts
-    const pricing = buildPricingFromPackages(packages);
+      // Transform packages into pricing info for prompts
+      const pricing = buildPricingFromPackages(packages);
 
-    // Build a text summary of packages for prompts
-    const packageSummary = buildPackageSummary(packages);
+      // Build a text summary of packages for prompts
+      const packageSummary = buildPackageSummary(packages);
 
-    return {
-      name: org.name,
-      phone: org.phone,
-      website: org.website,
-      logo: org.logo_url,
-      colors: org.colors,
-      services: org.services || [],
-      serviceAreas: org.service_areas || [],
-      pricing,
-      packages,
-      packageSummary,
-      guarantees: org.guarantees || [],
-      valuePropositions: org.value_propositions || [],
-      businessHours: org.business_hours,
-      tagline: org.tagline,
-      ...org.settings
-    };
+      return {
+        name: org.name || configStore.company.name,
+        phone: org.phone || configStore.company.phone,
+        website: org.website || configStore.company.website,
+        logo: org.logo_url || configStore.company.logo,
+        colors: org.colors,
+        services: org.services || [],
+        serviceAreas: org.service_areas || [],
+        pricing,
+        packages,
+        packageSummary,
+        guarantees: org.guarantees || [],
+        valuePropositions: org.value_propositions || [],
+        businessHours: org.business_hours,
+        tagline: org.tagline,
+        ...org.settings
+      };
+    }
+  } catch (error) {
+    console.error('Error getting company config from org:', error);
   }
   // Fallback to in-memory config
   return configStore.company;
@@ -790,13 +794,18 @@ app.post('/api/admin/scrape-company', async (req, res) => {
 
 // Get scenarios
 app.get('/api/scenarios', optionalAuthMiddleware, async (req, res) => {
-  const company = await getCompanyConfig(req);
-  const processed = scenarios.map(s => ({
-    ...s,
-    situation: processTemplate(s.situation, { company }),
-    customerBackground: processTemplate(s.customerBackground, { company })
-  }));
-  res.json({ success: true, scenarios: processed });
+  try {
+    const company = await getCompanyConfig(req);
+    const processed = scenarios.map(s => ({
+      ...s,
+      situation: processTemplate(s.situation, { company }),
+      customerBackground: processTemplate(s.customerBackground, { company })
+    }));
+    res.json({ success: true, scenarios: processed });
+  } catch (error) {
+    console.error('Error fetching scenarios:', error);
+    res.status(500).json({ error: 'Failed to fetch scenarios', message: error.message });
+  }
 });
 
 // Get single scenario

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Search, Filter, Phone } from 'lucide-react';
+import { Search, Filter, Phone, Heart, ChevronRight } from 'lucide-react';
 import { useOrganization } from '../context/OrganizationContext';
 import { useAuth } from '../context/AuthContext';
 import Input from '../components/ui/Input';
@@ -10,23 +11,35 @@ function Home() {
   const { organization: company } = useOrganization();
   const { authFetch } = useAuth();
   const [scenarios, setScenarios] = useState([]);
+  const [bookmarkedIds, setBookmarkedIds] = useState(new Set());
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterDifficulty, setFilterDifficulty] = useState('all');
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
   useEffect(() => {
-    fetchScenarios();
+    fetchData();
   }, [authFetch]);
 
-  const fetchScenarios = async () => {
+  const fetchData = async () => {
     try {
-      const response = await authFetch('/api/scenarios');
-      if (response.ok) {
-        const data = await response.json();
+      const [scenariosRes, bookmarksRes] = await Promise.all([
+        authFetch('/api/scenarios'),
+        authFetch('/api/bookmarks')
+      ]);
+
+      if (scenariosRes.ok) {
+        const data = await scenariosRes.json();
         setScenarios(data.scenarios || []);
       }
+
+      if (bookmarksRes.ok) {
+        const data = await bookmarksRes.json();
+        const ids = new Set((data.bookmarks || []).map(b => b.scenario_id));
+        setBookmarkedIds(ids);
+      }
     } catch (error) {
-      console.error('Error fetching scenarios:', error);
+      console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
@@ -39,7 +52,8 @@ function Home() {
     const matchesDifficulty =
       filterDifficulty === 'all' ||
       scenario.difficulty?.toLowerCase() === filterDifficulty;
-    return matchesSearch && matchesDifficulty;
+    const matchesFavorites = !showFavoritesOnly || bookmarkedIds.has(scenario.id);
+    return matchesSearch && matchesDifficulty && matchesFavorites;
   });
 
   return (
@@ -82,7 +96,7 @@ function Home() {
             icon={Search}
           />
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <FilterButton
             active={filterDifficulty === 'all'}
             onClick={() => setFilterDifficulty('all')}
@@ -110,6 +124,28 @@ function Home() {
           >
             Hard
           </FilterButton>
+          <div className="w-px bg-gray-700 mx-1 hidden sm:block" />
+          <button
+            onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+            className={`
+              flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200
+              ${showFavoritesOnly
+                ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+                : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'}
+            `}
+          >
+            <Heart className="w-4 h-4" fill={showFavoritesOnly ? 'currentColor' : 'none'} />
+            Favorites
+          </button>
+          {bookmarkedIds.size > 0 && (
+            <Link
+              to="/favorites"
+              className="flex items-center gap-1 px-3 py-2 text-sm text-blue-400 hover:text-blue-300 transition-colors"
+            >
+              View All
+              <ChevronRight className="w-4 h-4" />
+            </Link>
+          )}
         </div>
       </motion.div>
 

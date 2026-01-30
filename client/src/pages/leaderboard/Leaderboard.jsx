@@ -7,9 +7,11 @@ import {
   Flame,
   Target,
   TrendingUp,
-  Crown
+  Crown,
+  Swords
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import ChallengeColleagueModal from '../../components/social/ChallengeColleagueModal';
 
 export default function Leaderboard() {
   const { authFetch, profile } = useAuth();
@@ -18,6 +20,7 @@ export default function Leaderboard() {
   const [leaderboard, setLeaderboard] = useState([]);
   const [userRank, setUserRank] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [challengeTarget, setChallengeTarget] = useState(null);
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
@@ -204,11 +207,11 @@ export default function Leaderboard() {
 
                   {/* Stats */}
                   <div className="flex items-center gap-6">
-                    <div className="text-right">
+                    <div className="text-right hidden sm:block">
                       <p className="text-sm text-gray-400">Sessions</p>
                       <p className="font-semibold text-gray-200">{user.sessions}</p>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right hidden sm:block">
                       <p className="text-sm text-gray-400">Avg Score</p>
                       <p className={`font-semibold ${
                         user.avg_score >= 80 ? 'text-green-400' : user.avg_score >= 60 ? 'text-yellow-400' : 'text-gray-400'
@@ -220,6 +223,19 @@ export default function Leaderboard() {
                       <p className="text-sm text-gray-400">Points</p>
                       <p className="font-bold text-yellow-400">{user.points?.toLocaleString()}</p>
                     </div>
+                    {!isCurrentUser && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setChallengeTarget(user);
+                        }}
+                        className="flex items-center gap-2 px-3 py-2 bg-purple-600/20 hover:bg-purple-600/30 text-purple-400 rounded-lg transition-colors border border-purple-500/30"
+                        title={`Challenge ${user.name}`}
+                      >
+                        <Swords className="w-4 h-4" />
+                        <span className="hidden lg:inline">Challenge</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -241,6 +257,15 @@ export default function Leaderboard() {
           </motion.div>
         )}
       </div>
+
+      {/* Challenge Modal */}
+      {challengeTarget && (
+        <ChallengeColleagueModal
+          isOpen={!!challengeTarget}
+          onClose={() => setChallengeTarget(null)}
+          targetUser={challengeTarget}
+        />
+      )}
     </div>
   );
 }

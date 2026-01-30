@@ -685,4 +685,65 @@ router.delete('/requirements/:id', authMiddleware, tenantMiddleware, requireRole
   }
 });
 
+/**
+ * GET /api/practice/quick-scenario
+ * Get a random scenario matching user's level/difficulty
+ */
+router.get('/quick-scenario', authMiddleware, tenantMiddleware, async (req, res) => {
+  try {
+    const userLevel = req.user.level || 1;
+
+    // Map user level (1-20) to difficulty
+    // Level 1-6: easy, Level 7-13: medium, Level 14-20: hard
+    let difficulty;
+    if (userLevel <= 6) {
+      difficulty = 'easy';
+    } else if (userLevel <= 13) {
+      difficulty = 'medium';
+    } else {
+      difficulty = 'hard';
+    }
+
+    // Default scenarios with difficulty mapping
+    const scenarios = [
+      { id: 'cancellation-save', name: 'The Cancellation Save', difficulty: 'hard', category: 'Retention' },
+      { id: 'furious-callback', name: 'The Furious Callback', difficulty: 'hard', category: 'Complaint Resolution' },
+      { id: 'price-shopper', name: 'The Price Shopper', difficulty: 'medium', category: 'Sales' },
+      { id: 'new-customer-inquiry', name: 'The New Customer Inquiry', difficulty: 'easy', category: 'Sales' },
+      { id: 'wildlife-emergency', name: 'The Wildlife Emergency', difficulty: 'medium', category: 'Emergency Response' }
+    ];
+
+    // Filter scenarios by difficulty
+    let matchingScenarios = scenarios.filter(s => s.difficulty === difficulty);
+
+    // If no exact match, include adjacent difficulty
+    if (matchingScenarios.length === 0) {
+      if (difficulty === 'easy') {
+        matchingScenarios = scenarios.filter(s => s.difficulty === 'medium');
+      } else if (difficulty === 'hard') {
+        matchingScenarios = scenarios.filter(s => s.difficulty === 'medium');
+      }
+    }
+
+    // If still no match, use all scenarios
+    if (matchingScenarios.length === 0) {
+      matchingScenarios = scenarios;
+    }
+
+    // Pick a random scenario
+    const randomIndex = Math.floor(Math.random() * matchingScenarios.length);
+    const selectedScenario = matchingScenarios[randomIndex];
+
+    res.json({
+      success: true,
+      scenario: selectedScenario,
+      userLevel,
+      recommendedDifficulty: difficulty
+    });
+  } catch (error) {
+    console.error('Error getting quick scenario:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 export default router;

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   ArrowLeft,
@@ -9,13 +9,17 @@ import {
   Lightbulb,
   MessageCircle,
   Clock,
-  RotateCcw
+  RotateCcw,
+  BarChart2,
+  Play
 } from 'lucide-react';
 import { useConfig } from '../context/ConfigContext';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import ScoreRing from '../components/coaching/ScoreRing';
 import CategoryScore from '../components/coaching/CategoryScore';
+import PracticeAgainButton from '../components/training/PracticeAgainButton';
+import ShareButton from '../components/social/ShareButton';
 
 function Results() {
   const navigate = useNavigate();
@@ -122,7 +126,21 @@ function Results() {
         transition={{ delay: 0.1 }}
         className="mb-8"
       >
-        <Card className="text-center py-8">
+        <Card className="text-center py-8 relative">
+          {/* Share Button for high scores */}
+          {analysis.overallScore >= 80 && (
+            <div className="absolute top-4 right-4">
+              <ShareButton
+                achievementType="score"
+                achievementData={{
+                  score: analysis.overallScore,
+                  scenarioId: scenario.id,
+                  scenarioName: scenario.name
+                }}
+                variant="icon"
+              />
+            </div>
+          )}
           <div className="mb-4">
             <ScoreRing score={analysis.overallScore} size={160} />
           </div>
@@ -300,12 +318,37 @@ function Results() {
         </motion.div>
       )}
 
+      {/* Quick Actions Bar */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.65 }}
+        className="flex flex-wrap gap-3 justify-center mb-6"
+      >
+        {lastResults.sessionId && (
+          <Link
+            to={`/replay/${lastResults.sessionId}`}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors text-sm"
+          >
+            <Play className="w-4 h-4" />
+            Replay Call
+          </Link>
+        )}
+        <Link
+          to={`/analysis/${scenario.id}`}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors text-sm"
+        >
+          <BarChart2 className="w-4 h-4" />
+          Compare with Previous
+        </Link>
+      </motion.div>
+
       {/* Action Buttons */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7 }}
-        className="flex flex-col sm:flex-row gap-4 justify-center"
+        className="flex flex-col sm:flex-row gap-4 justify-center items-center"
       >
         {isModuleScenario ? (
           <>
@@ -333,13 +376,12 @@ function Results() {
             >
               Try Different Scenario
             </Button>
-            <Button
-              size="lg"
-              icon={RotateCcw}
-              onClick={handleTryAgain}
-            >
-              Practice Again
-            </Button>
+            <PracticeAgainButton
+              scenarioId={scenario.id}
+              scenarioName={scenario.name}
+              lastScore={analysis.overallScore}
+              onNavigate={clearSession}
+            />
           </>
         )}
       </motion.div>

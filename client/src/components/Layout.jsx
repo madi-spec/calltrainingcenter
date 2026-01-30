@@ -26,6 +26,8 @@ import {
 import { useOrganization } from '../context/OrganizationContext';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import useKeyboardShortcuts from '../hooks/useKeyboardShortcuts';
+import KeyboardShortcutsModal from './help/KeyboardShortcutsModal';
 
 function Layout({ children }) {
   const location = useLocation();
@@ -37,6 +39,14 @@ function Layout({ children }) {
   const { theme, toggleTheme, isDark } = useTheme();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+
+  // Keyboard shortcuts
+  const { showHelpModal, setShowHelpModal } = useKeyboardShortcuts({
+    onCloseModal: () => {
+      setSidebarOpen(false);
+      setUserMenuOpen(false);
+    }
+  });
 
   // Apply brand colors as CSS variables
   useEffect(() => {
@@ -321,6 +331,12 @@ function Layout({ children }) {
           </motion.div>
         </main>
       </div>
+
+      {/* Keyboard shortcuts help modal */}
+      <KeyboardShortcutsModal
+        isOpen={showHelpModal}
+        onClose={() => setShowHelpModal(false)}
+      />
     </div>
   );
 }

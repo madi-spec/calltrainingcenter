@@ -25,6 +25,21 @@ import practiceRoutes from './routes/practice.js';
 import organizationsRoutes from './routes/organizations.js';
 import invitationsRoutes from './routes/invitations.js';
 import generatedScenariosRoutes from './routes/generatedScenarios.js';
+import challengesRoutes from './routes/challenges.js';
+import streaksRoutes from './routes/streaks.js';
+import bookmarksRoutes from './routes/bookmarks.js';
+import socialRoutes from './routes/social.js';
+import onboardingRoutes from './routes/onboarding.js';
+import warmupsRoutes from './routes/warmups.js';
+import microlearningRoutes from './routes/microlearning.js';
+import recommendationsRoutes from './routes/recommendations.js';
+import liveRoutes from './routes/live.js';
+import skillGapsRoutes from './routes/skillGaps.js';
+import roiRoutes from './routes/roi.js';
+import analysisRoutes from './routes/analysis.js';
+import pwaRoutes from './routes/pwa.js';
+import calendarRoutes from './routes/calendar.js';
+import recordingsRoutes from './routes/recordings.js';
 
 // Import services
 import {
@@ -666,6 +681,21 @@ app.use('/api/practice', practiceRoutes);
 app.use('/api/organizations', organizationsRoutes);
 app.use('/api/generated-scenarios', generatedScenariosRoutes);
 app.use('/api/invitations', invitationsRoutes);
+app.use('/api/challenges', challengesRoutes);
+app.use('/api/streaks', streaksRoutes);
+app.use('/api/bookmarks', bookmarksRoutes);
+app.use('/api/social', socialRoutes);
+app.use('/api/onboarding', onboardingRoutes);
+app.use('/api/warmups', warmupsRoutes);
+app.use('/api/microlearning', microlearningRoutes);
+app.use('/api/recommendations', recommendationsRoutes);
+app.use('/api/live', liveRoutes);
+app.use('/api/skill-gaps', skillGapsRoutes);
+app.use('/api/roi', roiRoutes);
+app.use('/api/analysis', analysisRoutes);
+app.use('/api/pwa', pwaRoutes);
+app.use('/api/calendar', calendarRoutes);
+app.use('/api/recordings', recordingsRoutes);
 
 // ============ LEGACY ROUTES (maintain backward compatibility) ============
 

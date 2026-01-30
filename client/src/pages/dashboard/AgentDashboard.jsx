@@ -19,6 +19,10 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useOrganization } from '../../context/OrganizationContext';
+import QuickPracticeButton from '../../components/gamification/QuickPracticeButton';
+import ChallengeList from '../../components/gamification/ChallengeList';
+import StreakStatus from '../../components/gamification/StreakStatus';
+import PendingChallenges from '../../components/social/PendingChallenges';
 
 export default function AgentDashboard() {
   const { profile, authFetch } = useAuth();
@@ -101,12 +105,7 @@ export default function AgentDashboard() {
               Welcome back, {profile?.full_name?.split(' ')[0] || 'there'}!
             </h1>
             <div className="flex flex-wrap items-center gap-4 mt-3">
-              {stats?.current_streak > 0 && (
-                <span className="flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-white text-sm">
-                  <Flame className="w-4 h-4 text-orange-400" />
-                  {stats.current_streak} day streak
-                </span>
-              )}
+              <StreakStatus compact />
               {profile?.level && (
                 <span className="flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-white text-sm">
                   <Zap className="w-4 h-4 text-yellow-400" />
@@ -119,6 +118,7 @@ export default function AgentDashboard() {
               </span>
             </div>
           </div>
+          <QuickPracticeButton className="hidden md:flex" />
         </div>
       </motion.div>
 
@@ -233,6 +233,12 @@ export default function AgentDashboard() {
           </div>
         )}
       </motion.div>
+
+      {/* Pending Challenges */}
+      <PendingChallenges maxDisplay={2} />
+
+      {/* Daily Challenges */}
+      <ChallengeList maxDisplay={3} />
 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

@@ -103,8 +103,15 @@ router.get('/session/:id', async (req, res) => {
  */
 router.post('/session', async (req, res) => {
   try {
-    const { scenario_id, retell_call_id, assignment_id } = req.body;
+    const { scenario_id, retell_call_id, assignment_id, scenario_name } = req.body;
     const adminClient = createAdminClient();
+
+    // Get attempt number for this scenario
+    const { count } = await adminClient
+      .from(TABLES.TRAINING_SESSIONS)
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', req.user.id)
+      .eq('scenario_id', scenario_id);
 
     const { data: session, error } = await adminClient
       .from(TABLES.TRAINING_SESSIONS)
@@ -112,8 +119,10 @@ router.post('/session', async (req, res) => {
         organization_id: req.organization.id,
         user_id: req.user.id,
         scenario_id,
+        scenario_name: scenario_name || null,
         retell_call_id,
         assignment_id,
+        attempt_number: (count || 0) + 1,
         status: 'in_progress',
         started_at: new Date().toISOString()
       })
@@ -123,6 +132,63 @@ router.post('/session', async (req, res) => {
     if (error) throw error;
 
     res.json({ session });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * POST /api/training/repeat
+ * Create a repeat practice session from an existing session
+ */
+router.post('/repeat', async (req, res) => {
+  try {
+    const { session_id, retell_call_id } = req.body;
+    const adminClient = createAdminClient();
+
+    // Get original session
+    const { data: original } = await adminClient
+      .from(TABLES.TRAINING_SESSIONS)
+      .select('*')
+      .eq('id', session_id)
+      .eq('user_id', req.user.id)
+      .single();
+
+    if (!original) {
+      return res.status(404).json({ error: 'Original session not found' });
+    }
+
+    // Get attempt number for this scenario
+    const { count } = await adminClient
+      .from(TABLES.TRAINING_SESSIONS)
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', req.user.id)
+      .eq('scenario_id', original.scenario_id);
+
+    const { data: session, error } = await adminClient
+      .from(TABLES.TRAINING_SESSIONS)
+      .insert({
+        organization_id: req.organization.id,
+        user_id: req.user.id,
+        scenario_id: original.scenario_id,
+        scenario_name: original.scenario_name,
+        retell_call_id,
+        is_repeat_practice: true,
+        original_session_id: session_id,
+        attempt_number: (count || 0) + 1,
+        status: 'in_progress',
+        started_at: new Date().toISOString()
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    res.json({
+      session,
+      original_score: original.overall_score,
+      attempt_number: session.attempt_number
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

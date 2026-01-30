@@ -5,10 +5,12 @@ import {
   Mail,
   Bell,
   Save,
-  RotateCcw
+  RotateCcw,
+  Award
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
+import { BadgeShowcase } from '../../components/gamification';
 
 export default function Profile() {
   const { profile, authFetch } = useAuth();
@@ -235,6 +237,26 @@ export default function Profile() {
             </button>
           </div>
         </div>
+      </motion.div>
+
+      {/* Badge Showcase */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+      >
+        <div className="flex items-center gap-3 mb-6">
+          <div className="p-2 bg-purple-500/10 rounded-lg">
+            <Award className="w-6 h-6 text-purple-400" />
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-gray-100">Your Achievements</h2>
+            <p className="text-sm text-gray-400">Badges and achievements you've earned</p>
+          </div>
+        </div>
+
+        <BadgeShowcase maxDisplay={8} />
       </motion.div>
     </div>
   );

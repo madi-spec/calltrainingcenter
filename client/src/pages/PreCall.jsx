@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Phone,
@@ -9,7 +9,11 @@ import {
   CheckCircle,
   Clock,
   Mic,
-  ArrowLeft
+  ArrowLeft,
+  Brain,
+  Sparkles,
+  BarChart2,
+  Trophy
 } from 'lucide-react';
 import { useConfig } from '../context/ConfigContext';
 import { useOrganization } from '../context/OrganizationContext';
@@ -28,14 +32,42 @@ function PreCall() {
   const [scenario, setScenario] = useState(null);
   const [loading, setLoading] = useState(true);
   const [starting, setStarting] = useState(false);
+  const [previousAttempts, setPreviousAttempts] = useState(null);
 
   // Check if this is a generated scenario from a module
   const moduleContext = location.state?.moduleContext;
   const isGeneratedScenario = !!location.state?.moduleId;
 
+  // Check if user completed warmup
+  const warmupCompleted = location.state?.warmupCompleted;
+  const warmupResults = location.state?.warmupResults;
+
+  const handleWarmup = () => {
+    navigate(`/warmup/${id}`);
+  };
+
   useEffect(() => {
     fetchScenario();
   }, [id, authFetch, isGeneratedScenario]);
+
+  // Fetch previous attempts for this scenario
+  useEffect(() => {
+    if (id && !isGeneratedScenario) {
+      fetchPreviousAttempts();
+    }
+  }, [id, authFetch, isGeneratedScenario]);
+
+  const fetchPreviousAttempts = async () => {
+    try {
+      const response = await authFetch(`/api/analysis/comparative/${id}`);
+      if (response.ok) {
+        const data = await response.json();
+        setPreviousAttempts(data);
+      }
+    } catch (error) {
+      console.error('Error fetching previous attempts:', error);
+    }
+  };
 
   const fetchScenario = async () => {
     try {
@@ -132,6 +164,70 @@ function PreCall() {
           </div>
         )}
       </motion.div>
+
+      {/* Previous Attempts Info */}
+      {previousAttempts && previousAttempts.totalAttempts > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="mb-6"
+        >
+          <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl p-4">
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center">
+                  <BarChart2 className="w-6 h-6 text-blue-400" />
+                </div>
+                <div>
+                  <p className="font-medium text-white">
+                    Attempt #{previousAttempts.totalAttempts + 1}
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    You've practiced this scenario {previousAttempts.totalAttempts} time{previousAttempts.totalAttempts !== 1 ? 's' : ''} before
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-6">
+                {/* Best Score */}
+                <div className="text-center">
+                  <div className="flex items-center gap-1 text-green-400">
+                    <Trophy className="w-4 h-4" />
+                    <span className="text-xl font-bold">{previousAttempts.summary?.bestScore ?? '--'}%</span>
+                  </div>
+                  <p className="text-xs text-gray-500">Best Score</p>
+                </div>
+
+                {/* Last Score */}
+                <div className="text-center">
+                  <span className="text-xl font-bold text-white">{previousAttempts.summary?.lastScore ?? '--'}%</span>
+                  <p className="text-xs text-gray-500">Last Score</p>
+                </div>
+
+                {/* Progress Indicator */}
+                {previousAttempts.progression?.isImproving && (
+                  <div className="px-3 py-1 bg-green-500/20 rounded-full">
+                    <span className="text-sm text-green-400">Improving!</span>
+                  </div>
+                )}
+                {previousAttempts.progression?.masteryAchieved && (
+                  <div className="px-3 py-1 bg-yellow-500/20 rounded-full">
+                    <span className="text-sm text-yellow-400">Mastered!</span>
+                  </div>
+                )}
+
+                <Link
+                  to={`/analysis/${id}`}
+                  className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                >
+                  View Progress
+                </Link>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       <div className="grid md:grid-cols-2 gap-6">
         {/* Customer Profile */}
@@ -317,22 +413,65 @@ function PreCall() {
         </Card>
       </motion.div>
 
+      {/* Warmup Completion Banner */}
+      {warmupCompleted && warmupResults && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.55 }}
+          className="mt-6"
+        >
+          <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 text-green-400" />
+                </div>
+                <div>
+                  <p className="font-medium text-green-400">Warm-up Complete!</p>
+                  <p className="text-sm text-gray-400">
+                    {warmupResults.correct}/{warmupResults.total} correct ({warmupResults.accuracy}%)
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-lg font-bold text-green-400">+{warmupResults.pointsEarned}</p>
+                <p className="text-xs text-gray-500">points earned</p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
       {/* Start Call Button */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
         className="mt-8 text-center"
+        data-tutorial="start-button"
       >
-        <Button
-          size="xl"
-          onClick={handleStartCall}
-          loading={starting}
-          icon={starting ? null : Phone}
-          className="px-12"
-        >
-          {starting ? 'Preparing Call...' : 'Start Training Call'}
-        </Button>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          {!warmupCompleted && !isGeneratedScenario && (
+            <Button
+              variant="secondary"
+              size="lg"
+              onClick={handleWarmup}
+              icon={Brain}
+            >
+              Warm Up First
+            </Button>
+          )}
+          <Button
+            size="xl"
+            onClick={handleStartCall}
+            loading={starting}
+            icon={starting ? null : Phone}
+            className="px-12"
+          >
+            {starting ? 'Preparing Call...' : 'Start Training Call'}
+          </Button>
+        </div>
         <p className="text-sm text-gray-500 mt-3 flex items-center justify-center gap-2">
           <Mic className="w-4 h-4" />
           Make sure your microphone is ready

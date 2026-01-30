@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Clock, User, Target } from 'lucide-react';
 import Card from '../ui/Card';
 import { DifficultyBadge, CategoryBadge } from '../ui/Badge';
+import BookmarkButton from './BookmarkButton';
 
 function ScenarioCard({ scenario }) {
   const navigate = useNavigate();
@@ -15,7 +16,10 @@ function ScenarioCard({ scenario }) {
       <Card.Header>
         <div className="flex items-start justify-between gap-2">
           <Card.Title className="flex-1">{scenario.name}</Card.Title>
-          <DifficultyBadge difficulty={scenario.difficulty} />
+          <div className="flex items-center gap-2">
+            <BookmarkButton scenarioId={scenario.id} size="small" />
+            <DifficultyBadge difficulty={scenario.difficulty} />
+          </div>
         </div>
         {scenario.category && (
           <div className="mt-2">

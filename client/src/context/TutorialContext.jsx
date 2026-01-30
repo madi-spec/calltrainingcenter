@@ -123,11 +123,23 @@ export function TutorialProvider({ children }) {
             const data = await response.json();
             const scenarios = data.scenarios || [];
             if (scenarios.length > 0) {
+              console.log('[Tutorial] Navigating to scenario:', scenarios[0].id);
               navigate(`/scenario/${scenarios[0].id}`);
+            } else {
+              console.warn('[Tutorial] No scenarios available, skipping to next step');
+              // Skip to gamification step if no scenarios
+              const gamificationStep = TUTORIAL_STEPS.find(s => s.id === 'gamification');
+              if (gamificationStep) {
+                setCurrentStep(gamificationStep);
+                saveState(newCompleted, gamificationStep, true);
+                navigate('/dashboard');
+              }
             }
+          } else {
+            console.error('[Tutorial] Failed to fetch scenarios:', response.status);
           }
         } catch (error) {
-          console.error('Error fetching scenarios for tutorial:', error);
+          console.error('[Tutorial] Error fetching scenarios:', error);
         }
       }
 

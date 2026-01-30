@@ -57,8 +57,9 @@ function Results() {
   // Save session results to database
   const saveSessionResults = useCallback(async (analysis) => {
     const sessionId = lastResults?.sessionId;
+    console.log('[SESSION SAVE] Attempting to save, sessionId:', sessionId);
     if (!sessionId) {
-      console.log('No session ID, skipping database save');
+      console.log('[SESSION SAVE] No session ID, skipping database save');
       return;
     }
 
@@ -78,12 +79,13 @@ function Results() {
       });
 
       if (response.ok) {
-        console.log('Session results saved to database');
+        console.log('[SESSION SAVE] Success - session saved to database');
       } else {
-        console.error('Failed to save session results:', response.status);
+        const errorText = await response.text();
+        console.error('[SESSION SAVE] Failed:', response.status, errorText);
       }
     } catch (err) {
-      console.error('Error saving session results:', err);
+      console.error('[SESSION SAVE] Error:', err);
     }
   }, [lastResults?.sessionId, lastResults?.transcript, lastResults?.duration, authFetch]);
 

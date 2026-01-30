@@ -129,6 +129,7 @@ export function useRetellCall() {
       const data = await response.json();
       callIdRef.current = data.callId;
       sessionIdRef.current = data.sessionId;  // Store database session ID
+      console.log('[CALL] Created call, callId:', data.callId, 'sessionId:', data.sessionId);
 
       // Start the web call
       console.log('Starting Retell web call with access token');

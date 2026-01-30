@@ -35,6 +35,8 @@ function Results() {
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState('processing');
   const [recoveredFromStorage, setRecoveredFromStorage] = useState(false);
+  const [pollFailures, setPollFailures] = useState(0);
+  const [usingSyncFallback, setUsingSyncFallback] = useState(false);
 
   // Try to recover results from sessionStorage if not in context
   useEffect(() => {
@@ -53,59 +55,138 @@ function Results() {
     }
   }, [lastResults, recoveredFromStorage, setLastResults]);
 
+  // Fallback to synchronous analysis
+  const runSyncAnalysis = useCallback(async () => {
+    if (!lastResults?.transcript || usingSyncFallback) return;
+
+    setUsingSyncFallback(true);
+    console.log('Falling back to synchronous analysis...');
+
+    try {
+      // Format transcript for analysis
+      const transcript = lastResults.transcript;
+      let transcriptText = '';
+      if (transcript?.raw) {
+        transcriptText = transcript.raw;
+      } else if (transcript?.formatted && Array.isArray(transcript.formatted)) {
+        transcriptText = transcript.formatted
+          .map(entry => `${entry.role === 'agent' ? 'Customer' : 'CSR'}: ${entry.content}`)
+          .join('\n');
+      } else if (typeof transcript === 'string') {
+        transcriptText = transcript;
+      }
+
+      const response = await authFetch('/api/analysis/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          transcript: transcriptText,
+          scenario: lastResults.scenario,
+          callDuration: lastResults.duration
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setLastResults(prev => ({
+          ...prev,
+          analysis: data.analysis,
+          analysisStatus: 'completed'
+        }));
+      } else {
+        setLastResults(prev => ({
+          ...prev,
+          analysisStatus: 'failed',
+          analysisError: 'Analysis failed'
+        }));
+      }
+    } catch (err) {
+      console.error('Sync analysis error:', err);
+      setLastResults(prev => ({
+        ...prev,
+        analysisStatus: 'failed',
+        analysisError: err.message
+      }));
+    }
+  }, [lastResults?.transcript, lastResults?.scenario, lastResults?.duration, usingSyncFallback, authFetch, setLastResults]);
+
   // Poll for analysis completion
   const pollAnalysis = useCallback(async () => {
-    if (!lastResults?.analysisId || lastResults?.analysis) return;
+    if (!lastResults?.analysisId || lastResults?.analysis || usingSyncFallback) return;
 
     try {
       const response = await authFetch(`/api/analysis/status/${lastResults.analysisId}`);
-      if (response.ok) {
-        const data = await response.json();
 
-        if (data.status === 'completed') {
-          // Update results with completed analysis
-          setLastResults(prev => ({
-            ...prev,
-            analysis: data.analysis,
-            analysisStatus: 'completed'
-          }));
-
-          // Update module progress if this is a generated scenario
-          if (lastResults.scenario?.isGeneratedScenario && lastResults.scenario?.moduleId) {
-            try {
-              const score = data.analysis?.overallScore || 0;
-              const won = score >= 70;
-
-              await authFetch(`/api/modules/${lastResults.scenario.moduleId}/complete-scenario`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  scenario_id: lastResults.scenario.id,
-                  won,
-                  score
-                })
-              });
-            } catch (moduleErr) {
-              console.error('Error updating module progress:', moduleErr);
-            }
+      if (!response.ok) {
+        // Polling failed - increment failure counter
+        setPollFailures(prev => {
+          const newCount = prev + 1;
+          console.log(`Poll failure ${newCount}/3`);
+          if (newCount >= 3) {
+            // After 3 failures, fall back to sync analysis
+            runSyncAnalysis();
           }
-        } else if (data.status === 'failed') {
-          setLastResults(prev => ({
-            ...prev,
-            analysisStatus: 'failed',
-            analysisError: data.error
-          }));
-        } else {
-          // Still processing - update progress
-          const elapsed = data.elapsedMs || 0;
-          const estimated = data.estimatedTotalMs || 15000;
-          setAnalysisProgress(Math.min(95, (elapsed / estimated) * 100));
+          return newCount;
+        });
+        return;
+      }
+
+      const data = await response.json();
+
+      if (data.status === 'completed') {
+        // Update results with completed analysis
+        setLastResults(prev => ({
+          ...prev,
+          analysis: data.analysis,
+          analysisStatus: 'completed'
+        }));
+
+        // Update module progress if this is a generated scenario
+        if (lastResults.scenario?.isGeneratedScenario && lastResults.scenario?.moduleId) {
+          try {
+            const score = data.analysis?.overallScore || 0;
+            const won = score >= 70;
+
+            await authFetch(`/api/modules/${lastResults.scenario.moduleId}/complete-scenario`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                scenario_id: lastResults.scenario.id,
+                won,
+                score
+              })
+            });
+          } catch (moduleErr) {
+            console.error('Error updating module progress:', moduleErr);
+          }
         }
+      } else if (data.status === 'failed') {
+        setLastResults(prev => ({
+          ...prev,
+          analysisStatus: 'failed',
+          analysisError: data.error
+        }));
+      } else if (data.status === 'not_found') {
+        // Analysis not found in memory - fall back to sync
+        console.log('Analysis not found, falling back to sync...');
+        runSyncAnalysis();
+      } else {
+        // Still processing - update progress
+        const elapsed = data.elapsedMs || 0;
+        const estimated = data.estimatedTotalMs || 15000;
+        setAnalysisProgress(Math.min(95, (elapsed / estimated) * 100));
       }
     } catch (err) {
       console.error('Error polling analysis:', err);
+      setPollFailures(prev => {
+        const newCount = prev + 1;
+        if (newCount >= 3) {
+          runSyncAnalysis();
+        }
+        return newCount;
+      });
     }
-  }, [lastResults?.analysisId, lastResults?.analysis, lastResults?.scenario, authFetch, setLastResults]);
+  }, [lastResults?.analysisId, lastResults?.analysis, lastResults?.scenario, usingSyncFallback, authFetch, setLastResults, runSyncAnalysis]);
 
   // Start polling when we have an analysis in progress
   useEffect(() => {

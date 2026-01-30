@@ -24,8 +24,12 @@ function ScenarioGrid({ scenarios }) {
       animate="show"
       className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
     >
-      {scenarios.map((scenario) => (
-        <motion.div key={scenario.id} variants={item}>
+      {scenarios.map((scenario, index) => (
+        <motion.div
+          key={scenario.id}
+          variants={item}
+          data-tutorial={index === 0 ? 'scenario-card' : undefined}
+        >
           <ScenarioCard scenario={scenario} />
         </motion.div>
       ))}

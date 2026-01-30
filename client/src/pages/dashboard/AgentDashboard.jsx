@@ -241,7 +241,7 @@ export default function AgentDashboard() {
       <ChallengeList maxDisplay={3} />
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div data-tutorial="dashboard-stats" className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -377,6 +377,7 @@ export default function AgentDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.45 }}
+          data-tutorial="gamification"
           className="bg-gray-800 rounded-xl p-6 border border-gray-700"
         >
           <div className="flex items-center justify-between mb-6">

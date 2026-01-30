@@ -138,6 +138,7 @@ function Layout({ children }) {
 
       {/* Sidebar */}
       <aside
+        data-tutorial="sidebar"
         className={`fixed inset-y-0 left-0 z-50 w-64 ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-r transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
@@ -177,6 +178,11 @@ function Layout({ children }) {
                 key={item.to}
                 to={item.to}
                 onClick={() => setSidebarOpen(false)}
+                data-tutorial={
+                  item.to === '/scenarios' ? 'scenarios-link' :
+                  item.to === '/my-assignments' ? 'assignments-link' :
+                  undefined
+                }
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
                   isActive(item.to)
                     ? 'bg-primary-600 text-white'

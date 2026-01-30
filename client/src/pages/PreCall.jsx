@@ -229,7 +229,7 @@ function PreCall() {
         </motion.div>
       )}
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div data-tutorial="pre-call-info" className="grid md:grid-cols-2 gap-6">
         {/* Customer Profile */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

@@ -17,6 +17,7 @@
     "express": "^4.18.2",
     "postgres": "^3.4.8",
     "retell-sdk": "^4.0.0",
-    "stripe": "^14.14.0"
+    "stripe": "^14.14.0",
+    "web-push": "^3.6.7"
   }
 }

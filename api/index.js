@@ -1064,12 +1064,43 @@ app.post('/api/calls/create-training-call', optionalAuthMiddleware, async (req, 
 app.post('/api/calls/end', async (req, res) => {
   try {
     const { callId } = req.body;
-    if (!callId) return res.status(400).json({ error: 'Call ID is required' });
+    if (!callId) {
+      console.log('[CALLS/END] No callId provided');
+      return res.status(400).json({ error: 'Call ID is required' });
+    }
 
-    await getRetellClient().call.end(callId);
+    console.log('[CALLS/END] Ending call:', callId);
+
+    // Try to end the call, but don't fail if it's already ended
+    try {
+      await getRetellClient().call.end(callId);
+    } catch (endErr) {
+      console.log('[CALLS/END] Error ending call (may already be ended):', endErr.message);
+      // Continue - the call may have already ended naturally
+    }
+
+    // Wait for transcript to be available
     await new Promise(r => setTimeout(r, 2000));
 
-    const call = await getRetellClient().call.retrieve(callId);
+    // Try to retrieve the call data
+    let call = null;
+    try {
+      call = await getRetellClient().call.retrieve(callId);
+    } catch (retrieveErr) {
+      console.log('[CALLS/END] Error retrieving call:', retrieveErr.message);
+      // Return empty transcript if we can't retrieve
+      return res.json({
+        success: true,
+        callId,
+        transcript: {
+          raw: '',
+          formatted: [],
+          duration: 0
+        }
+      });
+    }
+
+    console.log('[CALLS/END] Call retrieved, transcript length:', call.transcript?.length || 0);
 
     res.json({
       success: true,
@@ -1081,7 +1112,18 @@ app.post('/api/calls/end', async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('[CALLS/END] Unexpected error:', error);
+    // Still return success with empty data rather than failing
+    res.json({
+      success: true,
+      callId: req.body?.callId,
+      transcript: {
+        raw: '',
+        formatted: [],
+        duration: 0
+      },
+      warning: error.message
+    });
   }
 });
 

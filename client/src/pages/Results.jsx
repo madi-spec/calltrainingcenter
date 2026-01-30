@@ -136,6 +136,14 @@ function Results() {
     }
   }, [lastResults, recoveredFromStorage, navigate]);
 
+  // Helper function - defined early since it's used in loading states
+  const formatDuration = (seconds) => {
+    if (!seconds) return '0:00';
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   // Show loading while trying to recover
   if (!lastResults) {
     if (!recoveredFromStorage) {
@@ -289,12 +297,6 @@ function Results() {
 
   const handleBackToModule = () => {
     cleanupAndNavigate(`/modules/${scenario.moduleId}`);
-  };
-
-  const formatDuration = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
   // Handle case where analysis failed

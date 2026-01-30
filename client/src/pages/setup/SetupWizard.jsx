@@ -142,7 +142,7 @@ const STEPS = [
 export default function SetupWizard() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { authFetch, role } = useAuth();
+  const { authFetch, role, refreshProfile } = useAuth();
   const { organization, refreshOrganization } = useOrganization();
   const notifications = useNotifications();
   const showSuccess = notifications?.showSuccess || (() => {});
@@ -279,7 +279,12 @@ export default function SetupWizard() {
 
       if (response.ok) {
         try {
-          await refreshOrganization();
+          // Refresh both organization context and auth profile
+          // Auth profile contains organization data that ProtectedRoute checks
+          await Promise.all([
+            refreshOrganization(),
+            refreshProfile()
+          ]);
         } catch (refreshErr) {
           // Continue anyway
         }

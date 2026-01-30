@@ -7,6 +7,9 @@ import { TutorialOverlay } from './components/onboarding';
 import { InstallPrompt, UpdatePrompt } from './components/pwa';
 import { TutorialProvider } from './context/TutorialContext';
 
+// Public pages
+import Landing from './pages/Landing';
+
 // Existing pages
 import Home from './pages/Home';
 import PreCall from './pages/PreCall';
@@ -71,6 +74,9 @@ function App() {
       <UpdatePrompt />
       <AnimatePresence mode="wait">
         <Routes>
+        {/* Public Landing Page */}
+        <Route path="/" element={<Landing />} />
+
         {/* Clerk Auth Routes */}
         <Route
           path="/auth/login/*"
@@ -118,7 +124,6 @@ function App() {
                 <Suspense fallback={<PageLoader />}>
                   <Routes>
                     {/* Dashboard */}
-                    <Route path="/" element={<Dashboard />} />
                     <Route path="/dashboard" element={<Dashboard />} />
 
                     {/* Training */}

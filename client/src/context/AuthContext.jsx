@@ -125,7 +125,7 @@ export function AuthProvider({ children }) {
 
   // Sync Clerk user to Supabase on sign in
   const syncUserToDatabase = useCallback(async () => {
-    if (!user || !supabase) return null;
+    if (!user) return null;
 
     try {
       const token = await getToken();

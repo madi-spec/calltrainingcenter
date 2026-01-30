@@ -222,15 +222,18 @@ export function AuthProvider({ children }) {
     return response;
   }, [getToken]);
 
-  // Refresh profile from database
+  // Refresh profile from database (via API to avoid RLS issues)
   const refreshProfile = useCallback(async () => {
     if (user) {
-      const userProfile = await fetchProfile(user.id);
-      setProfile(userProfile);
+      // Use the sync-user API to get fresh profile data
+      const userProfile = await syncUserToDatabase();
+      if (userProfile) {
+        setProfile(userProfile);
+      }
       return userProfile;
     }
     return null;
-  }, [user, fetchProfile]);
+  }, [user, syncUserToDatabase]);
 
   // Effective role (override takes precedence for dev/testing)
   const effectiveRole = roleOverride || profile?.role;

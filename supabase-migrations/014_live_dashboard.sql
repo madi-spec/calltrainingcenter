@@ -75,7 +75,7 @@ CREATE POLICY active_sessions_manager_policy ON active_sessions
   FOR SELECT USING (
     org_id IN (
       SELECT org_id FROM users
-      WHERE id = auth.uid() AND role IN ('manager', 'admin', 'owner')
+      WHERE id = auth.uid() AND role IN ('manager', 'admin', 'super_admin')
     )
   );
 
@@ -88,7 +88,7 @@ CREATE POLICY session_completions_policy ON session_completions
   FOR SELECT USING (
     org_id IN (
       SELECT org_id FROM users
-      WHERE id = auth.uid() AND role IN ('manager', 'admin', 'owner')
+      WHERE id = auth.uid() AND role IN ('manager', 'admin', 'super_admin')
     )
   );
 

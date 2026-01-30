@@ -95,7 +95,7 @@ CREATE POLICY team_skill_assessments_policy ON team_skill_assessments
   FOR SELECT USING (
     org_id IN (
       SELECT org_id FROM users
-      WHERE id = auth.uid() AND role IN ('manager', 'admin', 'owner')
+      WHERE id = auth.uid() AND role IN ('manager', 'admin', 'super_admin')
     )
   );
 
@@ -105,7 +105,7 @@ CREATE POLICY user_skill_gaps_user_policy ON user_skill_gaps
     user_id = auth.uid() OR
     org_id IN (
       SELECT org_id FROM users
-      WHERE id = auth.uid() AND role IN ('manager', 'admin', 'owner')
+      WHERE id = auth.uid() AND role IN ('manager', 'admin', 'super_admin')
     )
   );
 
@@ -115,7 +115,7 @@ CREATE POLICY skill_improvement_plans_user_policy ON skill_improvement_plans
     user_id = auth.uid() OR
     org_id IN (
       SELECT org_id FROM users
-      WHERE id = auth.uid() AND role IN ('manager', 'admin', 'owner')
+      WHERE id = auth.uid() AND role IN ('manager', 'admin', 'super_admin')
     )
   );
 
@@ -123,6 +123,6 @@ CREATE POLICY skill_improvement_plans_manager_edit ON skill_improvement_plans
   FOR ALL USING (
     org_id IN (
       SELECT org_id FROM users
-      WHERE id = auth.uid() AND role IN ('manager', 'admin', 'owner')
+      WHERE id = auth.uid() AND role IN ('manager', 'admin', 'super_admin')
     )
   );

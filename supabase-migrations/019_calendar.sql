@@ -129,7 +129,7 @@ CREATE POLICY training_events_manager_policy ON training_events
   FOR SELECT USING (
     org_id IN (
       SELECT org_id FROM users
-      WHERE id = auth.uid() AND role IN ('manager', 'admin', 'owner')
+      WHERE id = auth.uid() AND role IN ('manager', 'admin', 'super_admin')
     )
   );
 
@@ -141,6 +141,6 @@ CREATE POLICY training_goals_manager_policy ON training_goals
   FOR ALL USING (
     org_id IN (
       SELECT org_id FROM users
-      WHERE id = auth.uid() AND role IN ('manager', 'admin', 'owner')
+      WHERE id = auth.uid() AND role IN ('manager', 'admin', 'super_admin')
     )
   );

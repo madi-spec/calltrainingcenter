@@ -119,7 +119,7 @@ CREATE POLICY skill_profiles_policy ON skill_profiles
     user_id = auth.uid() OR
     org_id IN (
       SELECT org_id FROM users
-      WHERE id = auth.uid() AND role IN ('admin', 'owner', 'manager')
+      WHERE id = auth.uid() AND role IN ('admin', 'super_admin', 'manager')
     )
   );
 

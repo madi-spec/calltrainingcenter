@@ -67,7 +67,7 @@ CREATE POLICY "Admins view org usage records" ON usage_records
   FOR SELECT USING (
     organization_id IN (
       SELECT organization_id FROM users
-      WHERE id = auth.uid() AND role IN ('admin', 'owner')
+      WHERE id = auth.uid() AND role IN ('admin', 'super_admin')
     )
   );
 
@@ -75,7 +75,7 @@ CREATE POLICY "Admins view org invoices" ON invoices
   FOR SELECT USING (
     organization_id IN (
       SELECT organization_id FROM users
-      WHERE id = auth.uid() AND role IN ('admin', 'owner')
+      WHERE id = auth.uid() AND role IN ('admin', 'super_admin')
     )
   );
 
@@ -83,7 +83,7 @@ CREATE POLICY "Admins view org hour purchases" ON hour_purchases
   FOR SELECT USING (
     organization_id IN (
       SELECT organization_id FROM users
-      WHERE id = auth.uid() AND role IN ('admin', 'owner')
+      WHERE id = auth.uid() AND role IN ('admin', 'super_admin')
     )
   );
 
@@ -154,7 +154,7 @@ CREATE POLICY "Admins view org promo redemptions" ON promo_redemptions
   FOR SELECT USING (
     organization_id IN (
       SELECT organization_id FROM users
-      WHERE id = auth.uid() AND role IN ('admin', 'owner')
+      WHERE id = auth.uid() AND role IN ('admin', 'super_admin')
     )
   );
 

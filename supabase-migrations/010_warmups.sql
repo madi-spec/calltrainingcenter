@@ -68,7 +68,7 @@ CREATE POLICY warmup_exercises_admin_policy ON warmup_exercises
   FOR ALL USING (
     org_id IN (
       SELECT org_id FROM users
-      WHERE id = auth.uid() AND role IN ('admin', 'owner', 'manager')
+      WHERE id = auth.uid() AND role IN ('admin', 'super_admin', 'manager')
     )
   );
 

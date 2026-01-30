@@ -81,7 +81,7 @@ CREATE POLICY analysis_cache_policy ON analysis_cache
       WHERE user_id = auth.uid() OR
       organization_id IN (
         SELECT org_id FROM users
-        WHERE id = auth.uid() AND role IN ('manager', 'admin', 'owner')
+        WHERE id = auth.uid() AND role IN ('manager', 'admin', 'super_admin')
       )
     )
   );

@@ -118,7 +118,7 @@ CREATE POLICY business_metrics_policy ON business_metrics
   FOR ALL USING (
     org_id IN (
       SELECT org_id FROM users
-      WHERE id = auth.uid() AND role IN ('admin', 'owner')
+      WHERE id = auth.uid() AND role IN ('admin', 'super_admin')
     )
   );
 
@@ -127,7 +127,7 @@ CREATE POLICY roi_calculations_policy ON roi_calculations
   FOR ALL USING (
     org_id IN (
       SELECT org_id FROM users
-      WHERE id = auth.uid() AND role IN ('admin', 'owner')
+      WHERE id = auth.uid() AND role IN ('admin', 'super_admin')
     )
   );
 
@@ -136,6 +136,6 @@ CREATE POLICY roi_config_policy ON roi_config
   FOR ALL USING (
     org_id IN (
       SELECT org_id FROM users
-      WHERE id = auth.uid() AND role IN ('admin', 'owner')
+      WHERE id = auth.uid() AND role IN ('admin', 'super_admin')
     )
   );

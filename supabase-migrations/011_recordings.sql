@@ -76,7 +76,7 @@ CREATE POLICY call_recordings_user_policy ON call_recordings
     -- Managers can see their team's recordings
     org_id IN (
       SELECT org_id FROM users
-      WHERE id = auth.uid() AND role IN ('admin', 'owner', 'manager')
+      WHERE id = auth.uid() AND role IN ('admin', 'super_admin', 'manager')
     )
   );
 

@@ -97,7 +97,7 @@ CREATE POLICY micro_scenarios_admin_policy ON micro_scenarios
   FOR ALL USING (
     org_id IN (
       SELECT org_id FROM users
-      WHERE id = auth.uid() AND role IN ('admin', 'owner', 'manager')
+      WHERE id = auth.uid() AND role IN ('admin', 'super_admin', 'manager')
     )
   );
 

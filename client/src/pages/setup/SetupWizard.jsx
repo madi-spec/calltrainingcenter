@@ -158,7 +158,7 @@ export default function SetupWizard() {
 
   // Only admins/owners can access setup
   useEffect(() => {
-    if (!['admin', 'owner'].includes(role)) {
+    if (!['admin', 'super_admin'].includes(role)) {
       navigate('/dashboard');
     }
   }, [role, navigate]);

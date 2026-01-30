@@ -15,7 +15,7 @@ const router = Router();
  * GET /api/invitations
  * List all pending invitations for the organization
  */
-router.get('/', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.get('/', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
 
@@ -39,7 +39,7 @@ router.get('/', authMiddleware, tenantMiddleware, requireRole('manager', 'admin'
  * POST /api/invitations/send
  * Send an invitation to a new team member
  */
-router.post('/send', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.post('/send', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const { email, role = 'trainee', team_id } = req.body;
 
@@ -251,7 +251,7 @@ router.get('/validate/:token', async (req, res) => {
  * DELETE /api/invitations/:id
  * Cancel an invitation
  */
-router.delete('/:id', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.delete('/:id', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
 
@@ -274,7 +274,7 @@ router.delete('/:id', authMiddleware, tenantMiddleware, requireRole('manager', '
  * POST /api/invitations/:id/resend
  * Resend an invitation
  */
-router.post('/:id/resend', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.post('/:id/resend', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
 

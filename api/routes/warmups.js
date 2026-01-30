@@ -302,7 +302,7 @@ router.post('/', async (req, res) => {
     const supabase = createAdminClient();
     const { org_id: orgId, role } = req.user;
 
-    if (!['admin', 'owner', 'manager'].includes(role)) {
+    if (!['admin', 'super_admin', 'manager'].includes(role)) {
       return res.status(403).json({ error: 'Insufficient permissions' });
     }
 

@@ -234,7 +234,7 @@ export const TABLES = {
  *   branch_id UUID REFERENCES branches(id) ON DELETE SET NULL,
  *   email TEXT UNIQUE NOT NULL,
  *   full_name TEXT NOT NULL,
- *   role TEXT NOT NULL DEFAULT 'trainee' CHECK (role IN ('trainee', 'manager', 'admin', 'owner')),
+ *   role TEXT NOT NULL DEFAULT 'trainee' CHECK (role IN ('trainee', 'manager', 'admin', 'super_admin')),
  *   status TEXT DEFAULT 'active' CHECK (status IN ('active', 'inactive', 'pending')),
  *   total_points INTEGER DEFAULT 0,
  *   current_streak INTEGER DEFAULT 0,

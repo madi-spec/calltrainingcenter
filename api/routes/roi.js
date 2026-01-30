@@ -6,7 +6,7 @@ const router = express.Router();
 
 // All routes require admin or owner role
 router.use(authMiddleware);
-router.use(requireRole(['admin', 'owner']));
+router.use(requireRole(['admin', 'super_admin']));
 
 /**
  * GET /api/roi/config

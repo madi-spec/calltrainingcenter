@@ -87,7 +87,7 @@ router.get('/session/:id', async (req, res) => {
     }
 
     // Check if user can view this session
-    if (session.user_id !== req.user.id && !['manager', 'admin', 'owner'].includes(req.user.role)) {
+    if (session.user_id !== req.user.id && !['manager', 'admin', 'super_admin'].includes(req.user.role)) {
       return res.status(403).json({ error: 'Access denied' });
     }
 
@@ -292,7 +292,7 @@ router.patch('/session/:id', async (req, res) => {
  */
 router.get('/team-recent', async (req, res) => {
   try {
-    if (!['manager', 'admin', 'owner'].includes(req.user.role)) {
+    if (!['manager', 'admin', 'super_admin'].includes(req.user.role)) {
       return res.status(403).json({ error: 'Access denied' });
     }
 
@@ -366,7 +366,7 @@ router.get('/team-recent', async (req, res) => {
  */
 router.get('/team', async (req, res) => {
   try {
-    if (!['manager', 'admin', 'owner'].includes(req.user.role)) {
+    if (!['manager', 'admin', 'super_admin'].includes(req.user.role)) {
       return res.status(403).json({ error: 'Access denied' });
     }
 

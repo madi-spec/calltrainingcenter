@@ -119,7 +119,7 @@ router.delete('/:id', async (req, res) => {
  * POST /api/notifications/send
  * Send a notification to users (for managers)
  */
-router.post('/send', requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.post('/send', requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const { user_ids, branch_id, type, title, message, data } = req.body;
     const adminClient = createAdminClient();

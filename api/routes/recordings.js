@@ -36,7 +36,7 @@ router.get('/:sessionId', async (req, res) => {
       .single();
 
     const canAccess = recording.user_id === userId ||
-      (recording.org_id === orgId && ['manager', 'admin', 'owner'].includes(user?.role));
+      (recording.org_id === orgId && ['manager', 'admin', 'super_admin'].includes(user?.role));
 
     if (!canAccess) {
       return res.status(403).json({ error: 'Access denied' });

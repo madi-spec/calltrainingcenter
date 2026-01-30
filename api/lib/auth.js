@@ -326,7 +326,7 @@ export function checkBranchAccess(req, res, next) {
     return next();
   }
 
-  if (['owner', 'admin'].includes(req.user.role)) {
+  if (['super_admin', 'admin'].includes(req.user.role)) {
     return next();
   }
 
@@ -358,7 +358,7 @@ export function checkUserAccess(req, res, next) {
     return next();
   }
 
-  if (['owner', 'admin'].includes(req.user.role)) {
+  if (['super_admin', 'admin'].includes(req.user.role)) {
     return next();
   }
 

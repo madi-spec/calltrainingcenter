@@ -11,7 +11,7 @@ router.use(tenantMiddleware);
  * GET /api/assignments
  * Get all assignments (for managers/admins)
  */
-router.get('/', requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.get('/', requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
 
@@ -105,7 +105,7 @@ router.get('/pending', async (req, res) => {
  * POST /api/assignments
  * Create a new assignment
  */
-router.post('/', requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.post('/', requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const { user_id, branch_id, suite_id, scenario_id, due_date } = req.body;
     const adminClient = createAdminClient();
@@ -175,7 +175,7 @@ router.post('/', requireRole('manager', 'admin', 'owner'), async (req, res) => {
  * POST /api/assignments/bulk
  * Create assignments for multiple users
  */
-router.post('/bulk', requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.post('/bulk', requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const { user_ids, branch_id, suite_id, scenario_id, due_date } = req.body;
     const adminClient = createAdminClient();
@@ -252,7 +252,7 @@ router.post('/bulk', requireRole('manager', 'admin', 'owner'), async (req, res) 
  * PATCH /api/assignments/:id
  * Update an assignment
  */
-router.patch('/:id', requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.patch('/:id', requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const { id } = req.params;
     const { due_date, status } = req.body;
@@ -278,7 +278,7 @@ router.patch('/:id', requireRole('manager', 'admin', 'owner'), async (req, res) 
  * DELETE /api/assignments/:id
  * Delete an assignment
  */
-router.delete('/:id', requireRole('admin', 'owner'), async (req, res) => {
+router.delete('/:id', requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { id } = req.params;
     const adminClient = createAdminClient();

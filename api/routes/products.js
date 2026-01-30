@@ -128,7 +128,7 @@ router.get('/service-lines', authMiddleware, tenantMiddleware, async (req, res) 
  * POST /api/products/service-lines
  * Add a service line for the org
  */
-router.post('/service-lines', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.post('/service-lines', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { category_id, is_primary, notes } = req.body;
 
@@ -172,7 +172,7 @@ router.post('/service-lines', authMiddleware, tenantMiddleware, requireRole('adm
  * DELETE /api/products/service-lines/:id
  * Remove a service line (soft delete via is_active)
  */
-router.delete('/service-lines/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.delete('/service-lines/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
     const { error } = await adminClient
@@ -257,7 +257,7 @@ router.get('/packages/:id', authMiddleware, tenantMiddleware, async (req, res) =
  * POST /api/products/packages
  * Create a new package
  */
-router.post('/packages', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.post('/packages', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const {
       service_line_id,
@@ -319,7 +319,7 @@ router.post('/packages', authMiddleware, tenantMiddleware, requireRole('admin', 
  * POST /api/products/packages/from-template
  * Create a package from a template
  */
-router.post('/packages/from-template', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.post('/packages/from-template', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { template_id, service_line_id, overrides } = req.body;
 
@@ -385,7 +385,7 @@ router.post('/packages/from-template', authMiddleware, tenantMiddleware, require
  * PUT /api/products/packages/:id
  * Update a package
  */
-router.put('/packages/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.put('/packages/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
     const { data, error } = await adminClient
@@ -411,7 +411,7 @@ router.put('/packages/:id', authMiddleware, tenantMiddleware, requireRole('admin
  * DELETE /api/products/packages/:id
  * Soft delete a package
  */
-router.delete('/packages/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.delete('/packages/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
     const { error } = await adminClient
@@ -453,7 +453,7 @@ router.get('/packages/:id/selling-points', authMiddleware, tenantMiddleware, asy
 /**
  * POST /api/products/packages/:id/selling-points
  */
-router.post('/packages/:id/selling-points', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.post('/packages/:id/selling-points', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { point, emphasis_level, display_order } = req.body;
 
@@ -484,7 +484,7 @@ router.post('/packages/:id/selling-points', authMiddleware, tenantMiddleware, re
 /**
  * PUT /api/products/packages/:packageId/selling-points/:id
  */
-router.put('/packages/:packageId/selling-points/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.put('/packages/:packageId/selling-points/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
     const { data, error } = await adminClient
@@ -506,7 +506,7 @@ router.put('/packages/:packageId/selling-points/:id', authMiddleware, tenantMidd
 /**
  * DELETE /api/products/packages/:packageId/selling-points/:id
  */
-router.delete('/packages/:packageId/selling-points/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.delete('/packages/:packageId/selling-points/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
     const { error } = await adminClient
@@ -548,7 +548,7 @@ router.get('/packages/:id/objections', authMiddleware, tenantMiddleware, async (
 /**
  * POST /api/products/packages/:id/objections
  */
-router.post('/packages/:id/objections', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.post('/packages/:id/objections', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const {
       objection_text,
@@ -595,7 +595,7 @@ router.post('/packages/:id/objections', authMiddleware, tenantMiddleware, requir
 /**
  * PUT /api/products/packages/:packageId/objections/:id
  */
-router.put('/packages/:packageId/objections/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.put('/packages/:packageId/objections/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
     const { data, error } = await adminClient
@@ -617,7 +617,7 @@ router.put('/packages/:packageId/objections/:id', authMiddleware, tenantMiddlewa
 /**
  * DELETE /api/products/packages/:packageId/objections/:id
  */
-router.delete('/packages/:packageId/objections/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.delete('/packages/:packageId/objections/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
     const { error } = await adminClient
@@ -659,7 +659,7 @@ router.get('/competitors', authMiddleware, tenantMiddleware, async (req, res) =>
 /**
  * POST /api/products/competitors
  */
-router.post('/competitors', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.post('/competitors', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const {
       name,
@@ -702,7 +702,7 @@ router.post('/competitors', authMiddleware, tenantMiddleware, requireRole('admin
 /**
  * PUT /api/products/competitors/:id
  */
-router.put('/competitors/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.put('/competitors/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
     const { data, error } = await adminClient
@@ -727,7 +727,7 @@ router.put('/competitors/:id', authMiddleware, tenantMiddleware, requireRole('ad
 /**
  * DELETE /api/products/competitors/:id
  */
-router.delete('/competitors/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.delete('/competitors/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
     const { error } = await adminClient
@@ -770,7 +770,7 @@ router.get('/sales-guidelines', authMiddleware, tenantMiddleware, async (req, re
 /**
  * POST /api/products/sales-guidelines
  */
-router.post('/sales-guidelines', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.post('/sales-guidelines', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { guideline_type, title, content, examples, display_order } = req.body;
 
@@ -803,7 +803,7 @@ router.post('/sales-guidelines', authMiddleware, tenantMiddleware, requireRole('
 /**
  * PUT /api/products/sales-guidelines/:id
  */
-router.put('/sales-guidelines/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.put('/sales-guidelines/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
     const { data, error } = await adminClient
@@ -825,7 +825,7 @@ router.put('/sales-guidelines/:id', authMiddleware, tenantMiddleware, requireRol
 /**
  * DELETE /api/products/sales-guidelines/:id
  */
-router.delete('/sales-guidelines/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.delete('/sales-guidelines/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
     const { error } = await adminClient

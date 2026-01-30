@@ -30,6 +30,7 @@ import useKeyboardShortcuts from '../hooks/useKeyboardShortcuts';
 import KeyboardShortcutsModal from './help/KeyboardShortcutsModal';
 import TrialStatusBanner from './billing/TrialStatusBanner';
 import UpgradeModal from './billing/UpgradeModal';
+import HelpAgent from './HelpAgent';
 
 function Layout({ children }) {
   const location = useLocation();
@@ -98,22 +99,22 @@ function Layout({ children }) {
 
   // Navigation items with role-based visibility
   const navItems = [
-    { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', roles: ['trainee', 'manager', 'admin', 'owner'] },
-    { to: '/scenarios', icon: Play, label: 'Practice', roles: ['trainee', 'manager', 'admin', 'owner'] },
-    { to: '/courses', icon: BookOpen, label: 'Courses', roles: ['trainee', 'manager', 'admin', 'owner'] },
-    { to: '/my-assignments', icon: ClipboardList, label: 'My Assignments', roles: ['trainee', 'manager', 'admin', 'owner'] },
-    { to: '/assignments', icon: ClipboardList, label: 'Assign Training', roles: ['manager', 'admin', 'owner'] },
-    { to: '/reports', icon: BarChart3, label: 'Reports', roles: ['trainee', 'manager', 'admin', 'owner'] },
-    { to: '/leaderboard', icon: Trophy, label: 'Leaderboard', roles: ['trainee', 'manager', 'admin', 'owner'] },
+    { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
+    { to: '/scenarios', icon: Play, label: 'Practice', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
+    { to: '/courses', icon: BookOpen, label: 'Courses', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
+    { to: '/my-assignments', icon: ClipboardList, label: 'My Assignments', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
+    { to: '/assignments', icon: ClipboardList, label: 'Assign Training', roles: ['manager', 'admin', 'super_admin'] },
+    { to: '/reports', icon: BarChart3, label: 'Reports', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
+    { to: '/leaderboard', icon: Trophy, label: 'Leaderboard', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
   ];
 
   const settingsItems = [
-    { to: '/setup', icon: Wand2, label: 'Setup Wizard', roles: ['admin', 'owner'] },
-    { to: '/settings', icon: Settings, label: 'Settings', roles: ['trainee', 'manager', 'admin', 'owner'] },
-    { to: '/settings/team', icon: Users, label: 'Team', roles: ['manager', 'admin', 'owner'] },
-    { to: '/settings/branches', icon: Building2, label: 'Branches', roles: ['admin', 'owner'] },
-    { to: '/settings/billing', icon: CreditCard, label: 'Billing', roles: ['admin', 'owner'] },
-    { to: '/settings/ai', icon: Sparkles, label: 'AI Settings', roles: ['admin', 'owner'] },
+    { to: '/setup', icon: Wand2, label: 'Setup Wizard', roles: ['admin', 'super_admin'] },
+    { to: '/settings', icon: Settings, label: 'Settings', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
+    { to: '/settings/team', icon: Users, label: 'Team', roles: ['manager', 'admin', 'super_admin'] },
+    { to: '/settings/branches', icon: Building2, label: 'Branches', roles: ['admin', 'super_admin'] },
+    { to: '/settings/billing', icon: CreditCard, label: 'Billing', roles: ['admin', 'super_admin'] },
+    { to: '/settings/ai', icon: Sparkles, label: 'AI Settings', roles: ['admin', 'super_admin'] },
   ];
 
   const filteredNavItems = navItems.filter(item => item.roles.includes(role || 'trainee'));
@@ -225,7 +226,7 @@ function Layout({ children }) {
           </nav>
 
           {/* Role Switcher - Only visible to admins/owners */}
-          {(actualRole === 'admin' || actualRole === 'owner') && (
+          {(actualRole === 'admin' || actualRole === 'super_admin') && (
             <div className={`px-3 py-2 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
               <p className="px-3 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1">
                 <span>View As</span>
@@ -356,6 +357,9 @@ function Layout({ children }) {
         isOpen={showUpgradeModal}
         onClose={() => setShowUpgradeModal(false)}
       />
+
+      {/* Help Agent Chat */}
+      <HelpAgent />
     </div>
   );
 }

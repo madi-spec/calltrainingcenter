@@ -131,7 +131,7 @@ router.get('/my-progress', async (req, res) => {
  * GET /api/reports/team
  * Get team performance report (for managers)
  */
-router.get('/team', requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.get('/team', requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const { range = 'month' } = req.query;
     const adminClient = createAdminClient();
@@ -212,7 +212,7 @@ router.get('/team', requireRole('manager', 'admin', 'owner'), async (req, res) =
  * GET /api/reports/team-summary
  * Quick team summary for dashboard
  */
-router.get('/team-summary', requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.get('/team-summary', requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
     const now = new Date();
@@ -265,7 +265,7 @@ router.get('/team-summary', requireRole('manager', 'admin', 'owner'), async (req
  * GET /api/reports/organization
  * Organization-wide report (for admins)
  */
-router.get('/organization', requireRole('admin', 'owner'), async (req, res) => {
+router.get('/organization', requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { range = 'month' } = req.query;
     const adminClient = createAdminClient();
@@ -291,7 +291,7 @@ router.get('/organization', requireRole('admin', 'owner'), async (req, res) => {
  * GET /api/reports/export
  * Export report data to CSV
  */
-router.get('/export', requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.get('/export', requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const { type = 'personal', range = 'month' } = req.query;
 

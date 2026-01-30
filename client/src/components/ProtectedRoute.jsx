@@ -43,7 +43,7 @@ export function ProtectedRoute({ children }) {
 
   // Check if onboarding is needed (organization missing website/phone)
   // Only check for owners who haven't completed onboarding
-  const needsOnboarding = profile?.role === 'owner' &&
+  const needsOnboarding = profile?.role === 'super_admin' &&
     organization &&
     !organization.website &&
     !organization.onboarding_completed &&

@@ -86,7 +86,7 @@ router.get('/:id', authMiddleware, tenantMiddleware, async (req, res) => {
  * POST /api/teams
  * Create a new team
  */
-router.post('/', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.post('/', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const { name, description, branch_id, manager_id } = req.body;
 
@@ -123,7 +123,7 @@ router.post('/', authMiddleware, tenantMiddleware, requireRole('manager', 'admin
  * PUT /api/teams/:id
  * Update team details
  */
-router.put('/:id', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.put('/:id', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const { name, description, branch_id, manager_id } = req.body;
 
@@ -172,7 +172,7 @@ router.put('/:id', authMiddleware, tenantMiddleware, requireRole('manager', 'adm
  * DELETE /api/teams/:id
  * Soft delete a team
  */
-router.delete('/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.delete('/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
 
@@ -201,7 +201,7 @@ router.delete('/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'ow
  * POST /api/teams/:id/members
  * Add members to a team
  */
-router.post('/:id/members', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.post('/:id/members', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const { user_ids } = req.body;
 
@@ -244,7 +244,7 @@ router.post('/:id/members', authMiddleware, tenantMiddleware, requireRole('manag
  * DELETE /api/teams/:id/members/:userId
  * Remove a member from a team
  */
-router.delete('/:id/members/:userId', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.delete('/:id/members/:userId', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
 
@@ -367,7 +367,7 @@ router.get('/:id/stats', authMiddleware, tenantMiddleware, async (req, res) => {
  * GET /api/teams/comparison
  * Compare all teams in the organization
  */
-router.get('/comparison', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.get('/comparison', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
 

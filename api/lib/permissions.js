@@ -4,7 +4,7 @@
  */
 
 // Role hierarchy (higher index = more permissions)
-export const ROLE_HIERARCHY = ['trainee', 'manager', 'admin', 'owner'];
+export const ROLE_HIERARCHY = ['trainee', 'manager', 'admin', 'super_admin'];
 
 // Permission definitions
 export const PERMISSIONS = {
@@ -234,7 +234,7 @@ export function getAssignableRoles(role) {
  */
 export function getDataScope(role) {
   switch (role) {
-    case 'owner':
+    case 'super_admin':
     case 'admin':
       return 'all';
     case 'manager':

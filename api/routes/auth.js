@@ -100,7 +100,7 @@ router.post('/sync-user', authMiddleware, async (req, res) => {
         email: email,
         full_name: fullName || 'User',
         avatar_url: imageUrl,
-        role: 'owner',
+        role: 'super_admin',
         status: 'active',
         total_points: 0,
         current_streak: 0,

@@ -6,7 +6,7 @@ const router = express.Router();
 
 // All routes require manager or higher role
 router.use(authMiddleware);
-router.use(requireRole(['manager', 'admin', 'owner']));
+router.use(requireRole(['manager', 'admin', 'super_admin']));
 
 /**
  * GET /api/skill-gaps/team-assessment

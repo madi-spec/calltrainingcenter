@@ -357,7 +357,7 @@ router.get('/team', async (req, res) => {
  * POST /api/challenges/generate
  * Manually trigger challenge generation (admin only)
  */
-router.post('/generate', requireRole('admin', 'owner'), async (req, res) => {
+router.post('/generate', requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { date } = req.body;
     const targetDate = date || new Date().toISOString().split('T')[0];

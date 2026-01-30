@@ -80,7 +80,7 @@ router.get('/:id', async (req, res) => {
  * POST /api/branches
  * Create a new branch
  */
-router.post('/', requireRole('admin', 'owner'), async (req, res) => {
+router.post('/', requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { name, address, phone, timezone, is_primary } = req.body;
     const adminClient = createAdminClient();
@@ -119,7 +119,7 @@ router.post('/', requireRole('admin', 'owner'), async (req, res) => {
  * PATCH /api/branches/:id
  * Update a branch
  */
-router.patch('/:id', requireRole('admin', 'owner'), async (req, res) => {
+router.patch('/:id', requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { id } = req.params;
     const { name, address, phone, timezone, is_primary } = req.body;
@@ -162,7 +162,7 @@ router.patch('/:id', requireRole('admin', 'owner'), async (req, res) => {
  * DELETE /api/branches/:id
  * Delete a branch
  */
-router.delete('/:id', requireRole('admin', 'owner'), async (req, res) => {
+router.delete('/:id', requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { id } = req.params;
     const adminClient = createAdminClient();

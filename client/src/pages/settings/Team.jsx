@@ -18,7 +18,7 @@ const ROLES = [
   { id: 'trainee', name: 'Trainee', description: 'Can complete training and view own progress' },
   { id: 'manager', name: 'Manager', description: 'Can assign training and view team reports' },
   { id: 'admin', name: 'Admin', description: 'Full access except billing' },
-  { id: 'owner', name: 'Owner', description: 'Full access including billing' }
+  { id: 'super_admin', name: 'Super Admin', description: 'Full access including billing' }
 ];
 
 export default function Team() {
@@ -108,7 +108,7 @@ export default function Team() {
 
   const getRoleBadgeColor = (role) => {
     switch (role) {
-      case 'owner':
+      case 'super_admin':
         return 'bg-purple-500/10 text-purple-400';
       case 'admin':
         return 'bg-red-500/10 text-red-400';
@@ -311,7 +311,7 @@ export default function Team() {
                     onChange={(e) => setInviteData((prev) => ({ ...prev, role: e.target.value }))}
                     className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   >
-                    {ROLES.filter((r) => r.id !== 'owner').map((role) => (
+                    {ROLES.filter((r) => r.id !== 'super_admin').map((role) => (
                       <option key={role.id} value={role.id}>
                         {role.name} - {role.description}
                       </option>

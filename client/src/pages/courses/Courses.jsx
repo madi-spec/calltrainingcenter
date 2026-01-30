@@ -16,7 +16,7 @@ import { useAuth } from '../../context/AuthContext';
 
 export default function Courses() {
   const { authFetch, role } = useAuth();
-  const canCreate = ['admin', 'owner'].includes(role);
+  const canCreate = ['admin', 'super_admin'].includes(role);
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');

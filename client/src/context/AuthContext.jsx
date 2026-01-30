@@ -69,7 +69,7 @@ const ROLE_PERMISSIONS = {
     'badges:create': true,
     'notifications:send': true
   },
-  owner: {
+  super_admin: {
     'all': true
   }
 };
@@ -189,7 +189,7 @@ export function AuthProvider({ children }) {
   const hasPermission = useCallback((permission) => {
     if (!profile) return false;
     const role = profile.role;
-    if (role === 'owner') return true;
+    if (role === 'super_admin') return true;
     const perms = ROLE_PERMISSIONS[role] || {};
     return perms[permission] === true;
   }, [profile]);
@@ -202,7 +202,7 @@ export function AuthProvider({ children }) {
   // Check if user is at least a certain role
   const isAtLeastRole = useCallback((requiredRole) => {
     if (!profile) return false;
-    const hierarchy = ['trainee', 'manager', 'admin', 'owner'];
+    const hierarchy = ['trainee', 'manager', 'admin', 'super_admin'];
     const userIndex = hierarchy.indexOf(profile.role);
     const requiredIndex = hierarchy.indexOf(requiredRole);
     return userIndex >= requiredIndex;

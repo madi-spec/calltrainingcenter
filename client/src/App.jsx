@@ -158,7 +158,7 @@ function App() {
                     <Route
                       path="/courses/create"
                       element={
-                        <RoleProtectedRoute allowedRoles={['admin', 'owner']}>
+                        <RoleProtectedRoute allowedRoles={['admin', 'super_admin']}>
                           <CourseBuilder />
                         </RoleProtectedRoute>
                       }
@@ -171,7 +171,7 @@ function App() {
                     <Route
                       path="/assignments"
                       element={
-                        <RoleProtectedRoute allowedRoles={['manager', 'admin', 'owner']}>
+                        <RoleProtectedRoute allowedRoles={['manager', 'admin', 'super_admin']}>
                           <Assignments />
                         </RoleProtectedRoute>
                       }
@@ -182,7 +182,7 @@ function App() {
                     <Route
                       path="/live"
                       element={
-                        <RoleProtectedRoute allowedRoles={['manager', 'admin', 'owner']}>
+                        <RoleProtectedRoute allowedRoles={['manager', 'admin', 'super_admin']}>
                           <LiveDashboard />
                         </RoleProtectedRoute>
                       }
@@ -190,7 +190,7 @@ function App() {
                     <Route
                       path="/skill-gaps"
                       element={
-                        <RoleProtectedRoute allowedRoles={['manager', 'admin', 'owner']}>
+                        <RoleProtectedRoute allowedRoles={['manager', 'admin', 'super_admin']}>
                           <SkillGapHeatmap />
                         </RoleProtectedRoute>
                       }
@@ -198,7 +198,7 @@ function App() {
                     <Route
                       path="/roi"
                       element={
-                        <RoleProtectedRoute allowedRoles={['admin', 'owner']}>
+                        <RoleProtectedRoute allowedRoles={['admin', 'super_admin']}>
                           <ROIDashboard />
                         </RoleProtectedRoute>
                       }
@@ -214,7 +214,7 @@ function App() {
                     <Route
                       path="/settings/billing"
                       element={
-                        <RoleProtectedRoute allowedRoles={['admin', 'owner']}>
+                        <RoleProtectedRoute allowedRoles={['admin', 'super_admin']}>
                           <BillingSettings />
                         </RoleProtectedRoute>
                       }
@@ -222,7 +222,7 @@ function App() {
                     <Route
                       path="/settings/ai"
                       element={
-                        <RoleProtectedRoute allowedRoles={['admin', 'owner']}>
+                        <RoleProtectedRoute allowedRoles={['admin', 'super_admin']}>
                           <AISettings />
                         </RoleProtectedRoute>
                       }
@@ -230,7 +230,7 @@ function App() {
                     <Route
                       path="/settings/team"
                       element={
-                        <RoleProtectedRoute allowedRoles={['manager', 'admin', 'owner']}>
+                        <RoleProtectedRoute allowedRoles={['manager', 'admin', 'super_admin']}>
                           <TeamSettings />
                         </RoleProtectedRoute>
                       }
@@ -238,7 +238,7 @@ function App() {
                     <Route
                       path="/settings/branches"
                       element={
-                        <RoleProtectedRoute allowedRoles={['admin', 'owner']}>
+                        <RoleProtectedRoute allowedRoles={['admin', 'super_admin']}>
                           <BranchSettings />
                         </RoleProtectedRoute>
                       }
@@ -248,7 +248,7 @@ function App() {
                     <Route
                       path="/setup"
                       element={
-                        <RoleProtectedRoute allowedRoles={['admin', 'owner']}>
+                        <RoleProtectedRoute allowedRoles={['admin', 'super_admin']}>
                           <SetupWizard />
                         </RoleProtectedRoute>
                       }
@@ -258,7 +258,7 @@ function App() {
                     <Route
                       path="/admin"
                       element={
-                        <RoleProtectedRoute allowedRoles={['admin', 'owner']}>
+                        <RoleProtectedRoute allowedRoles={['admin', 'super_admin']}>
                           <Admin />
                         </RoleProtectedRoute>
                       }
@@ -266,7 +266,7 @@ function App() {
                     <Route
                       path="/builder"
                       element={
-                        <RoleProtectedRoute allowedRoles={['manager', 'admin', 'owner']}>
+                        <RoleProtectedRoute allowedRoles={['manager', 'admin', 'super_admin']}>
                           <Builder />
                         </RoleProtectedRoute>
                       }

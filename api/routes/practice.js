@@ -275,7 +275,7 @@ router.post('/log', authMiddleware, tenantMiddleware, async (req, res) => {
  * GET /api/practice/team/:id/compliance
  * Get team practice compliance (manager+)
  */
-router.get('/team/:id/compliance', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.get('/team/:id/compliance', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
 
@@ -386,7 +386,7 @@ router.get('/team/:id/compliance', authMiddleware, tenantMiddleware, requireRole
  * PUT /api/practice/excuse
  * Mark a day as excused (manager+)
  */
-router.put('/excuse', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.put('/excuse', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const { user_id, date, reason } = req.body;
 
@@ -450,7 +450,7 @@ router.put('/excuse', authMiddleware, tenantMiddleware, requireRole('manager', '
  * GET /api/practice/requirements
  * Get practice requirements for the org
  */
-router.get('/requirements', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.get('/requirements', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
 
@@ -476,7 +476,7 @@ router.get('/requirements', authMiddleware, tenantMiddleware, requireRole('admin
  * POST /api/practice/requirements
  * Create or update practice requirements
  */
-router.post('/requirements', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.post('/requirements', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { team_id, frequency, required_calls, required_minutes } = req.body;
 
@@ -539,7 +539,7 @@ router.post('/requirements', authMiddleware, tenantMiddleware, requireRole('admi
  * GET /api/practice/compliance-overview
  * Get compliance overview for all teams (manager+)
  */
-router.get('/compliance-overview', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.get('/compliance-overview', authMiddleware, tenantMiddleware, requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
 
@@ -666,7 +666,7 @@ router.get('/compliance-overview', authMiddleware, tenantMiddleware, requireRole
  * DELETE /api/practice/requirements/:id
  * Delete a practice requirement
  */
-router.delete('/requirements/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.delete('/requirements/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
 

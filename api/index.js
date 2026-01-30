@@ -40,6 +40,7 @@ import analysisRoutes from './routes/analysis.js';
 import pwaRoutes from './routes/pwa.js';
 import calendarRoutes from './routes/calendar.js';
 import recordingsRoutes from './routes/recordings.js';
+import helpAgentRoutes from './routes/helpAgent.js';
 
 // Import services
 import {
@@ -754,6 +755,7 @@ app.use('/api/analysis', analysisRoutes);
 app.use('/api/pwa', pwaRoutes);
 app.use('/api/calendar', calendarRoutes);
 app.use('/api/recordings', recordingsRoutes);
+app.use('/api/help-agent', helpAgentRoutes);
 
 // ============ LEGACY ROUTES (maintain backward compatibility) ============
 

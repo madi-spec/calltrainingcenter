@@ -223,7 +223,7 @@ router.post('/:id/start', authMiddleware, tenantMiddleware, async (req, res) => 
  * POST /api/courses
  * Create a custom course (admin only)
  */
-router.post('/', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.post('/', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { name, description, category, product_line, icon, badge_name, badge_icon, modules } = req.body;
 
@@ -294,7 +294,7 @@ router.post('/', authMiddleware, tenantMiddleware, requireRole('admin', 'owner')
  * PUT /api/courses/:id
  * Update a custom course
  */
-router.put('/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.put('/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
 
@@ -332,7 +332,7 @@ router.put('/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'owner
  * DELETE /api/courses/:id
  * Soft delete a custom course
  */
-router.delete('/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.delete('/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
 

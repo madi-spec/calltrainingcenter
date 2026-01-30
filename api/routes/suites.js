@@ -63,7 +63,7 @@ router.get('/:id', async (req, res) => {
  * POST /api/suites
  * Create a new training suite
  */
-router.post('/', requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.post('/', requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const { name, description, type, scenario_order, passing_score, required_completions } = req.body;
 
@@ -100,7 +100,7 @@ router.post('/', requireRole('manager', 'admin', 'owner'), async (req, res) => {
  * PATCH /api/suites/:id
  * Update a training suite
  */
-router.patch('/:id', requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.patch('/:id', requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const { id } = req.params;
     const { name, description, type, scenario_order, passing_score, required_completions } = req.body;
@@ -136,7 +136,7 @@ router.patch('/:id', requireRole('manager', 'admin', 'owner'), async (req, res) 
  * DELETE /api/suites/:id
  * Delete a training suite
  */
-router.delete('/:id', requireRole('admin', 'owner'), async (req, res) => {
+router.delete('/:id', requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { id } = req.params;
     const adminClient = createAdminClient();
@@ -159,7 +159,7 @@ router.delete('/:id', requireRole('admin', 'owner'), async (req, res) => {
  * POST /api/suites/:id/duplicate
  * Duplicate a training suite
  */
-router.post('/:id/duplicate', requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.post('/:id/duplicate', requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const { id } = req.params;
     const adminClient = createAdminClient();

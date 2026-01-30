@@ -134,7 +134,7 @@ export async function createCheckoutSession(organization, planId, successUrl, ca
       .from(TABLES.USERS)
       .select('email')
       .eq('organization_id', organization.id)
-      .eq('role', 'owner')
+      .eq('role', 'super_admin')
       .single();
 
     const customer = await createCustomer(organization, owner?.email);

@@ -79,7 +79,7 @@ router.get('/plans', (req, res) => {
  * GET /api/billing/usage
  * Get current usage for the organization
  */
-router.get('/usage', requireRole('admin', 'owner'), async (req, res) => {
+router.get('/usage', requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const usage = await getCurrentUsage(req.organization);
     res.json(usage);
@@ -92,7 +92,7 @@ router.get('/usage', requireRole('admin', 'owner'), async (req, res) => {
  * GET /api/billing/status
  * Get subscription status
  */
-router.get('/status', requireRole('admin', 'owner'), async (req, res) => {
+router.get('/status', requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const status = await getSubscriptionStatus(req.organization);
     res.json(status);
@@ -105,7 +105,7 @@ router.get('/status', requireRole('admin', 'owner'), async (req, res) => {
  * GET /api/billing/invoices
  * Get invoice history
  */
-router.get('/invoices', requireRole('admin', 'owner'), async (req, res) => {
+router.get('/invoices', requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { limit = 10 } = req.query;
     const invoices = await getInvoices(req.organization, parseInt(limit));
@@ -119,7 +119,7 @@ router.get('/invoices', requireRole('admin', 'owner'), async (req, res) => {
  * POST /api/billing/checkout
  * Create a checkout session for subscription
  */
-router.post('/checkout', requireRole('owner'), async (req, res) => {
+router.post('/checkout', requireRole('super_admin'), async (req, res) => {
   try {
     const { planId, successUrl, cancelUrl } = req.body;
 
@@ -144,7 +144,7 @@ router.post('/checkout', requireRole('owner'), async (req, res) => {
  * POST /api/billing/portal
  * Create a billing portal session
  */
-router.post('/portal', requireRole('admin', 'owner'), async (req, res) => {
+router.post('/portal', requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const returnUrl = req.body.returnUrl || `${process.env.APP_URL}/settings/billing`;
     const session = await createBillingPortalSession(req.organization, returnUrl);
@@ -158,7 +158,7 @@ router.post('/portal', requireRole('admin', 'owner'), async (req, res) => {
  * POST /api/billing/cancel
  * Cancel subscription
  */
-router.post('/cancel', requireRole('owner'), async (req, res) => {
+router.post('/cancel', requireRole('super_admin'), async (req, res) => {
   try {
     const { immediately = false } = req.body;
     await cancelSubscription(req.organization, immediately);
@@ -172,7 +172,7 @@ router.post('/cancel', requireRole('owner'), async (req, res) => {
  * POST /api/billing/purchase-hours
  * Purchase additional training hours
  */
-router.post('/purchase-hours', requireRole('admin', 'owner'), async (req, res) => {
+router.post('/purchase-hours', requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     if (!stripe) {
       return res.status(503).json({ error: 'Stripe not configured' });
@@ -198,7 +198,7 @@ router.post('/purchase-hours', requireRole('admin', 'owner'), async (req, res) =
         .from(TABLES.USERS)
         .select('email')
         .eq('organization_id', organization.id)
-        .eq('role', 'owner')
+        .eq('role', 'super_admin')
         .single();
 
       const customer = await stripe.customers.create({
@@ -259,7 +259,7 @@ router.post('/purchase-hours', requireRole('admin', 'owner'), async (req, res) =
  * GET /api/billing/hour-packages
  * Get available hour packages for purchase
  */
-router.get('/hour-packages', requireRole('admin', 'owner'), (req, res) => {
+router.get('/hour-packages', requireRole('admin', 'super_admin'), (req, res) => {
   // Predefined packages for additional hours
   const packages = [
     {
@@ -305,7 +305,7 @@ router.get('/hour-packages', requireRole('admin', 'owner'), (req, res) => {
  * POST /api/billing/redeem-promo
  * Redeem a promotional code for free Enterprise access
  */
-router.post('/redeem-promo', requireRole('admin', 'owner'), async (req, res) => {
+router.post('/redeem-promo', requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { code } = req.body;
 
@@ -399,7 +399,7 @@ router.post('/redeem-promo', requireRole('admin', 'owner'), async (req, res) => 
  * GET /api/billing/promo-status
  * Check if organization has an active promo
  */
-router.get('/promo-status', requireRole('admin', 'owner'), async (req, res) => {
+router.get('/promo-status', requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const organization = req.organization;
 

@@ -10,7 +10,7 @@ import ScenarioGrid from '../components/scenarios/ScenarioGrid';
 function Home() {
   const { organization: company } = useOrganization();
   const { authFetch, role } = useAuth();
-  const canCreate = ['manager', 'admin', 'owner'].includes(role);
+  const canCreate = ['manager', 'admin', 'super_admin'].includes(role);
   const [scenarios, setScenarios] = useState([]);
   const [bookmarkedIds, setBookmarkedIds] = useState(new Set());
   const [loading, setLoading] = useState(true);

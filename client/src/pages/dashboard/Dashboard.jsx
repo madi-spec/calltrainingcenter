@@ -6,7 +6,7 @@ export default function Dashboard() {
   const { role } = useAuth();
 
   // Render manager dashboard for managers and above
-  if (['manager', 'admin', 'owner'].includes(role)) {
+  if (['manager', 'admin', 'super_admin'].includes(role)) {
     return <ManagerDashboard />;
   }
 

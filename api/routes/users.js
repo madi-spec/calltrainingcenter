@@ -12,7 +12,7 @@ router.use(tenantMiddleware);
  * GET /api/users
  * Get all users in organization
  */
-router.get('/', requireRole('manager', 'admin', 'owner'), async (req, res) => {
+router.get('/', requireRole('manager', 'admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
 
@@ -67,7 +67,7 @@ router.get('/:id', async (req, res) => {
     const adminClient = createAdminClient();
 
     // Users can view themselves
-    if (id !== req.user.id && !['manager', 'admin', 'owner'].includes(req.user.role)) {
+    if (id !== req.user.id && !['manager', 'admin', 'super_admin'].includes(req.user.role)) {
       return res.status(403).json({ error: 'Access denied' });
     }
 
@@ -103,7 +103,7 @@ router.patch('/:id', async (req, res) => {
     const { full_name, preferences, branch_id } = req.body;
 
     // Users can update themselves, managers+ can update others
-    const canUpdate = id === req.user.id || ['manager', 'admin', 'owner'].includes(req.user.role);
+    const canUpdate = id === req.user.id || ['manager', 'admin', 'super_admin'].includes(req.user.role);
     if (!canUpdate) {
       return res.status(403).json({ error: 'Access denied' });
     }
@@ -113,7 +113,7 @@ router.patch('/:id', async (req, res) => {
     const updates = {};
     if (full_name) updates.full_name = full_name;
     if (preferences) updates.preferences = preferences;
-    if (branch_id && ['admin', 'owner'].includes(req.user.role)) {
+    if (branch_id && ['admin', 'super_admin'].includes(req.user.role)) {
       updates.branch_id = branch_id;
     }
 
@@ -137,7 +137,7 @@ router.patch('/:id', async (req, res) => {
  * PATCH /api/users/:id/role
  * Change a user's role
  */
-router.patch('/:id/role', requireRole('admin', 'owner'), async (req, res) => {
+router.patch('/:id/role', requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { id } = req.params;
     const { role } = req.body;
@@ -186,7 +186,7 @@ router.patch('/:id/role', requireRole('admin', 'owner'), async (req, res) => {
  * POST /api/users/invite
  * Invite a new user
  */
-router.post('/invite', requireRole('admin', 'owner'), async (req, res) => {
+router.post('/invite', requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { email, role, branch_id } = req.body;
 
@@ -239,7 +239,7 @@ router.post('/invite', requireRole('admin', 'owner'), async (req, res) => {
  * DELETE /api/users/:id
  * Deactivate a user
  */
-router.delete('/:id', requireRole('admin', 'owner'), async (req, res) => {
+router.delete('/:id', requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -263,7 +263,7 @@ router.delete('/:id', requireRole('admin', 'owner'), async (req, res) => {
     }
 
     // Cannot deactivate owner
-    if (targetUser.role === 'owner') {
+    if (targetUser.role === 'super_admin') {
       return res.status(403).json({ error: 'Cannot deactivate organization owner' });
     }
 

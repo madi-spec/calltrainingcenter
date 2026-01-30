@@ -390,7 +390,7 @@ router.get('/current', authMiddleware, tenantMiddleware, async (req, res) => {
  * PUT /api/organizations/update
  * Update organization details
  */
-router.put('/update', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.put('/update', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { name, phone, website, address, services, guarantees, settings, service_areas, value_propositions, business_hours, pricing, logo_url, brand_colors, tagline, onboarding_completed } = req.body;
     const adminClient = createAdminClient();
@@ -473,7 +473,7 @@ router.put('/update', authMiddleware, tenantMiddleware, requireRole('admin', 'ow
  * POST /api/organizations/complete-setup
  * Mark organization setup as complete and save all step data
  */
-router.post('/complete-setup', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.post('/complete-setup', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const adminClient = createAdminClient();
     const { setupData } = req.body;
@@ -566,7 +566,7 @@ router.post('/complete-setup', authMiddleware, tenantMiddleware, requireRole('ad
  * POST /api/organizations/scrape-website
  * Extract company info from website using AI
  */
-router.post('/scrape-website', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.post('/scrape-website', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { website } = req.body;
 
@@ -803,7 +803,7 @@ router.get('/members', authMiddleware, tenantMiddleware, async (req, res) => {
  * PUT /api/organizations/members/:id/role
  * Update a member's role
  */
-router.put('/members/:id/role', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.put('/members/:id/role', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { role } = req.body;
     const validRoles = ['trainee', 'manager', 'admin'];
@@ -813,7 +813,7 @@ router.put('/members/:id/role', authMiddleware, tenantMiddleware, requireRole('a
     }
 
     // Prevent demoting owners
-    if (req.params.id === req.user.id && req.user.role === 'owner') {
+    if (req.params.id === req.user.id && req.user.role === 'super_admin') {
       return res.status(400).json({ error: 'Cannot change owner role' });
     }
 
@@ -840,7 +840,7 @@ router.put('/members/:id/role', authMiddleware, tenantMiddleware, requireRole('a
  * DELETE /api/organizations/members/:id
  * Remove a member from the organization
  */
-router.delete('/members/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
+router.delete('/members/:id', authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
   try {
     if (req.params.id === req.user.id) {
       return res.status(400).json({ error: 'Cannot remove yourself' });

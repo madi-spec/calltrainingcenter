@@ -26,9 +26,14 @@ export function ConfigProvider({ children }) {
     setConfig(prev => ({ ...prev, currentCall: callInfo }));
   }, []);
 
-  // Set last coaching results
-  const setLastResults = useCallback((results) => {
-    setConfig(prev => ({ ...prev, lastResults: results }));
+  // Set last coaching results (supports function updaters like setState)
+  const setLastResults = useCallback((resultsOrUpdater) => {
+    setConfig(prev => ({
+      ...prev,
+      lastResults: typeof resultsOrUpdater === 'function'
+        ? resultsOrUpdater(prev.lastResults)
+        : resultsOrUpdater
+    }));
   }, []);
 
   // Clear current session

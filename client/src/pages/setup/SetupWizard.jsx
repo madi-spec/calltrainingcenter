@@ -17,11 +17,15 @@ import {
   ClipboardCheck,
   Bot,
   Sliders,
-  Settings2
+  Settings2,
+  Rocket,
+  Globe,
+  X
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useOrganization } from '../../context/OrganizationContext';
 import { useNotifications } from '../../context/NotificationContext';
+import { useTutorial } from '../../context/TutorialContext';
 import CompanyInfoStep from './steps/CompanyInfoStep';
 import ServiceLinesStep from './steps/ServiceLinesStep';
 import PackagesStep from './steps/PackagesStep';
@@ -139,11 +143,19 @@ const STEPS = [
 export default function SetupWizard() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { authFetch, role } = useAuth();
+  const { authFetch, role, profile } = useAuth();
   const { organization, refreshOrganization } = useOrganization();
   const notifications = useNotifications();
   const showSuccess = notifications?.showSuccess || (() => {});
   const showError = notifications?.showError || (() => {});
+
+  // Tutorial - will start after setup completion for new users
+  let tutorial = null;
+  try {
+    tutorial = useTutorial();
+  } catch (e) {
+    // Tutorial context not available (e.g., direct URL access)
+  }
 
   const [currentStep, setCurrentStep] = useState(0);
   const [stepData, setStepData] = useState({});
@@ -153,8 +165,11 @@ export default function SetupWizard() {
   const [autoScraping, setAutoScraping] = useState(false);
   const hasAutoScraped = useRef(false);
 
-  // Check for auto-scrape request from onboarding
+  // Check for new user from redirect
   const { isNewUser, website, autoScrape } = location.state || {};
+
+  // Welcome modal for new users
+  const [showWelcomeModal, setShowWelcomeModal] = useState(isNewUser === true);
 
   // Only admins/owners can access setup
   useEffect(() => {
@@ -278,7 +293,17 @@ export default function SetupWizard() {
           // Continue anyway
         }
         showSuccess('Setup Complete', 'Your organization is ready to go!');
-        navigate('/dashboard');
+
+        // Start tutorial for new users after setup
+        if (isNewUser && tutorial?.startTutorial) {
+          navigate('/dashboard');
+          // Small delay to let dashboard render before starting tutorial
+          setTimeout(() => {
+            tutorial.startTutorial();
+          }, 500);
+        } else {
+          navigate('/dashboard');
+        }
       } else {
         let errorMessage = 'Failed to complete setup';
         try {
@@ -355,6 +380,82 @@ export default function SetupWizard() {
 
   return (
     <div className="min-h-screen bg-gray-900">
+      {/* Welcome Modal for New Users */}
+      <AnimatePresence>
+        {showWelcomeModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-gray-800 rounded-2xl p-8 max-w-lg w-full border border-gray-700 shadow-2xl"
+            >
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500 to-purple-600 mb-6">
+                  <Rocket className="w-8 h-8 text-white" />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-100 mb-3">
+                  Welcome to Your Training Platform!
+                </h2>
+                <p className="text-gray-400 mb-6">
+                  Let's personalize your experience. This configuration wizard will help you set up:
+                </p>
+
+                <div className="grid grid-cols-2 gap-3 mb-8 text-left">
+                  <div className="flex items-start gap-3 p-3 bg-gray-700/50 rounded-lg">
+                    <Building2 className="w-5 h-5 text-primary-400 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-200">Company Info</p>
+                      <p className="text-xs text-gray-400">Your business details</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 bg-gray-700/50 rounded-lg">
+                    <Package className="w-5 h-5 text-green-400 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-200">Services & Packages</p>
+                      <p className="text-xs text-gray-400">What you offer</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 bg-gray-700/50 rounded-lg">
+                    <Bot className="w-5 h-5 text-purple-400 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-200">AI Behavior</p>
+                      <p className="text-xs text-gray-400">Customize training</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 bg-gray-700/50 rounded-lg">
+                    <Users className="w-5 h-5 text-blue-400 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-200">Team Setup</p>
+                      <p className="text-xs text-gray-400">Invite your team</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 p-3 bg-primary-500/10 rounded-lg mb-6">
+                  <Globe className="w-5 h-5 text-primary-400" />
+                  <p className="text-sm text-primary-300">
+                    <strong>Tip:</strong> Enter your website URL and we'll auto-import your company data!
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setShowWelcomeModal(false)}
+                  className="w-full px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                >
+                  Let's Get Started
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       {/* Header */}
       <div className="bg-gray-800 border-b border-gray-700">
         <div className="max-w-6xl mx-auto px-4 py-4">

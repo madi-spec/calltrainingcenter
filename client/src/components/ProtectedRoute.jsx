@@ -41,16 +41,16 @@ export function ProtectedRoute({ children }) {
     );
   }
 
-  // Check if onboarding is needed (organization missing website/phone)
-  // Only check for owners who haven't completed onboarding
-  const needsOnboarding = profile?.role === 'super_admin' &&
+  // Check if setup wizard is needed for new super_admins
+  // Redirect to /setup if onboarding not completed
+  const needsSetup = profile?.role === 'super_admin' &&
     organization &&
-    !organization.website &&
     !organization.onboarding_completed &&
-    location.pathname !== '/onboarding';
+    location.pathname !== '/setup' &&
+    !location.pathname.startsWith('/settings');
 
-  if (needsOnboarding) {
-    return <Navigate to="/onboarding" replace />;
+  if (needsSetup) {
+    return <Navigate to="/setup" state={{ isNewUser: true }} replace />;
   }
 
   return children;

@@ -1,21 +1,44 @@
 import express from 'express';
-import webpush from 'web-push';
 import { createAdminClient, TABLES } from '../lib/supabase.js';
-import { requireAuth } from '../lib/auth.js';
+import { authMiddleware } from '../lib/auth.js';
 
 const router = express.Router();
+
+// Lazy-load web-push to avoid breaking the entire API if not installed
+let webpush = null;
+let webpushLoadError = null;
+
+async function getWebPush() {
+  if (webpush) return webpush;
+  if (webpushLoadError) return null;
+
+  try {
+    const module = await import('web-push');
+    webpush = module.default;
+
+    // Configure with VAPID keys if available
+    const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY;
+    const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY;
+
+    if (VAPID_PUBLIC_KEY && VAPID_PRIVATE_KEY) {
+      webpush.setVapidDetails(
+        'mailto:support@csrtraining.com',
+        VAPID_PUBLIC_KEY,
+        VAPID_PRIVATE_KEY
+      );
+    }
+
+    return webpush;
+  } catch (error) {
+    console.warn('[PWA] web-push package not available:', error.message);
+    webpushLoadError = error;
+    return null;
+  }
+}
 
 // Configure web-push with VAPID keys
 const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY;
 const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY;
-
-if (VAPID_PUBLIC_KEY && VAPID_PRIVATE_KEY) {
-  webpush.setVapidDetails(
-    'mailto:support@csrtraining.com',
-    VAPID_PUBLIC_KEY,
-    VAPID_PRIVATE_KEY
-  );
-}
 
 /**
  * GET /api/pwa/vapid-public-key
@@ -32,11 +55,16 @@ router.get('/vapid-public-key', (req, res) => {
  * POST /api/pwa/subscribe
  * Subscribe to push notifications
  */
-router.post('/subscribe', requireAuth, async (req, res) => {
+router.post('/subscribe', authMiddleware, async (req, res) => {
   try {
     const supabase = createAdminClient();
-    const { id: userId, orgId } = req.user;
+    const userId = req.user?.id;
+    const orgId = req.organization?.id;
     const { subscription, deviceInfo } = req.body;
+
+    if (!userId) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
 
     if (!subscription || !subscription.endpoint) {
       return res.status(400).json({ error: 'Invalid subscription' });
@@ -46,7 +74,7 @@ router.post('/subscribe', requireAuth, async (req, res) => {
       .from(TABLES.PUSH_SUBSCRIPTIONS)
       .upsert({
         user_id: userId,
-        org_id: orgId,
+        organization_id: orgId,
         endpoint: subscription.endpoint,
         p256dh_key: subscription.keys?.p256dh,
         auth_key: subscription.keys?.auth,
@@ -74,11 +102,15 @@ router.post('/subscribe', requireAuth, async (req, res) => {
  * DELETE /api/pwa/subscribe
  * Unsubscribe from push notifications
  */
-router.delete('/subscribe', requireAuth, async (req, res) => {
+router.delete('/subscribe', authMiddleware, async (req, res) => {
   try {
     const supabase = createAdminClient();
-    const { id: userId } = req.user;
+    const userId = req.user?.id;
     const { endpoint } = req.body;
+
+    if (!userId) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
 
     if (endpoint) {
       // Unsubscribe specific endpoint
@@ -106,10 +138,14 @@ router.delete('/subscribe', requireAuth, async (req, res) => {
  * GET /api/pwa/subscriptions
  * Get user's push subscriptions
  */
-router.get('/subscriptions', requireAuth, async (req, res) => {
+router.get('/subscriptions', authMiddleware, async (req, res) => {
   try {
     const supabase = createAdminClient();
-    const { id: userId } = req.user;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
 
     const { data, error } = await supabase
       .from(TABLES.PUSH_SUBSCRIPTIONS)
@@ -130,8 +166,13 @@ router.get('/subscriptions', requireAuth, async (req, res) => {
  * POST /api/pwa/send-notification
  * Send a push notification (internal use)
  */
-router.post('/send-notification', requireAuth, async (req, res) => {
+router.post('/send-notification', authMiddleware, async (req, res) => {
   try {
+    const wp = await getWebPush();
+    if (!wp) {
+      return res.status(503).json({ error: 'Push notifications not available (web-push not installed)' });
+    }
+
     if (!VAPID_PUBLIC_KEY || !VAPID_PRIVATE_KEY) {
       return res.status(503).json({ error: 'Push notifications not configured' });
     }
@@ -164,7 +205,7 @@ router.post('/send-notification', requireAuth, async (req, res) => {
 
     for (const sub of subscriptions) {
       try {
-        await webpush.sendNotification({
+        await wp.sendNotification({
           endpoint: sub.endpoint,
           keys: {
             p256dh: sub.p256dh_key,
@@ -204,11 +245,15 @@ router.post('/send-notification', requireAuth, async (req, res) => {
  * PUT /api/pwa/preferences
  * Update notification preferences
  */
-router.put('/preferences', requireAuth, async (req, res) => {
+router.put('/preferences', authMiddleware, async (req, res) => {
   try {
     const supabase = createAdminClient();
-    const { id: userId } = req.user;
+    const userId = req.user?.id;
     const { preferences } = req.body;
+
+    if (!userId) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
 
     const { data, error } = await supabase
       .from(TABLES.USERS)
@@ -233,10 +278,14 @@ router.put('/preferences', requireAuth, async (req, res) => {
  * GET /api/pwa/preferences
  * Get notification preferences
  */
-router.get('/preferences', requireAuth, async (req, res) => {
+router.get('/preferences', authMiddleware, async (req, res) => {
   try {
     const supabase = createAdminClient();
-    const { id: userId } = req.user;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
 
     const { data, error } = await supabase
       .from(TABLES.USERS)

@@ -31,9 +31,24 @@ export default function TutorialOverlay() {
       return;
     }
 
+    console.log('[Tutorial Debug] Step:', currentStep.id);
+    console.log('[Tutorial Debug] Looking for:', currentStep.target);
+
     const target = document.querySelector(currentStep.target);
+    console.log('[Tutorial Debug] Found element:', target);
+
     if (target) {
       const rect = target.getBoundingClientRect();
+      console.log('[Tutorial Debug] Element rect:', {
+        top: rect.top,
+        left: rect.left,
+        width: rect.width,
+        height: rect.height,
+        bottom: rect.bottom,
+        right: rect.right
+      });
+      console.log('[Tutorial Debug] Element innerHTML preview:', target.innerHTML?.substring(0, 200));
+
       const padding = currentStep.highlightPadding || 4;
       setTargetRect({
         top: rect.top - padding,
@@ -43,9 +58,22 @@ export default function TutorialOverlay() {
         bottom: rect.bottom + padding,
         right: rect.right + padding
       });
-    } else if (currentStep.waitForElement) {
-      // Element not found yet, will retry
-      setTargetRect(null);
+    } else {
+      console.log('[Tutorial Debug] Element NOT FOUND for selector:', currentStep.target);
+      // List all elements with data-tutorial attribute for debugging
+      const allTutorialElements = document.querySelectorAll('[data-tutorial]');
+      console.log('[Tutorial Debug] All data-tutorial elements on page:',
+        Array.from(allTutorialElements).map(el => ({
+          attribute: el.getAttribute('data-tutorial'),
+          tagName: el.tagName,
+          className: el.className?.substring(0, 50)
+        }))
+      );
+
+      if (currentStep.waitForElement) {
+        // Element not found yet, will retry
+        setTargetRect(null);
+      }
     }
   }, [currentStep]);
 

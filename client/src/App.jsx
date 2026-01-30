@@ -5,6 +5,7 @@ import Layout from './components/Layout';
 import { ProtectedRoute, RoleProtectedRoute } from './components/ProtectedRoute';
 import { TutorialOverlay } from './components/onboarding';
 import { InstallPrompt, UpdatePrompt } from './components/pwa';
+import { TutorialProvider } from './context/TutorialContext';
 
 // Existing pages
 import Home from './pages/Home';
@@ -109,8 +110,9 @@ function App() {
           path="/*"
           element={
             <ProtectedRoute>
-              <TutorialOverlay />
-              <Layout>
+              <TutorialProvider>
+                <TutorialOverlay />
+                <Layout>
                 <Suspense fallback={<PageLoader />}>
                   <Routes>
                     {/* Dashboard */}
@@ -243,6 +245,7 @@ function App() {
                   </Routes>
                 </Suspense>
               </Layout>
+              </TutorialProvider>
             </ProtectedRoute>
           }
         />

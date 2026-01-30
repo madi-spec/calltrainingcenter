@@ -13,7 +13,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
 import { BadgeShowcase } from '../../components/gamification';
-import { useTutorial } from '../../hooks/useTutorial';
+import { useTutorial } from '../../context/TutorialContext';
 
 export default function Profile() {
   const { profile, authFetch } = useAuth();

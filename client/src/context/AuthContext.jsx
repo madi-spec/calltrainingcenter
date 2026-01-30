@@ -243,7 +243,7 @@ export function AuthProvider({ children }) {
 
     // Profile state
     profile,
-    loading: !isLoaded || profileLoading,
+    loading: !isLoaded || profileLoading || (isSignedIn && !profile),
     error,
     isAuthenticated: isSignedIn && !!profile,
 

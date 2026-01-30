@@ -51,7 +51,7 @@ export const TUTORIAL_STEPS = [
     type: 'highlight',
     target: '[data-tutorial="scenario-card"]',
     title: 'Choose a Scenario',
-    description: 'Each card shows a different scenario. You can see the difficulty level, category, and what skills it focuses on. Click the highlighted card to continue!',
+    description: 'Each card shows a different scenario. You can see the difficulty level, category, and what skills it focuses on.',
     position: 'bottom',
     highlightPadding: 8
   },
@@ -62,7 +62,9 @@ export const TUTORIAL_STEPS = [
     title: 'Pre-Call Briefing',
     description: 'Before each call, review the scenario details, customer background, and your objectives. This prepares you for the conversation.',
     position: 'left',
-    waitForElement: true
+    action: {
+      type: 'navigate-to-scenario'
+    }
   },
   {
     id: 'start-training',

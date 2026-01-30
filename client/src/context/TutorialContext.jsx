@@ -99,7 +99,7 @@ export function TutorialProvider({ children }) {
   }, [authFetch, saveState, navigate, location.pathname]);
 
   // Go to next step
-  const nextStep = useCallback(() => {
+  const nextStep = useCallback(async () => {
     if (!currentStep) return;
 
     const next = getNextStep(currentStep.id);
@@ -115,6 +115,20 @@ export function TutorialProvider({ children }) {
       // Handle navigation actions
       if (next.action?.type === 'navigate') {
         navigate(next.action.path);
+      } else if (next.action?.type === 'navigate-to-scenario') {
+        // Fetch first available scenario and navigate to it
+        try {
+          const response = await authFetch('/api/scenarios');
+          if (response.ok) {
+            const data = await response.json();
+            const scenarios = data.scenarios || [];
+            if (scenarios.length > 0) {
+              navigate(`/scenario/${scenarios[0].id}`);
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching scenarios for tutorial:', error);
+        }
       }
 
       // Update backend

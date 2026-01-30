@@ -34,6 +34,24 @@ function Results() {
 
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState('processing');
+  const [recoveredFromStorage, setRecoveredFromStorage] = useState(false);
+
+  // Try to recover results from sessionStorage if not in context
+  useEffect(() => {
+    if (!lastResults && !recoveredFromStorage) {
+      setRecoveredFromStorage(true);
+      try {
+        const stored = sessionStorage.getItem('lastTrainingResults');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          console.log('Recovered results from sessionStorage:', parsed);
+          setLastResults(parsed);
+        }
+      } catch (e) {
+        console.error('Error recovering from sessionStorage:', e);
+      }
+    }
+  }, [lastResults, recoveredFromStorage, setLastResults]);
 
   // Poll for analysis completion
   const pollAnalysis = useCallback(async () => {
@@ -110,14 +128,24 @@ function Results() {
     }
   }, [lastResults?.analysisStatus, lastResults?.analysisId, pollAnalysis]);
 
-  // Redirect if no results
+  // Redirect if no results (but wait for recovery attempt)
   useEffect(() => {
-    if (!lastResults) {
+    if (!lastResults && recoveredFromStorage) {
+      // Only redirect after we've tried to recover from storage
       navigate('/');
     }
-  }, [lastResults, navigate]);
+  }, [lastResults, recoveredFromStorage, navigate]);
 
+  // Show loading while trying to recover
   if (!lastResults) {
+    if (!recoveredFromStorage) {
+      return (
+        <div className="max-w-2xl mx-auto px-4 py-16 text-center">
+          <Loader2 className="w-12 h-12 text-primary-400 mx-auto animate-spin" />
+          <p className="text-gray-400 mt-4">Loading results...</p>
+        </div>
+      );
+    }
     return null;
   }
 
@@ -232,27 +260,35 @@ function Results() {
     );
   }
 
-  const handleTryAgain = () => {
+  // Clear sessionStorage when leaving results
+  const cleanupAndNavigate = (path) => {
+    try {
+      sessionStorage.removeItem('lastTrainingResults');
+    } catch (e) {
+      // Ignore
+    }
     clearSession();
+    navigate(path);
+  };
+
+  const handleTryAgain = () => {
     if (isModuleScenario) {
-      navigate(`/modules/${scenario.moduleId}`);
+      cleanupAndNavigate(`/modules/${scenario.moduleId}`);
     } else {
-      navigate(`/scenario/${scenario.id}`);
+      cleanupAndNavigate(`/scenario/${scenario.id}`);
     }
   };
 
   const handleNewScenario = () => {
-    clearSession();
     if (isModuleScenario) {
-      navigate(`/modules/${scenario.moduleId}`);
+      cleanupAndNavigate(`/modules/${scenario.moduleId}`);
     } else {
-      navigate('/');
+      cleanupAndNavigate('/');
     }
   };
 
   const handleBackToModule = () => {
-    clearSession();
-    navigate(`/modules/${scenario.moduleId}`);
+    cleanupAndNavigate(`/modules/${scenario.moduleId}`);
   };
 
   const formatDuration = (seconds) => {
@@ -592,10 +628,15 @@ function getScoreLabel(score) {
 function formatCategoryName(key) {
   const names = {
     empathyRapport: 'Empathy & Rapport',
+    bookingConversion: 'Booking & Conversion',
+    serviceKnowledge: 'Service Knowledge',
+    valueAndObjections: 'Value & Objections',
+    professionalism: 'Professionalism',
+    // Legacy names for backward compatibility
     problemResolution: 'Problem Resolution',
     productKnowledge: 'Product Knowledge',
-    professionalism: 'Professionalism',
-    scenarioSpecific: 'Scenario Performance'
+    scenarioSpecific: 'Scenario Performance',
+    communication: 'Communication'
   };
   return names[key] || key.replace(/([A-Z])/g, ' $1').trim();
 }

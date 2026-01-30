@@ -56,14 +56,55 @@ function Training() {
   }, [currentScenario, callState, callStarted, startCall]);
 
   const handleEndCall = async () => {
-    const callData = await endCall();
+    let callData = null;
+
+    try {
+      callData = await endCall();
+    } catch (err) {
+      console.error('Error ending call:', err);
+      // Create fallback call data from current state
+      callData = {
+        callId: null,
+        transcript: { formatted: transcript, raw: '' },
+        duration: callDuration
+      };
+    }
+
+    // Ensure we have valid call data
+    if (!callData) {
+      callData = {
+        callId: null,
+        transcript: { formatted: transcript, raw: '' },
+        duration: callDuration
+      };
+    }
+
     setCurrentCall(callData);
 
     // Start async analysis - don't wait for it to complete
     const analysisId = `analysis_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
+    // Store pending results with analysis ID for Results page to poll
+    const pendingResults = {
+      analysisId,
+      analysisStatus: 'processing',
+      transcript: callData.transcript,
+      scenario: currentScenario,
+      duration: callData.duration
+    };
+
+    // Set results in context
+    setLastResults(pendingResults);
+
+    // Also persist to sessionStorage as backup in case of page refresh
     try {
-      // Fire off the analysis request (don't await the full response)
+      sessionStorage.setItem('lastTrainingResults', JSON.stringify(pendingResults));
+    } catch (e) {
+      console.error('Error saving to sessionStorage:', e);
+    }
+
+    // Fire off the analysis request (don't await the full response)
+    try {
       authFetch('/api/analysis/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -74,26 +115,8 @@ function Training() {
           sessionId: analysisId
         })
       }).catch(err => console.error('Error starting analysis:', err));
-
-      // Store pending results with analysis ID for Results page to poll
-      const pendingResults = {
-        analysisId,
-        analysisStatus: 'processing',
-        transcript: callData.transcript,
-        scenario: currentScenario,
-        duration: callData.duration
-      };
-      setLastResults(pendingResults);
-
     } catch (err) {
       console.error('Error starting analysis:', err);
-      // Still navigate with what we have
-      setLastResults({
-        transcript: callData.transcript,
-        scenario: currentScenario,
-        duration: callData.duration,
-        analysisStatus: 'failed'
-      });
     }
 
     // Navigate immediately - Results page will handle polling

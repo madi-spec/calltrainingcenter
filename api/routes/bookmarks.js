@@ -38,7 +38,14 @@ router.get('/', async (req, res) => {
 
     const { data: bookmarks, error } = await query;
 
-    if (error) throw error;
+    // If table doesn't exist, return empty array instead of error
+    if (error) {
+      if (error.code === '42P01' || error.message?.includes('does not exist')) {
+        console.warn('Bookmarks table does not exist yet, returning empty array');
+        return res.json({ success: true, bookmarks: [] });
+      }
+      throw error;
+    }
 
     res.json({
       success: true,

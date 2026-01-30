@@ -483,7 +483,36 @@ export function OrganizationProvider({ children }) {
     subscriptionStatus: organization.subscription_status,
     subscriptionPlan: organization.subscription_plan,
     trainingHoursIncluded: organization.training_hours_included,
-    trainingHoursUsed: organization.training_hours_used
+    trainingHoursUsed: organization.training_hours_used,
+
+    // Trial status helpers
+    trialEndsAt: organization.trial_ends_at ? new Date(organization.trial_ends_at) : null,
+    isTrialExpired: organization.trial_ends_at ? new Date(organization.trial_ends_at) < new Date() : false,
+    trialDaysRemaining: organization.trial_ends_at
+      ? Math.max(0, Math.ceil((new Date(organization.trial_ends_at) - new Date()) / (1000 * 60 * 60 * 24)))
+      : 0,
+    isOnTrial: organization.subscription_status === 'trialing' || organization.subscription_plan === 'trial',
+    hoursRemaining: Math.max(0, (organization.training_hours_included || 0) - (parseFloat(organization.training_hours_used) || 0)),
+    isHoursExhausted: (parseFloat(organization.training_hours_used) || 0) >= (organization.training_hours_included || 0),
+    canStartTraining: (() => {
+      const isTrialing = organization.subscription_status === 'trialing' || organization.subscription_plan === 'trial';
+      const trialExpired = organization.trial_ends_at ? new Date(organization.trial_ends_at) < new Date() : false;
+      const hoursExhausted = (parseFloat(organization.training_hours_used) || 0) >= (organization.training_hours_included || 0);
+
+      // If on trial, check both trial expiry and hours
+      if (isTrialing) {
+        return !trialExpired && !hoursExhausted;
+      }
+      // If paid subscription, only check hours
+      return !hoursExhausted;
+    })(),
+    needsUpgrade: (() => {
+      const isTrialing = organization.subscription_status === 'trialing' || organization.subscription_plan === 'trial';
+      const trialExpired = organization.trial_ends_at ? new Date(organization.trial_ends_at) < new Date() : false;
+      const hoursExhausted = (parseFloat(organization.training_hours_used) || 0) >= (organization.training_hours_included || 0);
+
+      return (isTrialing && (trialExpired || hoursExhausted)) || hoursExhausted;
+    })()
   };
 
   return (

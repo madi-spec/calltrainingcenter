@@ -13,7 +13,10 @@ import {
   Brain,
   Sparkles,
   BarChart2,
-  Trophy
+  Trophy,
+  Lock,
+  Zap,
+  ArrowRight
 } from 'lucide-react';
 import { useConfig } from '../context/ConfigContext';
 import { useOrganization } from '../context/OrganizationContext';
@@ -27,7 +30,15 @@ function PreCall() {
   const navigate = useNavigate();
   const location = useLocation();
   const { setCurrentScenario } = useConfig();
-  const { organization: company } = useOrganization();
+  const {
+    organization: company,
+    canStartTraining,
+    isTrialExpired,
+    isHoursExhausted,
+    trialDaysRemaining,
+    hoursRemaining,
+    isOnTrial
+  } = useOrganization();
   const { authFetch } = useAuth();
   const [scenario, setScenario] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -443,40 +454,117 @@ function PreCall() {
         </motion.div>
       )}
 
-      {/* Start Call Button */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
-        className="mt-8 text-center"
-        data-tutorial="start-button"
-      >
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          {!warmupCompleted && !isGeneratedScenario && (
+      {/* Upgrade Required Banner - Shows when training is blocked */}
+      {!canStartTraining && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="mt-8"
+        >
+          <div className="bg-gradient-to-r from-red-500/10 via-orange-500/10 to-amber-500/10 border border-red-500/30 rounded-2xl p-6">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mb-4">
+                <Lock className="w-8 h-8 text-red-400" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">
+                {isTrialExpired
+                  ? 'Trial Period Ended'
+                  : isHoursExhausted
+                    ? 'Training Hours Exhausted'
+                    : 'Upgrade Required'}
+              </h3>
+              <p className="text-gray-400 mb-6 max-w-md">
+                {isTrialExpired
+                  ? 'Your free trial has ended. Upgrade to a paid plan to continue practicing with AI-powered training calls.'
+                  : isHoursExhausted
+                    ? "You've used all your training hours for this period. Upgrade your plan or purchase additional hours to continue."
+                    : 'Please upgrade your plan to continue training.'}
+              </p>
+
+              {/* Current Status */}
+              {isOnTrial && (
+                <div className="bg-gray-800/50 rounded-lg p-4 mb-6 w-full max-w-sm">
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-gray-400">Trial Status:</span>
+                    <span className={isTrialExpired ? 'text-red-400' : 'text-amber-400'}>
+                      {isTrialExpired ? 'Expired' : `${trialDaysRemaining} days left`}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center text-sm mt-2">
+                    <span className="text-gray-400">Hours Remaining:</span>
+                    <span className={hoursRemaining <= 0 ? 'text-red-400' : 'text-gray-200'}>
+                      {hoursRemaining <= 0 ? 'None' : `${hoursRemaining.toFixed(1)} hours`}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Benefits */}
+              <div className="flex flex-wrap justify-center gap-4 mb-6">
+                <div className="flex items-center gap-2 text-gray-300 text-sm">
+                  <Zap className="w-4 h-4 text-primary-400" />
+                  <span>Up to 25 hours/month</span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-300 text-sm">
+                  <Zap className="w-4 h-4 text-primary-400" />
+                  <span>Custom scenarios</span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-300 text-sm">
+                  <Zap className="w-4 h-4 text-primary-400" />
+                  <span>Team analytics</span>
+                </div>
+              </div>
+
+              {/* CTA */}
+              <Link
+                to="/settings/billing"
+                className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 text-white font-semibold rounded-lg transition-all"
+              >
+                View Plans & Upgrade
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Start Call Button - Only show when training is allowed */}
+      {canStartTraining && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="mt-8 text-center"
+          data-tutorial="start-button"
+        >
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            {!warmupCompleted && !isGeneratedScenario && (
+              <Button
+                variant="secondary"
+                size="lg"
+                onClick={handleWarmup}
+                icon={Brain}
+              >
+                Warm Up First
+              </Button>
+            )}
             <Button
-              variant="secondary"
-              size="lg"
-              onClick={handleWarmup}
-              icon={Brain}
+              size="xl"
+              onClick={handleStartCall}
+              loading={starting}
+              icon={starting ? null : Phone}
+              className="px-12"
             >
-              Warm Up First
+              {starting ? 'Preparing Call...' : 'Start Training Call'}
             </Button>
-          )}
-          <Button
-            size="xl"
-            onClick={handleStartCall}
-            loading={starting}
-            icon={starting ? null : Phone}
-            className="px-12"
-          >
-            {starting ? 'Preparing Call...' : 'Start Training Call'}
-          </Button>
-        </div>
-        <p className="text-sm text-gray-500 mt-3 flex items-center justify-center gap-2">
-          <Mic className="w-4 h-4" />
-          Make sure your microphone is ready
-        </p>
-      </motion.div>
+          </div>
+          <p className="text-sm text-gray-500 mt-3 flex items-center justify-center gap-2">
+            <Mic className="w-4 h-4" />
+            Make sure your microphone is ready
+          </p>
+        </motion.div>
+      )}
     </div>
   );
 }

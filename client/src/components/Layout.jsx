@@ -28,6 +28,8 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import useKeyboardShortcuts from '../hooks/useKeyboardShortcuts';
 import KeyboardShortcutsModal from './help/KeyboardShortcutsModal';
+import TrialStatusBanner from './billing/TrialStatusBanner';
+import UpgradeModal from './billing/UpgradeModal';
 
 function Layout({ children }) {
   const location = useLocation();
@@ -39,6 +41,7 @@ function Layout({ children }) {
   const { theme, toggleTheme, isDark } = useTheme();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   // Keyboard shortcuts
   const { showHelpModal, setShowHelpModal } = useKeyboardShortcuts({
@@ -280,6 +283,9 @@ function Layout({ children }) {
 
       {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0">
+        {/* Trial/Upgrade Status Banner */}
+        <TrialStatusBanner onUpgradeClick={() => setShowUpgradeModal(true)} />
+
         {/* Top bar (mobile) */}
         <header className={`lg:hidden flex items-center justify-between h-16 px-4 ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-b`}>
           <button
@@ -343,6 +349,12 @@ function Layout({ children }) {
       <KeyboardShortcutsModal
         isOpen={showHelpModal}
         onClose={() => setShowHelpModal(false)}
+      />
+
+      {/* Upgrade Modal */}
+      <UpgradeModal
+        isOpen={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
       />
     </div>
   );

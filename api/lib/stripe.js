@@ -18,6 +18,21 @@ function getStripeClient() {
  * Subscription Plans Configuration
  */
 export const PLANS = {
+  trial: {
+    name: 'Free Trial',
+    tier: 'Trial',
+    priceId: null, // No Stripe price for trial
+    trainingHours: 1,
+    maxUsers: 3,
+    features: [
+      '1 training hour',
+      '3 team members',
+      '10 day trial',
+      'All scenarios',
+      'Basic coaching'
+    ],
+    price: 0
+  },
   starter: {
     name: 'Starter',
     tier: 'Try It',

@@ -181,4 +181,11 @@ BEGIN
   ) THEN
     ALTER TABLE organizations ADD COLUMN current_period_end TIMESTAMPTZ;
   END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'organizations' AND column_name = 'trial_ends_at'
+  ) THEN
+    ALTER TABLE organizations ADD COLUMN trial_ends_at TIMESTAMPTZ;
+  END IF;
 END $$;

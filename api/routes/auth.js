@@ -37,15 +37,20 @@ router.post('/sync-user', authMiddleware, async (req, res) => {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-|-$/g, '') + '-' + Date.now().toString(36);
 
+    // Calculate trial end date (10 days from now)
+    const trialEndsAt = new Date();
+    trialEndsAt.setDate(trialEndsAt.getDate() + 10);
+
     const { data: org, error: orgError } = await adminClient
       .from(TABLES.ORGANIZATIONS)
       .insert({
         name: organizationName,
         slug: slug,
         subscription_status: 'trialing',
-        subscription_plan: 'starter',
-        training_hours_included: 10,
+        subscription_plan: 'trial',
+        training_hours_included: 1,
         training_hours_used: 0,
+        trial_ends_at: trialEndsAt.toISOString(),
         settings: {
           aiModel: 'claude-sonnet-4-20250514',
           customPromptAdditions: '',

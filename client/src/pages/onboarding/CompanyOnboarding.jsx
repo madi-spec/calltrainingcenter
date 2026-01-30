@@ -7,7 +7,7 @@ import { useOrganization } from '../../context/OrganizationContext';
 
 export default function CompanyOnboarding() {
   const navigate = useNavigate();
-  const { authFetch, profile } = useAuth();
+  const { authFetch, profile, refreshProfile } = useAuth();
   const { refreshOrganization } = useOrganization();
 
   const [formData, setFormData] = useState({
@@ -50,15 +50,14 @@ export default function CompanyOnboarding() {
         website = 'https://' + website;
       }
 
-      // Update organization with basic info
+      // Update organization with basic info (don't set onboarding_completed yet - that happens after setup wizard)
       const response = await authFetch('/api/organizations/update', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: formData.name,
           phone: formData.phone,
-          website: website,
-          onboarding_completed: true
+          website: website
         })
       });
 
@@ -67,8 +66,11 @@ export default function CompanyOnboarding() {
         throw new Error(data.error || 'Failed to save company info');
       }
 
-      // Refresh organization data
-      await refreshOrganization();
+      // Refresh both organization and auth profile data
+      await Promise.all([
+        refreshOrganization(),
+        refreshProfile()
+      ]);
 
       // Navigate to setup wizard with auto-scrape enabled
       navigate('/setup', {

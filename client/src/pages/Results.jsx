@@ -35,15 +35,7 @@ function Results() {
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState('processing');
   const [recoveredFromStorage, setRecoveredFromStorage] = useState(false);
-  const [pollFailures, setPollFailures] = useState(0);
   const [usingSyncFallback, setUsingSyncFallback] = useState(false);
-
-  // Debug: Log whenever lastResults changes
-  useEffect(() => {
-    console.log('lastResults changed:', lastResults);
-    console.log('analysisStatus:', lastResults?.analysisStatus);
-    console.log('analysis:', lastResults?.analysis);
-  }, [lastResults]);
 
   // Try to recover results from sessionStorage if not in context
   useEffect(() => {
@@ -67,34 +59,25 @@ function Results() {
     if (usingSyncFallback) return;
 
     setUsingSyncFallback(true);
-    console.log('Falling back to synchronous analysis...');
-    console.log('lastResults:', lastResults);
 
     try {
       // Format transcript for analysis
       const transcript = lastResults?.transcript;
       let transcriptText = '';
 
-      console.log('Transcript object:', transcript);
-      console.log('Transcript type:', typeof transcript);
-
       if (transcript?.raw && transcript.raw.length > 0) {
         transcriptText = transcript.raw;
-        console.log('Using raw transcript, length:', transcriptText.length);
       } else if (transcript?.formatted && Array.isArray(transcript.formatted) && transcript.formatted.length > 0) {
         transcriptText = transcript.formatted
           .map(entry => `${entry.role === 'agent' ? 'Customer' : 'CSR'}: ${entry.content}`)
           .join('\n');
-        console.log('Using formatted transcript, length:', transcriptText.length);
       } else if (Array.isArray(transcript) && transcript.length > 0) {
         // Direct array from Retell
         transcriptText = transcript
           .map(entry => `${entry.role === 'agent' ? 'Customer' : 'CSR'}: ${entry.content}`)
           .join('\n');
-        console.log('Using direct array transcript, length:', transcriptText.length);
       } else if (typeof transcript === 'string' && transcript.length > 0) {
         transcriptText = transcript;
-        console.log('Using string transcript, length:', transcriptText.length);
       }
 
       if (!transcriptText || transcriptText.length < 10) {
@@ -107,13 +90,6 @@ function Results() {
         return;
       }
 
-      console.log('Making sync analysis request...');
-      console.log('Request payload:', {
-        transcriptLength: transcriptText.length,
-        scenarioName: lastResults.scenario?.name,
-        duration: lastResults.duration
-      });
-
       const response = await authFetch('/api/analysis/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -124,25 +100,15 @@ function Results() {
         })
       });
 
-      console.log('Sync analysis response status:', response.status);
-
       if (response.ok) {
         const data = await response.json();
-        console.log('Analysis successful, score:', data.analysis?.overallScore);
-        console.log('Full analysis data:', data.analysis);
-        setLastResults(prev => {
-          console.log('setLastResults called with prev:', prev);
-          const newResults = {
-            ...prev,
-            analysis: data.analysis,
-            analysisStatus: 'completed'
-          };
-          console.log('setLastResults returning:', newResults);
-          return newResults;
-        });
+        setLastResults(prev => ({
+          ...prev,
+          analysis: data.analysis,
+          analysisStatus: 'completed'
+        }));
       } else {
-        const errorText = await response.text();
-        console.error('Analysis failed with status:', response.status, 'Error:', errorText);
+        console.error('Analysis failed with status:', response.status);
         setLastResults(prev => ({
           ...prev,
           analysisStatus: 'failed',
@@ -167,16 +133,9 @@ function Results() {
       const response = await authFetch(`/api/analysis/status/${lastResults.analysisId}`);
 
       if (!response.ok) {
-        // Polling failed - increment failure counter
-        setPollFailures(prev => {
-          const newCount = prev + 1;
-          console.log(`Poll failure ${newCount}/3`);
-          if (newCount >= 3) {
-            // After 3 failures, fall back to sync analysis
-            runSyncAnalysis();
-          }
-          return newCount;
-        });
+        // Polling failed - fall back to sync analysis immediately
+        // (Vercel serverless doesn't maintain in-memory state between requests)
+        runSyncAnalysis();
         return;
       }
 
@@ -227,13 +186,7 @@ function Results() {
       }
     } catch (err) {
       console.error('Error polling analysis:', err);
-      setPollFailures(prev => {
-        const newCount = prev + 1;
-        if (newCount >= 3) {
-          runSyncAnalysis();
-        }
-        return newCount;
-      });
+      runSyncAnalysis();
     }
   }, [lastResults?.analysisId, lastResults?.analysis, lastResults?.scenario, usingSyncFallback, authFetch, setLastResults, runSyncAnalysis]);
 

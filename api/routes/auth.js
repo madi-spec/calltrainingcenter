@@ -91,28 +91,33 @@ router.post('/sync-user', authMiddleware, async (req, res) => {
     }
 
     // Create user profile with clerk_id
+    const userInsertData = {
+      clerk_id: clerkId,
+      organization_id: org.id,
+      branch_id: branch?.id,
+      email: email,
+      full_name: fullName || 'User',
+      avatar_url: imageUrl,
+      role: 'super_admin',
+      status: 'active',
+      total_points: 0,
+      current_streak: 0,
+      longest_streak: 0,
+      level: 1
+    };
+    console.log('[Auth] Creating user with data:', JSON.stringify(userInsertData, null, 2));
+
     const { data: userProfile, error: userError } = await adminClient
       .from(TABLES.USERS)
-      .insert({
-        clerk_id: clerkId,
-        organization_id: org.id,
-        branch_id: branch?.id,
-        email: email,
-        full_name: fullName || 'User',
-        avatar_url: imageUrl,
-        role: 'super_admin',
-        status: 'active',
-        total_points: 0,
-        current_streak: 0,
-        longest_streak: 0,
-        level: 1
-      })
+      .insert(userInsertData)
       .select(`
         *,
         organization:organizations(*),
         branch:branches(*)
       `)
       .single();
+
+    console.log('[Auth] User created result:', userProfile ? { id: userProfile.id, role: userProfile.role, email: userProfile.email } : 'null');
 
     if (userError) {
       console.error('Error creating user profile:', userError);

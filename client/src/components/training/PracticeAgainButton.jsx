@@ -5,8 +5,15 @@ import { RotateCcw, Play, Target, TrendingUp, Loader2, ChevronDown } from 'lucid
 import { useAuth } from '../../context/AuthContext';
 
 export default function PracticeAgainButton({
+  // New props (from Results page)
+  scenarioId,
+  scenarioName,
+  lastScore,
+  onNavigate,
+  // Legacy props (from session history)
   session,
   scenario,
+  // Common props
   variant = 'primary',
   size = 'medium',
   showOptions = true
@@ -16,14 +23,23 @@ export default function PracticeAgainButton({
   const navigate = useNavigate();
   const { authFetch } = useAuth();
 
+  // Normalize props - support both old and new prop patterns
+  const resolvedScenarioId = scenarioId || scenario?.id || session?.scenario_id;
+  const resolvedScore = lastScore || session?.overall_score;
+
   const handlePracticeAgain = async (mode = 'repeat') => {
     setLoading(true);
     setShowDropdown(false);
 
     try {
-      if (mode === 'new') {
-        // Start fresh with the same scenario
-        navigate(`/scenario/${scenario?.id || session?.scenario_id}`);
+      // Call onNavigate callback if provided (for cleanup)
+      if (onNavigate) {
+        onNavigate();
+      }
+
+      if (mode === 'new' || !session?.id) {
+        // Start fresh with the same scenario (or when no session available)
+        navigate(`/scenario/${resolvedScenarioId}`);
       } else {
         // Create a repeat practice session linked to the original
         const response = await authFetch('/api/training/repeat', {
@@ -38,17 +54,22 @@ export default function PracticeAgainButton({
 
         if (data.session) {
           // Navigate to the scenario with repeat context
-          navigate(`/scenario/${scenario?.id || session?.scenario_id}`, {
+          navigate(`/scenario/${resolvedScenarioId}`, {
             state: {
               repeatSession: data.session,
               originalScore: data.original_score,
               attemptNumber: data.attempt_number
             }
           });
+        } else {
+          // Fallback to simple navigation
+          navigate(`/scenario/${resolvedScenarioId}`);
         }
       }
     } catch (error) {
       console.error('Error starting practice:', error);
+      // Fallback to simple navigation on error
+      navigate(`/scenario/${resolvedScenarioId}`);
     } finally {
       setLoading(false);
     }
@@ -143,13 +164,16 @@ export default function PracticeAgainButton({
                   <div>
                     <p className="font-medium text-gray-200">Beat Your Score</p>
                     <p className="text-xs text-gray-500">
-                      Track improvement from your previous {session?.overall_score}%
+                      Track improvement from your previous {resolvedScore}%
                     </p>
                   </div>
                 </button>
 
                 <button
-                  onClick={() => handlePracticeAgain('new')}
+                  onClick={() => {
+                    if (onNavigate) onNavigate();
+                    navigate(`/scenario/${resolvedScenarioId}`);
+                  }}
                   className="w-full flex items-start gap-3 p-3 hover:bg-gray-700 rounded-lg transition-colors text-left"
                 >
                   <Play className="w-5 h-5 text-green-400 mt-0.5" />
@@ -162,7 +186,10 @@ export default function PracticeAgainButton({
                 </button>
 
                 <button
-                  onClick={() => navigate(`/scenario/${scenario?.id || session?.scenario_id}?difficulty=harder`)}
+                  onClick={() => {
+                    if (onNavigate) onNavigate();
+                    navigate(`/scenario/${resolvedScenarioId}?difficulty=harder`);
+                  }}
                   className="w-full flex items-start gap-3 p-3 hover:bg-gray-700 rounded-lg transition-colors text-left"
                 >
                   <Target className="w-5 h-5 text-orange-400 mt-0.5" />

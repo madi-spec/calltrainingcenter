@@ -20,48 +20,48 @@ function getStripeClient() {
 export const PLANS = {
   starter: {
     name: 'Starter',
+    tier: 'Try It',
     priceId: process.env.STRIPE_STARTER_PRICE_ID,
-    trainingHours: 10,
-    maxUsers: 5,
+    trainingHours: 5,
+    maxUsers: 3,
     features: [
-      '10 training hours/month',
-      'Up to 5 users',
-      'Basic scenarios',
+      '5 training hours/month',
+      '3 team members',
+      '8 standard scenarios',
+      'Basic coaching scorecards',
       'Email support'
     ],
-    price: 99
+    price: 149
   },
-  professional: {
-    name: 'Professional',
-    priceId: process.env.STRIPE_PROFESSIONAL_PRICE_ID,
-    trainingHours: 50,
-    maxUsers: 25,
+  pro: {
+    name: 'Pro',
+    tier: 'Build Your Team',
+    priceId: process.env.STRIPE_PRO_PRICE_ID,
+    trainingHours: 12,
+    maxUsers: 10,
     features: [
-      '50 training hours/month',
-      'Up to 25 users',
-      'All scenarios',
-      'Custom scenarios',
-      'Branch management',
+      '12 training hours/month',
+      '10 team members',
+      'All scenarios + custom builder',
+      'Team trends & leaderboards',
       'Priority support'
     ],
-    price: 299
+    price: 349
   },
   enterprise: {
     name: 'Enterprise',
+    tier: 'Scale It',
     priceId: process.env.STRIPE_ENTERPRISE_PRICE_ID,
-    trainingHours: 200,
+    trainingHours: 25,
     maxUsers: -1, // Unlimited
     features: [
-      '200 training hours/month',
-      'Unlimited users',
-      'All scenarios',
-      'Custom scenarios',
-      'Advanced analytics',
-      'API access',
-      'Dedicated support',
-      'Custom integrations'
+      '25 training hours/month',
+      'Unlimited team members',
+      'All scenarios + custom development',
+      'Full analytics + API access',
+      'Dedicated success manager'
     ],
-    price: 799
+    price: 699
   }
 };
 

@@ -82,24 +82,27 @@ function Landing() {
   const plans = [
     {
       name: 'Starter',
-      price: 99,
-      description: 'Perfect for small teams getting started',
-      features: ['10 training hours/month', 'Up to 5 users', 'Basic scenarios', 'Email support'],
+      tier: 'Try It',
+      price: 149,
+      description: 'Perfect for testing with a small team',
+      features: ['5 training hours/month', '3 team members', '8 standard scenarios', 'Basic coaching scorecards', 'Email support'],
       cta: 'Start Free Trial'
     },
     {
-      name: 'Professional',
-      price: 299,
-      description: 'For growing teams that need more',
-      features: ['50 training hours/month', 'Up to 25 users', 'Custom scenarios', 'Branch management', 'Priority support'],
+      name: 'Pro',
+      tier: 'Build Your Team',
+      price: 349,
+      description: 'Everything you need to train a winning team',
+      features: ['12 training hours/month', '10 team members', 'All scenarios + custom builder', 'Team trends & leaderboards', 'Priority support'],
       cta: 'Start Free Trial',
       popular: true
     },
     {
       name: 'Enterprise',
-      price: 799,
-      description: 'For large organizations',
-      features: ['200 training hours/month', 'Unlimited users', 'Advanced analytics', 'API access', 'Dedicated support', 'Custom integrations'],
+      tier: 'Scale It',
+      price: 699,
+      description: 'For multi-location operations',
+      features: ['25 training hours/month', 'Unlimited team members', 'All scenarios + custom development', 'Full analytics + API access', 'Dedicated success manager'],
       cta: 'Contact Sales'
     }
   ];
@@ -188,16 +191,16 @@ function Landing() {
               <div className="p-8 text-center">
                 <div className="flex items-center justify-center gap-8 flex-wrap">
                   <div className="text-center">
-                    <div className="text-4xl font-bold text-blue-400">87%</div>
-                    <div className="text-gray-500 text-sm">Avg. Score Improvement</div>
+                    <div className="text-4xl font-bold text-blue-400">47%</div>
+                    <div className="text-gray-500 text-sm">Higher Save Rate</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-4xl font-bold text-green-400">2.5x</div>
-                    <div className="text-gray-500 text-sm">Faster Onboarding</div>
+                    <div className="text-4xl font-bold text-green-400">3.2x</div>
+                    <div className="text-gray-500 text-sm">Faster Ramp-up</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-4xl font-bold text-purple-400">40%</div>
-                    <div className="text-gray-500 text-sm">Higher Close Rates</div>
+                    <div className="text-4xl font-bold text-purple-400">89%</div>
+                    <div className="text-gray-500 text-sm">CSR Preference</div>
                   </div>
                 </div>
               </div>
@@ -312,9 +315,9 @@ function Landing() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Simple, Transparent Pricing</h2>
-            <p className="text-gray-400">Start free, upgrade when you're ready</p>
+            <p className="text-gray-400">Platform access plus training hours. Scale as you grow.</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16">
             {plans.map((plan, index) => (
               <motion.div
                 key={plan.name}
@@ -333,19 +336,22 @@ function Landing() {
                     </span>
                   </div>
                 )}
-                <div className="text-center mb-6">
-                  <h3 className="text-xl font-semibold mb-2">{plan.name}</h3>
-                  <div className="flex items-baseline justify-center gap-1">
+                <div className="mb-6">
+                  <p className="text-blue-400 text-xs font-semibold uppercase tracking-wider mb-1">{plan.name}</p>
+                  <h3 className="text-xl font-semibold mb-1">{plan.tier}</h3>
+                  <p className="text-gray-400 text-sm">{plan.description}</p>
+                </div>
+                <div className="mb-6">
+                  <div className="flex items-baseline gap-1">
                     <span className="text-4xl font-bold">${plan.price}</span>
                     <span className="text-gray-400">/month</span>
                   </div>
-                  <p className="text-gray-400 text-sm mt-2">{plan.description}</p>
                 </div>
                 <ul className="space-y-3 mb-8">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-center gap-3">
                       <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
-                      <span className="text-gray-300">{feature}</span>
+                      <span className="text-gray-300 text-sm">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -362,6 +368,57 @@ function Landing() {
               </motion.div>
             ))}
           </div>
+
+          {/* Hour Blocks */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="bg-gray-800/50 border border-gray-700 rounded-2xl p-8 max-w-4xl mx-auto"
+          >
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+              <div>
+                <h3 className="text-xl font-semibold mb-1">Need more training hours?</h3>
+                <p className="text-gray-400 text-sm">Purchase hour blocks anytime. They never expire.</p>
+              </div>
+            </div>
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="bg-gray-900/50 border border-gray-700 rounded-xl p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-semibold">5-Hour Block</h4>
+                  <span className="text-xs text-gray-500">~60 calls</span>
+                </div>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between"><span className="text-gray-400">Starter</span><span className="font-medium">$145</span></div>
+                  <div className="flex justify-between"><span className="text-gray-400">Pro</span><span className="font-medium">$125</span></div>
+                  <div className="flex justify-between"><span className="text-gray-400">Enterprise</span><span className="font-medium">$115</span></div>
+                </div>
+              </div>
+              <div className="bg-gray-900/50 border border-gray-700 rounded-xl p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-semibold">10-Hour Block</h4>
+                  <span className="text-xs text-gray-500">~120 calls · 4% off</span>
+                </div>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between"><span className="text-gray-400">Starter</span><span className="font-medium">$279</span></div>
+                  <div className="flex justify-between"><span className="text-gray-400">Pro</span><span className="font-medium">$239</span></div>
+                  <div className="flex justify-between"><span className="text-gray-400">Enterprise</span><span className="font-medium">$219</span></div>
+                </div>
+              </div>
+              <div className="bg-gray-900/50 border border-gray-700 rounded-xl p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-semibold">25-Hour Block</h4>
+                  <span className="text-xs text-gray-500">~300 calls · 7% off</span>
+                </div>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between"><span className="text-gray-400">Starter</span><span className="font-medium">$675</span></div>
+                  <div className="flex justify-between"><span className="text-gray-400">Pro</span><span className="font-medium">$575</span></div>
+                  <div className="flex justify-between"><span className="text-gray-400">Enterprise</span><span className="font-medium">$525</span></div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 

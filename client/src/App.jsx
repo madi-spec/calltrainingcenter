@@ -21,6 +21,7 @@ import { lazy, Suspense } from 'react';
 const Dashboard = lazy(() => import('./pages/dashboard/Dashboard'));
 const Courses = lazy(() => import('./pages/courses/Courses'));
 const CourseDetail = lazy(() => import('./pages/courses/CourseDetail'));
+const CourseBuilder = lazy(() => import('./pages/courses/CourseBuilder'));
 const ModuleDetail = lazy(() => import('./pages/modules/ModuleDetail'));
 const Assignments = lazy(() => import('./pages/assignments/Assignments'));
 const MyAssignments = lazy(() => import('./pages/assignments/MyAssignments'));
@@ -135,6 +136,14 @@ function App() {
 
                     {/* Courses & Modules */}
                     <Route path="/courses" element={<Courses />} />
+                    <Route
+                      path="/courses/create"
+                      element={
+                        <RoleProtectedRoute allowedRoles={['admin', 'owner']}>
+                          <CourseBuilder />
+                        </RoleProtectedRoute>
+                      }
+                    />
                     <Route path="/courses/:id" element={<CourseDetail />} />
                     <Route path="/modules/:id" element={<ModuleDetail />} />
 

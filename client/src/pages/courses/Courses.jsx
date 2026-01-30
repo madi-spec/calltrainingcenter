@@ -9,12 +9,14 @@ import {
   CheckCircle2,
   Star,
   Clock,
-  Filter
+  Filter,
+  Plus
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 export default function Courses() {
-  const { authFetch } = useAuth();
+  const { authFetch, role } = useAuth();
+  const canCreate = ['admin', 'owner'].includes(role);
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
@@ -72,19 +74,31 @@ export default function Courses() {
           </p>
         </div>
 
-        {/* Filter */}
-        <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-gray-400" />
-          <select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-200 text-sm focus:ring-2 focus:ring-primary-500"
-          >
-            <option value="all">All Courses</option>
-            <option value="in_progress">In Progress</option>
-            <option value="completed">Completed</option>
-            <option value="not_started">Not Started</option>
-          </select>
+        {/* Filter and Create */}
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <Filter className="w-4 h-4 text-gray-400" />
+            <select
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              className="px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-200 text-sm focus:ring-2 focus:ring-primary-500"
+            >
+              <option value="all">All Courses</option>
+              <option value="in_progress">In Progress</option>
+              <option value="completed">Completed</option>
+              <option value="not_started">Not Started</option>
+            </select>
+          </div>
+
+          {canCreate && (
+            <Link
+              to="/courses/create"
+              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm font-medium transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              Create Course
+            </Link>
+          )}
         </div>
       </motion.div>
 

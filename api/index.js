@@ -1045,7 +1045,9 @@ app.post('/api/calls/create-training-call', optionalAuthMiddleware, async (req, 
 
     // Create training session in database
     let sessionId = null;
+    console.log(`[CALL] User ID: ${req.user?.id}, Org ID: ${req.organization?.id}`);
     if (req.user?.id && req.organization?.id) {
+      console.log('[CALL] Creating training session...');
       try {
         const adminClient = createAdminClient();
 
@@ -1080,6 +1082,8 @@ app.post('/api/calls/create-training-call', optionalAuthMiddleware, async (req, 
       } catch (dbError) {
         console.error('[CALL] Database error creating session:', dbError);
       }
+    } else {
+      console.log('[CALL] Skipping session creation - no user or org ID');
     }
 
     res.json({

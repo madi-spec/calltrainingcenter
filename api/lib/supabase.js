@@ -22,8 +22,13 @@ function validateEnvVars() {
  * This bypasses Row Level Security and should only be used for admin operations
  */
 export function createAdminClient() {
-  if (!validateEnvVars() || !supabaseServiceRoleKey) {
-    throw new Error('Supabase service role key not configured');
+  console.log('[Supabase] Creating admin client, URL exists:', !!supabaseUrl, 'Service key exists:', !!supabaseServiceRoleKey);
+
+  if (!supabaseUrl) {
+    throw new Error('SUPABASE_URL environment variable is not set');
+  }
+  if (!supabaseServiceRoleKey) {
+    throw new Error('SUPABASE_SERVICE_ROLE_KEY environment variable is not set');
   }
 
   return createClient(supabaseUrl, supabaseServiceRoleKey, {

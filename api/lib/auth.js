@@ -11,12 +11,13 @@ const clerkClient = createClerkClient({
  */
 async function verifyClerkToken(token) {
   try {
+    console.log('[Auth] CLERK_SECRET_KEY exists:', !!process.env.CLERK_SECRET_KEY);
     const payload = await verifyToken(token, {
       secretKey: process.env.CLERK_SECRET_KEY
     });
     return payload.sub; // Returns the Clerk user ID
   } catch (error) {
-    console.error('Token verification failed:', error.message);
+    console.error('[Auth] Token verification failed:', error.message);
     return null;
   }
 }
@@ -26,6 +27,7 @@ async function verifyClerkToken(token) {
  */
 export async function authMiddleware(req, res, next) {
   try {
+    console.log('[Auth] Starting auth middleware');
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -36,17 +38,23 @@ export async function authMiddleware(req, res, next) {
     }
 
     const token = authHeader.replace('Bearer ', '');
+    console.log('[Auth] Verifying Clerk token...');
     const clerkUserId = await verifyClerkToken(token);
 
     if (!clerkUserId) {
+      console.log('[Auth] Token verification failed');
       return res.status(401).json({
         error: 'Unauthorized',
         message: 'Invalid or expired token'
       });
     }
 
+    console.log('[Auth] Token verified, clerk user ID:', clerkUserId);
+
     // Fetch the user profile with organization data
+    console.log('[Auth] Creating Supabase admin client...');
     const adminClient = createAdminClient();
+    console.log('[Auth] Fetching user from database...');
     const { data: user, error: userError } = await adminClient
       .from(TABLES.USERS)
       .select(`
@@ -85,10 +93,10 @@ export async function authMiddleware(req, res, next) {
 
     next();
   } catch (error) {
-    console.error('Auth middleware error:', error);
+    console.error('[Auth] Auth middleware error:', error.message, error.stack);
     return res.status(500).json({
       error: 'Internal Server Error',
-      message: 'Authentication failed'
+      message: 'Authentication failed: ' + error.message
     });
   }
 }

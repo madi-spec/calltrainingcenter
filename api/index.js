@@ -290,8 +290,15 @@ Background: {{scenario.customerBackground}}
 
 Remember: This is training - challenge the CSR but be fair. Ask about specific packages and pricing when relevant to your scenario.`;
 
-const DEFAULT_COACHING_SYSTEM_PROMPT = `You are an expert CSR coach specializing in pest control customer service training.
-Provide detailed, constructive feedback on call performance.
+const DEFAULT_COACHING_SYSTEM_PROMPT = `You are an expert CSR coach specializing in pest control and home services customer service training.
+You understand what drives revenue and customer retention for pest control companies:
+- Converting inquiries into booked appointments (the #1 metric)
+- Getting customers on recurring service plans vs one-time treatments
+- Handling price objections by communicating value, not discounting
+- Creating urgency appropriately for pest issues
+- Building trust through technical knowledge and professionalism
+
+Provide detailed, constructive feedback that helps CSRs book more appointments and retain more customers.
 You have deep knowledge of the company's products, services, and recommended objection responses.
 Always respond with valid JSON matching the exact schema provided.`;
 
@@ -328,28 +335,62 @@ const DEFAULT_COACHING_USER_PROMPT = `Analyze this CSR training call and provide
 ## Transcript
 {{transcript}}
 
-## Scoring Guidelines
-When evaluating Product Knowledge, consider:
-- Did the CSR accurately describe service packages and pricing?
-- Did the CSR effectively use selling points when appropriate?
-- Did the CSR handle price objections using recommended responses?
-- Did the CSR differentiate from competitors when mentioned?
+## Scoring Categories for Pest Control CSRs
+
+### 1. Empathy & Rapport (Weight: 15%)
+- Did the CSR acknowledge the customer's pest concerns with understanding?
+- Did they make the customer feel heard and not judged about having pests?
+- Did they build trust and connection appropriate to a home service call?
+
+### 2. Booking & Conversion (Weight: 25%) - CRITICAL
+- Did the CSR attempt to book an appointment? (Most important metric)
+- Did they offer specific date/time options rather than leaving it open?
+- Did they create appropriate urgency for the pest situation?
+- Did they overcome scheduling objections?
+- For existing customers: Did they successfully retain or save the account?
+
+### 3. Service & Technical Knowledge (Weight: 20%)
+- Did the CSR accurately explain treatment methods and what to expect?
+- Did they demonstrate knowledge of pest behavior and solutions?
+- Did they explain safety information (pets, children, prep requirements)?
+- Did they accurately describe service packages and pricing?
+- Did they mention guarantees and follow-up services?
+
+### 4. Value Communication & Objection Handling (Weight: 25%)
+- Did the CSR communicate value rather than just price?
+- Did they handle price objections effectively without discounting?
+- Did they differentiate from competitors when relevant?
+- Did they recommend the right service level (not underserving or overselling)?
+- Did they present recurring service benefits vs one-time treatment?
+
+### 5. Professionalism & Call Control (Weight: 15%)
+- Did the CSR maintain a professional, confident tone?
+- Did they control the call flow and guide the conversation?
+- Did they ask the right qualifying questions?
+- Did they summarize and confirm next steps clearly?
 
 Respond with JSON:
 {
   "overallScore": 0-100,
   "categories": {
-    "empathyRapport": { "score": 0-100, "feedback": "Specific feedback", "keyMoments": [] },
-    "problemResolution": { "score": 0-100, "feedback": "Specific feedback", "keyMoments": [] },
-    "productKnowledge": { "score": 0-100, "feedback": "Feedback on product/service knowledge accuracy", "keyMoments": [] },
-    "professionalism": { "score": 0-100, "feedback": "Specific feedback", "keyMoments": [] },
-    "scenarioSpecific": { "score": 0-100, "feedback": "Specific feedback", "keyMoments": [] }
+    "empathyRapport": { "score": 0-100, "feedback": "Specific feedback on building trust with customer", "keyMoments": [] },
+    "bookingConversion": { "score": 0-100, "feedback": "Did they ask for the appointment? How well did they handle booking?", "keyMoments": [] },
+    "serviceKnowledge": { "score": 0-100, "feedback": "Feedback on technical accuracy and service explanation", "keyMoments": [] },
+    "valueAndObjections": { "score": 0-100, "feedback": "How well did they communicate value and handle price/competitor objections?", "keyMoments": [] },
+    "professionalism": { "score": 0-100, "feedback": "Call control, tone, and professional conduct", "keyMoments": [] }
   },
-  "strengths": [{ "title": "Strength", "description": "Why effective", "quote": "Quote" }],
-  "improvements": [{ "title": "Area", "issue": "What went wrong", "quote": "What they said", "alternative": "Better response for {{company.name}}" }],
-  "keyMoment": { "timestamp": "When", "description": "What happened", "impact": "Effect", "betterApproach": "Alternative using company products/services" },
-  "summary": "2-3 sentence assessment",
-  "nextSteps": ["Action 1", "Action 2", "Action 3"]
+  "strengths": [{ "title": "Strength", "description": "Why this was effective for booking/retention", "quote": "Quote" }],
+  "improvements": [{ "title": "Area", "issue": "What went wrong or was missed", "quote": "What they said", "alternative": "Better response that would improve booking/retention for {{company.name}}" }],
+  "keyMoment": { "timestamp": "When", "description": "The pivotal moment that most impacted whether this call would convert", "impact": "Effect on booking likelihood", "betterApproach": "What would have increased conversion" },
+  "bookingAssessment": {
+    "attemptedToBook": true/false,
+    "offeredSpecificTimes": true/false,
+    "createdUrgency": true/false,
+    "wouldHaveConverted": "likely/unlikely/uncertain",
+    "primaryBookingBarrier": "What prevented or almost prevented the booking"
+  },
+  "summary": "2-3 sentence assessment focusing on booking/retention effectiveness",
+  "nextSteps": ["Specific action to improve conversion", "Action 2", "Action 3"]
 }`;
 
 function buildAgentPrompt(scenario, company, customTemplate = null) {

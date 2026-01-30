@@ -51,27 +51,9 @@ export const TUTORIAL_STEPS = [
     type: 'highlight',
     target: '[data-tutorial="scenario-card"]',
     title: 'Choose a Scenario',
-    description: 'Each card shows a different scenario. You can see the difficulty level, category, and what skills it focuses on. Click any card to start!',
+    description: 'Each card shows a different scenario with difficulty level and category. Click any card to see the pre-call briefing, then start your AI-powered training call!',
     position: 'bottom',
     highlightPadding: 8
-  },
-  {
-    id: 'pre-call',
-    type: 'highlight',
-    target: '[data-tutorial="pre-call-info"]',
-    title: 'Pre-Call Briefing',
-    description: 'Before each call, review the scenario details, customer background, and your objectives. This prepares you for the conversation.',
-    position: 'left',
-    waitForElement: true
-  },
-  {
-    id: 'start-training',
-    type: 'highlight',
-    target: '[data-tutorial="start-button"]',
-    title: 'Start Your Training',
-    description: 'When you\'re ready, click this button to begin the voice call. The AI customer will respond naturally to what you say.',
-    position: 'top',
-    highlightPadding: 4
   },
   {
     id: 'gamification',
@@ -80,7 +62,11 @@ export const TUTORIAL_STEPS = [
     title: 'Points & Achievements',
     description: 'Earn points for completing training sessions. Build your streak by practicing daily, and unlock badges as you improve!',
     position: 'left',
-    highlightPadding: 8
+    highlightPadding: 8,
+    action: {
+      type: 'navigate',
+      path: '/dashboard'
+    }
   },
   {
     id: 'assignments',

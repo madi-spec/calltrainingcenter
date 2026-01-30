@@ -488,7 +488,8 @@ router.post('/complete-setup', authMiddleware, tenantMiddleware, requireRole('ad
         setupComplete: true,
         setupCompletedAt: new Date().toISOString()
       },
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
+      onboarding_completed: true
     };
 
     // Extract company info step data

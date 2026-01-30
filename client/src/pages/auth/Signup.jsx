@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, Lock, Eye, EyeOff, User, Building2, Globe, UserPlus, AlertCircle, Check } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, User, Building2, Globe, UserPlus, AlertCircle, Check, Phone } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 export default function Signup() {
@@ -15,6 +15,7 @@ export default function Signup() {
     confirmPassword: '',
     fullName: '',
     organizationName: '',
+    phone: '',
     website: ''
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -74,12 +75,21 @@ export default function Signup() {
         formData.email,
         formData.password,
         formData.fullName,
-        formData.organizationName
+        formData.organizationName,
+        formData.phone,
+        formData.website
       );
 
-      // If there's a session, user can go straight to dashboard (email confirmation disabled)
+      // If there's a session, go to setup wizard for new users
       if (result.session) {
-        navigate('/dashboard');
+        // Navigate to setup wizard with website to auto-scrape
+        navigate('/setup', {
+          state: {
+            isNewUser: true,
+            website: formData.website,
+            autoScrape: true
+          }
+        });
       } else {
         // No session means email confirmation is required
         navigate('/auth/verify-email', {
@@ -277,7 +287,7 @@ export default function Signup() {
                 {/* Organization Name */}
                 <div>
                   <label htmlFor="organizationName" className="block text-sm font-medium text-gray-300 mb-2">
-                    Company Name
+                    Company Name <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
                     <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
@@ -294,25 +304,46 @@ export default function Signup() {
                   </div>
                 </div>
 
-                {/* Website (Optional) */}
+                {/* Phone Number */}
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-2">
+                    Company Phone <span className="text-red-400">*</span>
+                  </label>
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      placeholder="(555) 123-4567"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Website */}
                 <div>
                   <label htmlFor="website" className="block text-sm font-medium text-gray-300 mb-2">
-                    Company Website <span className="text-gray-500">(Optional)</span>
+                    Company Website <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
                     <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                     <input
-                      type="url"
+                      type="text"
                       id="website"
                       name="website"
                       value={formData.website}
                       onChange={handleChange}
                       className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                      placeholder="https://www.yourcompany.com"
+                      placeholder="yourcompany.com"
+                      required
                     />
                   </div>
                   <p className="mt-2 text-sm text-gray-500">
-                    We'll use this to auto-fill your company branding
+                    We'll automatically import your company info, services, and branding
                   </p>
                 </div>
 
@@ -327,7 +358,7 @@ export default function Signup() {
                   </button>
                   <button
                     type="submit"
-                    disabled={loading}
+                    disabled={loading || !formData.organizationName || !formData.phone || !formData.website}
                     className="flex-1 py-3 px-4 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
                   >
                     {loading ? (

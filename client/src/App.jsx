@@ -48,6 +48,7 @@ const MicroPractice = lazy(() => import('./pages/micro/MicroPractice'));
 const Recommendations = lazy(() => import('./pages/recommendations/Recommendations'));
 const CallReplay = lazy(() => import('./pages/replay/CallReplay'));
 const ComparativeAnalysis = lazy(() => import('./pages/analysis/ComparativeAnalysis'));
+const CompanyOnboarding = lazy(() => import('./pages/onboarding/CompanyOnboarding'));
 
 // Loading component for lazy loaded pages
 function PageLoader() {
@@ -110,6 +111,18 @@ function App() {
                 }}
               />
             </AuthPageWrapper>
+          }
+        />
+
+        {/* Onboarding Route - Protected but no Layout */}
+        <Route
+          path="/onboarding"
+          element={
+            <ProtectedRoute>
+              <Suspense fallback={<PageLoader />}>
+                <CompanyOnboarding />
+              </Suspense>
+            </ProtectedRoute>
           }
         />
 

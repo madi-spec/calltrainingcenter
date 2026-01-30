@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Building2,
@@ -138,6 +138,7 @@ const STEPS = [
 
 export default function SetupWizard() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { authFetch, role } = useAuth();
   const { organization, refreshOrganization } = useOrganization();
   const notifications = useNotifications();
@@ -149,6 +150,11 @@ export default function SetupWizard() {
   const [visitedSteps, setVisitedSteps] = useState(new Set([0]));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
+  const [autoScraping, setAutoScraping] = useState(false);
+  const hasAutoScraped = useRef(false);
+
+  // Check for auto-scrape request from onboarding
+  const { isNewUser, website, autoScrape } = location.state || {};
 
   // Only admins/owners can access setup
   useEffect(() => {
@@ -156,6 +162,65 @@ export default function SetupWizard() {
       navigate('/dashboard');
     }
   }, [role, navigate]);
+
+  // Auto-scrape website if coming from onboarding
+  useEffect(() => {
+    const performAutoScrape = async () => {
+      if (autoScrape && website && !hasAutoScraped.current) {
+        hasAutoScraped.current = true;
+        setAutoScraping(true);
+
+        try {
+          const response = await authFetch('/api/organizations/scrape-website', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ website })
+          });
+
+          const result = await response.json();
+
+          if (response.ok && result.extracted) {
+            const extracted = result.extracted;
+
+            // Pre-populate step data with scraped info
+            setStepData(prev => ({
+              ...prev,
+              company: {
+                name: extracted.name || organization?.name || '',
+                phone: extracted.phone || organization?.phone || '',
+                website: website,
+                address: extracted.address || '',
+                services: extracted.services || [],
+                guarantees: extracted.guarantees || [],
+                logo_url: extracted.logo_url || '',
+                brand_colors: extracted.brand_colors || {},
+                tagline: extracted.tagline || '',
+                extractedPackages: extracted.packages || [],
+                competitors_mentioned: extracted.competitors_mentioned || []
+              }
+            }));
+
+            // Mark company step as visited
+            setVisitedSteps(prev => new Set([...prev, 0]));
+
+            showSuccess('Website Imported', `Found: ${[
+              extracted.services?.length && `${extracted.services.length} services`,
+              extracted.packages?.length && `${extracted.packages.length} packages`,
+              extracted.logo_url && 'logo',
+              extracted.brand_colors?.primary && 'brand colors'
+            ].filter(Boolean).join(', ')}`);
+          }
+        } catch (err) {
+          console.error('Auto-scrape error:', err);
+          // Don't show error - user can still manually enter info
+        } finally {
+          setAutoScraping(false);
+        }
+      }
+    };
+
+    performAutoScrape();
+  }, [autoScrape, website, authFetch, organization, showSuccess]);
 
   const CurrentStepComponent = STEPS[currentStep].component;
 
@@ -274,6 +339,19 @@ export default function SetupWizard() {
       </button>
     );
   };
+
+  // Show loading while auto-scraping
+  if (autoScraping) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary-500 mx-auto mb-4"></div>
+          <h2 className="text-xl font-bold text-gray-100 mb-2">Importing Your Company Data</h2>
+          <p className="text-gray-400">Scanning {website} for services, pricing, and branding...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-900">

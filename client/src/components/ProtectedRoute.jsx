@@ -5,10 +5,11 @@ import { useAuth } from '../context/AuthContext';
 /**
  * ProtectedRoute - Wrapper for routes that require authentication
  * Redirects to login if not authenticated
+ * Redirects to onboarding if company setup is not complete
  */
 export function ProtectedRoute({ children }) {
   const { isLoaded, isSignedIn } = useUser();
-  const { loading, profile } = useAuth();
+  const { loading, profile, organization } = useAuth();
   const location = useLocation();
 
   // Wait for Clerk to load
@@ -38,6 +39,18 @@ export function ProtectedRoute({ children }) {
         </div>
       </div>
     );
+  }
+
+  // Check if onboarding is needed (organization missing website/phone)
+  // Only check for owners who haven't completed onboarding
+  const needsOnboarding = profile?.role === 'owner' &&
+    organization &&
+    !organization.website &&
+    !organization.onboarding_completed &&
+    location.pathname !== '/onboarding';
+
+  if (needsOnboarding) {
+    return <Navigate to="/onboarding" replace />;
   }
 
   return children;

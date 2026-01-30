@@ -392,7 +392,7 @@ router.get('/current', authMiddleware, tenantMiddleware, async (req, res) => {
  */
 router.put('/update', authMiddleware, tenantMiddleware, requireRole('admin', 'owner'), async (req, res) => {
   try {
-    const { name, phone, website, address, services, guarantees, settings, service_areas, value_propositions, business_hours, pricing, logo_url, brand_colors, tagline } = req.body;
+    const { name, phone, website, address, services, guarantees, settings, service_areas, value_propositions, business_hours, pricing, logo_url, brand_colors, tagline, onboarding_completed } = req.body;
     const adminClient = createAdminClient();
 
     // Build update data with only defined fields
@@ -414,7 +414,7 @@ router.put('/update', authMiddleware, tenantMiddleware, requireRole('admin', 'ow
     if (settings !== undefined) updateData.settings = settings;
 
     // These fields might not exist in older schemas - handle gracefully
-    const optionalFields = { address, service_areas, value_propositions, business_hours, pricing, logo_url, brand_colors, tagline };
+    const optionalFields = { address, service_areas, value_propositions, business_hours, pricing, logo_url, brand_colors, tagline, onboarding_completed };
 
     console.log('[ORG UPDATE] Updating organization with:', {
       ...updateData,

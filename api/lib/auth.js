@@ -102,7 +102,7 @@ export async function authMiddleware(req, res, next) {
 }
 
 /**
- * Optional auth middleware - doesn't fail if no auth header
+ * Optional auth middleware - doesn't fail if no auth header or if auth fails
  */
 export async function optionalAuthMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
@@ -114,8 +114,63 @@ export async function optionalAuthMiddleware(req, res, next) {
     return next();
   }
 
-  // If there is an auth header, validate it
-  return authMiddleware(req, res, next);
+  // If there is an auth header, try to validate it but don't fail the request
+  try {
+    const token = authHeader.replace('Bearer ', '');
+    const clerkUserId = await verifyClerkToken(token);
+
+    if (!clerkUserId) {
+      // Token invalid but this is optional auth, continue without user
+      req.user = null;
+      req.organization = null;
+      req.clerkUserId = null;
+      return next();
+    }
+
+    req.clerkUserId = clerkUserId;
+    req.token = token;
+
+    // Try to fetch user from database
+    try {
+      const adminClient = createAdminClient();
+      const { data: user, error: userError } = await adminClient
+        .from(TABLES.USERS)
+        .select(`
+          *,
+          organization:organizations(*),
+          branch:branches(*)
+        `)
+        .eq('clerk_id', clerkUserId)
+        .single();
+
+      if (userError || !user) {
+        req.user = null;
+        req.organization = null;
+        req.branch = null;
+      } else if (user.status !== 'active') {
+        req.user = null;
+        req.organization = null;
+        req.branch = null;
+      } else {
+        req.user = user;
+        req.organization = user.organization;
+        req.branch = user.branch;
+      }
+    } catch (dbError) {
+      console.error('[Auth] Database error in optional auth:', dbError.message);
+      req.user = null;
+      req.organization = null;
+      req.branch = null;
+    }
+
+    next();
+  } catch (error) {
+    console.error('[Auth] Optional auth error:', error.message);
+    req.user = null;
+    req.organization = null;
+    req.clerkUserId = null;
+    next();
+  }
 }
 
 /**

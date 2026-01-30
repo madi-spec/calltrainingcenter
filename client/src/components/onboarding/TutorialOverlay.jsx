@@ -120,6 +120,26 @@ export default function TutorialOverlay() {
     }
   }, [targetRect, currentStep]);
 
+  // Add click listener to target element to advance tutorial
+  useEffect(() => {
+    if (!isActive || !currentStep || currentStep.type === 'modal') return;
+
+    const target = document.querySelector(currentStep.target);
+    if (!target) return;
+
+    const handleTargetClick = () => {
+      // Delay to allow navigation to happen first
+      setTimeout(handleNext, 300);
+    };
+
+    // Listen for clicks on the target and its children
+    target.addEventListener('click', handleTargetClick, true);
+
+    return () => {
+      target.removeEventListener('click', handleTargetClick, true);
+    };
+  }, [isActive, currentStep, handleNext]);
+
   if (!isActive || isLoading || !currentStep) {
     return null;
   }
@@ -193,47 +213,42 @@ export default function TutorialOverlay() {
             )}
           </motion.div>
 
-          {/* Click blocker with hole for target */}
-          <div
-            className="fixed inset-0 z-[10000]"
-            onClick={(e) => {
-              // Allow clicks on the target element
-              if (targetRect && currentStep) {
-                const { clientX, clientY } = e;
-                const isInTarget =
-                  clientX >= targetRect.left &&
-                  clientX <= targetRect.right &&
-                  clientY >= targetRect.top &&
-                  clientY <= targetRect.bottom;
-                if (isInTarget) {
-                  // Find the actual target element and trigger click
-                  const target = document.querySelector(currentStep.target);
-                  if (target) {
-                    // Try to find a clickable element: link, button, or element with cursor-pointer
-                    const clickable =
-                      target.querySelector('a, button, [role="button"]') ||
-                      target.querySelector('[class*="cursor-pointer"]') ||
-                      target.firstElementChild ||
-                      target;
-
-                    // Dispatch a real click event that will trigger React handlers
-                    const clickEvent = new MouseEvent('click', {
-                      bubbles: true,
-                      cancelable: true,
-                      view: window
-                    });
-                    clickable.dispatchEvent(clickEvent);
-                  }
-                  // Advance tutorial after a short delay
-                  setTimeout(handleNext, 400);
-                  return;
-                }
-              }
-              // Block other clicks
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-          />
+          {/* Click blockers around the target - creates a hole where clicks pass through */}
+          {targetRect ? (
+            <>
+              {/* Top blocker */}
+              <div
+                className="fixed left-0 right-0 top-0 z-[10000] bg-transparent"
+                style={{ height: targetRect.top }}
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+              />
+              {/* Bottom blocker */}
+              <div
+                className="fixed left-0 right-0 bottom-0 z-[10000] bg-transparent"
+                style={{ top: targetRect.bottom }}
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+              />
+              {/* Left blocker */}
+              <div
+                className="fixed left-0 z-[10000] bg-transparent"
+                style={{ top: targetRect.top, height: targetRect.height, width: targetRect.left }}
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+              />
+              {/* Right blocker */}
+              <div
+                className="fixed right-0 z-[10000] bg-transparent"
+                style={{ top: targetRect.top, height: targetRect.height, left: targetRect.right }}
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+              />
+              {/* No blocker on target area - clicks pass through to actual element */}
+            </>
+          ) : (
+            /* Full screen blocker when no target */
+            <div
+              className="fixed inset-0 z-[10000]"
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+            />
+          )}
 
           {/* Tooltip */}
           <TutorialTooltip

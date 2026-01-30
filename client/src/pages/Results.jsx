@@ -100,6 +100,13 @@ function Results() {
         return;
       }
 
+      console.log('Making sync analysis request...');
+      console.log('Request payload:', {
+        transcriptLength: transcriptText.length,
+        scenarioName: lastResults.scenario?.name,
+        duration: lastResults.duration
+      });
+
       const response = await authFetch('/api/analysis/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -110,18 +117,23 @@ function Results() {
         })
       });
 
+      console.log('Sync analysis response status:', response.status);
+
       if (response.ok) {
         const data = await response.json();
+        console.log('Analysis successful, score:', data.analysis?.overallScore);
         setLastResults(prev => ({
           ...prev,
           analysis: data.analysis,
           analysisStatus: 'completed'
         }));
       } else {
+        const errorText = await response.text();
+        console.error('Analysis failed with status:', response.status, 'Error:', errorText);
         setLastResults(prev => ({
           ...prev,
           analysisStatus: 'failed',
-          analysisError: 'Analysis failed'
+          analysisError: `Analysis failed: ${response.status}`
         }));
       }
     } catch (err) {

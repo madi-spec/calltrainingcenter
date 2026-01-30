@@ -1247,28 +1247,36 @@ app.post('/api/analysis/analyze', optionalAuthMiddleware, async (req, res) => {
   try {
     const { transcript, scenario, callDuration } = req.body;
     console.log('[ANALYSIS] Received request, transcript length:', transcript?.length || 0, 'type:', typeof transcript);
+    console.log('[ANALYSIS] Scenario:', scenario?.name || 'none');
+    console.log('[ANALYSIS] Call duration:', callDuration);
 
     if (!transcript || transcript.length < 10) {
       console.log('[ANALYSIS] Transcript too short or missing');
       return res.status(400).json({ error: 'Transcript is required and must have content' });
     }
 
+    console.log('[ANALYSIS] Getting company config...');
     const company = await getCompanyConfig(req);
+    console.log('[ANALYSIS] Company:', company?.name || 'none');
+
     const customPrompts = req.organization?.settings?.customPrompts || null;
     const scoringCriteria = customPrompts?.scoringCriteria || null;
 
     // Fetch product context for authenticated users
     let productContext = null;
     if (req.organization?.id) {
+      console.log('[ANALYSIS] Fetching product context for org:', req.organization.id);
       productContext = await getProductContext(req.organization.id);
     }
 
+    console.log('[ANALYSIS] Building coaching prompt...');
     const { system, user } = buildCoachingPrompt(
       transcript,
       { scenario, company, callDuration, productContext, scoringCriteria },
       customPrompts?.coaching
     );
 
+    console.log('[ANALYSIS] Calling Claude API...');
     const response = await getAnthropicClient().messages.create({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 4096,
@@ -1276,13 +1284,19 @@ app.post('/api/analysis/analyze', optionalAuthMiddleware, async (req, res) => {
       messages: [{ role: 'user', content: user }]
     });
 
+    console.log('[ANALYSIS] Claude API response received');
     const content = response.content[0].text;
+    console.log('[ANALYSIS] Response content length:', content?.length || 0);
+
     const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/) || [null, content];
+    console.log('[ANALYSIS] Parsing JSON...');
     const analysis = JSON.parse(jsonMatch[1].trim());
+    console.log('[ANALYSIS] Analysis complete, overall score:', analysis?.overallScore);
 
     res.json({ success: true, analysis });
   } catch (error) {
-    console.error('Analysis error:', error);
+    console.error('[ANALYSIS] Error:', error);
+    console.error('[ANALYSIS] Error stack:', error.stack);
     res.status(500).json({ error: error.message });
   }
 });

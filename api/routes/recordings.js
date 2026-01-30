@@ -1,9 +1,9 @@
 import express from 'express';
 import { createAdminClient, TABLES } from '../lib/supabase.js';
-import { requireAuth, requireRole } from '../lib/auth.js';
+import { authMiddleware, requireRole } from '../lib/auth.js';
 
 const router = express.Router();
-router.use(requireAuth);
+router.use(authMiddleware);
 
 /**
  * GET /api/recordings/:sessionId

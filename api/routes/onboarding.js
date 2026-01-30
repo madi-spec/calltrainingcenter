@@ -1,11 +1,11 @@
 import express from 'express';
-import { requireAuth } from '../lib/auth.js';
+import { authMiddleware } from '../lib/auth.js';
 import { createAdminClient } from '../lib/supabase.js';
 
 const router = express.Router();
 
 // All routes require authentication
-router.use(requireAuth);
+router.use(authMiddleware);
 
 /**
  * GET /api/onboarding/status

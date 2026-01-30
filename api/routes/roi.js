@@ -1,11 +1,11 @@
 import express from 'express';
 import { createAdminClient } from '../lib/supabase.js';
-import { requireAuth, requireRole } from '../lib/auth.js';
+import { authMiddleware, requireRole } from '../lib/auth.js';
 
 const router = express.Router();
 
 // All routes require admin or owner role
-router.use(requireAuth);
+router.use(authMiddleware);
 router.use(requireRole(['admin', 'owner']));
 
 /**

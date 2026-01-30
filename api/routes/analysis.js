@@ -1,11 +1,11 @@
 import express from 'express';
 import { createAdminClient } from '../lib/supabase.js';
-import { requireAuth } from '../lib/auth.js';
+import { authMiddleware } from '../lib/auth.js';
 import { queueAnalysis, getAnalysisStatus, retryFailedJobs } from '../services/asyncAnalysis.js';
 
 const router = express.Router();
 
-router.use(requireAuth);
+router.use(authMiddleware);
 
 /**
  * POST /api/analysis/queue

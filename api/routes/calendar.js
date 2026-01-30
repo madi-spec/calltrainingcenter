@@ -1,9 +1,9 @@
 import express from 'express';
 import { createAdminClient, TABLES } from '../lib/supabase.js';
-import { requireAuth } from '../lib/auth.js';
+import { authMiddleware } from '../lib/auth.js';
 
 const router = express.Router();
-router.use(requireAuth);
+router.use(authMiddleware);
 
 // Google OAuth configuration
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;

@@ -87,6 +87,7 @@ function Training() {
     // Store pending results with analysis ID for Results page to poll
     const pendingResults = {
       analysisId,
+      sessionId: callData.sessionId,  // Database session ID
       analysisStatus: 'processing',
       transcript: callData.transcript,
       scenario: currentScenario,

@@ -21,6 +21,7 @@ export function useRetellCall() {
 
   const retellClientRef = useRef(null);
   const callIdRef = useRef(null);
+  const sessionIdRef = useRef(null);  // Database session ID
   const timerRef = useRef(null);
   const startTimeRef = useRef(null);
   const initializedRef = useRef(false);
@@ -127,6 +128,7 @@ export function useRetellCall() {
 
       const data = await response.json();
       callIdRef.current = data.callId;
+      sessionIdRef.current = data.sessionId;  // Store database session ID
 
       // Start the web call
       console.log('Starting Retell web call with access token');
@@ -168,6 +170,7 @@ export function useRetellCall() {
           const data = await response.json();
           return {
             callId: callIdRef.current,
+            sessionId: sessionIdRef.current,
             transcript: data.transcript,
             duration: callDuration
           };
@@ -176,6 +179,7 @@ export function useRetellCall() {
 
       return {
         callId: callIdRef.current,
+        sessionId: sessionIdRef.current,
         transcript: { formatted: transcript, raw: '' },
         duration: callDuration
       };
@@ -184,6 +188,7 @@ export function useRetellCall() {
       setCallState(CALL_STATES.ENDED);
       return {
         callId: callIdRef.current,
+        sessionId: sessionIdRef.current,
         transcript: { formatted: transcript, raw: '' },
         duration: callDuration
       };
@@ -210,6 +215,7 @@ export function useRetellCall() {
     setCallDuration(0);
     setIsMuted(false);
     callIdRef.current = null;
+    sessionIdRef.current = null;
     startingCallRef.current = false;  // Reset for retry
     if (timerRef.current) {
       clearInterval(timerRef.current);

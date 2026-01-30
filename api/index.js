@@ -1043,12 +1043,52 @@ app.post('/api/calls/create-training-call', optionalAuthMiddleware, async (req, 
 
     console.log(`[CALL CREATE SUCCESS] callId: ${webCall.call_id}, agentId: ${agent.agent_id}`);
 
+    // Create training session in database
+    let sessionId = null;
+    if (req.user?.id && req.organization?.id) {
+      try {
+        const adminClient = createAdminClient();
+
+        // Get attempt number for this scenario
+        const { count } = await adminClient
+          .from(TABLES.TRAINING_SESSIONS)
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', req.user.id)
+          .eq('scenario_id', scenario.id);
+
+        const { data: session, error } = await adminClient
+          .from(TABLES.TRAINING_SESSIONS)
+          .insert({
+            organization_id: req.organization.id,
+            user_id: req.user.id,
+            scenario_id: scenario.id,
+            scenario_name: scenario.name,
+            retell_call_id: webCall.call_id,
+            attempt_number: (count || 0) + 1,
+            status: 'in_progress',
+            started_at: new Date().toISOString()
+          })
+          .select()
+          .single();
+
+        if (error) {
+          console.error('[CALL] Error creating training session:', error);
+        } else {
+          sessionId = session.id;
+          console.log(`[CALL] Created training session: ${sessionId}`);
+        }
+      } catch (dbError) {
+        console.error('[CALL] Database error creating session:', dbError);
+      }
+    }
+
     res.json({
       success: true,
       callId: webCall.call_id,
       agentId: agent.agent_id,
       accessToken: webCall.access_token,
-      sampleRate: webCall.sample_rate || 24000
+      sampleRate: webCall.sample_rate || 24000,
+      sessionId
     });
   } catch (error) {
     console.error('[CALL CREATE ERROR]', error);

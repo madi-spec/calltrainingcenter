@@ -54,6 +54,39 @@ function Results() {
     }
   }, [lastResults, recoveredFromStorage, setLastResults]);
 
+  // Save session results to database
+  const saveSessionResults = useCallback(async (analysis) => {
+    const sessionId = lastResults?.sessionId;
+    if (!sessionId) {
+      console.log('No session ID, skipping database save');
+      return;
+    }
+
+    try {
+      const response = await authFetch(`/api/training/session/${sessionId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          transcript_raw: lastResults?.transcript?.raw || '',
+          transcript_formatted: lastResults?.transcript?.formatted || [],
+          overall_score: analysis.overallScore,
+          category_scores: analysis.categories,
+          strengths: analysis.strengths,
+          improvements: analysis.improvements,
+          duration_seconds: lastResults?.duration || 0
+        })
+      });
+
+      if (response.ok) {
+        console.log('Session results saved to database');
+      } else {
+        console.error('Failed to save session results:', response.status);
+      }
+    } catch (err) {
+      console.error('Error saving session results:', err);
+    }
+  }, [lastResults?.sessionId, lastResults?.transcript, lastResults?.duration, authFetch]);
+
   // Fallback to synchronous analysis
   const runSyncAnalysis = useCallback(async () => {
     if (usingSyncFallback) return;
@@ -107,6 +140,8 @@ function Results() {
           analysis: data.analysis,
           analysisStatus: 'completed'
         }));
+        // Save results to database
+        saveSessionResults(data.analysis);
       } else {
         console.error('Analysis failed with status:', response.status);
         setLastResults(prev => ({
@@ -123,7 +158,7 @@ function Results() {
         analysisError: err.message
       }));
     }
-  }, [lastResults?.transcript, lastResults?.scenario, lastResults?.duration, usingSyncFallback, authFetch, setLastResults]);
+  }, [lastResults?.transcript, lastResults?.scenario, lastResults?.duration, usingSyncFallback, authFetch, setLastResults, saveSessionResults]);
 
   // Poll for analysis completion
   const pollAnalysis = useCallback(async () => {
@@ -148,6 +183,8 @@ function Results() {
           analysis: data.analysis,
           analysisStatus: 'completed'
         }));
+        // Save results to database
+        saveSessionResults(data.analysis);
 
         // Update module progress if this is a generated scenario
         if (lastResults.scenario?.isGeneratedScenario && lastResults.scenario?.moduleId) {
@@ -188,7 +225,7 @@ function Results() {
       console.error('Error polling analysis:', err);
       runSyncAnalysis();
     }
-  }, [lastResults?.analysisId, lastResults?.analysis, lastResults?.scenario, usingSyncFallback, authFetch, setLastResults, runSyncAnalysis]);
+  }, [lastResults?.analysisId, lastResults?.analysis, lastResults?.scenario, usingSyncFallback, authFetch, setLastResults, runSyncAnalysis, saveSessionResults]);
 
   // Start polling when we have an analysis in progress
   useEffect(() => {

@@ -23,7 +23,12 @@ export const TUTORIAL_STEPS = [
     title: 'Navigation',
     description: 'Use the sidebar to navigate between different sections of the app. You can access scenarios, courses, your assignments, and more.',
     position: 'right',
-    highlightPadding: 8
+    highlightPadding: 8,
+    // Navigate to dashboard AFTER this step so next step can find dashboard-stats
+    action: {
+      type: 'navigate',
+      path: '/dashboard'
+    }
   },
   {
     id: 'dashboard',
@@ -31,8 +36,9 @@ export const TUTORIAL_STEPS = [
     target: '[data-tutorial="dashboard-stats"]',
     title: 'Your Dashboard',
     description: 'This is your personal dashboard. Track your training progress, streaks, points, and recent activity all in one place.',
-    position: 'right',
-    highlightPadding: 8
+    position: 'bottom',
+    highlightPadding: 8,
+    waitForElement: true
   },
   {
     id: 'scenarios',
@@ -41,6 +47,7 @@ export const TUTORIAL_STEPS = [
     title: 'Training Scenarios',
     description: 'Click here to browse available training scenarios. Each scenario simulates a real customer interaction you might encounter.',
     position: 'right',
+    // Navigate to scenarios page AFTER this step
     action: {
       type: 'navigate',
       path: '/scenarios'
@@ -51,9 +58,14 @@ export const TUTORIAL_STEPS = [
     type: 'highlight',
     target: '[data-tutorial="scenario-card"]',
     title: 'Choose a Scenario',
-    description: 'Each card shows a different scenario. You can see the difficulty level, category, and what skills it focuses on.',
+    description: 'Each card shows a different scenario. You can see the difficulty level, category, and what skills it focuses on. Click a scenario to see more details.',
     position: 'bottom',
-    highlightPadding: 8
+    highlightPadding: 8,
+    waitForElement: true,
+    // Navigate to first scenario AFTER this step
+    action: {
+      type: 'navigate-to-scenario'
+    }
   },
   {
     id: 'pre-call',
@@ -63,9 +75,7 @@ export const TUTORIAL_STEPS = [
     description: 'Before each call, review the scenario details, customer background, and your objectives. This prepares you for the conversation.',
     position: 'bottom',
     highlightPadding: 8,
-    action: {
-      type: 'navigate-to-scenario'
-    }
+    waitForElement: true
   },
   {
     id: 'start-training',
@@ -74,7 +84,12 @@ export const TUTORIAL_STEPS = [
     title: 'Start Your Training',
     description: 'When you\'re ready, click this button to begin the voice call. The AI customer will respond naturally to what you say.',
     position: 'top',
-    highlightPadding: 4
+    highlightPadding: 4,
+    // Navigate back to dashboard AFTER this step for gamification
+    action: {
+      type: 'navigate',
+      path: '/dashboard'
+    }
   },
   {
     id: 'gamification',
@@ -84,10 +99,7 @@ export const TUTORIAL_STEPS = [
     description: 'Earn points for completing training sessions. Build your streak by practicing daily, and unlock badges as you improve!',
     position: 'top',
     highlightPadding: 8,
-    action: {
-      type: 'navigate',
-      path: '/dashboard'
-    }
+    waitForElement: true
   },
   {
     id: 'assignments',

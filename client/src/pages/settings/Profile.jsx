@@ -6,17 +6,22 @@ import {
   Bell,
   Save,
   RotateCcw,
-  Award
+  Award,
+  GraduationCap,
+  PlayCircle
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
 import { BadgeShowcase } from '../../components/gamification';
+import { useTutorial } from '../../hooks/useTutorial';
 
 export default function Profile() {
   const { profile, authFetch } = useAuth();
   const notifications = useNotifications();
   const showSuccess = notifications?.showSuccess || (() => {});
   const showError = notifications?.showError || (() => {});
+  const { startTutorial, isActive: tutorialActive } = useTutorial();
+  const [restartingTutorial, setRestartingTutorial] = useState(false);
 
   const [formData, setFormData] = useState({
     full_name: '',
@@ -97,6 +102,34 @@ export default function Profile() {
         }
       });
       setHasChanges(false);
+    }
+  };
+
+  const handleRestartTutorial = async () => {
+    setRestartingTutorial(true);
+    try {
+      // Reset onboarding status in backend
+      const response = await authFetch('/api/onboarding/reset', {
+        method: 'POST'
+      });
+
+      if (response.ok) {
+        // Clear local storage
+        localStorage.removeItem('csr_tutorial_state');
+        // Start the tutorial
+        startTutorial();
+        showSuccess('Tutorial Restarted', 'The guided walkthrough will begin now');
+      } else {
+        throw new Error('Failed to reset tutorial');
+      }
+    } catch (error) {
+      console.error('Error restarting tutorial:', error);
+      // Even if backend fails, try to start locally
+      localStorage.removeItem('csr_tutorial_state');
+      startTutorial();
+      showSuccess('Tutorial Started', 'The guided walkthrough will begin now');
+    } finally {
+      setRestartingTutorial(false);
     }
   };
 
@@ -257,6 +290,43 @@ export default function Profile() {
         </div>
 
         <BadgeShowcase maxDisplay={8} />
+      </motion.div>
+
+      {/* Tutorial & Help */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+      >
+        <div className="flex items-center gap-3 mb-6">
+          <div className="p-2 bg-green-500/10 rounded-lg">
+            <GraduationCap className="w-6 h-6 text-green-400" />
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-gray-100">Tutorial & Help</h2>
+            <p className="text-sm text-gray-400">Learn how to use the platform</p>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between p-4 bg-gray-750 rounded-lg">
+          <div>
+            <p className="font-medium text-gray-100">Guided Walkthrough</p>
+            <p className="text-sm text-gray-400">
+              {tutorialActive
+                ? 'Tutorial is currently active - follow the highlighted steps'
+                : 'Take a guided tour of all the features and learn how to get started'}
+            </p>
+          </div>
+          <button
+            onClick={handleRestartTutorial}
+            disabled={restartingTutorial || tutorialActive}
+            className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-green-600/50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors"
+          >
+            <PlayCircle className="w-5 h-5" />
+            {restartingTutorial ? 'Starting...' : tutorialActive ? 'In Progress' : 'Start Tutorial'}
+          </button>
+        </div>
       </motion.div>
     </div>
   );

@@ -481,10 +481,6 @@ router.post('/complete-setup', authMiddleware, tenantMiddleware, requireRole('ad
     // Get current organization settings, defaulting to empty object if null
     const currentSettings = req.organization?.settings || {};
 
-    console.log('[SETUP] Completing setup for org:', req.organization?.id);
-    console.log('[SETUP] Current settings:', JSON.stringify(currentSettings));
-    console.log('[SETUP] Step data received:', JSON.stringify(setupData));
-
     // Build update data from step data
     const updateData = {
       settings: {
@@ -541,7 +537,13 @@ router.post('/complete-setup', authMiddleware, tenantMiddleware, requireRole('ad
       };
     }
 
-    console.log('[SETUP] Final update data:', JSON.stringify(updateData, null, 2));
+    // AI settings are saved directly by each step via /api/admin/prompts
+    // but we preserve any existing customPrompts settings here
+    const existingCustomPrompts = currentSettings.customPrompts || {};
+    updateData.settings = {
+      ...updateData.settings,
+      customPrompts: existingCustomPrompts
+    };
 
     const { data: org, error } = await adminClient
       .from('organizations')
@@ -551,19 +553,11 @@ router.post('/complete-setup', authMiddleware, tenantMiddleware, requireRole('ad
       .single();
 
     if (error) {
-      console.error('[SETUP] Database error:', error);
       throw error;
     }
 
-    console.log('[SETUP] Setup completed successfully');
-    console.log('[SETUP] Saved org data:', {
-      name: org.name,
-      logo_url: org.logo_url,
-      brand_colors: org.brand_colors
-    });
     res.json({ success: true, organization: org });
   } catch (error) {
-    console.error('[SETUP] Error completing setup:', error);
     res.status(500).json({ error: error.message || 'Failed to complete setup' });
   }
 });

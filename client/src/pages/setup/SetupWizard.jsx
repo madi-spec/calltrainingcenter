@@ -14,74 +14,125 @@ import {
   Loader2,
   Layers,
   MessageSquare,
-  ClipboardCheck
+  ClipboardCheck,
+  Bot,
+  Sliders,
+  Settings2
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useOrganization } from '../../context/OrganizationContext';
+import { useNotifications } from '../../context/NotificationContext';
 import CompanyInfoStep from './steps/CompanyInfoStep';
 import ServiceLinesStep from './steps/ServiceLinesStep';
 import PackagesStep from './steps/PackagesStep';
 import ObjectionsStep from './steps/ObjectionsStep';
 import CompetitorsStep from './steps/CompetitorsStep';
 import TeamSetupStep from './steps/TeamSetupStep';
+import AICustomerBehaviorStep from './steps/AICustomerBehaviorStep';
+import AICoachingStyleStep from './steps/AICoachingStyleStep';
+import AIScoringStep from './steps/AIScoringStep';
 import ReviewStep from './steps/ReviewStep';
 
 const STEPS = [
   {
     id: 'company',
     title: 'Company Info',
+    shortTitle: 'Company',
     description: 'Basic information about your business',
     icon: Building2,
     component: CompanyInfoStep,
-    required: true
+    required: true,
+    category: 'business'
   },
   {
     id: 'serviceLines',
     title: 'Service Lines',
+    shortTitle: 'Services',
     description: 'Select the services you offer',
     icon: Layers,
     component: ServiceLinesStep,
-    required: false
+    required: false,
+    category: 'business'
   },
   {
     id: 'packages',
     title: 'Packages',
+    shortTitle: 'Packages',
     description: 'Configure your service packages',
     icon: Package,
     component: PackagesStep,
-    required: false
+    required: false,
+    category: 'business'
   },
   {
     id: 'objections',
     title: 'Objections',
+    shortTitle: 'Objections',
     description: 'Set up objection handling',
     icon: MessageSquare,
     component: ObjectionsStep,
-    required: false
+    required: false,
+    category: 'business'
   },
   {
     id: 'competitors',
     title: 'Competitors',
+    shortTitle: 'Competitors',
     description: 'Add competitor information',
     icon: Swords,
     component: CompetitorsStep,
-    required: false
+    required: false,
+    category: 'business'
+  },
+  {
+    id: 'aiCustomer',
+    title: 'AI Customer Behavior',
+    shortTitle: 'AI Customer',
+    description: 'How AI customers behave',
+    icon: Bot,
+    component: AICustomerBehaviorStep,
+    required: false,
+    category: 'ai'
+  },
+  {
+    id: 'aiCoaching',
+    title: 'Coaching Style',
+    shortTitle: 'Coaching',
+    description: 'How feedback is delivered',
+    icon: MessageSquare,
+    component: AICoachingStyleStep,
+    required: false,
+    category: 'ai'
+  },
+  {
+    id: 'aiScoring',
+    title: 'Scoring Weights',
+    shortTitle: 'Scoring',
+    description: 'Customize scoring criteria',
+    icon: Sliders,
+    component: AIScoringStep,
+    required: false,
+    category: 'ai'
   },
   {
     id: 'team',
     title: 'Team',
+    shortTitle: 'Team',
     description: 'Invite your team members',
     icon: Users,
     component: TeamSetupStep,
-    required: false
+    required: false,
+    category: 'team'
   },
   {
     id: 'review',
     title: 'Review',
+    shortTitle: 'Review',
     description: 'Review and complete setup',
     icon: ClipboardCheck,
     component: ReviewStep,
-    required: true
+    required: true,
+    category: 'review'
   }
 ];
 
@@ -89,8 +140,13 @@ export default function SetupWizard() {
   const navigate = useNavigate();
   const { authFetch, role } = useAuth();
   const { organization, refreshOrganization } = useOrganization();
+  const notifications = useNotifications();
+  const showSuccess = notifications?.showSuccess || (() => {});
+  const showError = notifications?.showError || (() => {});
+
   const [currentStep, setCurrentStep] = useState(0);
   const [stepData, setStepData] = useState({});
+  const [visitedSteps, setVisitedSteps] = useState(new Set([0]));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
@@ -110,7 +166,9 @@ export default function SetupWizard() {
     }));
 
     if (currentStep < STEPS.length - 1) {
-      setCurrentStep(prev => prev + 1);
+      const nextStep = currentStep + 1;
+      setCurrentStep(nextStep);
+      setVisitedSteps(prev => new Set([...prev, nextStep]));
     } else {
       completeSetup();
     }
@@ -118,7 +176,9 @@ export default function SetupWizard() {
 
   const handleSkip = () => {
     if (currentStep < STEPS.length - 1) {
-      setCurrentStep(prev => prev + 1);
+      const nextStep = currentStep + 1;
+      setCurrentStep(nextStep);
+      setVisitedSteps(prev => new Set([...prev, nextStep]));
     } else {
       completeSetup();
     }
@@ -130,115 +190,154 @@ export default function SetupWizard() {
     }
   };
 
+  const handleJumpToStep = (index) => {
+    setVisitedSteps(prev => new Set([...prev, index]));
+    setCurrentStep(index);
+  };
+
   const completeSetup = async () => {
     setSaving(true);
     setError(null);
 
     try {
-      // Mark organization setup as complete
-      console.log('[SETUP] Completing setup with data:', stepData);
-      console.log('[SETUP] Company data being sent:', {
-        logo_url: stepData?.company?.logo_url,
-        brand_colors: stepData?.company?.brand_colors
-      });
       const response = await authFetch('/api/organizations/complete-setup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ setupData: stepData })
       });
 
-      console.log('[SETUP] Response status:', response.status);
-
       if (response.ok) {
-        console.log('[SETUP] API call succeeded, refreshing organization...');
         try {
           await refreshOrganization();
         } catch (refreshErr) {
-          console.warn('[SETUP] Failed to refresh organization, continuing anyway:', refreshErr);
+          // Continue anyway
         }
-        console.log('[SETUP] Navigating to dashboard');
+        showSuccess('Setup Complete', 'Your organization is ready to go!');
         navigate('/dashboard');
       } else {
         let errorMessage = 'Failed to complete setup';
         try {
           const data = await response.json();
-          console.error('[SETUP] Setup failed:', data);
           errorMessage = data.error || errorMessage;
         } catch (parseErr) {
-          console.error('[SETUP] Failed to parse error response:', parseErr);
+          // Use default error
         }
         setError(errorMessage);
       }
     } catch (err) {
-      console.error('[SETUP] Error during setup:', err);
       setError(`An error occurred: ${err.message || 'Please try again.'}`);
     } finally {
       setSaving(false);
     }
   };
 
+  // Group steps by category for the navigation
+  const businessSteps = STEPS.filter(s => s.category === 'business');
+  const aiSteps = STEPS.filter(s => s.category === 'ai');
+  const teamSteps = STEPS.filter(s => s.category === 'team');
+  const reviewSteps = STEPS.filter(s => s.category === 'review');
+
+  const renderStepButton = (step, index) => {
+    const StepIcon = step.icon;
+    const isComplete = visitedSteps.has(index) && stepData[step.id];
+    const isCurrent = index === currentStep;
+    const isVisited = visitedSteps.has(index);
+
+    return (
+      <button
+        key={step.id}
+        onClick={() => handleJumpToStep(index)}
+        className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left ${
+          isCurrent
+            ? 'bg-primary-500/20 text-primary-400 ring-2 ring-primary-500/50'
+            : isComplete
+            ? 'text-green-400 hover:bg-gray-700 cursor-pointer'
+            : isVisited
+            ? 'text-gray-300 hover:bg-gray-700 cursor-pointer'
+            : 'text-gray-500 hover:bg-gray-700 hover:text-gray-400 cursor-pointer'
+        }`}
+      >
+        <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${
+          isComplete
+            ? 'bg-green-500/20'
+            : isCurrent
+            ? 'bg-primary-500/20'
+            : 'bg-gray-700'
+        }`}>
+          {isComplete ? (
+            <CheckCircle2 className="w-4 h-4 text-green-400" />
+          ) : (
+            <StepIcon className="w-3.5 h-3.5" />
+          )}
+        </div>
+        <span className="text-sm font-medium whitespace-nowrap">{step.shortTitle}</span>
+      </button>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-900">
       {/* Header */}
       <div className="bg-gray-800 border-b border-gray-700">
-        <div className="max-w-4xl mx-auto px-4 py-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary-500/10 rounded-xl">
-              <Sparkles className="w-6 h-6 text-primary-400" />
+        <div className="max-w-6xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-primary-500/10 rounded-xl">
+                <Settings2 className="w-6 h-6 text-primary-400" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-gray-100">Setup Your Organization</h1>
+                <p className="text-sm text-gray-400">Click any section to configure</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-xl font-bold text-gray-100">Setup Your Organization</h1>
-              <p className="text-sm text-gray-400">Let's configure your training platform</p>
-            </div>
+            <button
+              onClick={() => navigate('/dashboard')}
+              className="text-sm text-gray-400 hover:text-gray-300"
+            >
+              Exit Setup
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Progress Indicator */}
-      <div className="bg-gray-800/50 border-b border-gray-700">
-        <div className="max-w-4xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            {STEPS.map((step, index) => {
-              const StepIcon = step.icon;
-              const isComplete = index < currentStep;
-              const isCurrent = index === currentStep;
+      {/* Navigation Tabs */}
+      <div className="bg-gray-800/50 border-b border-gray-700 sticky top-0 z-10">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="py-3 space-y-3">
+            {/* Business Info Row */}
+            <div>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-1">Business Info</p>
+              <div className="flex flex-wrap gap-2">
+                {businessSteps.map((step) => renderStepButton(step, STEPS.findIndex(s => s.id === step.id)))}
+              </div>
+            </div>
 
-              return (
-                <div key={step.id} className="flex items-center">
-                  <button
-                    onClick={() => index < currentStep && setCurrentStep(index)}
-                    disabled={index > currentStep}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
-                      isCurrent
-                        ? 'bg-primary-500/20 text-primary-400'
-                        : isComplete
-                        ? 'text-green-400 hover:bg-gray-700 cursor-pointer'
-                        : 'text-gray-500'
-                    }`}
-                  >
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      isComplete
-                        ? 'bg-green-500/20'
-                        : isCurrent
-                        ? 'bg-primary-500/20'
-                        : 'bg-gray-700'
-                    }`}>
-                      {isComplete ? (
-                        <CheckCircle2 className="w-5 h-5 text-green-400" />
-                      ) : (
-                        <StepIcon className="w-4 h-4" />
-                      )}
-                    </div>
-                    <span className="hidden md:inline text-sm font-medium">{step.title}</span>
-                  </button>
-                  {index < STEPS.length - 1 && (
-                    <ChevronRight className={`w-5 h-5 mx-2 ${
-                      index < currentStep ? 'text-green-400' : 'text-gray-600'
-                    }`} />
-                  )}
+            {/* AI Settings Row */}
+            <div>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-1 flex items-center gap-1">
+                <Sparkles className="w-3 h-3" />
+                AI Settings
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {aiSteps.map((step) => renderStepButton(step, STEPS.findIndex(s => s.id === step.id)))}
+              </div>
+            </div>
+
+            {/* Team & Review Row */}
+            <div className="flex gap-6">
+              <div>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-1">Team</p>
+                <div className="flex flex-wrap gap-2">
+                  {teamSteps.map((step) => renderStepButton(step, STEPS.findIndex(s => s.id === step.id)))}
                 </div>
-              );
-            })}
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-1">Finish</p>
+                <div className="flex flex-wrap gap-2">
+                  {reviewSteps.map((step) => renderStepButton(step, STEPS.findIndex(s => s.id === step.id)))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -255,6 +354,12 @@ export default function SetupWizard() {
           >
             {/* Step Header */}
             <div className="mb-8">
+              <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+                <span>Step {currentStep + 1} of {STEPS.length}</span>
+                {STEPS[currentStep].required && (
+                  <span className="px-2 py-0.5 bg-primary-500/20 text-primary-400 rounded text-xs">Required</span>
+                )}
+              </div>
               <h2 className="text-2xl font-bold text-gray-100">
                 {STEPS[currentStep].title}
               </h2>
@@ -277,7 +382,7 @@ export default function SetupWizard() {
               onComplete={handleStepComplete}
               authFetch={authFetch}
               organization={organization}
-              onEditStep={(stepIndex) => setCurrentStep(stepIndex)}
+              onEditStep={(stepIndex) => handleJumpToStep(stepIndex)}
             />
 
             {/* Navigation Buttons */}

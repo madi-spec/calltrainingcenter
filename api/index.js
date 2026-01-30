@@ -1373,6 +1373,7 @@ app.post('/api/admin/prompts', optionalAuthMiddleware, async (req, res) => {
       agentWizardAnswers,
       coachingWizardAnswers,
       scoringCriteria,
+      scoringWeights,
       preserveAgent,
       preserveCoaching
     } = req.body;
@@ -1390,7 +1391,8 @@ app.post('/api/admin/prompts', optionalAuthMiddleware, async (req, res) => {
         user: preserveCoaching ? currentCustomPrompts.coaching?.user : (coachingUserPrompt !== undefined ? coachingUserPrompt : currentCustomPrompts.coaching?.user)
       },
       coachingWizardAnswers: preserveCoaching ? currentCustomPrompts.coachingWizardAnswers : (coachingWizardAnswers !== undefined ? coachingWizardAnswers : currentCustomPrompts.coachingWizardAnswers),
-      scoringCriteria: scoringCriteria !== undefined ? scoringCriteria : currentCustomPrompts.scoringCriteria
+      scoringCriteria: scoringCriteria !== undefined ? scoringCriteria : currentCustomPrompts.scoringCriteria,
+      scoringWeights: scoringWeights !== undefined ? scoringWeights : currentCustomPrompts.scoringWeights
     };
 
     const updatedSettings = {

@@ -21,7 +21,8 @@ import {
   BookOpen,
   Wand2,
   Sun,
-  Moon
+  Moon,
+  PenSquare
 } from 'lucide-react';
 import { useOrganization } from '../context/OrganizationContext';
 import { useAuth } from '../context/AuthContext';
@@ -100,6 +101,7 @@ function Layout({ children }) {
     { to: '/courses', icon: BookOpen, label: 'Courses', roles: ['trainee', 'manager', 'admin', 'owner'] },
     { to: '/my-assignments', icon: ClipboardList, label: 'My Assignments', roles: ['trainee', 'manager', 'admin', 'owner'] },
     { to: '/assignments', icon: ClipboardList, label: 'Assign Training', roles: ['manager', 'admin', 'owner'] },
+    { to: '/builder', icon: PenSquare, label: 'Scenario Builder', roles: ['manager', 'admin', 'owner'] },
     { to: '/reports', icon: BarChart3, label: 'Reports', roles: ['trainee', 'manager', 'admin', 'owner'] },
     { to: '/leaderboard', icon: Trophy, label: 'Leaderboard', roles: ['trainee', 'manager', 'admin', 'owner'] },
   ];

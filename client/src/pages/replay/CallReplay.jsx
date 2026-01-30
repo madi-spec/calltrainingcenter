@@ -2,11 +2,12 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { AudioPlayer, TranscriptSyncViewer } from '../../components/replay';
-import api from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 
 function CallReplay() {
   const { sessionId } = useParams();
   const navigate = useNavigate();
+  const { authFetch } = useAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [recording, setRecording] = useState(null);
@@ -29,23 +30,30 @@ function CallReplay() {
 
       // Fetch recording, session details, and bookmarks in parallel
       const [recordingRes, sessionRes, bookmarksRes] = await Promise.all([
-        api.get(`/api/recordings/${sessionId}`),
-        api.get(`/api/training/sessions/${sessionId}`),
-        api.get(`/api/recordings/${sessionId}/bookmarks`)
+        authFetch(`/api/recordings/${sessionId}`),
+        authFetch(`/api/training/sessions/${sessionId}`),
+        authFetch(`/api/recordings/${sessionId}/bookmarks`)
       ]);
 
-      setRecording(recordingRes.data.recording);
-      setSession(sessionRes.data.session);
-      setBookmarks(bookmarksRes.data.bookmarks || []);
+      if (recordingRes.status === 404) {
+        setError('Recording not found. This session may not have been recorded.');
+        return;
+      }
+      if (recordingRes.status === 403) {
+        setError('You do not have permission to view this recording.');
+        return;
+      }
+
+      const recordingData = await recordingRes.json();
+      const sessionData = await sessionRes.json();
+      const bookmarksData = await bookmarksRes.json();
+
+      setRecording(recordingData.recording);
+      setSession(sessionData.session);
+      setBookmarks(bookmarksData.bookmarks || []);
     } catch (err) {
       console.error('Error fetching recording:', err);
-      if (err.response?.status === 404) {
-        setError('Recording not found. This session may not have been recorded.');
-      } else if (err.response?.status === 403) {
-        setError('You do not have permission to view this recording.');
-      } else {
-        setError('Failed to load recording. Please try again.');
-      }
+      setError('Failed to load recording. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -70,17 +78,24 @@ function CallReplay() {
     if (pendingBookmarkTime === null) return;
 
     try {
-      const res = await api.post(`/api/recordings/${sessionId}/bookmarks`, {
-        timestampSeconds: pendingBookmarkTime,
-        label: bookmarkLabel || null,
-        note: bookmarkNote || null,
-        bookmarkType: 'general'
+      const response = await authFetch(`/api/recordings/${sessionId}/bookmarks`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          timestampSeconds: pendingBookmarkTime,
+          label: bookmarkLabel || null,
+          note: bookmarkNote || null,
+          bookmarkType: 'general'
+        })
       });
 
-      setBookmarks(prev => [...prev, res.data.bookmark].sort((a, b) =>
-        a.timestamp_seconds - b.timestamp_seconds
-      ));
-      setShowBookmarkModal(false);
+      if (response.ok) {
+        const data = await response.json();
+        setBookmarks(prev => [...prev, data.bookmark].sort((a, b) =>
+          a.timestamp_seconds - b.timestamp_seconds
+        ));
+        setShowBookmarkModal(false);
+      }
     } catch (err) {
       console.error('Error saving bookmark:', err);
     }
@@ -88,8 +103,12 @@ function CallReplay() {
 
   const deleteBookmark = async (bookmarkId) => {
     try {
-      await api.delete(`/api/recordings/${sessionId}/bookmarks/${bookmarkId}`);
-      setBookmarks(prev => prev.filter(b => b.id !== bookmarkId));
+      const response = await authFetch(`/api/recordings/${sessionId}/bookmarks/${bookmarkId}`, {
+        method: 'DELETE'
+      });
+      if (response.ok) {
+        setBookmarks(prev => prev.filter(b => b.id !== bookmarkId));
+      }
     } catch (err) {
       console.error('Error deleting bookmark:', err);
     }

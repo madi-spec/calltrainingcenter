@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { AttemptTimeline, ScoreComparisonChart } from '../../components/analysis';
-import api from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 
 function ComparativeAnalysis() {
   const { scenarioId } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { authFetch } = useAuth();
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -25,15 +26,17 @@ function ComparativeAnalysis() {
       setLoading(true);
       setError(null);
 
-      const res = await api.get(`/api/analysis/comparative/${scenarioId}`);
-      setData(res.data);
+      const response = await authFetch(`/api/analysis/comparative/${scenarioId}`);
+      if (!response.ok) throw new Error('Failed to fetch');
+      const resData = await response.json();
+      setData(resData);
 
       // Select the latest attempt by default or from URL params
       const attemptParam = searchParams.get('attempt');
       if (attemptParam) {
         setSelectedAttempt(parseInt(attemptParam));
-      } else if (res.data.attempts?.length > 0) {
-        setSelectedAttempt(res.data.attempts.length);
+      } else if (resData.attempts?.length > 0) {
+        setSelectedAttempt(resData.attempts.length);
       }
     } catch (err) {
       console.error('Error fetching comparative data:', err);
@@ -45,8 +48,10 @@ function ComparativeAnalysis() {
 
   const fetchScenarioInfo = async () => {
     try {
-      const res = await api.get(`/api/scenarios/${scenarioId}`);
-      setScenarioInfo(res.data.scenario);
+      const response = await authFetch(`/api/scenarios/${scenarioId}`);
+      if (!response.ok) throw new Error('Failed to fetch');
+      const resData = await response.json();
+      setScenarioInfo(resData.scenario);
     } catch (err) {
       console.error('Error fetching scenario info:', err);
     }

@@ -397,6 +397,10 @@ function Results() {
   };
 
   const handleTryAgain = () => {
+    if (!scenario?.id) {
+      cleanupAndNavigate('/');
+      return;
+    }
     if (isModuleScenario) {
       cleanupAndNavigate(`/modules/${scenario.moduleId}`);
     } else {
@@ -405,7 +409,7 @@ function Results() {
   };
 
   const handleNewScenario = () => {
-    if (isModuleScenario) {
+    if (isModuleScenario && scenario?.moduleId) {
       cleanupAndNavigate(`/modules/${scenario.moduleId}`);
     } else {
       cleanupAndNavigate('/');
@@ -413,7 +417,11 @@ function Results() {
   };
 
   const handleBackToModule = () => {
-    cleanupAndNavigate(`/modules/${scenario.moduleId}`);
+    if (scenario?.moduleId) {
+      cleanupAndNavigate(`/modules/${scenario.moduleId}`);
+    } else {
+      cleanupAndNavigate('/');
+    }
   };
 
   // Handle case where analysis failed

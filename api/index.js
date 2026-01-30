@@ -1052,12 +1052,20 @@ app.post('/api/calls/create-training-call', optionalAuthMiddleware, async (req, 
       try {
         const adminClient = createAdminClient();
 
+        // Get attempt number for this scenario
+        const { count } = await adminClient
+          .from(TABLES.TRAINING_SESSIONS)
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', req.user.id)
+          .eq('scenario_id', scenario.id);
+
         const insertData = {
           organization_id: req.organization.id,
           user_id: req.user.id,
           scenario_id: scenario.id,
           scenario_name: scenario.name,
           retell_call_id: webCall.call_id,
+          attempt_number: (count || 0) + 1,
           status: 'in_progress',
           started_at: new Date().toISOString()
         };

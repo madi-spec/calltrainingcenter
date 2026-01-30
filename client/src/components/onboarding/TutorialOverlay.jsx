@@ -81,6 +81,7 @@ export default function TutorialOverlay() {
   useEffect(() => {
     if (!isActive) return;
 
+    // Initial attempt to find element
     updateTargetRect();
 
     // Re-measure on resize and scroll
@@ -90,13 +91,22 @@ export default function TutorialOverlay() {
     window.addEventListener('resize', handleResize);
     window.addEventListener('scroll', handleScroll, true);
 
-    // Poll for element if waitForElement is true
+    // Always poll for element if it's a highlight step - element may not be ready yet
     let pollInterval;
-    if (currentStep?.waitForElement && !targetRect) {
+    let pollCount = 0;
+    const maxPolls = 25; // 5 seconds max
+
+    if (currentStep?.type === 'highlight') {
       pollInterval = setInterval(() => {
+        pollCount++;
         const target = document.querySelector(currentStep.target);
+
         if (target) {
+          console.log('[Tutorial Debug] Element found after polling, attempts:', pollCount);
           updateTargetRect();
+          clearInterval(pollInterval);
+        } else if (pollCount >= maxPolls) {
+          console.log('[Tutorial Debug] Gave up polling for element after', pollCount, 'attempts');
           clearInterval(pollInterval);
         }
       }, 200);

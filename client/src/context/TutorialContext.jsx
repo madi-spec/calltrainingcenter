@@ -108,40 +108,42 @@ export function TutorialProvider({ children }) {
     const newCompleted = [...new Set([...completedSteps, currentStep.id])];
     setCompletedSteps(newCompleted);
 
+    // Handle navigation actions from CURRENT step (runs before showing next step)
+    // This ensures we navigate to the right page before the next step tries to find its element
+    if (currentStep.action?.type === 'navigate') {
+      console.log('[Tutorial] Navigating to:', currentStep.action.path);
+      navigate(currentStep.action.path);
+      // Wait for navigation to complete
+      await new Promise(resolve => setTimeout(resolve, 300));
+    } else if (currentStep.action?.type === 'navigate-to-scenario') {
+      // Fetch first available scenario and navigate to it
+      try {
+        const response = await authFetch('/api/scenarios');
+        if (response.ok) {
+          const data = await response.json();
+          const scenarios = data.scenarios || [];
+          if (scenarios.length > 0) {
+            console.log('[Tutorial] Navigating to scenario:', scenarios[0].id);
+            navigate(`/scenario/${scenarios[0].id}`);
+            // Wait for navigation to complete
+            await new Promise(resolve => setTimeout(resolve, 500));
+          } else {
+            console.warn('[Tutorial] No scenarios available, skipping scenario steps');
+            // Skip scenario-related steps and go to gamification
+            navigate('/dashboard');
+            await new Promise(resolve => setTimeout(resolve, 300));
+          }
+        } else {
+          console.error('[Tutorial] Failed to fetch scenarios:', response.status);
+        }
+      } catch (error) {
+        console.error('[Tutorial] Error fetching scenarios:', error);
+      }
+    }
+
     if (next) {
       setCurrentStep(next);
       saveState(newCompleted, next, true);
-
-      // Handle navigation actions
-      if (next.action?.type === 'navigate') {
-        navigate(next.action.path);
-      } else if (next.action?.type === 'navigate-to-scenario') {
-        // Fetch first available scenario and navigate to it
-        try {
-          const response = await authFetch('/api/scenarios');
-          if (response.ok) {
-            const data = await response.json();
-            const scenarios = data.scenarios || [];
-            if (scenarios.length > 0) {
-              console.log('[Tutorial] Navigating to scenario:', scenarios[0].id);
-              navigate(`/scenario/${scenarios[0].id}`);
-            } else {
-              console.warn('[Tutorial] No scenarios available, skipping to next step');
-              // Skip to gamification step if no scenarios
-              const gamificationStep = TUTORIAL_STEPS.find(s => s.id === 'gamification');
-              if (gamificationStep) {
-                setCurrentStep(gamificationStep);
-                saveState(newCompleted, gamificationStep, true);
-                navigate('/dashboard');
-              }
-            }
-          } else {
-            console.error('[Tutorial] Failed to fetch scenarios:', response.status);
-          }
-        } catch (error) {
-          console.error('[Tutorial] Error fetching scenarios:', error);
-        }
-      }
 
       // Update backend
       authFetch('/api/onboarding/progress', {

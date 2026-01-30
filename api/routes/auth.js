@@ -24,14 +24,20 @@ router.post('/sync-user', authMiddleware, async (req, res) => {
     }
 
     // User authenticated with Clerk but not in database - create new user
+    console.log('[Auth] User not found in database, creating new user...');
+    console.log('[Auth] Request body:', { clerkId, email, fullName, imageUrl: imageUrl ? 'present' : 'missing' });
+
     if (!clerkId || !email) {
+      console.log('[Auth] Missing required fields');
       return res.status(400).json({ error: 'Missing required fields: clerkId, email' });
     }
 
+    console.log('[Auth] Creating admin client for insert...');
     const adminClient = createAdminClient();
 
     // Create organization for new user
     const organizationName = fullName ? `${fullName}'s Organization` : 'My Organization';
+    console.log('[Auth] Creating organization:', organizationName);
     const slug = organizationName
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
@@ -70,11 +76,13 @@ router.post('/sync-user', authMiddleware, async (req, res) => {
       .single();
 
     if (orgError) {
-      console.error('Error creating organization:', orgError);
-      return res.status(500).json({ error: 'Failed to create organization' });
+      console.error('[Auth] Error creating organization:', orgError);
+      return res.status(500).json({ error: 'Failed to create organization', details: orgError.message });
     }
+    console.log('[Auth] Organization created:', { id: org.id, name: org.name });
 
     // Create primary branch
+    console.log('[Auth] Creating branch...');
     const { data: branch, error: branchError } = await adminClient
       .from(TABLES.BRANCHES)
       .insert({
@@ -87,7 +95,9 @@ router.post('/sync-user', authMiddleware, async (req, res) => {
       .single();
 
     if (branchError) {
-      console.error('Error creating branch:', branchError);
+      console.error('[Auth] Error creating branch:', branchError);
+    } else {
+      console.log('[Auth] Branch created:', { id: branch?.id, name: branch?.name });
     }
 
     // Create user profile with clerk_id

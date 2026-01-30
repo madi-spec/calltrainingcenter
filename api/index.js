@@ -1202,19 +1202,34 @@ app.post('/api/admin/prompts', optionalAuthMiddleware, async (req, res) => {
       return res.status(401).json({ error: 'Authentication required' });
     }
 
-    const { agentPrompt, coachingSystemPrompt, coachingUserPrompt } = req.body;
+    const {
+      agentPrompt,
+      coachingSystemPrompt,
+      coachingUserPrompt,
+      agentWizardAnswers,
+      coachingWizardAnswers,
+      preserveAgent,
+      preserveCoaching
+    } = req.body;
 
     // Update organization settings with custom prompts
     const currentSettings = req.organization.settings || {};
+    const currentCustomPrompts = currentSettings.customPrompts || {};
+
+    // Build new custom prompts, preserving existing values if flags are set
+    const newCustomPrompts = {
+      agent: preserveAgent ? currentCustomPrompts.agent : (agentPrompt !== undefined ? agentPrompt : currentCustomPrompts.agent),
+      agentWizardAnswers: preserveAgent ? currentCustomPrompts.agentWizardAnswers : (agentWizardAnswers !== undefined ? agentWizardAnswers : currentCustomPrompts.agentWizardAnswers),
+      coaching: {
+        system: preserveCoaching ? currentCustomPrompts.coaching?.system : (coachingSystemPrompt !== undefined ? coachingSystemPrompt : currentCustomPrompts.coaching?.system),
+        user: preserveCoaching ? currentCustomPrompts.coaching?.user : (coachingUserPrompt !== undefined ? coachingUserPrompt : currentCustomPrompts.coaching?.user)
+      },
+      coachingWizardAnswers: preserveCoaching ? currentCustomPrompts.coachingWizardAnswers : (coachingWizardAnswers !== undefined ? coachingWizardAnswers : currentCustomPrompts.coachingWizardAnswers)
+    };
+
     const updatedSettings = {
       ...currentSettings,
-      customPrompts: {
-        agent: agentPrompt || null,
-        coaching: {
-          system: coachingSystemPrompt || null,
-          user: coachingUserPrompt || null
-        }
-      }
+      customPrompts: newCustomPrompts
     };
 
     const adminClient = createAdminClient();

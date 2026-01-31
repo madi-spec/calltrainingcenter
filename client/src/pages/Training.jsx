@@ -223,17 +223,17 @@ function Training() {
               </div>
 
               {/* Transcript */}
-              <Card className="mb-6 max-h-64 overflow-y-auto scrollbar-hide">
+              <Card className="mb-6 max-h-[28rem] overflow-y-auto scrollbar-hide">
                 <Card.Header>
-                  <Card.Title className="text-sm">Live Transcript</Card.Title>
+                  <Card.Title>Live Transcript</Card.Title>
                 </Card.Header>
                 <Card.Content>
                   {transcript.length === 0 ? (
-                    <p className="text-gray-500 text-center py-4">
+                    <p className="text-gray-400 text-center py-6">
                       Conversation will appear here...
                     </p>
                   ) : (
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       {transcript.map((entry, index) => (
                         <motion.div
                           key={index}
@@ -244,16 +244,16 @@ function Training() {
                           }`}
                         >
                           <div
-                            className={`max-w-[80%] rounded-lg px-3 py-2 ${
+                            className={`max-w-[85%] rounded-lg px-4 py-3 ${
                               entry.role === 'agent'
                                 ? 'bg-purple-500/20 text-purple-100'
                                 : 'bg-blue-500/20 text-blue-100'
                             }`}
                           >
-                            <p className="text-xs font-medium mb-1 opacity-70">
+                            <p className="text-sm font-medium mb-1 opacity-70">
                               {entry.role === 'agent' ? currentScenario.customerName : 'You'}
                             </p>
-                            <p className="text-sm">{entry.content}</p>
+                            <p className="text-base leading-relaxed">{entry.content}</p>
                           </div>
                         </motion.div>
                       ))}

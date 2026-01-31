@@ -80,6 +80,21 @@ function Results() {
 
       if (response.ok) {
         console.log('[SESSION SAVE] Success - session saved to database');
+
+        // Also log this as practice for today's practice tracking
+        try {
+          await authFetch('/api/practice/log', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              duration_seconds: lastResults?.duration || 0,
+              session_id: sessionId
+            })
+          });
+          console.log('[PRACTICE LOG] Practice logged successfully');
+        } catch (practiceErr) {
+          console.error('[PRACTICE LOG] Error logging practice:', practiceErr);
+        }
       } else {
         const errorText = await response.text();
         console.error('[SESSION SAVE] Failed:', response.status, errorText);

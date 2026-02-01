@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import DemoVideoModal from '../components/DemoVideoModal';
 import {
   Phone,
   Zap,
@@ -19,6 +21,8 @@ import {
 } from 'lucide-react';
 
 function Landing() {
+  const [isDemoOpen, setIsDemoOpen] = useState(false);
+
   const problems = [
     {
       icon: Users,
@@ -219,7 +223,10 @@ function Landing() {
                 Start Free Trial
                 <ArrowRight className="w-5 h-5" />
               </Link>
-              <button className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-gray-50 border border-gray-200 rounded-xl font-semibold text-gray-900 transition-colors flex items-center justify-center gap-2">
+              <button
+                onClick={() => setIsDemoOpen(true)}
+                className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-gray-50 border border-gray-200 rounded-xl font-semibold text-gray-900 transition-colors flex items-center justify-center gap-2"
+              >
                 <Play className="w-5 h-5" />
                 Watch Demo
               </button>
@@ -600,6 +607,9 @@ function Landing() {
           </div>
         </div>
       </footer>
+
+      {/* Demo Video Modal */}
+      <DemoVideoModal isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
     </div>
   );
 }

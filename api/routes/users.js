@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { createAdminClient, TABLES } from '../lib/supabase.js';
-import { authMiddleware, tenantMiddleware, requireRole } from '../lib/auth.js';
-import { getAssignableRoles, validateRoleTransition } from '../lib/permissions.js';
+import { authMiddleware, tenantMiddleware, requireRole, requirePermission } from '../lib/auth.js';
+import { getAssignableRoles, validateRoleTransition, getRolePermissions, hasPermission } from '../lib/permissions.js';
 
 const router = Router();
 
@@ -52,6 +52,33 @@ router.get('/', requireRole('manager', 'admin', 'super_admin'), async (req, res)
     }));
 
     res.json({ users: usersWithCounts || [] });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * GET /api/users/me/permissions
+ * Debug endpoint: Get current user's permissions
+ */
+router.get('/me/permissions', async (req, res) => {
+  try {
+    const permissions = getRolePermissions(req.user.role);
+    const canInvite = hasPermission(req.user.role, 'users:invite');
+
+    res.json({
+      user: {
+        id: req.user.id,
+        email: req.user.email,
+        full_name: req.user.full_name,
+        role: req.user.role
+      },
+      permissions: permissions,
+      checks: {
+        'users:invite': canInvite,
+        canInviteUsers: canInvite
+      }
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -186,7 +213,7 @@ router.patch('/:id/role', requireRole('admin', 'super_admin'), async (req, res) 
  * POST /api/users/invite
  * Invite a new user
  */
-router.post('/invite', requireRole('admin', 'super_admin'), async (req, res) => {
+router.post('/invite', requirePermission('users:invite'), async (req, res) => {
   try {
     const { email, role, branch_id } = req.body;
 

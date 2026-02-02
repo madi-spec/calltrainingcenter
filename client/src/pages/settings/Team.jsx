@@ -9,7 +9,10 @@ import {
   Shield,
   Edit2,
   Trash2,
-  X
+  X,
+  Clock,
+  Send,
+  XCircle
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
@@ -26,6 +29,7 @@ export default function Team() {
   const { showSuccess, showError } = useNotifications();
 
   const [users, setUsers] = useState([]);
+  const [invitations, setInvitations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [showInviteModal, setShowInviteModal] = useState(false);
@@ -36,21 +40,29 @@ export default function Team() {
   const canEditRoles = hasPermission('users:change_role');
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchData = async () => {
       try {
-        const response = await authFetch('/api/users');
-        if (response.ok) {
-          const data = await response.json();
-          setUsers(data.users || []);
+        // Fetch users
+        const usersResponse = await authFetch('/api/users');
+        if (usersResponse.ok) {
+          const usersData = await usersResponse.json();
+          setUsers(usersData.users || []);
+        }
+
+        // Fetch pending invitations
+        const invitationsResponse = await authFetch('/api/invitations');
+        if (invitationsResponse.ok) {
+          const invitationsData = await invitationsResponse.json();
+          setInvitations(invitationsData.invitations || []);
         }
       } catch (error) {
-        console.error('Error fetching users:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUsers();
+    fetchData();
   }, [authFetch]);
 
   const filteredUsers = users.filter((u) =>
@@ -73,14 +85,54 @@ export default function Team() {
         showSuccess('Invitation Sent', `Invitation sent to ${inviteData.email}`);
         setShowInviteModal(false);
         setInviteData({ email: '', role: 'trainee', branch_id: '' });
+
+        // Refresh invitations list
+        const invitationsResponse = await authFetch('/api/invitations');
+        if (invitationsResponse.ok) {
+          const invitationsData = await invitationsResponse.json();
+          setInvitations(invitationsData.invitations || []);
+        }
       } else {
         const data = await response.json();
-        throw new Error(data.message || 'Failed to send invitation');
+        throw new Error(data.error || data.message || 'Failed to send invitation');
       }
     } catch (error) {
       showError('Error', error.message);
     } finally {
       setInviting(false);
+    }
+  };
+
+  const handleCancelInvitation = async (invitationId) => {
+    try {
+      const response = await authFetch(`/api/invitations/${invitationId}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        setInvitations((prev) => prev.filter((inv) => inv.id !== invitationId));
+        showSuccess('Invitation Cancelled', 'The invitation has been cancelled');
+      } else {
+        throw new Error('Failed to cancel invitation');
+      }
+    } catch (error) {
+      showError('Error', error.message);
+    }
+  };
+
+  const handleResendInvitation = async (invitationId) => {
+    try {
+      const response = await authFetch(`/api/invitations/${invitationId}/resend`, {
+        method: 'POST'
+      });
+
+      if (response.ok) {
+        showSuccess('Invitation Resent', 'The invitation has been resent');
+      } else {
+        throw new Error('Failed to resend invitation');
+      }
+    } catch (error) {
+      showError('Error', error.message);
     }
   };
 
@@ -172,6 +224,63 @@ export default function Team() {
           );
         })}
       </div>
+
+      {/* Pending Invitations */}
+      {invitations.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-gray-800 rounded-lg border border-gray-700"
+        >
+          <div className="p-6 border-b border-gray-700">
+            <div className="flex items-center gap-2">
+              <Clock className="w-5 h-5 text-yellow-400" />
+              <h2 className="text-lg font-semibold text-gray-100">
+                Pending Invitations ({invitations.length})
+              </h2>
+            </div>
+          </div>
+          <div className="divide-y divide-gray-700">
+            {invitations.map((invitation) => (
+              <div key={invitation.id} className="p-4 flex items-center justify-between hover:bg-gray-750">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3">
+                    <Mail className="w-5 h-5 text-gray-500" />
+                    <div>
+                      <p className="text-gray-100 font-medium">{invitation.email}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${getRoleBadgeColor(invitation.role)}`}>
+                          <Shield className="w-3 h-3" />
+                          {invitation.role.replace('_', ' ')}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          Expires {new Date(invitation.expires_at).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handleResendInvitation(invitation.id)}
+                    className="p-2 text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors"
+                    title="Resend invitation"
+                  >
+                    <Send className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => handleCancelInvitation(invitation.id)}
+                    className="p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+                    title="Cancel invitation"
+                  >
+                    <XCircle className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      )}
 
       {/* Team List */}
       <motion.div

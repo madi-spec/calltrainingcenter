@@ -145,6 +145,11 @@ export const ROLE_PERMISSIONS = {
     'notifications:send'
   ],
 
+  super_admin: [
+    // All permissions
+    ...Object.keys(PERMISSIONS)
+  ],
+
   owner: [
     // All permissions
     ...Object.keys(PERMISSIONS)

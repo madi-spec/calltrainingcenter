@@ -179,7 +179,7 @@ export default function CourseBuilder() {
       {/* Header */}
       <div className="mb-8">
         <button
-          onClick={() => navigate('/courses')}
+          onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-gray-400 hover:text-white mb-4 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -577,7 +577,7 @@ export default function CourseBuilder() {
         <div className="flex items-center justify-end gap-4">
           <button
             type="button"
-            onClick={() => navigate('/courses')}
+            onClick={() => navigate(-1)}
             className="px-6 py-3 text-gray-400 hover:text-white transition-colors"
           >
             Cancel

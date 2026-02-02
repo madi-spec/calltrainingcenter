@@ -95,6 +95,7 @@ export const ROLE_PERMISSIONS = {
     'suites:create',
     'users:view_own',
     'users:view_team',
+    'users:invite',
     'branches:view',
     'reports:view_own',
     'reports:view_team',

@@ -460,7 +460,7 @@ We've never had problems with your service"
         >
           <Button
             variant="secondary"
-            onClick={() => navigate('/')}
+            onClick={() => navigate(-1)}
           >
             Cancel
           </Button>

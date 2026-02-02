@@ -135,7 +135,7 @@ function PreCall() {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8 text-center">
         <h2 className="text-2xl font-bold text-white mb-4">Scenario not found</h2>
-        <Button onClick={() => navigate('/')}>Back to Scenarios</Button>
+        <Button onClick={handleBack}>Back to Scenarios</Button>
       </div>
     );
   }

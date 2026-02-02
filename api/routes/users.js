@@ -241,23 +241,64 @@ router.post('/invite', requirePermission('users:invite'), async (req, res) => {
       return res.status(400).json({ error: 'User already exists in organization' });
     }
 
-    // In a real implementation, you would:
-    // 1. Create an invitation record
-    // 2. Send an invitation email
-    // 3. The user clicks the link to complete signup
+    // Check if invitation already exists
+    const { data: existingInvite } = await adminClient
+      .from('invitations')
+      .select('id')
+      .eq('email', email.toLowerCase())
+      .eq('organization_id', req.organization.id)
+      .eq('status', 'pending')
+      .single();
 
-    // For now, we'll return a placeholder response
+    if (existingInvite) {
+      return res.status(400).json({ error: 'Invitation already pending for this email' });
+    }
+
+    // Generate invitation token
+    const crypto = await import('crypto');
+    const token = crypto.randomBytes(32).toString('hex');
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 7); // 7 days expiry
+
+    // Create invitation
+    const { data: invitation, error: inviteError } = await adminClient
+      .from('invitations')
+      .insert({
+        organization_id: req.organization.id,
+        email: email.toLowerCase(),
+        role,
+        branch_id,
+        token,
+        invited_by: req.user.id,
+        expires_at: expiresAt.toISOString(),
+        status: 'pending'
+      })
+      .select()
+      .single();
+
+    if (inviteError) throw inviteError;
+
+    // Generate invite URL
+    const inviteUrl = `${process.env.APP_URL || 'https://www.selleverycall.com'}/auth/accept-invite?token=${token}`;
+
+    // TODO: Send email with inviteUrl
+    console.log(`[INVITE] Created invitation for ${email}, URL: ${inviteUrl}`);
+
     res.json({
       success: true,
       message: `Invitation sent to ${email}`,
       invitation: {
-        email,
-        role,
-        branch_id,
-        expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
-      }
+        id: invitation.id,
+        email: invitation.email,
+        role: invitation.role,
+        branch_id: invitation.branch_id,
+        expires_at: invitation.expires_at
+      },
+      // Return URL for now until email sending is implemented
+      inviteUrl
     });
   } catch (error) {
+    console.error('[INVITE] Error:', error);
     res.status(500).json({ error: error.message });
   }
 });

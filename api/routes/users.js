@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { createAdminClient, TABLES } from '../lib/supabase.js';
 import { authMiddleware, tenantMiddleware, requireRole, requirePermission } from '../lib/auth.js';
 import { getAssignableRoles, validateRoleTransition, getRolePermissions, hasPermission } from '../lib/permissions.js';
+import { sendInvitationEmail } from '../lib/email.js';
 
 const router = Router();
 
@@ -281,12 +282,28 @@ router.post('/invite', requirePermission('users:invite'), async (req, res) => {
     // Generate invite URL
     const inviteUrl = `${process.env.APP_URL || 'https://www.selleverycall.com'}/auth/accept-invite?token=${token}`;
 
-    // TODO: Send email with inviteUrl
-    console.log(`[INVITE] Created invitation for ${email}, URL: ${inviteUrl}`);
+    // Send invitation email
+    const emailResult = await sendInvitationEmail({
+      to: email,
+      inviterName: req.user.full_name || req.user.email,
+      organizationName: req.organization.name,
+      role,
+      inviteUrl
+    });
+
+    if (emailResult.success) {
+      console.log(`[INVITE] Email sent successfully to ${email}`);
+    } else if (emailResult.skipped) {
+      console.log(`[INVITE] Email sending skipped (not configured), invitation URL: ${inviteUrl}`);
+    } else {
+      console.error(`[INVITE] Failed to send email to ${email}:`, emailResult.error);
+    }
 
     res.json({
       success: true,
-      message: `Invitation sent to ${email}`,
+      message: emailResult.success
+        ? `Invitation sent to ${email}`
+        : `Invitation created for ${email} (email not configured)`,
       invitation: {
         id: invitation.id,
         email: invitation.email,
@@ -294,8 +311,9 @@ router.post('/invite', requirePermission('users:invite'), async (req, res) => {
         branch_id: invitation.branch_id,
         expires_at: invitation.expires_at
       },
-      // Return URL for now until email sending is implemented
-      inviteUrl
+      emailSent: emailResult.success,
+      // Include URL in response if email wasn't sent
+      ...(!emailResult.success && { inviteUrl })
     });
   } catch (error) {
     console.error('[INVITE] Error:', error);

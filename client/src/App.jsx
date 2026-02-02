@@ -9,6 +9,7 @@ import { TutorialProvider } from './context/TutorialContext';
 
 // Public pages
 import Landing from './pages/Landing';
+import AcceptInvite from './pages/auth/AcceptInvite';
 
 // Existing pages
 import Home from './pages/Home';
@@ -113,6 +114,9 @@ function App() {
             </AuthPageWrapper>
           }
         />
+
+        {/* Accept Invitation Route - Public */}
+        <Route path="/auth/accept-invite" element={<AcceptInvite />} />
 
         {/* Onboarding Route - Protected but no Layout */}
         <Route

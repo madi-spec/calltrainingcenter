@@ -94,17 +94,28 @@ export default function AcceptInvite() {
         emailAddress: inviteData.email,
         password: formData.password,
         firstName: formData.fullName.split(' ')[0],
-        lastName: formData.fullName.split(' ').slice(1).join(' ') || ''
+        lastName: formData.fullName.split(' ').slice(1).join(' ') || '',
+        unsafeMetadata: {
+          invitationToken: token
+        }
       });
 
-      // Step 2: Prepare email verification
-      await signUpAttempt.prepareEmailAddressVerification({ strategy: 'email_code' });
+      // Step 2: Skip email verification for invited users - they're pre-verified
+      // The invitation link serves as verification
+      if (signUpAttempt.status === 'missing_requirements') {
+        // Complete the sign up without email verification
+        await signUpAttempt.update({
+          emailAddress: inviteData.email
+        });
+      }
 
-      // For now, we'll skip email verification for invited users
-      // In production, you might want to handle this differently
+      // Step 3: Set the session active BEFORE calling the backend
+      if (signUpAttempt.createdSessionId) {
+        await setActive({ session: signUpAttempt.createdSessionId });
+      }
 
-      // Step 3: Set the session active
-      await setActive({ session: signUpAttempt.createdSessionId });
+      // Wait a moment for the session to be fully set
+      await new Promise(resolve => setTimeout(resolve, 500));
 
       // Step 4: Accept the invitation in our backend
       const clerkToken = await getToken();
@@ -127,8 +138,8 @@ export default function AcceptInvite() {
       }
 
       // Success! Navigate to dashboard
-      navigate('/', { replace: true });
-      window.location.reload(); // Reload to load user profile
+      // Use window.location instead of navigate to ensure a full page load
+      window.location.href = '/';
     } catch (err) {
       console.error('Invitation acceptance error:', err);
       setError(err.message || err.errors?.[0]?.message || 'Failed to accept invitation');

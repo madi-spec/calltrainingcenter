@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SellEveryCall Postcard</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #e5e7eb;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
+
+    h1 {
+      font-size: 20px;
+      color: #333;
+    }
+
+    .instructions {
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 12px;
+      max-width: 600px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .instructions h2 {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .instructions ol {
+      margin-left: 20px;
+      font-size: 14px;
+      color: #555;
+      line-height: 1.8;
+    }
+
+    /* Postcard wrapper for crop marks */
+    .postcard-wrapper {
+      padding: 0.25in;
+      position: relative;
+    }
+
+    /* Postcard: 7" x 5" */
+    .postcard {
+      width: 7in;
+      height: 5in;
+      border-radius: 0;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    /* Cutting guides - corner crop marks */
+    .postcard::before,
+    .postcard::after {
+      content: '';
+      position: absolute;
+      width: 0.15in;
+      height: 0.15in;
+      border: 1.5px solid #999;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .postcard::before {
+      top: -0.2in;
+      left: -0.2in;
+      border-right: none;
+      border-bottom: none;
+    }
+
+    .postcard::after {
+      top: -0.2in;
+      right: -0.2in;
+      border-left: none;
+      border-bottom: none;
+    }
+
+    .crop-bottom-left,
+    .crop-bottom-right {
+      position: absolute;
+      width: 0.15in;
+      height: 0.15in;
+      border: 1.5px solid #999;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .crop-bottom-left {
+      bottom: -0.2in;
+      left: -0.2in;
+      border-right: none;
+      border-top: none;
+    }
+
+    .crop-bottom-right {
+      bottom: -0.2in;
+      right: -0.2in;
+      border-left: none;
+      border-top: none;
+    }
+
+    /* ============ FRONT ============ */
+    .front {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1fr 2in;
+    }
+
+    .front .glow {
+      position: absolute;
+      top: -80px;
+      right: 100px;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(236,72,153,0.25) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .front-main {
+      padding: 0.2in;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    /* Header row */
+    .front-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.1in;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-icon {
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, #ec4899 0%, #f97316 100%);
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon svg {
+      width: 14px;
+      height: 14px;
+      stroke: white;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .logo-text {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .industry-badge {
+      background: linear-gradient(135deg, #ec4899 0%, #f97316 100%);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 9px;
+      font-weight: 700;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Headline */
+    .headline {
+      margin-bottom: 0.1in;
+    }
+
+    .headline h1 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.1;
+    }
+
+    .headline .gradient {
+      display: block;
+      font-size: 26px;
+      background: linear-gradient(135deg, #ec4899 0%, #f97316 50%, #facc15 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Problem */
+    .problem {
+      background: rgba(255,255,255,0.05);
+      border-left: 3px solid #f97316;
+      padding: 8px 10px;
+      margin-bottom: 0.1in;
+    }
+
+    .problem p {
+      color: #cbd5e1;
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .problem strong {
+      color: #fb923c;
+    }
+
+    /* Features grid */
+    .features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 0.08in;
+    }
+
+    .feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .feature-icon {
+      width: 16px;
+      height: 16px;
+      background: linear-gradient(135deg, #ec4899 0%, #f97316 100%);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .feature-icon svg {
+      width: 10px;
+      height: 10px;
+      stroke: white;
+      fill: none;
+      stroke-width: 2.5;
+    }
+
+    .feature span {
+      color: #e2e8f0;
+      font-size: 10px;
+      font-weight: 500;
+      line-height: 1.25;
+    }
+
+    /* Stats */
+    .stats {
+      display: flex;
+      gap: 16px;
+      margin-top: auto;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 20px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ec4899 0%, #f97316 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 8px;
+      color: #64748b;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      margin-top: 2px;
+    }
+
+    /* CTA sidebar */
+    .front-cta {
+      background: rgba(255,255,255,0.05);
+      border-left: 1px solid rgba(255,255,255,0.1);
+      padding: 0.15in;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-headline {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+
+    .cta-subhead {
+      font-size: 9px;
+      color: #94a3b8;
+      margin-bottom: 10px;
+    }
+
+    .qr-code {
+      width: 80px;
+      height: 80px;
+      background: #fff;
+      border-radius: 8px;
+      padding: 4px;
+      margin-bottom: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .qr-code img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .scan-text {
+      font-size: 8px;
+      font-weight: 700;
+      color: #ec4899;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 3px;
+    }
+
+    .website {
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* ============ BACK ============ */
+    .back {
+      background: #ffffff;
+      height: 100%;
+      padding: 0.2in;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .back-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.08in;
+      padding-bottom: 0.06in;
+      border-bottom: 2px solid #f1f5f9;
+    }
+
+    .back .logo-icon {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    }
+
+    .back .logo-text {
+      color: #0f172a;
+    }
+
+    .back-tagline {
+      font-size: 11px;
+      color: #64748b;
+      font-style: italic;
+    }
+
+    /* How it works */
+    .how-section {
+      margin-bottom: 0.1in;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .steps {
+      display: flex;
+      gap: 14px;
+    }
+
+    .step {
+      flex: 1;
+      display: flex;
+      gap: 8px;
+    }
+
+    .step-number {
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(135deg, #ec4899 0%, #f97316 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .step-content h3 {
+      font-size: 10px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 1px;
+    }
+
+    .step-content p {
+      font-size: 9px;
+      color: #64748b;
+      line-height: 1.3;
+    }
+
+    /* Testimonial */
+    .testimonial {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      border-radius: 10px;
+      padding: 12px 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .quote-text {
+      font-size: 12px;
+      color: #e2e8f0;
+      line-height: 1.4;
+      font-style: italic;
+      margin-bottom: 8px;
+    }
+
+    .quote-text::before {
+      content: '"';
+      color: #f97316;
+      font-size: 16px;
+      font-weight: 800;
+      margin-right: 2px;
+    }
+
+    .quote-author {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .author-avatar {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #ec4899 0%, #f97316 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .author-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .author-role {
+      font-size: 9px;
+      color: #94a3b8;
+    }
+
+    /* Back footer */
+    .back-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.08in;
+      padding-top: 0.06in;
+      border-top: 1px solid #e2e8f0;
+      flex-shrink: 0;
+    }
+
+    .back-website {
+      font-size: 14px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .back-offer {
+      font-size: 10px;
+      color: #ec4899;
+      font-weight: 600;
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+        gap: 0;
+      }
+
+      h1, .instructions {
+        display: none !important;
+      }
+
+      .postcard-wrapper {
+        page-break-after: always;
+        padding: 0.3in;
+      }
+
+      .postcard {
+        box-shadow: none;
+        border-radius: 0;
+        margin: 0;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .postcard::before,
+      .postcard::after,
+      .crop-bottom-left,
+      .crop-bottom-right {
+        border-color: #000;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Front Side</h1>
+
+  <div class="postcard-wrapper">
+  <div class="postcard front">
+    <div class="crop-bottom-left"></div>
+    <div class="crop-bottom-right"></div>
+    <div class="glow"></div>
+
+    <div class="front-main">
+      <div class="front-header">
+        <div class="logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+              <polyline points="17 6 23 6 23 12"/>
+            </svg>
+          </div>
+          <span class="logo-text">SellEveryCall</span>
+        </div>
+        <div class="industry-badge">Built Exclusively for Pest & Lawn</div>
+      </div>
+
+      <div class="headline">
+        <h1>Train Like It&#39;s Real.</h1>
+        <span class="gradient">Win When It Is.</span>
+      </div>
+
+      <div class="problem">
+        <p>Your leads cost <strong>$127 each</strong>. Unpracticed reps close just <strong>37%</strong>. That's <strong>$80 lost</strong> every fumbled call.</p>
+      </div>
+
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <span>Prebuilt scenarios for cancellations, objections & upsells</span>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          </div>
+          <span>Build custom courses for your products</span>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.88.33 1.75.6 2.58"/></svg>
+          </div>
+          <span>AI prospects that push back & negotiate</span>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <span>Instant AI coaching after every call</span>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value">47%</div>
+          <div class="stat-label">Higher Close Rate</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">3x</div>
+          <div class="stat-label">Faster Ramp-Up</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">24/7</div>
+          <div class="stat-label">Practice Anytime</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="front-cta">
+      <div class="cta-headline">Try Free</div>
+      <div class="cta-subhead">No credit card required</div>
+      <div class="qr-code">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://selleverycall.com&bgcolor=ffffff&color=0f172a&margin=0" alt="QR Code" />
+      </div>
+      <div class="scan-text">Scan to Start</div>
+      <div class="website">selleverycall.com</div>
+    </div>
+  </div>
+</div>
+
+  <h1>Back Side</h1>
+
+<div class="postcard-wrapper">
+  <div class="postcard back">
+    <div class="crop-bottom-left"></div>
+    <div class="crop-bottom-right"></div>
+    <div class="back-header">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24">
+            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+            <polyline points="17 6 23 6 23 12"/>
+          </svg>
+        </div>
+        <span class="logo-text">SellEveryCall</span>
+      </div>
+      <div class="back-tagline">AI-powered sales training for service companies</div>
+    </div>
+
+    <div class="how-section">
+      <div class="section-title">How It Works</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Choose or Build</h3>
+            <p>Use prebuilt pest & lawn care scenarios or create custom courses</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Practice the Call</h3>
+            <p>Talk to AI prospects who respond naturally and challenge your pitch</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Get AI Coaching</h3>
+            <p>Instant feedback on what worked and exactly what to say next time</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial">
+      <p class="quote-text">New hires used to take 3 months to get comfortable on phones. Now they're confident in 3 weeks. The AI feedback is better than anything I could give them.</p>
+      <div class="quote-author">
+        <div class="author-avatar">DF</div>
+        <div>
+          <div class="author-name">Dennis Foster</div>
+          <div class="author-role">COO, Go-Forth Home Services</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="back-footer">
+      <div class="back-website">selleverycall.com</div>
+      <div class="back-offer">14-day free trial • No credit card required</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

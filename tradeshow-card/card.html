@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SellEveryCall Tradeshow Card</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f0f0f0;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+
+    h1 {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .instructions {
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 12px;
+      max-width: 600px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .instructions h2 {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .instructions ol {
+      margin-left: 20px;
+      font-size: 14px;
+      color: #555;
+      line-height: 1.8;
+    }
+
+    .card-container {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .card-wrapper {
+      text-align: center;
+    }
+
+    .card-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #666;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Standard business card: 3.5" x 2" at 300dpi = 1050 x 600px */
+    /* Using 3.5x scale for screen: 350 x 200px display */
+    .card {
+      width: 350px;
+      height: 200px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      position: relative;
+    }
+
+    /* ============ FRONT ============ */
+    .card-front {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .card-front .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-front .logo-icon {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #ec4899 0%, #f97316 100%);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-front .logo-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .card-front .logo-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .card-front .headline {
+      text-align: center;
+    }
+
+    .card-front .headline h2 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 0;
+      text-shadow: 0 0 40px rgba(236, 72, 153, 0.3);
+    }
+
+    .card-front .headline .gradient {
+      background: linear-gradient(135deg, #ec4899 0%, #f97316 50%, #facc15 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+      font-size: 30px;
+    }
+
+    .card-front .tagline {
+      text-align: center;
+      font-size: 10px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
+    }
+
+    /* ============ BACK ============ */
+    .card-back {
+      background: #ffffff;
+      padding: 20px 24px;
+      display: flex;
+      gap: 20px;
+      height: 100%;
+    }
+
+    .card-back .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .card-back .pitch h3 {
+      font-size: 11px;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 0 0 4px 0;
+      line-height: 1.3;
+    }
+
+    .card-back .pitch p {
+      font-size: 9px;
+      color: #64748b;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .card-back .stats {
+      display: flex;
+      gap: 20px;
+      margin-top: 4px;
+    }
+
+    .card-back .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .card-back .stat-value {
+      font-size: 18px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ec4899 0%, #f97316 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+
+    .card-back .stat-label {
+      font-size: 8px;
+      color: #64748b;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .card-back .cta-section {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .card-back .qr-code {
+      width: 80px;
+      height: 80px;
+      background: #fff;
+      border-radius: 8px;
+      padding: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .card-back .qr-code img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .card-back .cta-text {
+      font-size: 8px;
+      font-weight: 700;
+      color: #1e293b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card-back .cta-text span {
+      color: #ec4899;
+    }
+
+    .card-back .website {
+      font-size: 11px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+
+      .instructions, h1, .card-label {
+        display: none;
+      }
+
+      .card-container {
+        gap: 20px;
+      }
+
+      .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>SellEveryCall Tradeshow Card</h1>
+
+  <div class="instructions">
+    <h2>Print Instructions:</h2>
+    <ol>
+      <li>Press <strong>Ctrl+P</strong> (or Cmd+P on Mac) to print</li>
+      <li>Select <strong>"Save as PDF"</strong> as the destination</li>
+      <li>Set margins to <strong>"None"</strong></li>
+      <li>Enable <strong>"Background graphics"</strong></li>
+      <li>Take the PDF to a print shop for professional card stock printing</li>
+    </ol>
+  </div>
+
+  <div class="card-container">
+    <!-- FRONT -->
+    <div class="card-wrapper">
+      <div class="card-label">Front</div>
+      <div class="card card-front">
+        <div class="logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+              <path d="M4 22h16"/>
+              <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+              <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+              <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+            </svg>
+          </div>
+          <span class="logo-text">SellEveryCall</span>
+        </div>
+
+        <div class="headline">
+          <h2>Train Like It's Real.<span class="gradient">Win When It Is.</span></h2>
+        </div>
+
+        <div class="tagline">AI-Powered Sales Training</div>
+      </div>
+    </div>
+
+    <!-- BACK -->
+    <div class="card-wrapper">
+      <div class="card-label">Back</div>
+      <div class="card card-back">
+        <div class="content">
+          <div class="pitch">
+            <h3>Your leads cost $127. Make every call count.</h3>
+            <p>CSRs practice closing sales with AI prospects who raise objections, question your price, and compare you to competitors.</p>
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              <span class="stat-value">47%</span>
+              <span class="stat-label">higher close rate</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">3x</span>
+              <span class="stat-label">faster ramp-up</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cta-section">
+          <div class="cta-text">Free Demo <span>No Card Required</span></div>
+          <div class="qr-code">
+            <!-- QR Code for selleverycall.com -->
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://selleverycall.com&bgcolor=ffffff&color=1e293b&margin=0" alt="QR Code" />
+          </div>
+          <div class="website">selleverycall.com</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

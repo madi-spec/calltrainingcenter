@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SellEveryCall Tradeshow Cards - Print Sheet</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f0f0f0;
+    }
+
+    .instructions {
+      background: #fff;
+      padding: 20px 30px;
+      margin: 20px auto;
+      border-radius: 12px;
+      max-width: 600px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .instructions h2 {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .instructions ol {
+      margin-left: 20px;
+      font-size: 14px;
+      color: #555;
+      line-height: 1.8;
+    }
+
+    .instructions .note {
+      margin-top: 12px;
+      padding: 10px;
+      background: #fef3c7;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #92400e;
+    }
+
+    /* Page setup for 8.5x11 */
+    @page {
+      size: letter;
+      margin: 0.25in;
+    }
+
+    .print-sheet {
+      width: 8in;
+      height: 10.5in;
+      margin: 20px auto;
+      background: white;
+      display: grid;
+      grid-template-columns: repeat(2, 3.5in);
+      grid-template-rows: repeat(5, 2in);
+      gap: 0;
+      padding: 0.25in;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      page-break-after: always;
+    }
+
+    .print-sheet.fronts {
+      background: white;
+    }
+
+    .print-sheet.backs {
+      /* Reverse the column order so backs align when flipped */
+      direction: rtl;
+      /* Adjust padding to shift grid UP - front has 0.25in, backs has 0.1in top */
+      padding: 0.1in 0.25in 0.4in 0.25in;
+    }
+
+    .print-sheet.backs .card {
+      direction: ltr;
+    }
+
+    .page-label {
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: #666;
+      margin: 30px 0 10px 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Card base - the cutting boundary */
+    .card {
+      width: 3.5in;
+      height: 2in;
+      overflow: hidden;
+      position: relative;
+      background: white;
+      box-sizing: border-box;
+    }
+
+    /* Cutting lines on backs only */
+    .print-sheet.backs .card {
+      box-shadow: inset 0 0 0 0.5px #aaa;
+    }
+
+    /* ============ FRONT ============ */
+    .card-front {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      padding: 0.12in;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-sizing: border-box;
+      border-radius: 6px;
+      position: absolute;
+      top: 0.08in;
+      left: 0.08in;
+      right: 0.08in;
+      bottom: 0.08in;
+    }
+
+    .card-front .logo {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-front .logo-icon {
+      width: 0.22in;
+      height: 0.22in;
+      background: linear-gradient(135deg, #ec4899 0%, #f97316 100%);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-front .logo-icon svg {
+      width: 0.13in;
+      height: 0.13in;
+    }
+
+    .card-front .logo-text {
+      font-size: 10pt;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .card-front .headline {
+      text-align: center;
+    }
+
+    .card-front .headline h2 {
+      font-size: 19pt;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 0;
+      text-shadow: 0 0 40px rgba(236, 72, 153, 0.3);
+    }
+
+    .card-front .headline .gradient {
+      background: linear-gradient(135deg, #ec4899 0%, #f97316 50%, #facc15 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+      font-size: 21pt;
+    }
+
+    .card-front .tagline {
+      text-align: center;
+      font-size: 7pt;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 600;
+    }
+
+    /* ============ BACK ============ */
+    .card-back {
+      background: #f8fafc;
+      padding: 0.08in 0.1in;
+      display: flex;
+      gap: 0.1in;
+      box-sizing: border-box;
+      border-radius: 6px;
+      border: 0.5px solid #e2e8f0;
+      position: absolute;
+      top: 0.08in;
+      left: 0.08in;
+      right: 0.08in;
+      bottom: 0.08in;
+    }
+
+    .card-back .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.08in;
+    }
+
+    .card-back .pitch {
+      margin: 0;
+      padding: 0;
+    }
+
+    .card-back .pitch h3 {
+      font-size: 7pt;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .card-back .pitch p {
+      font-size: 6.5pt;
+      color: #64748b;
+      line-height: 1.4;
+      margin: 3px 0 0 0;
+      padding: 0;
+    }
+
+    .card-back .stats {
+      display: flex;
+      gap: 0.15in;
+      margin: 0;
+      padding: 0;
+    }
+
+    .card-back .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .card-back .stat-value {
+      font-size: 12pt;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ec4899 0%, #f97316 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+
+    .card-back .stat-label {
+      font-size: 5.5pt;
+      color: #64748b;
+      font-weight: 500;
+      margin-top: 1px;
+    }
+
+    .card-back .cta-section {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .card-back .qr-code {
+      width: 0.65in;
+      height: 0.65in;
+      background: #fff;
+    }
+
+    .card-back .qr-code img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .card-back .cta-text {
+      font-size: 5.5pt;
+      font-weight: 700;
+      color: #1e293b;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .card-back .cta-text span {
+      color: #ec4899;
+    }
+
+    .card-back .website {
+      font-size: 8pt;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        background: white;
+      }
+
+      .instructions, .page-label {
+        display: none !important;
+      }
+
+      .print-sheet {
+        margin: 0;
+        box-shadow: none;
+        page-break-after: always;
+      }
+
+      .card {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="instructions">
+    <h2>Print Instructions:</h2>
+    <ol>
+      <li>Press <strong>Ctrl+P</strong> (or Cmd+P on Mac)</li>
+      <li>Select your printer (or "Save as PDF")</li>
+      <li>Set margins to <strong>"None"</strong> or <strong>"Minimum"</strong></li>
+      <li>Enable <strong>"Background graphics"</strong></li>
+      <li>Enable <strong>"Two-sided printing"</strong> (flip on short edge)</li>
+      <li>Print on card stock for best results</li>
+    </ol>
+    <div class="note">
+      <strong>Note:</strong> Page 1 = Fronts, Page 2 = Backs. They're mirrored so when you flip the paper on the short edge, fronts and backs align perfectly. Cut along the lines.
+    </div>
+  </div>
+
+  <!-- PAGE 1: FRONTS -->
+  <div class="page-label">Page 1: Fronts</div>
+  <div class="print-sheet fronts">
+    <div class="card"><div class="card-front">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+            <path d="M4 22h16"/>
+            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+          </svg>
+        </div>
+        <span class="logo-text">SellEveryCall</span>
+      </div>
+      <div class="headline">
+        <h2>Train Like It's Real.<span class="gradient">Win When It Is.</span></h2>
+      </div>
+      <div class="tagline">AI-Powered Sales Training</div>
+    </div></div>
+    <div class="card"><div class="card-front">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+            <path d="M4 22h16"/>
+            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+          </svg>
+        </div>
+        <span class="logo-text">SellEveryCall</span>
+      </div>
+      <div class="headline">
+        <h2>Train Like It's Real.<span class="gradient">Win When It Is.</span></h2>
+      </div>
+      <div class="tagline">AI-Powered Sales Training</div>
+    </div></div>
+    <div class="card"><div class="card-front">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+            <path d="M4 22h16"/>
+            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+          </svg>
+        </div>
+        <span class="logo-text">SellEveryCall</span>
+      </div>
+      <div class="headline">
+        <h2>Train Like It's Real.<span class="gradient">Win When It Is.</span></h2>
+      </div>
+      <div class="tagline">AI-Powered Sales Training</div>
+    </div></div>
+    <div class="card"><div class="card-front">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+            <path d="M4 22h16"/>
+            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+          </svg>
+        </div>
+        <span class="logo-text">SellEveryCall</span>
+      </div>
+      <div class="headline">
+        <h2>Train Like It's Real.<span class="gradient">Win When It Is.</span></h2>
+      </div>
+      <div class="tagline">AI-Powered Sales Training</div>
+    </div></div>
+    <div class="card"><div class="card-front">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+            <path d="M4 22h16"/>
+            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+          </svg>
+        </div>
+        <span class="logo-text">SellEveryCall</span>
+      </div>
+      <div class="headline">
+        <h2>Train Like It's Real.<span class="gradient">Win When It Is.</span></h2>
+      </div>
+      <div class="tagline">AI-Powered Sales Training</div>
+    </div></div>
+    <div class="card"><div class="card-front">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+            <path d="M4 22h16"/>
+            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+          </svg>
+        </div>
+        <span class="logo-text">SellEveryCall</span>
+      </div>
+      <div class="headline">
+        <h2>Train Like It's Real.<span class="gradient">Win When It Is.</span></h2>
+      </div>
+      <div class="tagline">AI-Powered Sales Training</div>
+    </div></div>
+    <div class="card"><div class="card-front">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+            <path d="M4 22h16"/>
+            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+          </svg>
+        </div>
+        <span class="logo-text">SellEveryCall</span>
+      </div>
+      <div class="headline">
+        <h2>Train Like It's Real.<span class="gradient">Win When It Is.</span></h2>
+      </div>
+      <div class="tagline">AI-Powered Sales Training</div>
+    </div></div>
+    <div class="card"><div class="card-front">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+            <path d="M4 22h16"/>
+            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+          </svg>
+        </div>
+        <span class="logo-text">SellEveryCall</span>
+      </div>
+      <div class="headline">
+        <h2>Train Like It's Real.<span class="gradient">Win When It Is.</span></h2>
+      </div>
+      <div class="tagline">AI-Powered Sales Training</div>
+    </div></div>
+    <div class="card"><div class="card-front">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+            <path d="M4 22h16"/>
+            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+          </svg>
+        </div>
+        <span class="logo-text">SellEveryCall</span>
+      </div>
+      <div class="headline">
+        <h2>Train Like It's Real.<span class="gradient">Win When It Is.</span></h2>
+      </div>
+      <div class="tagline">AI-Powered Sales Training</div>
+    </div></div>
+    <div class="card"><div class="card-front">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+            <path d="M4 22h16"/>
+            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+          </svg>
+        </div>
+        <span class="logo-text">SellEveryCall</span>
+      </div>
+      <div class="headline">
+        <h2>Train Like It's Real.<span class="gradient">Win When It Is.</span></h2>
+      </div>
+      <div class="tagline">AI-Powered Sales Training</div>
+    </div></div>
+  </div>
+
+  <!-- PAGE 2: BACKS (mirrored for double-sided printing) -->
+  <div class="page-label">Page 2: Backs (mirrored for flip-on-short-edge)</div>
+  <div class="print-sheet backs">
+    <div class="card"><div class="card-back">
+      <div class="content">
+        <div class="pitch">
+          <h3>Your leads cost $127. Make every call count.</h3>
+          <p>CSRs practice closing sales with AI prospects who raise objections, question your price, and compare you to competitors.</p>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">47%</span>
+            <span class="stat-label">higher close rate</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">3x</span>
+            <span class="stat-label">faster ramp-up</span>
+          </div>
+        </div>
+      </div>
+      <div class="cta-section">
+        <div class="cta-text">Free Demo <span>No Card Required</span></div>
+        <div class="qr-code">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://selleverycall.com&bgcolor=ffffff&color=1e293b&margin=0" alt="QR Code" />
+        </div>
+        <div class="website">selleverycall.com</div>
+      </div>
+    </div></div>
+    <div class="card"><div class="card-back">
+      <div class="content">
+        <div class="pitch">
+          <h3>Your leads cost $127. Make every call count.</h3>
+          <p>CSRs practice closing sales with AI prospects who raise objections, question your price, and compare you to competitors.</p>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">47%</span>
+            <span class="stat-label">higher close rate</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">3x</span>
+            <span class="stat-label">faster ramp-up</span>
+          </div>
+        </div>
+      </div>
+      <div class="cta-section">
+        <div class="cta-text">Free Demo <span>No Card Required</span></div>
+        <div class="qr-code">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://selleverycall.com&bgcolor=ffffff&color=1e293b&margin=0" alt="QR Code" />
+        </div>
+        <div class="website">selleverycall.com</div>
+      </div>
+    </div></div>
+    <div class="card"><div class="card-back">
+      <div class="content">
+        <div class="pitch">
+          <h3>Your leads cost $127. Make every call count.</h3>
+          <p>CSRs practice closing sales with AI prospects who raise objections, question your price, and compare you to competitors.</p>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">47%</span>
+            <span class="stat-label">higher close rate</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">3x</span>
+            <span class="stat-label">faster ramp-up</span>
+          </div>
+        </div>
+      </div>
+      <div class="cta-section">
+        <div class="cta-text">Free Demo <span>No Card Required</span></div>
+        <div class="qr-code">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://selleverycall.com&bgcolor=ffffff&color=1e293b&margin=0" alt="QR Code" />
+        </div>
+        <div class="website">selleverycall.com</div>
+      </div>
+    </div></div>
+    <div class="card"><div class="card-back">
+      <div class="content">
+        <div class="pitch">
+          <h3>Your leads cost $127. Make every call count.</h3>
+          <p>CSRs practice closing sales with AI prospects who raise objections, question your price, and compare you to competitors.</p>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">47%</span>
+            <span class="stat-label">higher close rate</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">3x</span>
+            <span class="stat-label">faster ramp-up</span>
+          </div>
+        </div>
+      </div>
+      <div class="cta-section">
+        <div class="cta-text">Free Demo <span>No Card Required</span></div>
+        <div class="qr-code">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://selleverycall.com&bgcolor=ffffff&color=1e293b&margin=0" alt="QR Code" />
+        </div>
+        <div class="website">selleverycall.com</div>
+      </div>
+    </div></div>
+    <div class="card"><div class="card-back">
+      <div class="content">
+        <div class="pitch">
+          <h3>Your leads cost $127. Make every call count.</h3>
+          <p>CSRs practice closing sales with AI prospects who raise objections, question your price, and compare you to competitors.</p>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">47%</span>
+            <span class="stat-label">higher close rate</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">3x</span>
+            <span class="stat-label">faster ramp-up</span>
+          </div>
+        </div>
+      </div>
+      <div class="cta-section">
+        <div class="cta-text">Free Demo <span>No Card Required</span></div>
+        <div class="qr-code">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://selleverycall.com&bgcolor=ffffff&color=1e293b&margin=0" alt="QR Code" />
+        </div>
+        <div class="website">selleverycall.com</div>
+      </div>
+    </div></div>
+    <div class="card"><div class="card-back">
+      <div class="content">
+        <div class="pitch">
+          <h3>Your leads cost $127. Make every call count.</h3>
+          <p>CSRs practice closing sales with AI prospects who raise objections, question your price, and compare you to competitors.</p>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">47%</span>
+            <span class="stat-label">higher close rate</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">3x</span>
+            <span class="stat-label">faster ramp-up</span>
+          </div>
+        </div>
+      </div>
+      <div class="cta-section">
+        <div class="cta-text">Free Demo <span>No Card Required</span></div>
+        <div class="qr-code">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://selleverycall.com&bgcolor=ffffff&color=1e293b&margin=0" alt="QR Code" />
+        </div>
+        <div class="website">selleverycall.com</div>
+      </div>
+    </div></div>
+    <div class="card"><div class="card-back">
+      <div class="content">
+        <div class="pitch">
+          <h3>Your leads cost $127. Make every call count.</h3>
+          <p>CSRs practice closing sales with AI prospects who raise objections, question your price, and compare you to competitors.</p>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">47%</span>
+            <span class="stat-label">higher close rate</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">3x</span>
+            <span class="stat-label">faster ramp-up</span>
+          </div>
+        </div>
+      </div>
+      <div class="cta-section">
+        <div class="cta-text">Free Demo <span>No Card Required</span></div>
+        <div class="qr-code">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://selleverycall.com&bgcolor=ffffff&color=1e293b&margin=0" alt="QR Code" />
+        </div>
+        <div class="website">selleverycall.com</div>
+      </div>
+    </div></div>
+    <div class="card"><div class="card-back">
+      <div class="content">
+        <div class="pitch">
+          <h3>Your leads cost $127. Make every call count.</h3>
+          <p>CSRs practice closing sales with AI prospects who raise objections, question your price, and compare you to competitors.</p>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">47%</span>
+            <span class="stat-label">higher close rate</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">3x</span>
+            <span class="stat-label">faster ramp-up</span>
+          </div>
+        </div>
+      </div>
+      <div class="cta-section">
+        <div class="cta-text">Free Demo <span>No Card Required</span></div>
+        <div class="qr-code">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://selleverycall.com&bgcolor=ffffff&color=1e293b&margin=0" alt="QR Code" />
+        </div>
+        <div class="website">selleverycall.com</div>
+      </div>
+    </div></div>
+    <div class="card"><div class="card-back">
+      <div class="content">
+        <div class="pitch">
+          <h3>Your leads cost $127. Make every call count.</h3>
+          <p>CSRs practice closing sales with AI prospects who raise objections, question your price, and compare you to competitors.</p>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">47%</span>
+            <span class="stat-label">higher close rate</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">3x</span>
+            <span class="stat-label">faster ramp-up</span>
+          </div>
+        </div>
+      </div>
+      <div class="cta-section">
+        <div class="cta-text">Free Demo <span>No Card Required</span></div>
+        <div class="qr-code">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://selleverycall.com&bgcolor=ffffff&color=1e293b&margin=0" alt="QR Code" />
+        </div>
+        <div class="website">selleverycall.com</div>
+      </div>
+    </div></div>
+    <div class="card"><div class="card-back">
+      <div class="content">
+        <div class="pitch">
+          <h3>Your leads cost $127. Make every call count.</h3>
+          <p>CSRs practice closing sales with AI prospects who raise objections, question your price, and compare you to competitors.</p>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">47%</span>
+            <span class="stat-label">higher close rate</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">3x</span>
+            <span class="stat-label">faster ramp-up</span>
+          </div>
+        </div>
+      </div>
+      <div class="cta-section">
+        <div class="cta-text">Free Demo <span>No Card Required</span></div>
+        <div class="qr-code">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://selleverycall.com&bgcolor=ffffff&color=1e293b&margin=0" alt="QR Code" />
+        </div>
+        <div class="website">selleverycall.com</div>
+      </div>
+    </div></div>
+  </div>
+</body>
+</html>

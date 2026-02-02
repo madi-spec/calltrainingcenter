@@ -762,6 +762,22 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Version/deployment check
+app.get('/api/version', async (req, res) => {
+  const { hasPermission, ROLE_PERMISSIONS } = await import('./lib/permissions.js');
+  const hasSuperAdminFix = 'super_admin' in ROLE_PERMISSIONS;
+  const superAdminCanInvite = hasSuperAdminFix && hasPermission('super_admin', 'users:invite');
+
+  res.json({
+    timestamp: new Date().toISOString(),
+    fixes: {
+      superAdminInRolePermissions: hasSuperAdminFix,
+      superAdminCanInvite: superAdminCanInvite
+    },
+    deploymentId: process.env.VERCEL_GIT_COMMIT_SHA?.substring(0, 7) || 'local'
+  });
+});
+
 // Mount modular routes
 app.use('/api/auth', authRoutes);
 app.use('/api/training', trainingRoutes);

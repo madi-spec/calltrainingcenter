@@ -814,6 +814,42 @@ app.get('/api/test-email', async (req, res) => {
   }
 });
 
+// Cleanup test user (admin only - one-time use)
+app.delete('/api/cleanup-user/:email', async (req, res) => {
+  try {
+    const { createAdminClient, TABLES } = await import('./lib/supabase.js');
+    const adminClient = createAdminClient();
+    const email = req.params.email.toLowerCase();
+
+    // Find and delete user
+    const { data: users, error: fetchError } = await adminClient
+      .from(TABLES.USERS)
+      .select('id, email, full_name, organization_id, clerk_id')
+      .eq('email', email);
+
+    if (fetchError) throw fetchError;
+
+    if (!users || users.length === 0) {
+      return res.json({ message: 'No users found with that email', deleted: 0 });
+    }
+
+    const { error: deleteError } = await adminClient
+      .from(TABLES.USERS)
+      .delete()
+      .eq('email', email);
+
+    if (deleteError) throw deleteError;
+
+    res.json({
+      message: `Deleted ${users.length} user(s)`,
+      deleted: users.length,
+      users: users
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Mount modular routes
 app.use('/api/auth', authRoutes);
 app.use('/api/training', trainingRoutes);

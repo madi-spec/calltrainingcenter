@@ -277,7 +277,7 @@ router.post('/invite', requirePermission('users:invite'), async (req, res) => {
         organization_id: req.organization.id,
         email: email.toLowerCase(),
         role,
-        branch_id,
+        branch_id: branch_id || null, // Convert empty string to null for UUID field
         token,
         invited_by: req.user.id,
         expires_at: expiresAt.toISOString(),

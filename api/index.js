@@ -850,6 +850,45 @@ app.delete('/api/cleanup-user/:email', async (req, res) => {
   }
 });
 
+// Delete pending invitation (admin only)
+app.delete('/api/cleanup-invitation/:email', async (req, res) => {
+  try {
+    const { createAdminClient } = await import('./lib/supabase.js');
+    const adminClient = createAdminClient();
+    const email = req.params.email.toLowerCase();
+
+    // Find pending invitations
+    const { data: invitations, error: fetchError } = await adminClient
+      .from('invitations')
+      .select('*')
+      .eq('email', email)
+      .eq('status', 'pending');
+
+    if (fetchError) throw fetchError;
+
+    if (!invitations || invitations.length === 0) {
+      return res.json({ message: 'No pending invitations found', deleted: 0 });
+    }
+
+    // Delete pending invitations
+    const { error: deleteError } = await adminClient
+      .from('invitations')
+      .delete()
+      .eq('email', email)
+      .eq('status', 'pending');
+
+    if (deleteError) throw deleteError;
+
+    res.json({
+      message: `Deleted ${invitations.length} pending invitation(s)`,
+      deleted: invitations.length,
+      invitations: invitations
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Mount modular routes
 app.use('/api/auth', authRoutes);
 app.use('/api/training', trainingRoutes);

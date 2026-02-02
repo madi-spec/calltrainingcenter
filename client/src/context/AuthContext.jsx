@@ -33,6 +33,7 @@ const ROLE_PERMISSIONS = {
     'assignments:create': true,
     'assignments:edit': true,
     'users:view_team': true,
+    'users:invite': true,
     'reports:view_own': true,
     'reports:view_team': true,
     'reports:export': true,

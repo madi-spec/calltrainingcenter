@@ -134,20 +134,7 @@ function Landing() {
     }
   ];
 
-  const testimonials = [
-    {
-      quote: "We used to lose 3-4 customers a month to competitors. After training with SellEveryCall, our CSRs actually look forward to cancellation calls. Save rate is up 52%.",
-      author: 'Jason Martinez',
-      role: 'Owner, Martinez Pest Solutions',
-      initials: 'JM'
-    },
-    {
-      quote: "New hires used to take 3 months to get comfortable on the phones. Now they're confident in 3 weeks. The AI feedback is better than anything I could give them.",
-      author: 'Sarah Brooks',
-      role: 'Operations Manager, Brooks Pest Control',
-      initials: 'SB'
-    }
-  ];
+  const testimonials = [];
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
@@ -248,22 +235,6 @@ function Landing() {
               </div>
             </div>
           </motion.div>
-        </div>
-      </section>
-
-      {/* Trust Bar */}
-      <section className="py-12 px-4 border-y border-gray-200 bg-white">
-        <div className="max-w-5xl mx-auto text-center">
-          <div className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-8">
-            Trusted by leading service companies
-          </div>
-          <div className="flex items-center justify-center gap-12 flex-wrap opacity-50">
-            <span className="text-lg font-semibold text-gray-900">Terminix</span>
-            <span className="text-lg font-semibold text-gray-900">Orkin</span>
-            <span className="text-lg font-semibold text-gray-900">Rentokil</span>
-            <span className="text-lg font-semibold text-gray-900">Aptive</span>
-            <span className="text-lg font-semibold text-gray-900">Massey Services</span>
-          </div>
         </div>
       </section>
 
@@ -498,42 +469,6 @@ function Landing() {
               </div>
             </div>
           </motion.div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-24 px-4 bg-gray-900 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-transparent to-purple-500/10 pointer-events-none" />
-        <div className="max-w-4xl mx-auto relative">
-          <div className="text-center mb-16">
-            <p className="text-pink-400 text-xs font-semibold uppercase tracking-wider mb-4">Testimonials</p>
-            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">
-              What customers are saying
-            </h2>
-          </div>
-          <div className="space-y-6">
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="bg-white/5 border border-white/10 rounded-2xl p-10"
-              >
-                <p className="text-xl leading-relaxed mb-8 text-gray-200">"{testimonial.quote}"</p>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-orange-400 rounded-full flex items-center justify-center font-semibold">
-                    {testimonial.initials}
-                  </div>
-                  <div>
-                    <div className="font-semibold">{testimonial.author}</div>
-                    <div className="text-sm text-gray-400">{testimonial.role}</div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </section>
 

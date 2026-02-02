@@ -149,52 +149,12 @@ router.post('/sync-user', authMiddleware, async (req, res) => {
 });
 
 /**
- * GET /api/auth/verify-invite
- * Verify an invitation token
+ * Note: Invitation endpoints have been moved to /api/invitations
+ *
+ * For invitation functionality, use:
+ * - GET /api/invitations/validate/:token - Validate an invitation token
+ * - POST /api/invitations/accept - Accept an invitation
+ * - POST /api/invitations/send - Send a new invitation
  */
-router.get('/verify-invite', async (req, res) => {
-  try {
-    const { token } = req.query;
-
-    if (!token) {
-      return res.status(400).json({ error: 'Token required' });
-    }
-
-    // In a real implementation, you'd store invitation tokens in a table
-    // For now, we'll decode a simple JWT-like token
-    // This is a placeholder - implement proper invitation token handling
-
-    res.json({
-      email: 'invited@example.com',
-      organization_name: 'Example Org',
-      role: 'trainee',
-      full_name: ''
-    });
-  } catch (error) {
-    res.status(400).json({ error: 'Invalid or expired invitation' });
-  }
-});
-
-/**
- * POST /api/auth/accept-invite
- * Accept an invitation and create user account
- */
-router.post('/accept-invite', async (req, res) => {
-  try {
-    const { token, password, fullName } = req.body;
-
-    if (!token || !password || !fullName) {
-      return res.status(400).json({ error: 'Missing required fields' });
-    }
-
-    // Placeholder - implement proper invitation acceptance
-    res.json({
-      success: true,
-      email: 'invited@example.com'
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
 
 export default router;

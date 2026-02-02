@@ -7,6 +7,7 @@
 import { Router } from 'express';
 import { authMiddleware, tenantMiddleware, requireRole } from '../lib/auth.js';
 import { createAdminClient } from '../lib/supabase.js';
+import { sendInvitationEmail } from '../lib/email.js';
 import crypto from 'crypto';
 
 const router = Router();
@@ -103,19 +104,47 @@ router.post('/send', authMiddleware, tenantMiddleware, requireRole('manager', 'a
 
     if (error) throw error;
 
-    // In production, send email here
-    // For now, just return success
+    // Generate invite URL
     const inviteUrl = `${process.env.APP_URL || 'http://localhost:5173'}/auth/accept-invite?token=${token}`;
+
+    // Get organization name for email
+    const { data: org } = await adminClient
+      .from('organizations')
+      .select('name')
+      .eq('id', req.organization.id)
+      .single();
+
+    // Send invitation email
+    const emailResult = await sendInvitationEmail({
+      to: email,
+      inviterName: req.user.full_name || req.user.email,
+      organizationName: org?.name || req.organization.name,
+      role,
+      inviteUrl
+    });
+
+    if (emailResult.success) {
+      console.log(`[INVITE] Email sent successfully to ${email}`);
+    } else if (emailResult.skipped) {
+      console.log(`[INVITE] Email sending skipped (not configured), invitation URL: ${inviteUrl}`);
+    } else {
+      console.error(`[INVITE] Failed to send email to ${email}:`, emailResult.error);
+    }
 
     res.json({
       success: true,
+      message: emailResult.success
+        ? `Invitation sent to ${email}`
+        : `Invitation created for ${email} (email not configured)`,
       invitation: {
         id: invitation.id,
         email: invitation.email,
         role: invitation.role,
         expiresAt: invitation.expires_at
       },
-      inviteUrl // In production, this would be sent via email, not returned
+      emailSent: emailResult.success,
+      // Include URL in response if email wasn't sent
+      ...(!emailResult.success && { inviteUrl })
     });
   } catch (error) {
     console.error('Error sending invitation:', error);
@@ -303,10 +332,39 @@ router.post('/:id/resend', authMiddleware, tenantMiddleware, requireRole('manage
 
     const inviteUrl = `${process.env.APP_URL || 'http://localhost:5173'}/auth/accept-invite?token=${token}`;
 
+    // Get organization name for email
+    const { data: org } = await adminClient
+      .from('organizations')
+      .select('name')
+      .eq('id', req.organization.id)
+      .single();
+
+    // Resend invitation email
+    const emailResult = await sendInvitationEmail({
+      to: invitation.email,
+      inviterName: req.user.full_name || req.user.email,
+      organizationName: org?.name || req.organization.name,
+      role: invitation.role,
+      inviteUrl
+    });
+
+    if (emailResult.success) {
+      console.log(`[INVITE] Email resent successfully to ${invitation.email}`);
+    } else if (emailResult.skipped) {
+      console.log(`[INVITE] Email sending skipped (not configured), invitation URL: ${inviteUrl}`);
+    } else {
+      console.error(`[INVITE] Failed to resend email to ${invitation.email}:`, emailResult.error);
+    }
+
     res.json({
       success: true,
+      message: emailResult.success
+        ? `Invitation resent to ${invitation.email}`
+        : `Invitation updated for ${invitation.email} (email not configured)`,
       invitation,
-      inviteUrl
+      emailSent: emailResult.success,
+      // Include URL in response if email wasn't sent
+      ...(!emailResult.success && { inviteUrl })
     });
   } catch (error) {
     console.error('Error resending invitation:', error);

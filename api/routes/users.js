@@ -216,18 +216,27 @@ router.patch('/:id/role', requireRole('admin', 'super_admin'), async (req, res) 
  */
 router.post('/invite', requirePermission('users:invite'), async (req, res) => {
   try {
+    console.log('[INVITE] Starting invitation process...');
+    console.log('[INVITE] Request body:', { email: req.body.email, role: req.body.role, branch_id: req.body.branch_id });
+    console.log('[INVITE] User:', { id: req.user?.id, role: req.user?.role, email: req.user?.email, full_name: req.user?.full_name });
+    console.log('[INVITE] Organization:', { id: req.organization?.id, name: req.organization?.name });
+
     const { email, role, branch_id } = req.body;
 
     if (!email || !role) {
+      console.log('[INVITE] Missing email or role');
       return res.status(400).json({ error: 'Email and role required' });
     }
 
     // Check if role is assignable
     const assignableRoles = getAssignableRoles(req.user.role);
+    console.log('[INVITE] Assignable roles:', assignableRoles);
     if (!assignableRoles.includes(role)) {
+      console.log('[INVITE] Role not assignable');
       return res.status(403).json({ error: 'Cannot invite user with this role' });
     }
 
+    console.log('[INVITE] Creating admin client...');
     const adminClient = createAdminClient();
 
     // Check if user already exists
@@ -281,15 +290,21 @@ router.post('/invite', requirePermission('users:invite'), async (req, res) => {
 
     // Generate invite URL
     const inviteUrl = `${process.env.APP_URL || 'https://www.selleverycall.com'}/auth/accept-invite?token=${token}`;
+    console.log('[INVITE] Generated invite URL:', inviteUrl);
 
     // Send invitation email
-    const emailResult = await sendInvitationEmail({
+    console.log('[INVITE] Preparing to send email...');
+    const emailParams = {
       to: email,
       inviterName: req.user.full_name || req.user.email,
       organizationName: req.organization.name,
       role,
       inviteUrl
-    });
+    };
+    console.log('[INVITE] Email params:', emailParams);
+
+    const emailResult = await sendInvitationEmail(emailParams);
+    console.log('[INVITE] Email result:', JSON.stringify(emailResult, null, 2));
 
     if (emailResult.success) {
       console.log(`[INVITE] Email sent successfully to ${email}`);
@@ -316,8 +331,13 @@ router.post('/invite', requirePermission('users:invite'), async (req, res) => {
       ...(!emailResult.success && { inviteUrl })
     });
   } catch (error) {
-    console.error('[INVITE] Error:', error);
-    res.status(500).json({ error: error.message });
+    console.error('[INVITE] Error occurred:', error);
+    console.error('[INVITE] Error stack:', error.stack);
+    res.status(500).json({
+      error: error.message,
+      details: error.toString(),
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 });
 

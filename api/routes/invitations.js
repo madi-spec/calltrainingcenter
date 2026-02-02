@@ -193,12 +193,16 @@ router.post('/accept', async (req, res) => {
       .from('users')
       .insert({
         organization_id: invitation.organization_id,
-        clerk_user_id,
+        clerk_id: clerk_user_id, // Use clerk_id to match auth system
         email: invitation.email,
         full_name: full_name || invitation.email.split('@')[0],
         role: invitation.role,
-        team_id: invitation.team_id,
-        status: 'active'
+        branch_id: invitation.branch_id, // Include branch_id from invitation
+        status: 'active',
+        total_points: 0,
+        current_streak: 0,
+        longest_streak: 0,
+        level: 1
       })
       .select()
       .single();

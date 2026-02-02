@@ -778,6 +778,42 @@ app.get('/api/version', async (req, res) => {
   });
 });
 
+// Test email configuration (admin only)
+app.get('/api/test-email', async (req, res) => {
+  try {
+    const { sendInvitationEmail, isEmailConfigured } = await import('./lib/email.js');
+    const testEmail = req.query.to || 'test@example.com';
+
+    if (!isEmailConfigured()) {
+      return res.json({
+        configured: false,
+        error: 'RESEND_API_KEY not found in environment',
+        hasKey: !!process.env.RESEND_API_KEY,
+        keyPreview: process.env.RESEND_API_KEY ? process.env.RESEND_API_KEY.substring(0, 10) + '...' : 'not set'
+      });
+    }
+
+    const result = await sendInvitationEmail({
+      to: testEmail,
+      inviterName: 'Test User',
+      organizationName: 'Test Organization',
+      role: 'trainee',
+      inviteUrl: 'https://www.selleverycall.com/auth/accept-invite?token=test123'
+    });
+
+    res.json({
+      configured: true,
+      result: result,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+      stack: error.stack
+    });
+  }
+});
+
 // Mount modular routes
 app.use('/api/auth', authRoutes);
 app.use('/api/training', trainingRoutes);

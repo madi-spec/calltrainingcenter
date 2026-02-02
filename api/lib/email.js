@@ -37,8 +37,12 @@ export async function sendInvitationEmail({ to, inviterName, organizationName, r
     });
 
     if (error) {
-      console.error('[EMAIL] Error sending invitation:', error);
-      return { success: false, error: error.message };
+      console.error('[EMAIL] Error sending invitation:', JSON.stringify(error, null, 2));
+      return {
+        success: false,
+        error: error.message || 'Unknown error',
+        errorDetails: error
+      };
     }
 
     console.log(`[EMAIL] Invitation sent to ${to}, message ID: ${data.id}`);

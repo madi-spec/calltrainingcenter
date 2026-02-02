@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
+import { useSignUp, useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { motion } from 'framer-motion';
-import { Lock, Eye, EyeOff, User, UserPlus, AlertCircle, Check, Building2 } from 'lucide-react';
+import { Lock, Eye, EyeOff, User, UserPlus, AlertCircle, Check, Building2, Mail } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 export default function AcceptInvite() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { acceptInvitation } = useAuth();
+  const { signUp, setActive } = useSignUp();
+  const { getToken } = useClerkAuth();
 
   const token = searchParams.get('token');
 
@@ -39,15 +41,20 @@ export default function AcceptInvite() {
       }
 
       try {
-        const response = await fetch(`/api/auth/verify-invite?token=${token}`);
+        const response = await fetch(`/api/invitations/validate/${token}`);
         const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.message || 'Invalid or expired invitation');
+          throw new Error(data.error || 'Invalid or expired invitation');
         }
 
-        setInviteData(data);
-        setFormData((prev) => ({ ...prev, fullName: data.full_name || '' }));
+        // Map the response to match expected format
+        setInviteData({
+          email: data.invitation?.email,
+          organization_name: data.invitation?.organizationName,
+          role: data.invitation?.role
+        });
+        setFormData((prev) => ({ ...prev, fullName: '' }));
       } catch (err) {
         setError(err.message);
       } finally {
@@ -82,10 +89,49 @@ export default function AcceptInvite() {
     setSubmitting(true);
 
     try {
-      await acceptInvitation(token, formData.password, formData.fullName);
+      // Step 1: Create Clerk account
+      const signUpAttempt = await signUp.create({
+        emailAddress: inviteData.email,
+        password: formData.password,
+        firstName: formData.fullName.split(' ')[0],
+        lastName: formData.fullName.split(' ').slice(1).join(' ') || ''
+      });
+
+      // Step 2: Prepare email verification
+      await signUpAttempt.prepareEmailAddressVerification({ strategy: 'email_code' });
+
+      // For now, we'll skip email verification for invited users
+      // In production, you might want to handle this differently
+
+      // Step 3: Set the session active
+      await setActive({ session: signUpAttempt.createdSessionId });
+
+      // Step 4: Accept the invitation in our backend
+      const clerkToken = await getToken();
+      const response = await fetch('/api/invitations/accept', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${clerkToken}`
+        },
+        body: JSON.stringify({
+          token: token,
+          clerk_user_id: signUpAttempt.createdUserId,
+          full_name: formData.fullName
+        })
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to accept invitation');
+      }
+
+      // Success! Navigate to dashboard
       navigate('/', { replace: true });
+      window.location.reload(); // Reload to load user profile
     } catch (err) {
-      setError(err.message || 'Failed to accept invitation');
+      console.error('Invitation acceptance error:', err);
+      setError(err.message || err.errors?.[0]?.message || 'Failed to accept invitation');
     } finally {
       setSubmitting(false);
     }

@@ -23,8 +23,8 @@ export default function ObjectionsStep({ data, allStepData, onComplete, authFetc
   const [showAddCustom, setShowAddCustom] = useState(false);
   const [newObjection, setNewObjection] = useState({ category: 'price', text: '', response: '' });
 
-  // Get selected industry
-  const selectedIndustry = allStepData?.industry || INDUSTRIES.PEST_CONTROL;
+  // Get selected industry (nested in stepData.industry.industry)
+  const selectedIndustry = allStepData?.industry?.industry || INDUSTRIES.PEST_CONTROL;
 
   useEffect(() => {
     fetchTemplates();

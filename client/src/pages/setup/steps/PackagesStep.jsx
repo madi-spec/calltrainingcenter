@@ -192,8 +192,8 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
   console.log('[PACKAGES] extractedPackages:', extractedPackages);
   const hasExtractedPackages = extractedPackages.length > 0;
 
-  // Get selected industry
-  const selectedIndustry = allStepData?.industry || INDUSTRIES.PEST_CONTROL;
+  // Get selected industry (nested in stepData.industry.industry)
+  const selectedIndustry = allStepData?.industry?.industry || INDUSTRIES.PEST_CONTROL;
   const defaultPackages = getDefaultPackages(selectedIndustry);
 
   // Initialize with existing data, or extracted packages if available

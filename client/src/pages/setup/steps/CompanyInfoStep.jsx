@@ -24,8 +24,8 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
   const [scrapeStatus, setScrapeStatus] = useState(null);
   const [scrapeError, setScrapeError] = useState(null);
 
-  // Get selected industry
-  const selectedIndustry = allStepData?.industry || INDUSTRIES.PEST_CONTROL;
+  // Get selected industry (nested in stepData.industry.industry)
+  const selectedIndustry = allStepData?.industry?.industry || INDUSTRIES.PEST_CONTROL;
 
   // Industry-specific services
   const getCommonServices = () => {

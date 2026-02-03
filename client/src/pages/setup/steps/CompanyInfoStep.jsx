@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Loader2, Globe, Phone, MapPin, Save, Sparkles, CheckCircle2, AlertCircle, Image, Palette } from 'lucide-react';
+import { INDUSTRIES } from '../../../utils/industryTerminology';
 
-export default function CompanyInfoStep({ data, onComplete, authFetch, organization }) {
+export default function CompanyInfoStep({ data, allStepData, onComplete, authFetch, organization }) {
   // Handle both brand_colors (database) and colors (context-mapped) naming
   const orgColors = organization?.brand_colors || organization?.colors || {};
 
@@ -23,28 +24,94 @@ export default function CompanyInfoStep({ data, onComplete, authFetch, organizat
   const [scrapeStatus, setScrapeStatus] = useState(null);
   const [scrapeError, setScrapeError] = useState(null);
 
-  const commonServices = [
-    'General Pest Control',
-    'Termite Control',
-    'Rodent Control',
-    'Mosquito Control',
-    'Bed Bug Treatment',
-    'Wildlife Removal',
-    'Ant Control',
-    'Cockroach Control',
-    'Spider Control',
-    'Flea & Tick Treatment'
-  ];
+  // Get selected industry
+  const selectedIndustry = allStepData?.industry || INDUSTRIES.PEST_CONTROL;
 
-  const commonGuarantees = [
-    'Satisfaction Guarantee',
-    'Re-service Guarantee',
-    'Money-back Guarantee',
-    '30-day Guarantee',
-    '60-day Guarantee',
-    '90-day Guarantee',
-    'Pest-free Guarantee'
-  ];
+  // Industry-specific services
+  const getCommonServices = () => {
+    switch (selectedIndustry) {
+      case INDUSTRIES.LAWN_CARE:
+        return [
+          'Lawn Fertilization',
+          'Weed Control',
+          'Grub Control',
+          'Aeration & Seeding',
+          'Disease Control',
+          'Insect Control',
+          'Soil Testing',
+          'Tree & Shrub Care',
+          'Mosquito Control',
+          'Tick Control'
+        ];
+      case INDUSTRIES.BOTH:
+        return [
+          'General Pest Control',
+          'Lawn Fertilization',
+          'Termite Control',
+          'Weed Control',
+          'Rodent Control',
+          'Grub Control',
+          'Mosquito Control',
+          'Aeration & Seeding',
+          'Bed Bug Treatment',
+          'Disease Control'
+        ];
+      case INDUSTRIES.PEST_CONTROL:
+      default:
+        return [
+          'General Pest Control',
+          'Termite Control',
+          'Rodent Control',
+          'Mosquito Control',
+          'Bed Bug Treatment',
+          'Wildlife Removal',
+          'Ant Control',
+          'Cockroach Control',
+          'Spider Control',
+          'Flea & Tick Treatment'
+        ];
+    }
+  };
+
+  // Industry-specific guarantees
+  const getCommonGuarantees = () => {
+    switch (selectedIndustry) {
+      case INDUSTRIES.LAWN_CARE:
+        return [
+          'Satisfaction Guarantee',
+          'Weed-Free Guarantee',
+          'Green Lawn Guarantee',
+          'Re-application Guarantee',
+          'Money-back Guarantee',
+          '30-day Guarantee',
+          'Season-Long Protection'
+        ];
+      case INDUSTRIES.BOTH:
+        return [
+          'Satisfaction Guarantee',
+          'Re-service Guarantee',
+          'Weed-Free Guarantee',
+          'Pest-Free Guarantee',
+          'Money-back Guarantee',
+          '60-day Guarantee',
+          'Year-Round Protection'
+        ];
+      case INDUSTRIES.PEST_CONTROL:
+      default:
+        return [
+          'Satisfaction Guarantee',
+          'Re-service Guarantee',
+          'Money-back Guarantee',
+          '30-day Guarantee',
+          '60-day Guarantee',
+          '90-day Guarantee',
+          'Pest-free Guarantee'
+        ];
+    }
+  };
+
+  const commonServices = getCommonServices();
+  const commonGuarantees = getCommonGuarantees();
 
   const handleChange = (e) => {
     setFormData(prev => ({

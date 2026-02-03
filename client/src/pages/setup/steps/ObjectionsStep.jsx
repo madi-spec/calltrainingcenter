@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Loader2, Save, ChevronDown, ChevronUp, Edit2, Check, X, Plus, Trash2 } from 'lucide-react';
+import { INDUSTRIES } from '../../../utils/industryTerminology';
 
 const OBJECTION_CATEGORIES = [
   { id: 'price', name: 'Price Objections', color: 'yellow' },
@@ -22,13 +23,17 @@ export default function ObjectionsStep({ data, allStepData, onComplete, authFetc
   const [showAddCustom, setShowAddCustom] = useState(false);
   const [newObjection, setNewObjection] = useState({ category: 'price', text: '', response: '' });
 
+  // Get selected industry
+  const selectedIndustry = allStepData?.industry || INDUSTRIES.PEST_CONTROL;
+
   useEffect(() => {
     fetchTemplates();
-  }, []);
+  }, [selectedIndustry]);
 
   const fetchTemplates = async () => {
     try {
-      const response = await authFetch('/api/products/objection-templates');
+      const url = `/api/products/objection-templates?industry=${selectedIndustry}`;
+      const response = await authFetch(url);
       if (response.ok) {
         const data = await response.json();
         setTemplates(data.templates || []);

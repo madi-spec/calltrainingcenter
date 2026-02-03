@@ -77,17 +77,31 @@ router.get('/package-templates/:slug', async (req, res) => {
 });
 
 /**
- * GET /api/products/objection-templates
- * List all objection templates (system reference data)
+ * GET /api/products/objection-templates?industry=lawn_care
+ * List objection templates filtered by industry (optional)
  */
 router.get('/objection-templates', async (req, res) => {
   try {
     const adminClient = createAdminClient();
-    const { data, error } = await adminClient
+    const { industry } = req.query;
+
+    let query = adminClient
       .from('objection_templates')
       .select('*')
-      .eq('is_active', true)
-      .order('display_order');
+      .eq('is_active', true);
+
+    // Filter by industry using display_order ranges
+    // Pest control: 1-59, Lawn care: 60-119, Both: all
+    if (industry === 'lawn_care') {
+      query = query.gte('display_order', 60).lte('display_order', 119);
+    } else if (industry === 'pest_control') {
+      query = query.gte('display_order', 1).lte('display_order', 59);
+    }
+    // If industry === 'both' or not specified, return all
+
+    query = query.order('display_order');
+
+    const { data, error } = await query;
 
     if (error) throw error;
     res.json({ success: true, templates: data });

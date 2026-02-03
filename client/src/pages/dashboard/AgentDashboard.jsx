@@ -23,10 +23,13 @@ import QuickPracticeButton from '../../components/gamification/QuickPracticeButt
 import ChallengeList from '../../components/gamification/ChallengeList';
 import StreakStatus from '../../components/gamification/StreakStatus';
 import PendingChallenges from '../../components/social/PendingChallenges';
+import OnboardingTour from '../../components/onboarding/OnboardingTour';
+import { useOnboarding } from '../../hooks/useOnboarding';
 
 export default function AgentDashboard() {
   const { profile, authFetch } = useAuth();
   const { organization } = useOrganization();
+  const { shouldShowTour, completeOnboarding } = useOnboarding();
 
   const [stats, setStats] = useState(null);
   const [practiceToday, setPracticeToday] = useState(null);
@@ -93,6 +96,12 @@ export default function AgentDashboard() {
 
   return (
     <div className="space-y-6">
+      {/* Onboarding Tour */}
+      <OnboardingTour
+        run={shouldShowTour}
+        onComplete={completeOnboarding}
+      />
+
       {/* Welcome Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}

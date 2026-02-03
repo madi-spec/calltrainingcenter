@@ -162,6 +162,38 @@ router.patch('/:id', async (req, res) => {
 });
 
 /**
+ * PATCH /api/users/onboarding-complete
+ * Mark onboarding as complete for the current user
+ */
+router.patch('/onboarding-complete', async (req, res) => {
+  try {
+    const adminClient = createAdminClient();
+
+    const { data: user, error } = await adminClient
+      .from(TABLES.USERS)
+      .update({
+        onboarding_completed: true,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', req.user.id)
+      .eq('organization_id', req.organization.id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    res.json({
+      success: true,
+      message: 'Onboarding completed successfully',
+      user
+    });
+  } catch (error) {
+    console.error('Error marking onboarding complete:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
  * PATCH /api/users/:id/role
  * Change a user's role
  */

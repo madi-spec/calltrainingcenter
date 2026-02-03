@@ -165,6 +165,140 @@ router.post('/send', requireRole('manager', 'admin', 'super_admin'), async (req,
 });
 
 /**
+ * GET /api/notifications/preferences
+ * Get user's email notification preferences
+ */
+router.get('/preferences', async (req, res) => {
+  try {
+    const adminClient = createAdminClient();
+
+    const { data: prefs, error } = await adminClient
+      .from('email_preferences')
+      .select('*')
+      .eq('user_id', req.user.id)
+      .single();
+
+    if (error && error.code !== 'PGRST116') {
+      throw error;
+    }
+
+    // Return default preferences if none exist
+    if (!prefs) {
+      return res.json({
+        weekly_digest: true,
+        digest_day: 'monday',
+        digest_time: '08:00:00',
+        timezone: req.user.preferences?.timezone || 'America/New_York'
+      });
+    }
+
+    res.json(prefs);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * PUT /api/notifications/preferences
+ * Update user's email notification preferences
+ */
+router.put('/preferences', async (req, res) => {
+  try {
+    const { weekly_digest, digest_day, digest_time, timezone } = req.body;
+    const adminClient = createAdminClient();
+
+    // Validate digest_day
+    const validDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    if (digest_day && !validDays.includes(digest_day.toLowerCase())) {
+      return res.status(400).json({ error: 'Invalid digest_day. Must be a day of the week.' });
+    }
+
+    // Check if preferences exist
+    const { data: existing } = await adminClient
+      .from('email_preferences')
+      .select('id')
+      .eq('user_id', req.user.id)
+      .single();
+
+    const prefsData = {
+      user_id: req.user.id,
+      ...(weekly_digest !== undefined && { weekly_digest }),
+      ...(digest_day && { digest_day: digest_day.toLowerCase() }),
+      ...(digest_time && { digest_time }),
+      ...(timezone && { timezone })
+    };
+
+    let result;
+    if (existing) {
+      // Update existing preferences
+      result = await adminClient
+        .from('email_preferences')
+        .update(prefsData)
+        .eq('user_id', req.user.id)
+        .select()
+        .single();
+    } else {
+      // Insert new preferences
+      result = await adminClient
+        .from('email_preferences')
+        .insert(prefsData)
+        .select()
+        .single();
+    }
+
+    if (result.error) throw result.error;
+
+    res.json(result.data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * POST /api/notifications/preferences/unsubscribe
+ * Unsubscribe from weekly digest emails
+ */
+router.post('/preferences/unsubscribe', async (req, res) => {
+  try {
+    const adminClient = createAdminClient();
+
+    // Check if preferences exist
+    const { data: existing } = await adminClient
+      .from('email_preferences')
+      .select('id')
+      .eq('user_id', req.user.id)
+      .single();
+
+    const prefsData = {
+      user_id: req.user.id,
+      weekly_digest: false
+    };
+
+    let result;
+    if (existing) {
+      result = await adminClient
+        .from('email_preferences')
+        .update(prefsData)
+        .eq('user_id', req.user.id)
+        .select()
+        .single();
+    } else {
+      result = await adminClient
+        .from('email_preferences')
+        .insert(prefsData)
+        .select()
+        .single();
+    }
+
+    if (result.error) throw result.error;
+
+    res.json({ success: true, message: 'Successfully unsubscribed from weekly digest emails' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
  * Create system notification helper
  */
 export async function createNotification(organizationId, userId, type, title, message, data = {}) {

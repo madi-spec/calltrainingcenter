@@ -288,6 +288,214 @@ router.get('/organization', requireRole('admin', 'super_admin'), async (req, res
 });
 
 /**
+ * GET /api/reports/performance-trends
+ * Get performance trends and insights over time
+ */
+router.get('/performance-trends', async (req, res) => {
+  try {
+    const { timeframe = '30d' } = req.query;
+    const adminClient = createAdminClient();
+
+    // Calculate date range based on timeframe
+    const now = new Date();
+    let startDate = new Date();
+    let days = 30;
+
+    switch (timeframe) {
+      case '7d':
+        days = 7;
+        startDate.setDate(now.getDate() - 7);
+        break;
+      case '30d':
+        days = 30;
+        startDate.setDate(now.getDate() - 30);
+        break;
+      case '90d':
+        days = 90;
+        startDate.setDate(now.getDate() - 90);
+        break;
+      case 'all':
+        days = 365 * 2; // 2 years max
+        startDate.setFullYear(now.getFullYear() - 2);
+        break;
+      default:
+        days = 30;
+        startDate.setDate(now.getDate() - 30);
+    }
+
+    // Get user's sessions in date range
+    const { data: sessions } = await adminClient
+      .from(TABLES.TRAINING_SESSIONS)
+      .select('*')
+      .eq('user_id', req.user.id)
+      .eq('status', 'completed')
+      .gte('created_at', startDate.toISOString())
+      .order('created_at', { ascending: true });
+
+    if (!sessions || sessions.length === 0) {
+      return res.json({
+        scoresTrend: [],
+        categoryPerformance: [],
+        improvingCategories: [],
+        needsWorkCategories: [],
+        teamAverage: null,
+        totalSessions: 0,
+        timeframe: timeframe
+      });
+    }
+
+    // 1. Score Trends - Group by date
+    const scoresByDate = {};
+    sessions.forEach(session => {
+      const date = new Date(session.created_at).toISOString().split('T')[0];
+      if (!scoresByDate[date]) {
+        scoresByDate[date] = { scores: [], date };
+      }
+      scoresByDate[date].scores.push(session.overall_score || 0);
+    });
+
+    const scoresTrend = Object.values(scoresByDate).map(day => ({
+      date: day.date,
+      score: Math.round(day.scores.reduce((a, b) => a + b, 0) / day.scores.length),
+      sessions: day.scores.length
+    }));
+
+    // 2. Category Performance - Aggregate all category scores
+    const categoryData = {};
+    sessions.forEach(session => {
+      if (session.category_scores) {
+        Object.entries(session.category_scores).forEach(([key, value]) => {
+          const score = typeof value === 'object' ? value.score : value;
+          if (!categoryData[key]) {
+            categoryData[key] = { scores: [], name: formatCategoryName(key) };
+          }
+          categoryData[key].scores.push(score);
+        });
+      }
+    });
+
+    const categoryPerformance = Object.entries(categoryData).map(([key, data]) => {
+      const average = Math.round(data.scores.reduce((a, b) => a + b, 0) / data.scores.length);
+      return {
+        category: data.name,
+        key: key,
+        average: average,
+        count: data.scores.length
+      };
+    }).sort((a, b) => b.average - a.average);
+
+    // 3. Identify Improving vs Needs Work Categories
+    // Split sessions into first half and second half
+    const midPoint = Math.floor(sessions.length / 2);
+    const firstHalf = sessions.slice(0, midPoint);
+    const secondHalf = sessions.slice(midPoint);
+
+    const categoryTrends = {};
+
+    // Calculate averages for first half
+    firstHalf.forEach(session => {
+      if (session.category_scores) {
+        Object.entries(session.category_scores).forEach(([key, value]) => {
+          const score = typeof value === 'object' ? value.score : value;
+          if (!categoryTrends[key]) {
+            categoryTrends[key] = { firstScores: [], secondScores: [], name: formatCategoryName(key) };
+          }
+          categoryTrends[key].firstScores.push(score);
+        });
+      }
+    });
+
+    // Calculate averages for second half
+    secondHalf.forEach(session => {
+      if (session.category_scores) {
+        Object.entries(session.category_scores).forEach(([key, value]) => {
+          const score = typeof value === 'object' ? value.score : value;
+          if (!categoryTrends[key]) {
+            categoryTrends[key] = { firstScores: [], secondScores: [], name: formatCategoryName(key) };
+          }
+          categoryTrends[key].secondScores.push(score);
+        });
+      }
+    });
+
+    const improvingCategories = [];
+    const needsWorkCategories = [];
+
+    Object.entries(categoryTrends).forEach(([key, data]) => {
+      if (data.firstScores.length > 0 && data.secondScores.length > 0) {
+        const firstAvg = data.firstScores.reduce((a, b) => a + b, 0) / data.firstScores.length;
+        const secondAvg = data.secondScores.reduce((a, b) => a + b, 0) / data.secondScores.length;
+        const change = secondAvg - firstAvg;
+        const percentChange = Math.round((change / firstAvg) * 100);
+
+        const categoryInfo = {
+          category: data.name,
+          key: key,
+          previousAverage: Math.round(firstAvg),
+          currentAverage: Math.round(secondAvg),
+          change: Math.round(change),
+          percentChange: percentChange
+        };
+
+        if (change > 2) {
+          improvingCategories.push(categoryInfo);
+        } else if (change < -2 || secondAvg < 70) {
+          needsWorkCategories.push(categoryInfo);
+        }
+      }
+    });
+
+    // Sort by change magnitude
+    improvingCategories.sort((a, b) => b.change - a.change);
+    needsWorkCategories.sort((a, b) => a.currentAverage - b.currentAverage);
+
+    // 4. Calculate team average for comparison
+    const { data: teamSessions } = await adminClient
+      .from(TABLES.TRAINING_SESSIONS)
+      .select('overall_score')
+      .eq('organization_id', req.organization.id)
+      .eq('status', 'completed')
+      .gte('created_at', startDate.toISOString());
+
+    const teamAverage = teamSessions && teamSessions.length > 0
+      ? Math.round(teamSessions.reduce((sum, s) => sum + (s.overall_score || 0), 0) / teamSessions.length)
+      : null;
+
+    const userAverage = Math.round(sessions.reduce((sum, s) => sum + (s.overall_score || 0), 0) / sessions.length);
+
+    res.json({
+      scoresTrend,
+      categoryPerformance,
+      improvingCategories: improvingCategories.slice(0, 3),
+      needsWorkCategories: needsWorkCategories.slice(0, 3),
+      teamAverage,
+      userAverage,
+      totalSessions: sessions.length,
+      timeframe: timeframe
+    });
+  } catch (error) {
+    console.error('Performance trends error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Helper function to format category names
+function formatCategoryName(key) {
+  const nameMap = {
+    'empathyRapport': 'Empathy & Rapport',
+    'problemResolution': 'Problem Resolution',
+    'productKnowledge': 'Product Knowledge',
+    'professionalism': 'Professionalism',
+    'scenarioSpecific': 'Scenario Specific',
+    'closing': 'Closing',
+    'objectionHandling': 'Objection Handling',
+    'activeListening': 'Active Listening',
+    'communication': 'Communication'
+  };
+  return nameMap[key] || key.replace(/([A-Z])/g, ' $1').trim();
+}
+
+/**
  * GET /api/reports/export
  * Export report data to CSV
  */

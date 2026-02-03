@@ -15,8 +15,10 @@ import { useConfig } from '../context/ConfigContext';
 import { useOrganization } from '../context/OrganizationContext';
 import { useAuth } from '../context/AuthContext';
 import { useRetellCall } from '../hooks/useRetellCall';
+import useBranchingLogic from '../hooks/useBranchingLogic';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
+import BranchingChoice from '../components/practice/BranchingChoice';
 
 function Training() {
   const navigate = useNavigate();
@@ -39,6 +41,17 @@ function Training() {
   } = useRetellCall();
 
   const [callStarted, setCallStarted] = useState(false);
+  const [sessionId, setSessionId] = useState(null);
+  const [branchingPoints, setBranchingPoints] = useState(null);
+
+  // Initialize branching logic
+  const {
+    currentNode,
+    isShowingChoice,
+    handleChoiceSelected,
+    saveFinalPathScore,
+    getPathForVisualization
+  } = useBranchingLogic(sessionId, branchingPoints, transcript);
 
   // Redirect if no scenario selected
   useEffect(() => {
@@ -47,11 +60,36 @@ function Training() {
     }
   }, [currentScenario, navigate]);
 
+  // Fetch branching points for scenario
+  useEffect(() => {
+    if (!currentScenario) return;
+
+    const fetchBranchingPoints = async () => {
+      try {
+        const response = await authFetch(`/api/generated-scenarios/${currentScenario.id}/branching`);
+        if (response.ok) {
+          const data = await response.json();
+          setBranchingPoints(data.branching_points);
+        }
+      } catch (error) {
+        console.error('[Training] Error fetching branching points:', error);
+      }
+    };
+
+    fetchBranchingPoints();
+  }, [currentScenario, authFetch]);
+
   // Start call when component mounts - only once
   useEffect(() => {
     if (currentScenario && callState === 'idle' && !callStarted) {
       setCallStarted(true);
-      startCall(currentScenario);
+
+      // Start call and capture session ID
+      startCall(currentScenario).then((callData) => {
+        if (callData?.sessionId) {
+          setSessionId(callData.sessionId);
+        }
+      });
     }
   }, [currentScenario, callState, callStarted, startCall]);
 
@@ -79,10 +117,22 @@ function Training() {
       };
     }
 
+    // Save branching path score before ending
+    if (sessionId && branchingPoints) {
+      try {
+        await saveFinalPathScore();
+      } catch (error) {
+        console.error('Error saving branch path score:', error);
+      }
+    }
+
     setCurrentCall(callData);
 
     // Start async analysis - don't wait for it to complete
     const analysisId = `analysis_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    // Get branch path info for results
+    const branchPathData = branchingPoints ? getPathForVisualization() : null;
 
     // Store pending results with analysis ID for Results page to poll
     const pendingResults = {
@@ -91,7 +141,9 @@ function Training() {
       analysisStatus: 'processing',
       transcript: callData.transcript,
       scenario: currentScenario,
-      duration: callData.duration
+      duration: callData.duration,
+      branchingPoints,
+      branchPath: branchPathData
     };
 
     // Set results in context
@@ -348,6 +400,13 @@ function Training() {
           <span>{company.guarantees?.[0]}</span>
         </div>
       </div>
+
+      {/* Branching Choice Overlay */}
+      <BranchingChoice
+        node={currentNode}
+        onChoiceSelected={handleChoiceSelected}
+        isVisible={isShowingChoice}
+      />
     </div>
   );
 }

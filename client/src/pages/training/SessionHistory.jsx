@@ -8,7 +8,8 @@ import {
   Star,
   ChevronRight,
   Filter,
-  Search
+  Search,
+  Play
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -165,6 +166,15 @@ export default function SessionHistory() {
                         </div>
                       ))}
                     </div>
+                  )}
+                  {(session.recording_url || session.recording_id) && (
+                    <Link
+                      to={`/playback/${session.id}`}
+                      className="flex items-center gap-1 px-3 py-1.5 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium text-sm transition-colors"
+                    >
+                      <Play className="w-4 h-4" />
+                      Watch Replay
+                    </Link>
                   )}
                   <Link
                     to={`/results?session=${session.id}`}

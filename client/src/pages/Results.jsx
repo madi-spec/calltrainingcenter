@@ -26,6 +26,7 @@ import ScoreRing from '../components/coaching/ScoreRing';
 import CategoryScore from '../components/coaching/CategoryScore';
 import PracticeAgainButton from '../components/training/PracticeAgainButton';
 import ShareButton from '../components/social/ShareButton';
+import DecisionTreeVisualization from '../components/practice/DecisionTreeVisualization';
 
 function Results() {
   const navigate = useNavigate();
@@ -621,6 +622,24 @@ function Results() {
               </div>
             </Card.Content>
           </Card>
+        </motion.div>
+      )}
+
+      {/* Decision Tree Visualization */}
+      {lastResults?.branchingPoints && lastResults?.branchPath && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.45 }}
+          className="mb-8"
+        >
+          <DecisionTreeVisualization
+            branchingPoints={lastResults.branchingPoints}
+            pathTaken={lastResults.branchPath.path || []}
+            pathScore={lastResults.branchPath.score}
+            pathQuality={lastResults.branchPath.quality}
+            onReplay={handleTryAgain}
+          />
         </motion.div>
       )}
 

@@ -187,7 +187,9 @@ export const TABLES = {
   OFFLINE_SYNC_QUEUE: 'offline_sync_queue',
   CALENDAR_INTEGRATIONS: 'calendar_integrations',
   TRAINING_EVENTS: 'training_events',
-  TRAINING_GOALS: 'training_goals'
+  TRAINING_GOALS: 'training_goals',
+  EMAIL_PREFERENCES: 'email_preferences',
+  SESSION_NOTES: 'session_notes'
 };
 
 /**

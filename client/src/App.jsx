@@ -30,11 +30,13 @@ const ModuleDetail = lazy(() => import('./pages/modules/ModuleDetail'));
 const Assignments = lazy(() => import('./pages/assignments/Assignments'));
 const MyAssignments = lazy(() => import('./pages/assignments/MyAssignments'));
 const SessionHistory = lazy(() => import('./pages/training/SessionHistory'));
+const SessionPlayback = lazy(() => import('./pages/training/SessionPlayback'));
 const Favorites = lazy(() => import('./pages/scenarios/Favorites'));
 const Reports = lazy(() => import('./pages/reports/Reports'));
 const LiveDashboard = lazy(() => import('./pages/reports/LiveDashboard'));
 const SkillGapHeatmap = lazy(() => import('./pages/reports/SkillGapHeatmap'));
 const ROIDashboard = lazy(() => import('./pages/reports/ROIDashboard'));
+const PerformanceTrends = lazy(() => import('./pages/analytics/PerformanceTrends'));
 const Leaderboard = lazy(() => import('./pages/leaderboard/Leaderboard'));
 const Settings = lazy(() => import('./pages/settings/Settings'));
 const BillingSettings = lazy(() => import('./pages/settings/Billing'));
@@ -50,6 +52,8 @@ const Recommendations = lazy(() => import('./pages/recommendations/Recommendatio
 const CallReplay = lazy(() => import('./pages/replay/CallReplay'));
 const ComparativeAnalysis = lazy(() => import('./pages/analysis/ComparativeAnalysis'));
 const CompanyOnboarding = lazy(() => import('./pages/onboarding/CompanyOnboarding'));
+const MyCertificates = lazy(() => import('./pages/certificates/MyCertificates'));
+const VerifyCertificate = lazy(() => import('./pages/certificates/VerifyCertificate'));
 
 // Loading component for lazy loaded pages
 function PageLoader() {
@@ -118,6 +122,13 @@ function App() {
         {/* Accept Invitation Route - Public */}
         <Route path="/auth/accept-invite" element={<AcceptInvite />} />
 
+        {/* Certificate Verification - Public Route */}
+        <Route path="/verify-certificate/:code?" element={
+          <Suspense fallback={<PageLoader />}>
+            <VerifyCertificate />
+          </Suspense>
+        } />
+
         {/* Onboarding Route - Protected but no Layout */}
         <Route
           path="/onboarding"
@@ -151,6 +162,7 @@ function App() {
                     <Route path="/results" element={<Results />} />
                     <Route path="/results/:sessionId" element={<Results />} />
                     <Route path="/replay/:sessionId" element={<CallReplay />} />
+                    <Route path="/playback/:sessionId" element={<SessionPlayback />} />
                     <Route path="/analysis/:scenarioId" element={<ComparativeAnalysis />} />
                     <Route path="/history" element={<SessionHistory />} />
                     <Route path="/favorites" element={<Favorites />} />
@@ -170,6 +182,9 @@ function App() {
                     <Route path="/courses/:id" element={<CourseDetail />} />
                     <Route path="/modules/:id" element={<ModuleDetail />} />
 
+                    {/* Certificates */}
+                    <Route path="/certificates" element={<MyCertificates />} />
+
                     {/* Assignments */}
                     <Route path="/my-assignments" element={<MyAssignments />} />
                     <Route
@@ -183,6 +198,7 @@ function App() {
 
                     {/* Reports */}
                     <Route path="/reports" element={<Reports />} />
+                    <Route path="/analytics/performance" element={<PerformanceTrends />} />
                     <Route
                       path="/live"
                       element={

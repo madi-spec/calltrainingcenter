@@ -8,6 +8,7 @@ import { Router } from 'express';
 import { authMiddleware, tenantMiddleware } from '../lib/auth.js';
 import { createAdminClient } from '../lib/supabase.js';
 import { generateScenariosForModule, regenerateScenario } from '../services/scenarioGenerator.js';
+import { generateCertificate } from '../services/certificateGenerator.js';
 
 const router = Router();
 
@@ -302,6 +303,43 @@ router.post('/:id/complete-scenario', authMiddleware, tenantMiddleware, async (r
 
       courseProgress = cp;
       badgeAwarded = isCourseComplete;
+
+      // Generate certificate if course is complete
+      if (isCourseComplete) {
+        try {
+          // Get user details
+          const { data: user } = await adminClient
+            .from('users')
+            .select('first_name, last_name, email')
+            .eq('id', req.user.id)
+            .single();
+
+          // Get course details
+          const { data: course } = await adminClient
+            .from('courses')
+            .select('name')
+            .eq('id', module.course_id)
+            .single();
+
+          if (user && course) {
+            const userName = `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.email;
+
+            await generateCertificate({
+              userId: req.user.id,
+              courseId: module.course_id,
+              userName,
+              courseName: course.name,
+              organizationName: req.organization.name,
+              userEmail: user.email
+            });
+
+            console.log('[COURSE] Certificate generated for course completion');
+          }
+        } catch (certError) {
+          console.error('[COURSE] Failed to generate certificate:', certError);
+          // Don't fail the completion if certificate generation fails
+        }
+      }
 
       // Unlock next module if exists
       const { data: nextModule } = await adminClient

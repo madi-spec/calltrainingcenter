@@ -17,7 +17,9 @@ import {
   BookOpen,
   Wand2,
   Sun,
-  Moon
+  Moon,
+  Award,
+  Activity
 } from 'lucide-react';
 import { useOrganization } from '../context/OrganizationContext';
 import { useAuth } from '../context/AuthContext';
@@ -98,9 +100,11 @@ function Layout({ children }) {
     { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
     { to: '/scenarios', icon: Play, label: 'Practice', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
     { to: '/courses', icon: BookOpen, label: 'Courses', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
+    { to: '/certificates', icon: Award, label: 'Certificates', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
     { to: '/my-assignments', icon: ClipboardList, label: 'My Assignments', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
     { to: '/assignments', icon: ClipboardList, label: 'Assign Training', roles: ['manager', 'admin', 'super_admin'] },
     { to: '/reports', icon: BarChart3, label: 'Reports', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
+    { to: '/analytics/performance', icon: Activity, label: 'Performance Trends', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
     { to: '/leaderboard', icon: Trophy, label: 'Leaderboard', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
   ];
 

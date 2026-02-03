@@ -147,4 +147,42 @@ function getScoringFocusForCategory(category) {
   return focusAreas[category] || ['Professionalism', 'Communication', 'Problem solving', 'Customer satisfaction'];
 }
 
+/**
+ * GET /api/generated-scenarios/:id/branching
+ * Get branching points for a scenario (from its template)
+ */
+router.get('/:id/branching', authMiddleware, tenantMiddleware, async (req, res) => {
+  try {
+    const adminClient = createAdminClient();
+
+    // Get the generated scenario to find its template
+    const { data: genScenario } = await adminClient
+      .from('generated_scenarios')
+      .select('template_id')
+      .eq('id', req.params.id)
+      .eq('user_id', req.user.id)
+      .single();
+
+    if (!genScenario || !genScenario.template_id) {
+      return res.json({ branching_points: null });
+    }
+
+    // Get the template's branching points
+    const { data: template, error } = await adminClient
+      .from('scenario_templates')
+      .select('branching_points')
+      .eq('id', genScenario.template_id)
+      .single();
+
+    if (error) throw error;
+
+    res.json({
+      branching_points: template?.branching_points || null
+    });
+  } catch (error) {
+    console.error('Error fetching branching points:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 export default router;

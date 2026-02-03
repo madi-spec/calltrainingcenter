@@ -122,6 +122,151 @@ function generateInvitationEmailHTML({ inviterName, organizationName, role, invi
 }
 
 /**
+ * Send a certificate email with PDF attachment
+ * @param {Object} params
+ * @param {string} params.to - Recipient email address
+ * @param {string} params.userName - Recipient's name
+ * @param {string} params.courseName - Course name
+ * @param {string} params.organizationName - Organization name
+ * @param {string} params.verificationCode - Certificate verification code
+ * @param {Buffer} params.pdfBuffer - PDF certificate as buffer
+ * @returns {Promise<Object>} Result of the email send operation
+ */
+export async function sendCertificateEmail({ to, userName, courseName, organizationName, verificationCode, pdfBuffer }) {
+  if (!resend) {
+    console.warn('[EMAIL] Resend not configured - skipping certificate email send');
+    return {
+      success: false,
+      error: 'Email service not configured',
+      skipped: true
+    };
+  }
+
+  try {
+    const { data, error } = await resend.emails.send({
+      from: 'Sell Every Call <certificates@selleverycall.com>',
+      to: [to],
+      subject: `Congratulations! Your ${courseName} Certificate`,
+      html: generateCertificateEmailHTML({
+        userName,
+        courseName,
+        organizationName,
+        verificationCode
+      }),
+      attachments: [
+        {
+          filename: `certificate-${verificationCode}.pdf`,
+          content: pdfBuffer
+        }
+      ]
+    });
+
+    if (error) {
+      console.error('[EMAIL] Error sending certificate:', JSON.stringify(error, null, 2));
+      return {
+        success: false,
+        error: error.message || 'Unknown error',
+        errorDetails: error
+      };
+    }
+
+    console.log(`[EMAIL] Certificate sent to ${to}, message ID: ${data.id}`);
+    return { success: true, messageId: data.id };
+  } catch (error) {
+    console.error('[EMAIL] Exception sending certificate:', error);
+    return { success: false, error: error.message };
+  }
+}
+
+/**
+ * Generate HTML content for certificate email
+ */
+function generateCertificateEmailHTML({ userName, courseName, organizationName, verificationCode }) {
+  const verificationUrl = `${process.env.APP_URL || 'http://localhost:5173'}/verify-certificate/${verificationCode}`;
+
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificate of Completion - ${courseName}</title>
+</head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+
+  <!-- Header -->
+  <div style="text-align: center; margin-bottom: 40px;">
+    <div style="background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white; padding: 32px; border-radius: 8px;">
+      <h1 style="color: white; margin: 0; font-size: 32px;">🎉 Congratulations!</h1>
+      <p style="color: #e0e7ff; margin-top: 8px; font-size: 18px;">You've earned a certificate</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div style="background: #f8fafc; border-radius: 8px; padding: 32px; margin-bottom: 32px;">
+    <p style="font-size: 16px; margin: 16px 0;">
+      Hi <strong>${userName}</strong>,
+    </p>
+
+    <p style="font-size: 16px; margin: 16px 0;">
+      Congratulations on completing <strong>${courseName}</strong> at ${organizationName}!
+    </p>
+
+    <p style="font-size: 16px; color: #475569; margin: 16px 0;">
+      Your certificate of completion is attached to this email. You can also download it
+      anytime from your profile or verify it using the code below.
+    </p>
+
+    <!-- Certificate Info Box -->
+    <div style="background: white; border: 2px solid #e2e8f0; border-radius: 6px; padding: 20px; margin: 24px 0;">
+      <p style="font-size: 14px; color: #64748b; margin: 0 0 8px 0;">
+        Verification Code:
+      </p>
+      <p style="font-size: 20px; font-weight: 600; color: #2563eb; margin: 0; font-family: monospace;">
+        ${verificationCode}
+      </p>
+    </div>
+
+    <!-- CTA Button -->
+    <div style="text-align: center; margin: 32px 0;">
+      <a href="${verificationUrl}"
+         style="display: inline-block; background: #2563eb; color: white; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-weight: 600; font-size: 16px;">
+        Verify Certificate Online
+      </a>
+    </div>
+
+    <p style="font-size: 14px; color: #64748b; margin-top: 24px;">
+      Keep this certificate as proof of your achievement. You can share it with others
+      or add it to your professional portfolio.
+    </p>
+  </div>
+
+  <!-- Tips Section -->
+  <div style="background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 4px; padding: 16px; margin-bottom: 32px;">
+    <p style="font-size: 14px; color: #1e40af; margin: 0; font-weight: 600;">
+      💡 What's Next?
+    </p>
+    <p style="font-size: 14px; color: #1e3a8a; margin: 8px 0 0 0;">
+      Continue your learning journey by exploring more courses and improving your skills.
+    </p>
+  </div>
+
+  <!-- Footer -->
+  <div style="text-align: center; color: #94a3b8; font-size: 14px; padding: 20px 0; border-top: 1px solid #e2e8f0;">
+    <p style="margin: 8px 0;">
+      Questions? Contact your training administrator or visit our support center.
+    </p>
+    <p style="margin-top: 24px;">
+      &copy; ${new Date().getFullYear()} Sell Every Call. All rights reserved.
+    </p>
+  </div>
+
+</body>
+</html>
+  `.trim();
+}
+
+/**
  * Check if email service is configured
  */
 export function isEmailConfigured() {

@@ -5,6 +5,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import Retell from 'retell-sdk';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
+import cron from 'node-cron';
 
 // Import route handlers
 import authRoutes from './routes/auth.js';
@@ -41,6 +42,8 @@ import pwaRoutes from './routes/pwa.js';
 import calendarRoutes from './routes/calendar.js';
 import recordingsRoutes from './routes/recordings.js';
 import helpAgentRoutes from './routes/helpAgent.js';
+import certificatesRoutes from './routes/certificates.js';
+import sessionNotesRoutes from './routes/sessionNotes.js';
 
 // Import services
 import {
@@ -50,8 +53,11 @@ import {
   getValidVoiceId
 } from './services/voiceService.js';
 
+// Import jobs
+import { runWeeklyDigestJob, triggerWeeklyDigestManual } from './jobs/weeklyDigest.js';
+
 // Import middleware and helpers
-import { optionalAuthMiddleware } from './lib/auth.js';
+import { optionalAuthMiddleware, authMiddleware, requireRole } from './lib/auth.js';
 import { createAdminClient, TABLES } from './lib/supabase.js';
 
 const app = express();
@@ -924,6 +930,8 @@ app.use('/api/pwa', pwaRoutes);
 app.use('/api/calendar', calendarRoutes);
 app.use('/api/recordings', recordingsRoutes);
 app.use('/api/help-agent', helpAgentRoutes);
+app.use('/api/certificates', certificatesRoutes);
+app.use('/api/session-notes', sessionNotesRoutes);
 
 // ============ LEGACY ROUTES (maintain backward compatibility) ============
 
@@ -1846,6 +1854,43 @@ app.get('/api/debug/test-retell', async (req, res) => {
       success: false,
       error: error.message
     });
+  }
+});
+
+// ============ CRON JOBS ============
+
+/**
+ * Weekly Digest Email Job
+ * Runs every Monday at 8:00 AM
+ * Cron schedule: '0 8 * * 1' (minute hour day month day-of-week)
+ */
+if (process.env.ENABLE_CRON_JOBS !== 'false') {
+  cron.schedule('0 8 * * 1', async () => {
+    console.log('[Cron] Running weekly digest job...');
+    try {
+      await runWeeklyDigestJob();
+    } catch (error) {
+      console.error('[Cron] Weekly digest job failed:', error);
+    }
+  }, {
+    timezone: 'America/New_York'
+  });
+
+  console.log('[Cron] Weekly digest job scheduled for Mondays at 8:00 AM ET');
+}
+
+/**
+ * Manual trigger for weekly digest (for testing)
+ * POST /api/admin/trigger-weekly-digest
+ */
+app.post('/api/admin/trigger-weekly-digest', authMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
+  try {
+    console.log(`[Admin] Manual weekly digest trigger by ${req.user.email}`);
+    const result = await triggerWeeklyDigestManual();
+    res.json(result);
+  } catch (error) {
+    console.error('[Admin] Weekly digest trigger failed:', error);
+    res.status(500).json({ error: error.message });
   }
 });
 

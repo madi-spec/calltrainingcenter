@@ -412,4 +412,147 @@ router.get('/team', async (req, res) => {
   }
 });
 
+/**
+ * POST /api/training/session/:id/branch-choice
+ * Record a branch choice during a training session
+ */
+router.post('/session/:id/branch-choice', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { node_id, choice_id, choice_text, score_modifier } = req.body;
+
+    if (!node_id || !choice_id) {
+      return res.status(400).json({ error: 'node_id and choice_id are required' });
+    }
+
+    const adminClient = createAdminClient();
+
+    // Verify session belongs to user
+    const { data: session } = await adminClient
+      .from(TABLES.TRAINING_SESSIONS)
+      .select('id, user_id')
+      .eq('id', id)
+      .eq('user_id', req.user.id)
+      .single();
+
+    if (!session) {
+      return res.status(404).json({ error: 'Session not found' });
+    }
+
+    // Insert branch choice
+    const { data: choice, error } = await adminClient
+      .from('session_branch_choices')
+      .insert({
+        session_id: id,
+        node_id,
+        choice_id,
+        choice_text: choice_text || null,
+        score_modifier: score_modifier || 1.0
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    // Update session branches_taken count
+    await adminClient
+      .from(TABLES.TRAINING_SESSIONS)
+      .update({
+        branches_taken: adminClient.raw('branches_taken + 1')
+      })
+      .eq('id', id);
+
+    res.json({ choice });
+  } catch (error) {
+    console.error('Error recording branch choice:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * GET /api/training/session/:id/branch-choices
+ * Get all branch choices for a session
+ */
+router.get('/session/:id/branch-choices', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const adminClient = createAdminClient();
+
+    // Verify session access
+    const { data: session } = await adminClient
+      .from(TABLES.TRAINING_SESSIONS)
+      .select('id, user_id')
+      .eq('id', id)
+      .eq('organization_id', req.organization.id)
+      .single();
+
+    if (!session) {
+      return res.status(404).json({ error: 'Session not found' });
+    }
+
+    // Check access permissions
+    if (session.user_id !== req.user.id && !['manager', 'admin', 'super_admin'].includes(req.user.role)) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    // Get all branch choices for this session
+    const { data: choices, error } = await adminClient
+      .from('session_branch_choices')
+      .select('*')
+      .eq('session_id', id)
+      .order('timestamp', { ascending: true });
+
+    if (error) throw error;
+
+    // Calculate path score and quality
+    const pathScore = choices && choices.length > 0
+      ? choices.reduce((sum, c) => sum + (c.score_modifier || 1.0), 0) / choices.length
+      : null;
+
+    const pathQuality = pathScore >= 0.9 ? 'optimal'
+      : pathScore >= 0.7 ? 'acceptable'
+      : 'poor';
+
+    res.json({
+      choices: choices || [],
+      pathScore,
+      pathQuality
+    });
+  } catch (error) {
+    console.error('Error fetching branch choices:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * PATCH /api/training/session/:id/branch-path
+ * Update session with final branch path score
+ */
+router.patch('/session/:id/branch-path', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { path_score, path_quality } = req.body;
+
+    const adminClient = createAdminClient();
+
+    const { data: session, error } = await adminClient
+      .from(TABLES.TRAINING_SESSIONS)
+      .update({
+        branch_path_score: path_score,
+        branch_path_quality: path_quality
+      })
+      .eq('id', id)
+      .eq('user_id', req.user.id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    res.json({ session });
+  } catch (error) {
+    console.error('Error updating branch path:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 export default router;

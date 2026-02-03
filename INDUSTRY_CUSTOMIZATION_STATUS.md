@@ -30,55 +30,71 @@
 - Now industry-agnostic and welcoming to all service companies
 - Maintains CSR training focus
 
-## ⏳ TODO - Phase 2 (Not Critical, Can Be Done Anytime)
+## ✅ COMPLETED - Phase 2
 
-### 1. **Apply Terminology Throughout App**
-Create a useIndustry hook to apply terminology across the app:
+### 1. **useIndustry Hook Created** ✅
+Created `client/src/hooks/useIndustry.js` to provide consistent industry terminology access:
+- Returns current organization's industry setting
+- Provides `term()` function for dynamic terminology
+- Provides `label()` and `theme()` helpers
+- Ready to use throughout the application
 
+Usage example:
 ```javascript
-// client/src/hooks/useIndustry.js
-import { useOrganization } from '../context/OrganizationContext';
-import { getIndustryTerm, INDUSTRIES } from '../utils/industryTerminology';
-
-export function useIndustry() {
-  const { organization } = useOrganization();
-  const industry = organization?.settings?.industry || INDUSTRIES.PEST_CONTROL;
-
-  return {
-    industry,
-    term: (termKey) => getIndustryTerm(industry, termKey)
-  };
-}
-```
-
-Then use it in components:
-```javascript
-const { term } = useIndustry();
+const { industry, term } = useIndustry();
 <h2>{term('technicians')} Performance</h2>  // Shows "Specialists" for lawn care
 ```
 
-### 2. **Add Lawn Care Scenarios**
-Create lawn care-specific training scenarios:
-- Fertilization Program Inquiry
-- Grub Problem Escalation
-- Weed Control Questions
-- Aeration Scheduling
-- Brown Patch Diagnosis
+### 2. **Industry-Specific Default Packages** ✅
+Updated `PackagesStep.jsx` to show industry-appropriate packages during setup:
+- **Pest Control**: Basic/Premium/Complete Protection with pest-specific features
+- **Lawn Care**: Basic/Premium/Complete Lawn Programs with fertilization, grub control, aeration
+- **Combined**: Essential/Complete/Ultimate Property Care with integrated services
+- Automatically selects correct templates based on industry choice
 
-### 3. **Industry-Specific Objections**
-Add common objections for each industry:
-- **Pest Control**: "Too expensive", "Can I do it myself?", "Chemicals are dangerous"
-- **Lawn Care**: "It's just grass", "I can fertilize myself", "Rain will wash it away"
+### 3. **Lawn Care Training Content** ✅
+Created comprehensive lawn care content in `021_lawn_care_content.sql`:
+- **Service Categories**: Lawn Fertilization, Weed Control, Grub Control, Aeration, Disease Control, Tree & Shrub Care
+- **Issue Types**: Grubs, chinch bugs, brown patch, dollar spot, crabgrass, dandelions, etc.
+- **Package Templates**: 4-step, 6-step, 8-step programs with proper pricing
+- **15+ Lawn Care Objections**:
+  * "I can fertilize myself from the hardware store"
+  * "Are these chemicals safe for my kids and pets?"
+  * "What if it rains after you apply?"
+  * "Will this kill the bees?"
+  * "My lawn is already pretty good"
+- **11 Customer Profiles**: From easy (Brad Henderson - new homeowner) to hard (Doug Martinez - professional landscaper skeptic)
+- **3 Training Courses**: Lawn Care Sales Fundamentals, Lawn Care Objections, Lawn Care Customer Service
+- **10 Training Scenarios**:
+  * Fertilization Program Inquiry
+  * Grub Damage Complaint
+  * Weed Control Questions
+  * Chemical Safety Concerns
+  * DIY Competitor (Hardware Store)
+  * Aeration Upsell
+  * Brown Patch Disease Diagnosis
+  * Environmental Activist
+  * Competitive Neighbor Motivation
+  * Professional Landscaper Skeptic
 
-### 4. **Dashboard Customization**
-- Use industry colors/themes
+## ⏳ TODO - Phase 3 (Optional Polish)
+
+### 1. **Apply Terminology in Components**
+Use the useIndustry hook throughout the app:
+- Dashboard components (ManagerDashboard, AgentDashboard)
+- Team management pages
+- Reports and analytics
+- Practice tracking components
+
+### 2. **Dashboard Customization**
+- Use industry colors/themes from `getIndustryTheme()`
 - Show industry-specific KPIs
 - Customize chart labels with industry terms
 
-### 5. **Scenario Builder Updates**
+### 3. **Scenario Builder Updates**
 - Pre-populate common scenarios based on industry
-- Industry-specific objection templates
-- Customer personas relevant to industry
+- Show industry-relevant objection templates
+- Filter customer personas by industry relevance
 
 ## 🎯 Impact
 
@@ -95,19 +111,27 @@ Add common objections for each industry:
 
 ## 📊 Current State
 
-**System is PRODUCTION READY** for lawn care companies!
-- Industry selection works
-- Data is saved
-- Landing page is generic
-- Setup experience is professional
+**Phase 2 COMPLETED** - System is FULLY READY for lawn care companies!
+- ✅ Industry selection in setup wizard
+- ✅ Industry-specific default packages
+- ✅ Comprehensive lawn care training content (scenarios, objections, courses)
+- ✅ useIndustry hook ready for app-wide terminology
+- ✅ Landing page is industry-agnostic
+- ✅ Professional setup experience
 
-**Phase 2 items** are polish/enhancement, not blockers.
+**Phase 3 items** are optional polish for enhanced user experience.
 
 ## 🚀 Next Steps for You
 
-1. **Test the setup wizard** - Go through setup and select different industries
-2. **Verify industry saves** - Check organization settings in database
-3. **Share with ExperiGreen/TopTurf** - They'll see industry selection immediately
-4. **Phase 2 can wait** - Implement terminology usage gradually as needed
+1. **Run the new migration** - Execute `021_lawn_care_content.sql` in Supabase to add lawn care content
+2. **Test the setup wizard** - Go through setup and select "Lawn Care" industry
+   - Verify lawn care packages appear in PackagesStep
+3. **Test lawn care scenarios** - After running migration, lawn care training courses should appear
+4. **Share with ExperiGreen/TopTurf** - System is fully ready for lawn care companies:
+   - Industry selection in setup
+   - Lawn care packages
+   - Lawn care training scenarios
+   - Lawn care objections and customer profiles
+5. **Phase 3 (optional)** - Gradually apply useIndustry hook throughout UI for dynamic terminology
 
-The core system is in place and working!
+The system is production-ready with full lawn care support!

@@ -492,6 +492,11 @@ router.post('/complete-setup', authMiddleware, tenantMiddleware, requireRole('ad
       onboarding_completed: true
     };
 
+    // Extract industry step data
+    if (setupData?.industry) {
+      updateData.settings.industry = setupData.industry;
+    }
+
     // Extract company info step data
     if (setupData?.company) {
       const company = setupData.company;

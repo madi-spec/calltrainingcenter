@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Download, Award, Calendar, Trophy, ExternalLink, Share2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 export default function MyCertificates() {
   const navigate = useNavigate();
+  const { authFetch } = useAuth();
   const [certificates, setCertificates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -15,9 +17,7 @@ export default function MyCertificates() {
 
   const fetchCertificates = async () => {
     try {
-      const response = await fetch('/api/certificates', {
-        credentials: 'include'
-      });
+      const response = await authFetch('/api/certificates');
 
       if (!response.ok) throw new Error('Failed to fetch certificates');
 
@@ -32,9 +32,7 @@ export default function MyCertificates() {
 
   const handleDownload = async (certificateId, verificationCode) => {
     try {
-      const response = await fetch(`/api/certificates/${certificateId}/download`, {
-        credentials: 'include'
-      });
+      const response = await authFetch(`/api/certificates/${certificateId}/download`);
 
       if (!response.ok) throw new Error('Failed to download certificate');
 

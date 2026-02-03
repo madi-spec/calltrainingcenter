@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Loader2, Plus, Trash2, ChevronDown, ChevronUp, Save, Wand2, CheckCircle2 } from 'lucide-react';
+import { INDUSTRIES } from '../../../utils/industryTerminology';
 
-const DEFAULT_PACKAGES = [
+const PEST_CONTROL_PACKAGES = [
   {
     name: 'Basic Protection',
     description: 'Essential pest control for common household pests',
@@ -42,6 +43,108 @@ const DEFAULT_PACKAGES = [
     ]
   }
 ];
+
+const LAWN_CARE_PACKAGES = [
+  {
+    name: 'Basic Lawn Program',
+    description: 'Essential fertilization and weed control for a healthy lawn',
+    initialPrice: 99,
+    recurringPrice: 65,
+    frequency: 'quarterly',
+    sellingPoints: [
+      '4 seasonal fertilizer applications',
+      'Pre-emergent weed control',
+      'Basic lawn analysis',
+      'Satisfaction guaranteed'
+    ]
+  },
+  {
+    name: 'Premium Lawn Care',
+    description: 'Comprehensive lawn health program with specialty treatments',
+    initialPrice: 149,
+    recurringPrice: 95,
+    frequency: 'bi-monthly',
+    sellingPoints: [
+      'All Basic features plus grub control',
+      '6 applications per year',
+      'Disease and insect monitoring',
+      'Priority service scheduling',
+      'Free service calls'
+    ]
+  },
+  {
+    name: 'Complete Lawn Solution',
+    description: 'Our most comprehensive turf management program',
+    initialPrice: 249,
+    recurringPrice: 135,
+    frequency: 'monthly',
+    sellingPoints: [
+      'All Premium features plus aeration',
+      'Monthly lawn health visits',
+      'Soil testing and amendments',
+      'Fungus and disease treatment',
+      'Tree and shrub care',
+      'Same-day service guarantee'
+    ]
+  }
+];
+
+const COMBINED_PACKAGES = [
+  {
+    name: 'Essential Home Care',
+    description: 'Basic pest control and lawn fertilization bundle',
+    initialPrice: 199,
+    recurringPrice: 99,
+    frequency: 'quarterly',
+    sellingPoints: [
+      'Quarterly pest treatments',
+      'Seasonal fertilization',
+      'Pre-emergent weed control',
+      'Interior and exterior pest service'
+    ]
+  },
+  {
+    name: 'Complete Property Care',
+    description: 'Comprehensive pest and lawn care protection',
+    initialPrice: 299,
+    recurringPrice: 149,
+    frequency: 'bi-monthly',
+    sellingPoints: [
+      'Bi-monthly pest control',
+      'Full lawn care program',
+      'Grub and termite monitoring',
+      'Priority scheduling',
+      'Integrated pest management'
+    ]
+  },
+  {
+    name: 'Ultimate Property Protection',
+    description: 'Premium full-service pest and lawn management',
+    initialPrice: 499,
+    recurringPrice: 229,
+    frequency: 'monthly',
+    sellingPoints: [
+      'Monthly pest and lawn visits',
+      'Mosquito and tick control',
+      'Aeration and overseeding',
+      'Tree and shrub care',
+      'Same-day emergency service',
+      'Full property guarantee'
+    ]
+  }
+];
+
+function getDefaultPackages(industry) {
+  switch (industry) {
+    case INDUSTRIES.LAWN_CARE:
+      return LAWN_CARE_PACKAGES;
+    case INDUSTRIES.BOTH:
+      return COMBINED_PACKAGES;
+    case INDUSTRIES.PEST_CONTROL:
+    default:
+      return PEST_CONTROL_PACKAGES;
+  }
+}
 
 // Helper to parse price strings like "$49", "$49/month", "49.99" into numbers
 function parsePrice(priceStr) {
@@ -89,6 +192,10 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
   console.log('[PACKAGES] extractedPackages:', extractedPackages);
   const hasExtractedPackages = extractedPackages.length > 0;
 
+  // Get selected industry
+  const selectedIndustry = allStepData?.industry || INDUSTRIES.PEST_CONTROL;
+  const defaultPackages = getDefaultPackages(selectedIndustry);
+
   // Initialize with existing data, or extracted packages if available
   const initialPackages = data.packages?.length > 0
     ? data.packages
@@ -113,7 +220,7 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
   }, [hasExtractedPackages, extractedPackages, packages.length]);
 
   const handleUseDefaults = () => {
-    setPackages(DEFAULT_PACKAGES);
+    setPackages(defaultPackages);
   };
 
   const handleGenerateWithAI = async () => {
@@ -132,8 +239,8 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
       }
     } catch (error) {
       console.error('Failed to generate packages:', error);
-      // Fall back to defaults
-      setPackages(DEFAULT_PACKAGES);
+      // Fall back to industry-specific defaults
+      setPackages(defaultPackages);
     } finally {
       setGenerating(false);
     }

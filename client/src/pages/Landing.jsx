@@ -82,7 +82,7 @@ function Landing() {
     { difficulty: 'medium', title: 'Upsell Opportunity', description: 'Happy customer mentions a mosquito problem before a party.' },
     { difficulty: 'medium', title: 'Missed Appointment', description: 'Tech was 75 minutes late. Customer missed an event waiting.' },
     { difficulty: 'medium', title: 'Wildlife Emergency', description: 'Panicked homeowner has a squirrel in their attic right now.' },
-    { difficulty: 'easy', title: 'New Customer Inquiry', description: 'First-time buyer, ants in the kitchen. Never had pest control.' }
+    { difficulty: 'easy', title: 'New Customer Inquiry', description: 'First-time buyer with a specific concern. Never used your services before.' }
   ];
 
   const plans = [

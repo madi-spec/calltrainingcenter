@@ -22,8 +22,10 @@ import {
   Users,
   Activity
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 export default function PerformanceTrends() {
+  const { authFetch } = useAuth();
   const [timeframe, setTimeframe] = useState('30d');
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
@@ -37,9 +39,7 @@ export default function PerformanceTrends() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`/api/reports/performance-trends?timeframe=${timeframe}`, {
-        credentials: 'include'
-      });
+      const response = await authFetch(`/api/reports/performance-trends?timeframe=${timeframe}`);
 
       if (!response.ok) {
         throw new Error('Failed to fetch performance trends');

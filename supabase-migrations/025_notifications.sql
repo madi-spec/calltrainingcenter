@@ -1,5 +1,8 @@
+-- Drop existing notifications table if it exists (safe for new feature)
+DROP TABLE IF EXISTS notifications CASCADE;
+
 -- Create notifications table
-CREATE TABLE IF NOT EXISTS notifications (
+CREATE TABLE notifications (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
@@ -15,10 +18,10 @@ CREATE TABLE IF NOT EXISTS notifications (
 );
 
 -- Create indexes
-CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id);
-CREATE INDEX IF NOT EXISTS idx_notifications_organization_id ON notifications(organization_id);
-CREATE INDEX IF NOT EXISTS idx_notifications_is_read ON notifications(is_read);
-CREATE INDEX IF NOT EXISTS idx_notifications_created_at ON notifications(created_at DESC);
+CREATE INDEX idx_notifications_user_id ON notifications(user_id);
+CREATE INDEX idx_notifications_organization_id ON notifications(organization_id);
+CREATE INDEX idx_notifications_is_read ON notifications(is_read);
+CREATE INDEX idx_notifications_created_at ON notifications(created_at DESC);
 
 -- Enable RLS
 ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;

@@ -25,6 +25,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { useOrganization } from '../../context/OrganizationContext';
 import { useNotifications } from '../../context/NotificationContext';
+import IndustryStep from './steps/IndustryStep';
 import CompanyInfoStep from './steps/CompanyInfoStep';
 import ServiceLinesStep from './steps/ServiceLinesStep';
 import PackagesStep from './steps/PackagesStep';
@@ -37,6 +38,16 @@ import AIScoringStep from './steps/AIScoringStep';
 import ReviewStep from './steps/ReviewStep';
 
 const STEPS = [
+  {
+    id: 'industry',
+    title: 'Industry Type',
+    shortTitle: 'Industry',
+    description: 'Select your business type',
+    icon: Globe,
+    component: IndustryStep,
+    required: true,
+    category: 'business'
+  },
   {
     id: 'company',
     title: 'Company Info',

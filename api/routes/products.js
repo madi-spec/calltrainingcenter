@@ -90,12 +90,9 @@ router.get('/objection-templates', async (req, res) => {
       .select('*')
       .eq('is_active', true);
 
-    // Filter by industry using display_order ranges
-    // Pest control: 1-59, Lawn care: 60-119, Both: all
-    if (industry === 'lawn_care') {
-      query = query.gte('display_order', 60).lte('display_order', 119);
-    } else if (industry === 'pest_control') {
-      query = query.gte('display_order', 1).lte('display_order', 59);
+    // Filter by industry column
+    if (industry && industry !== 'both') {
+      query = query.eq('industry', industry);
     }
     // If industry === 'both' or not specified, return all
 

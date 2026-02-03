@@ -53,13 +53,12 @@ const colorClasses = {
   }
 };
 
-export default function IndustryStep({ data, onUpdate, onComplete }) {
+export default function IndustryStep({ data, onComplete }) {
   const selectedIndustry = data.industry || '';
 
   const handleSelect = (industryId) => {
     const updatedData = { industry: industryId };
-    onUpdate(updatedData);
-    // Automatically advance to next step after selection
+    // Save and advance to next step
     if (onComplete) {
       onComplete(updatedData);
     }

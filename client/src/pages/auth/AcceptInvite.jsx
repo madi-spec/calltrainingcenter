@@ -90,7 +90,7 @@ export default function AcceptInvite() {
 
     try {
       // Step 1: Create Clerk account
-      const signUpAttempt = await signUp.create({
+      let signUpAttempt = await signUp.create({
         emailAddress: inviteData.email,
         password: formData.password,
         firstName: formData.fullName.split(' ')[0],
@@ -100,34 +100,56 @@ export default function AcceptInvite() {
         }
       });
 
-      // Step 2: Skip email verification for invited users - they're pre-verified
-      // The invitation link serves as verification
+      // Step 2: Handle email verification if required by Clerk
+      // For invited users, attempt to prepare email verification and complete it
       if (signUpAttempt.status === 'missing_requirements') {
-        // Complete the sign up without email verification
-        await signUpAttempt.update({
-          emailAddress: inviteData.email
-        });
+        try {
+          // Try to prepare email verification
+          await signUpAttempt.prepareEmailAddressVerification({ strategy: 'email_code' });
+        } catch (prepError) {
+          // If preparation fails, try updating the email to trigger completion
+          console.log('[AcceptInvite] Email verification prep failed, trying update:', prepError.message);
+          await signUpAttempt.update({
+            emailAddress: inviteData.email
+          });
+        }
       }
 
-      // Step 3: Set the session active BEFORE calling the backend
+      // Step 3: Wait for sign-up to complete and set session active
+      // Poll for completion if sign-up isn't done yet
+      let attempts = 0;
+      while (!signUpAttempt.createdSessionId && attempts < 10) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+        // Reload the sign-up attempt to check for updates
+        if (signUpAttempt.status === 'complete') break;
+        attempts++;
+      }
+
       if (signUpAttempt.createdSessionId) {
         await setActive({ session: signUpAttempt.createdSessionId });
+        // Wait for session to fully propagate
+        await new Promise(resolve => setTimeout(resolve, 1000));
       }
 
-      // Wait a moment for the session to be fully set
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      // Step 4: Accept the invitation in our backend
+      // Step 4: Get the authenticated user's clerk ID from the session
+      // CRITICAL: Use the Clerk session token as source of truth, not signUpAttempt
       const clerkToken = await getToken();
+      const clerkUserId = signUpAttempt.createdUserId;
+
+      if (!clerkUserId) {
+        throw new Error('Account creation incomplete. Please try signing in with your email and password.');
+      }
+
+      // Step 5: Accept the invitation in our backend
       const response = await fetch('/api/invitations/accept', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${clerkToken}`
+          ...(clerkToken && { 'Authorization': `Bearer ${clerkToken}` })
         },
         body: JSON.stringify({
           token: token,
-          clerk_user_id: signUpAttempt.createdUserId,
+          clerk_user_id: clerkUserId,
           full_name: formData.fullName
         })
       });

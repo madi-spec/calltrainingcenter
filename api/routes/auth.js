@@ -13,7 +13,7 @@ router.post('/sync-user', authMiddleware, async (req, res) => {
   try {
     const { clerkId, email, fullName, imageUrl } = req.body;
 
-    // If user already exists in database, return their profile
+    // If user already exists in database (matched by clerk_id), return their profile
     if (req.user) {
       return res.json({
         success: true,
@@ -23,7 +23,52 @@ router.post('/sync-user', authMiddleware, async (req, res) => {
       });
     }
 
-    // User authenticated with Clerk but not in database - create new user
+    // User authenticated with Clerk but not found by clerk_id in database
+    // Check if a user exists by email with a null/different clerk_id (e.g. from invitation accept)
+    const clerkUserId = req.clerkUserId;
+    if (email) {
+      const lookupClient = createAdminClient();
+      const { data: emailUser } = await lookupClient
+        .from(TABLES.USERS)
+        .select(`
+          *,
+          organization:organizations(*),
+          branch:branches(*)
+        `)
+        .eq('email', email.toLowerCase())
+        .single();
+
+      if (emailUser && (!emailUser.clerk_id || emailUser.clerk_id !== clerkUserId)) {
+        // Found a user by email with null or different clerk_id - update it
+        console.log(`[Auth] Found user by email ${email} with clerk_id=${emailUser.clerk_id}, updating to ${clerkUserId}`);
+        const { data: updatedUser, error: updateError } = await lookupClient
+          .from(TABLES.USERS)
+          .update({
+            clerk_id: clerkUserId,
+            full_name: emailUser.full_name || fullName || 'User',
+            avatar_url: imageUrl || emailUser.avatar_url
+          })
+          .eq('id', emailUser.id)
+          .select(`
+            *,
+            organization:organizations(*),
+            branch:branches(*)
+          `)
+          .single();
+
+        if (!updateError && updatedUser) {
+          return res.json({
+            success: true,
+            user: updatedUser,
+            organization: updatedUser.organization,
+            isNewUser: false
+          });
+        }
+        console.error('[Auth] Failed to update clerk_id for existing user:', updateError);
+      }
+    }
+
+    // User truly doesn't exist - create new user
     console.log('[Auth] User not found in database, creating new user...');
     console.log('[Auth] Request body:', { clerkId, email, fullName, imageUrl: imageUrl ? 'present' : 'missing' });
 

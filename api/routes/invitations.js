@@ -164,6 +164,10 @@ router.post('/accept', async (req, res) => {
       return res.status(400).json({ error: 'Invitation token is required' });
     }
 
+    if (!clerk_user_id) {
+      return res.status(400).json({ error: 'Clerk user ID is required. Please ensure your account was created successfully.' });
+    }
+
     const adminClient = createAdminClient();
 
     // Find invitation
@@ -188,26 +192,86 @@ router.post('/accept', async (req, res) => {
       return res.status(400).json({ error: 'Invitation has expired' });
     }
 
-    // Create user
-    const { data: user, error: userError } = await adminClient
+    // Check if a user with this clerk_id already exists (prevent duplicates)
+    const { data: existingClerkUser } = await adminClient
       .from('users')
-      .insert({
-        organization_id: invitation.organization_id,
-        clerk_id: clerk_user_id, // Use clerk_id to match auth system
-        email: invitation.email,
-        full_name: full_name || invitation.email.split('@')[0],
-        role: invitation.role,
-        branch_id: invitation.branch_id, // Include branch_id from invitation
-        status: 'active',
-        total_points: 0,
-        current_streak: 0,
-        longest_streak: 0,
-        level: 1
-      })
-      .select()
+      .select('id, email, clerk_id')
+      .eq('clerk_id', clerk_user_id)
       .single();
 
-    if (userError) throw userError;
+    if (existingClerkUser) {
+      // This clerk_id is already associated with a user - possible session contamination
+      console.warn(`[INVITE] clerk_id ${clerk_user_id} already belongs to user ${existingClerkUser.email}. Invitation email: ${invitation.email}`);
+      return res.status(400).json({
+        error: 'This account is already registered. Please sign out first, then try accepting the invitation again.'
+      });
+    }
+
+    // Check if a user with this email already exists in the organization (from a previous failed attempt)
+    const { data: existingEmailUser } = await adminClient
+      .from('users')
+      .select('id, email, clerk_id')
+      .eq('email', invitation.email)
+      .eq('organization_id', invitation.organization_id)
+      .single();
+
+    let user;
+    if (existingEmailUser && !existingEmailUser.clerk_id) {
+      // User record exists with null clerk_id from a previous failed attempt - update it
+      console.log(`[INVITE] Updating existing user record (null clerk_id) for ${invitation.email}`);
+      const { data: updatedUser, error: updateError } = await adminClient
+        .from('users')
+        .update({
+          clerk_id: clerk_user_id,
+          full_name: full_name || existingEmailUser.full_name || invitation.email.split('@')[0],
+          status: 'active'
+        })
+        .eq('id', existingEmailUser.id)
+        .select()
+        .single();
+
+      if (updateError) throw updateError;
+      user = updatedUser;
+    } else if (existingEmailUser) {
+      // User already exists with a different clerk_id - this shouldn't happen normally
+      console.warn(`[INVITE] User ${invitation.email} already exists with clerk_id ${existingEmailUser.clerk_id}, new clerk_id: ${clerk_user_id}`);
+      // Update the clerk_id to the new one (user may have re-registered with Clerk)
+      const { data: updatedUser, error: updateError } = await adminClient
+        .from('users')
+        .update({
+          clerk_id: clerk_user_id,
+          full_name: full_name || invitation.email.split('@')[0],
+          status: 'active'
+        })
+        .eq('id', existingEmailUser.id)
+        .select()
+        .single();
+
+      if (updateError) throw updateError;
+      user = updatedUser;
+    } else {
+      // Create new user
+      const { data: newUser, error: userError } = await adminClient
+        .from('users')
+        .insert({
+          organization_id: invitation.organization_id,
+          clerk_id: clerk_user_id,
+          email: invitation.email,
+          full_name: full_name || invitation.email.split('@')[0],
+          role: invitation.role,
+          branch_id: invitation.branch_id,
+          status: 'active',
+          total_points: 0,
+          current_streak: 0,
+          longest_streak: 0,
+          level: 1
+        })
+        .select()
+        .single();
+
+      if (userError) throw userError;
+      user = newUser;
+    }
 
     // Mark invitation as accepted
     await adminClient

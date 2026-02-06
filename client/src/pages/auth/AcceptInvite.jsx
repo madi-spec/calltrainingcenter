@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
-import { useSignUp, useAuth as useClerkAuth } from '@clerk/clerk-react';
+import { useSignUp, useAuth as useClerkAuth, useClerk, useUser } from '@clerk/clerk-react';
 import { motion } from 'framer-motion';
-import { Lock, Eye, EyeOff, User, UserPlus, AlertCircle, Check, Building2, Mail } from 'lucide-react';
+import { Lock, Eye, EyeOff, User, UserPlus, AlertCircle, Check, Building2, Mail, LogOut } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 export default function AcceptInvite() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { signUp, setActive } = useSignUp();
-  const { getToken } = useClerkAuth();
+  const { getToken, isSignedIn } = useClerkAuth();
+  const { signOut } = useClerk();
+  const { user: clerkUser } = useUser();
 
   const token = searchParams.get('token');
 
@@ -23,6 +25,7 @@ export default function AcceptInvite() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
 
   const passwordRequirements = [
     { text: 'At least 8 characters', test: (p) => p.length >= 8 },
@@ -30,6 +33,19 @@ export default function AcceptInvite() {
     { text: 'Contains uppercase letter', test: (p) => /[A-Z]/.test(p) },
     { text: 'Contains lowercase letter', test: (p) => /[a-z]/.test(p) }
   ];
+
+  // Sign out current user if someone is already signed in
+  const handleSignOut = async () => {
+    setSigningOut(true);
+    try {
+      await signOut();
+      // Reload the page to reset all Clerk state
+      window.location.reload();
+    } catch (err) {
+      console.error('Error signing out:', err);
+      setSigningOut(false);
+    }
+  };
 
   // Verify the invitation token
   useEffect(() => {
@@ -240,6 +256,37 @@ export default function AcceptInvite() {
             </div>
           </div>
 
+          {/* Already signed in warning */}
+          {isSignedIn && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0" />
+                <p className="text-amber-400 text-sm">
+                  You're currently signed in as <strong>{clerkUser?.primaryEmailAddress?.emailAddress}</strong>. You must sign out before creating a new account.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={handleSignOut}
+                disabled={signingOut}
+                className="w-full py-2 px-4 bg-amber-600 hover:bg-amber-700 disabled:bg-amber-600/50 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 text-sm"
+              >
+                {signingOut ? (
+                  <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
+                ) : (
+                  <>
+                    <LogOut className="w-4 h-4" />
+                    Sign Out & Continue
+                  </>
+                )}
+              </button>
+            </motion.div>
+          )}
+
           {/* Error Message */}
           {error && (
             <motion.div
@@ -351,7 +398,7 @@ export default function AcceptInvite() {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={submitting}
+              disabled={submitting || isSignedIn}
               className="w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
             >
               {submitting ? (

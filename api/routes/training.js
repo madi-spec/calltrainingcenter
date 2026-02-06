@@ -195,6 +195,39 @@ router.post('/repeat', async (req, res) => {
 });
 
 /**
+ * PUT /api/training/session/:id/transcript
+ * Save transcript immediately after call ends (before analysis)
+ */
+router.put('/session/:id/transcript', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { transcript_raw, transcript_formatted, duration_seconds } = req.body;
+
+    const adminClient = createAdminClient();
+
+    const { data: session, error } = await adminClient
+      .from(TABLES.TRAINING_SESSIONS)
+      .update({
+        transcript_raw: transcript_raw || '',
+        transcript_formatted: transcript_formatted || [],
+        duration_seconds: duration_seconds || 0,
+        ended_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .eq('user_id', req.user.id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    res.json({ session });
+  } catch (error) {
+    console.error('Error saving transcript:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
  * PATCH /api/training/session/:id
  * Update a training session (complete it with results)
  */

@@ -128,16 +128,15 @@ function Training() {
 
     setCurrentCall(callData);
 
-    // Start async analysis - don't wait for it to complete
-    const analysisId = `analysis_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
     // Get branch path info for results
     const branchPathData = branchingPoints ? getPathForVisualization() : null;
 
-    // Store pending results with analysis ID for Results page to poll
+    // Use the real database session ID for analysis tracking
+    const dbSessionId = callData.sessionId || sessionId;
+
+    // Store pending results - use DB session ID for polling
     const pendingResults = {
-      analysisId,
-      sessionId: callData.sessionId,  // Database session ID
+      sessionId: dbSessionId,
       analysisStatus: 'processing',
       transcript: callData.transcript,
       scenario: currentScenario,
@@ -156,20 +155,31 @@ function Training() {
       console.error('Error saving to sessionStorage:', e);
     }
 
-    // Fire off the analysis request (don't await the full response)
-    try {
-      authFetch('/api/analysis/start', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          transcript: formatTranscriptForAnalysis(callData.transcript),
-          scenario: currentScenario,
-          callDuration: callData.duration,
-          sessionId: analysisId
-        })
-      }).catch(err => console.error('Error starting analysis:', err));
-    } catch (err) {
-      console.error('Error starting analysis:', err);
+    // Save transcript to DB first, then queue background analysis
+    if (dbSessionId) {
+      try {
+        // Save transcript to the session so the async analyzer can find it
+        await authFetch(`/api/training/session/${dbSessionId}/transcript`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            transcript_raw: formatTranscriptForAnalysis(callData.transcript),
+            transcript_formatted: callData.transcript?.formatted || [],
+            duration_seconds: callData.duration
+          })
+        });
+
+        // Queue background analysis
+        authFetch('/api/analysis/queue', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sessionId: dbSessionId
+          })
+        }).catch(err => console.error('Error queueing analysis:', err));
+      } catch (err) {
+        console.error('Error saving transcript:', err);
+      }
     }
 
     // Navigate immediately - Results page will handle polling

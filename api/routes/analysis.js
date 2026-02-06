@@ -1,4 +1,5 @@
 import express from 'express';
+import Anthropic from '@anthropic-ai/sdk';
 import { createAdminClient } from '../lib/supabase.js';
 import { authMiddleware } from '../lib/auth.js';
 import { queueAnalysis, getAnalysisStatus, retryFailedJobs } from '../services/asyncAnalysis.js';
@@ -6,6 +7,83 @@ import { queueAnalysis, getAnalysisStatus, retryFailedJobs } from '../services/a
 const router = express.Router();
 
 router.use(authMiddleware);
+
+/**
+ * POST /api/analysis/analyze
+ * Synchronous analysis fallback - analyzes transcript directly
+ */
+router.post('/analyze', async (req, res) => {
+  try {
+    const { transcript, scenario, callDuration } = req.body;
+
+    if (!transcript || transcript.length < 10) {
+      return res.status(400).json({ error: 'Transcript is required' });
+    }
+
+    const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+    const systemPrompt = `You are an expert CSR coach specializing in pest control and home services customer service training.
+You understand what drives revenue and customer retention for pest control companies:
+- Converting inquiries into booked appointments (the #1 metric)
+- Getting customers on recurring service plans vs one-time treatments
+- Handling price objections by communicating value, not discounting
+- Creating urgency appropriately for pest issues
+- Building trust through technical knowledge and professionalism
+
+Provide detailed, constructive feedback that helps CSRs book more appointments and retain more customers.
+Always respond with valid JSON matching the exact schema provided.`;
+
+    const userPrompt = `Analyze this CSR training call and provide a comprehensive coaching scorecard.
+
+## Call Context
+- Scenario: ${scenario?.name || 'Training Call'}
+- Call Duration: ${callDuration || 'Unknown'} seconds
+
+## Transcript
+${transcript}
+
+## Scoring Categories for Pest Control CSRs
+
+### 1. Empathy & Rapport (15%) - Building trust with customers about pest concerns
+### 2. Booking & Conversion (25%) - CRITICAL: Did they ask for and secure the appointment?
+### 3. Service & Technical Knowledge (20%) - Treatment methods, pest knowledge, safety info
+### 4. Value Communication (25%) - Handling price objections, communicating value vs competitors
+### 5. Professionalism & Call Control (15%) - Tone, call flow, qualifying questions
+
+Respond with JSON:
+{
+  "overallScore": 0-100,
+  "categories": {
+    "empathyRapport": { "score": 0-100, "feedback": "Specific feedback on building trust", "keyMoments": [] },
+    "bookingConversion": { "score": 0-100, "feedback": "Did they ask for the appointment? Create urgency?", "keyMoments": [] },
+    "serviceKnowledge": { "score": 0-100, "feedback": "Technical accuracy and service explanation", "keyMoments": [] },
+    "valueAndObjections": { "score": 0-100, "feedback": "Value communication and objection handling", "keyMoments": [] },
+    "professionalism": { "score": 0-100, "feedback": "Call control and professional conduct", "keyMoments": [] }
+  },
+  "strengths": [{ "title": "Strength", "description": "Why effective for booking/retention", "quote": "Quote" }],
+  "improvements": [{ "title": "Area", "issue": "What went wrong", "quote": "What they said", "alternative": "Better response to improve conversion" }],
+  "keyMoment": { "timestamp": "When", "description": "Pivotal moment affecting conversion", "impact": "Effect on booking", "betterApproach": "What would increase conversion" },
+  "summary": "2-3 sentence assessment focusing on booking/retention effectiveness",
+  "nextSteps": ["Specific action to improve conversion", "Action 2", "Action 3"]
+}`;
+
+    const response = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 4096,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userPrompt }]
+    });
+
+    const content = response.content[0].text;
+    const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/) || [null, content];
+    const analysis = JSON.parse(jsonMatch[1].trim());
+
+    res.json({ analysis });
+  } catch (error) {
+    console.error('Error in sync analysis:', error);
+    res.status(500).json({ error: 'Analysis failed' });
+  }
+});
 
 /**
  * POST /api/analysis/queue

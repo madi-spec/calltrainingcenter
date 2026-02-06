@@ -180,10 +180,10 @@ function Results() {
 
   // Poll for analysis completion
   const pollAnalysis = useCallback(async () => {
-    if (!lastResults?.analysisId || lastResults?.analysis || usingSyncFallback) return;
+    if (!lastResults?.sessionId || lastResults?.analysis || usingSyncFallback) return;
 
     try {
-      const response = await authFetch(`/api/analysis/status/${lastResults.analysisId}`);
+      const response = await authFetch(`/api/analysis/status/${lastResults.sessionId}`);
 
       if (!response.ok) {
         // Polling failed - fall back to sync analysis immediately
@@ -196,18 +196,28 @@ function Results() {
 
       if (data.status === 'completed') {
         // Update results with completed analysis
+        const analysisData = data.results ? {
+          overallScore: data.results.overall_score,
+          categories: data.results.category_scores,
+          summary: data.results.summary,
+          strengths: data.results.strengths,
+          improvements: data.results.improvements,
+          keyMoment: data.results.key_moment,
+          nextSteps: data.results.next_steps
+        } : data.analysis;
+
         setLastResults(prev => ({
           ...prev,
-          analysis: data.analysis,
+          analysis: analysisData,
           analysisStatus: 'completed'
         }));
         // Save results to database
-        saveSessionResults(data.analysis);
+        saveSessionResults(analysisData);
 
         // Update module progress if this is a generated scenario
         if (lastResults.scenario?.isGeneratedScenario && lastResults.scenario?.moduleId) {
           try {
-            const score = data.analysis?.overallScore || 0;
+            const score = analysisData?.overallScore || 0;
             const won = score >= 70;
 
             await authFetch(`/api/modules/${lastResults.scenario.moduleId}/complete-scenario`, {
@@ -243,11 +253,11 @@ function Results() {
       console.error('Error polling analysis:', err);
       runSyncAnalysis();
     }
-  }, [lastResults?.analysisId, lastResults?.analysis, lastResults?.scenario, usingSyncFallback, authFetch, setLastResults, runSyncAnalysis, saveSessionResults]);
+  }, [lastResults?.sessionId, lastResults?.analysis, lastResults?.scenario, usingSyncFallback, authFetch, setLastResults, runSyncAnalysis, saveSessionResults]);
 
   // Start polling when we have an analysis in progress
   useEffect(() => {
-    if (lastResults?.analysisStatus === 'processing' && lastResults?.analysisId) {
+    if (lastResults?.analysisStatus === 'processing' && lastResults?.sessionId) {
       const interval = setInterval(pollAnalysis, 2000);
       pollAnalysis(); // Initial poll
 
@@ -264,7 +274,7 @@ function Results() {
         clearInterval(stepInterval);
       };
     }
-  }, [lastResults?.analysisStatus, lastResults?.analysisId, pollAnalysis]);
+  }, [lastResults?.analysisStatus, lastResults?.sessionId, pollAnalysis]);
 
   // Redirect if no results (but wait for recovery attempt)
   useEffect(() => {

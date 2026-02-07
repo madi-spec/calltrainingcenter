@@ -5,7 +5,6 @@ import Anthropic from '@anthropic-ai/sdk';
 import Retell from 'retell-sdk';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-import cron from 'node-cron';
 
 // Import route handlers
 import authRoutes from './routes/auth.js';
@@ -44,6 +43,7 @@ import recordingsRoutes from './routes/recordings.js';
 import helpAgentRoutes from './routes/helpAgent.js';
 import certificatesRoutes from './routes/certificates.js';
 import sessionNotesRoutes from './routes/sessionNotes.js';
+import devDashboardRoutes from './routes/devDashboard.js';
 
 // Import services
 import {
@@ -932,6 +932,7 @@ app.use('/api/recordings', recordingsRoutes);
 app.use('/api/help-agent', helpAgentRoutes);
 app.use('/api/certificates', certificatesRoutes);
 app.use('/api/session-notes', sessionNotesRoutes);
+app.use('/api/dev-dashboard', devDashboardRoutes);
 
 // ============ LEGACY ROUTES (maintain backward compatibility) ============
 
@@ -1860,24 +1861,29 @@ app.get('/api/debug/test-retell', async (req, res) => {
 // ============ CRON JOBS ============
 
 /**
- * Weekly Digest Email Job
- * Runs every Monday at 8:00 AM
- * Cron schedule: '0 8 * * 1' (minute hour day month day-of-week)
+ * Weekly Digest - triggered by Vercel Cron (GET /api/cron/weekly-digest)
+ * Secured by CRON_SECRET to prevent unauthorized triggers.
+ * Schedule configured in vercel.json: Mondays at 8:00 AM ET (13:00 UTC)
  */
-if (process.env.ENABLE_CRON_JOBS !== 'false') {
-  cron.schedule('0 8 * * 1', async () => {
-    console.log('[Cron] Running weekly digest job...');
-    try {
-      await runWeeklyDigestJob();
-    } catch (error) {
-      console.error('[Cron] Weekly digest job failed:', error);
-    }
-  }, {
-    timezone: 'America/New_York'
-  });
+app.get('/api/cron/weekly-digest', async (req, res) => {
+  // Verify the request is from Vercel Cron
+  const authHeader = req.headers['authorization'];
+  const cronSecret = process.env.CRON_SECRET;
 
-  console.log('[Cron] Weekly digest job scheduled for Mondays at 8:00 AM ET');
-}
+  if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+    console.warn('[Cron] Unauthorized weekly digest trigger attempt');
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  try {
+    console.log('[Cron] Running weekly digest job via Vercel Cron...');
+    const result = await runWeeklyDigestJob();
+    res.json(result);
+  } catch (error) {
+    console.error('[Cron] Weekly digest job failed:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 /**
  * Manual trigger for weekly digest (for testing)

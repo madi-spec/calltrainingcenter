@@ -54,6 +54,7 @@ const ComparativeAnalysis = lazy(() => import('./pages/analysis/ComparativeAnaly
 const CompanyOnboarding = lazy(() => import('./pages/onboarding/CompanyOnboarding'));
 const MyCertificates = lazy(() => import('./pages/certificates/MyCertificates'));
 const VerifyCertificate = lazy(() => import('./pages/certificates/VerifyCertificate'));
+const DevDashboard = lazy(() => import('./pages/dev/DevDashboard'));
 
 // Loading component for lazy loaded pages
 function PageLoader() {
@@ -273,6 +274,9 @@ function App() {
                         </RoleProtectedRoute>
                       }
                     />
+
+                    {/* Dev Dashboard */}
+                    <Route path="/dev" element={<DevDashboard />} />
 
                     {/* Admin */}
                     <Route

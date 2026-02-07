@@ -1,0 +1,6 @@
+client/.env
+client/.env.local
+api/.env
+api/.env.local
+server/.env
+server/.env.local

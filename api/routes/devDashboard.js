@@ -1,6 +1,15 @@
 import { Router } from 'express';
+import Retell from 'retell-sdk';
 import { authMiddleware } from '../lib/auth.js';
 import { createAdminClient } from '../lib/supabase.js';
+
+let retellClient = null;
+function getRetellClient() {
+  if (!retellClient) {
+    retellClient = new Retell({ apiKey: process.env.RETELL_API_KEY });
+  }
+  return retellClient;
+}
 
 const router = Router();
 
@@ -56,7 +65,7 @@ router.get('/stats', authMiddleware, requireDev, async (req, res) => {
 
       // Recent training sessions
       admin.from('training_sessions')
-        .select('id, scenario_id, scenario_name, overall_score, status, duration_seconds, created_at, user:users(email, full_name)')
+        .select('id, scenario_id, scenario_name, overall_score, status, duration_seconds, retell_call_id, created_at, user:users(email, full_name)')
         .order('created_at', { ascending: false })
         .limit(20),
 
@@ -142,6 +151,19 @@ router.get('/stats', authMiddleware, requireDev, async (req, res) => {
     });
   } catch (error) {
     console.error('[DevDashboard] Error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/recording/:callId', authMiddleware, requireDev, async (req, res) => {
+  try {
+    const call = await getRetellClient().call.retrieve(req.params.callId);
+    if (!call?.recording_url) {
+      return res.status(404).json({ error: 'No recording available for this call' });
+    }
+    res.json({ recording_url: call.recording_url });
+  } catch (error) {
+    console.error('[DevDashboard] Recording fetch error:', error.message);
     res.status(500).json({ error: error.message });
   }
 });

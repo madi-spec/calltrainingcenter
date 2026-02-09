@@ -272,9 +272,21 @@ async function sendDigestToManager(adminClient, manager, organization, stats) {
 }
 
 /**
+ * Get the digest week key (ISO week identifier) to deduplicate sends.
+ * Returns something like "2026-W06" for the current ISO week.
+ */
+function getDigestWeekKey() {
+  const now = new Date();
+  const jan1 = new Date(now.getFullYear(), 0, 1);
+  const dayOfYear = Math.ceil((now - jan1) / 86400000);
+  const weekNumber = Math.ceil((dayOfYear + jan1.getDay()) / 7);
+  return `${now.getFullYear()}-W${String(weekNumber).padStart(2, '0')}`;
+}
+
+/**
  * Main job function - sends weekly digest emails to all managers
  */
-export async function runWeeklyDigestJob() {
+export async function runWeeklyDigestJob({ force = false } = {}) {
   console.log('[WeeklyDigest] Starting weekly digest job...');
 
   if (!resend) {
@@ -283,6 +295,7 @@ export async function runWeeklyDigestJob() {
   }
 
   const adminClient = createAdminClient();
+  const weekKey = getDigestWeekKey();
 
   try {
     // Get all organizations
@@ -297,10 +310,28 @@ export async function runWeeklyDigestJob() {
 
     let totalSent = 0;
     let totalFailed = 0;
+    let totalSkippedDupe = 0;
 
     // Process each organization
     for (const organization of organizations) {
       console.log(`[WeeklyDigest] Processing organization: ${organization.name}`);
+
+      // Deduplication: check if we already sent this week's digest for this org
+      if (!force) {
+        const { data: existingSend } = await adminClient
+          .from('weekly_digest_log')
+          .select('id')
+          .eq('organization_id', organization.id)
+          .eq('week_key', weekKey)
+          .limit(1)
+          .maybeSingle();
+
+        if (existingSend) {
+          console.log(`[WeeklyDigest] Already sent ${weekKey} digest for ${organization.name}, skipping`);
+          totalSkippedDupe++;
+          continue;
+        }
+      }
 
       // Get managers with email digest enabled
       const { data: managers, error: managersError } = await adminClient
@@ -338,18 +369,33 @@ export async function runWeeklyDigestJob() {
       }
 
       // Send to each eligible manager
+      let orgSent = 0;
       for (const manager of eligibleManagers) {
         const result = await sendDigestToManager(adminClient, manager, organization, stats);
         if (result.success) {
           totalSent++;
+          orgSent++;
         } else if (!result.skipped) {
           totalFailed++;
         }
       }
+
+      // Record that we sent this week's digest for this org
+      if (orgSent > 0) {
+        await adminClient
+          .from('weekly_digest_log')
+          .insert({
+            organization_id: organization.id,
+            week_key: weekKey,
+            recipients_count: orgSent,
+            sent_at: new Date().toISOString()
+          })
+          .catch(err => console.error('[WeeklyDigest] Error logging digest send:', err));
+      }
     }
 
-    console.log(`[WeeklyDigest] Job completed. Sent: ${totalSent}, Failed: ${totalFailed}`);
-    return { success: true, sent: totalSent, failed: totalFailed };
+    console.log(`[WeeklyDigest] Job completed. Sent: ${totalSent}, Failed: ${totalFailed}, Skipped (already sent): ${totalSkippedDupe}`);
+    return { success: true, sent: totalSent, failed: totalFailed, skippedDuplicate: totalSkippedDupe };
 
   } catch (error) {
     console.error('[WeeklyDigest] Job failed:', error);
@@ -358,9 +404,9 @@ export async function runWeeklyDigestJob() {
 }
 
 /**
- * Manual trigger for testing (bypasses schedule)
+ * Manual trigger for testing (bypasses deduplication)
  */
 export async function triggerWeeklyDigestManual() {
-  console.log('[WeeklyDigest] Manual trigger requested');
-  return await runWeeklyDigestJob();
+  console.log('[WeeklyDigest] Manual trigger requested (force=true, bypasses deduplication)');
+  return await runWeeklyDigestJob({ force: true });
 }

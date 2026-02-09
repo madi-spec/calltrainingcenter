@@ -287,8 +287,10 @@ function getDigestWeekKey() {
  * Main job function - sends weekly digest emails to all managers
  */
 export async function runWeeklyDigestJob({ force = false } = {}) {
-  console.log('[WeeklyDigest] Starting weekly digest job...');
+  console.log('[WeeklyDigest] Job disabled - returning immediately');
+  return { success: false, error: 'Weekly digest is disabled' };
 
+  /* DISABLED - re-enable when deduplication is verified
   if (!resend) {
     console.warn('[WeeklyDigest] Resend not configured - aborting job');
     return { success: false, error: 'Email service not configured' };
@@ -401,12 +403,13 @@ export async function runWeeklyDigestJob({ force = false } = {}) {
     console.error('[WeeklyDigest] Job failed:', error);
     return { success: false, error: error.message };
   }
+  DISABLED */
 }
 
 /**
  * Manual trigger for testing (bypasses deduplication)
  */
 export async function triggerWeeklyDigestManual() {
-  console.log('[WeeklyDigest] Manual trigger requested (force=true, bypasses deduplication)');
-  return await runWeeklyDigestJob({ force: true });
+  console.log('[WeeklyDigest] Manual trigger disabled');
+  return { success: false, error: 'Weekly digest is disabled' };
 }

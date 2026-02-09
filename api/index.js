@@ -53,8 +53,6 @@ import {
   getValidVoiceId
 } from './services/voiceService.js';
 
-// Import jobs
-import { runWeeklyDigestJob, triggerWeeklyDigestManual } from './jobs/weeklyDigest.js';
 
 // Import middleware and helpers
 import { optionalAuthMiddleware, authMiddleware, requireRole } from './lib/auth.js';
@@ -1855,48 +1853,6 @@ app.get('/api/debug/test-retell', async (req, res) => {
       success: false,
       error: error.message
     });
-  }
-});
-
-// ============ CRON JOBS ============
-
-/**
- * Weekly Digest - triggered by Vercel Cron (GET /api/cron/weekly-digest)
- * Secured by CRON_SECRET to prevent unauthorized triggers.
- * Schedule configured in vercel.json: Mondays at 8:00 AM ET (13:00 UTC)
- */
-app.get('/api/cron/weekly-digest', async (req, res) => {
-  // Verify the request is from Vercel Cron
-  const authHeader = req.headers['authorization'];
-  const cronSecret = process.env.CRON_SECRET;
-
-  if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
-    console.warn('[Cron] Unauthorized weekly digest trigger attempt');
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-
-  try {
-    console.log('[Cron] Running weekly digest job via Vercel Cron...');
-    const result = await runWeeklyDigestJob();
-    res.json(result);
-  } catch (error) {
-    console.error('[Cron] Weekly digest job failed:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-/**
- * Manual trigger for weekly digest (for testing)
- * POST /api/admin/trigger-weekly-digest
- */
-app.post('/api/admin/trigger-weekly-digest', authMiddleware, requireRole('admin', 'super_admin'), async (req, res) => {
-  try {
-    console.log(`[Admin] Manual weekly digest trigger by ${req.user.email}`);
-    const result = await triggerWeeklyDigestManual();
-    res.json(result);
-  } catch (error) {
-    console.error('[Admin] Weekly digest trigger failed:', error);
-    res.status(500).json({ error: error.message });
   }
 });
 

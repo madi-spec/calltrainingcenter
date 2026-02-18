@@ -182,7 +182,8 @@ export async function sendCertificateEmail({ to, userName, courseName, organizat
  * Generate HTML content for certificate email
  */
 function generateCertificateEmailHTML({ userName, courseName, organizationName, verificationCode }) {
-  const verificationUrl = `${process.env.APP_URL || 'http://localhost:5173'}/verify-certificate/${verificationCode}`;
+  const appUrl = process.env.APP_URL || 'https://www.selleverycall.com';
+  const verificationUrl = `${appUrl}/verify-certificate/${verificationCode}`;
 
   return `
 <!DOCTYPE html>

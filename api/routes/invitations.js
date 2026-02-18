@@ -105,7 +105,8 @@ router.post('/send', authMiddleware, tenantMiddleware, requireRole('manager', 'a
     if (error) throw error;
 
     // Generate invite URL
-    const inviteUrl = `${process.env.APP_URL || 'http://localhost:5173'}/auth/accept-invite?token=${token}`;
+    const appUrl = process.env.APP_URL || 'https://www.selleverycall.com';
+    const inviteUrl = `${appUrl}/auth/accept-invite?token=${token}`;
 
     // Get organization name for email
     const { data: org } = await adminClient
@@ -398,7 +399,8 @@ router.post('/:id/resend', authMiddleware, tenantMiddleware, requireRole('manage
       return res.status(404).json({ error: 'Invitation not found' });
     }
 
-    const inviteUrl = `${process.env.APP_URL || 'http://localhost:5173'}/auth/accept-invite?token=${token}`;
+    const appUrl = process.env.APP_URL || 'https://www.selleverycall.com';
+    const inviteUrl = `${appUrl}/auth/accept-invite?token=${token}`;
 
     // Get organization name for email
     const { data: org } = await adminClient

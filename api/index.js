@@ -123,6 +123,7 @@ const scenarios = [
     name: 'The Cancellation Save',
     difficulty: 'hard',
     category: 'Retention',
+    industry: 'pest_control',
     estimatedDuration: '5-8 minutes',
     customerName: 'Margaret Thompson',
     personality: 'Direct, frustrated but reasonable, values being heard',
@@ -145,6 +146,7 @@ const scenarios = [
     name: 'The Furious Callback',
     difficulty: 'hard',
     category: 'Complaint Resolution',
+    industry: 'pest_control',
     estimatedDuration: '6-10 minutes',
     customerName: 'David Martinez',
     personality: 'Hot-tempered, loud, but fair when truly heard',
@@ -167,6 +169,7 @@ const scenarios = [
     name: 'The Price Shopper',
     difficulty: 'medium',
     category: 'Sales',
+    industry: 'pest_control',
     estimatedDuration: '4-6 minutes',
     customerName: 'Jennifer Walsh',
     personality: 'Analytical, comparison-focused, skeptical of sales pitches',
@@ -189,6 +192,7 @@ const scenarios = [
     name: 'The New Customer Inquiry',
     difficulty: 'easy',
     category: 'Sales',
+    industry: 'pest_control',
     estimatedDuration: '3-5 minutes',
     customerName: 'Michael Torres',
     personality: 'Friendly, new to pest control, asks lots of questions',
@@ -211,6 +215,7 @@ const scenarios = [
     name: 'The Wildlife Emergency',
     difficulty: 'medium',
     category: 'Emergency Response',
+    industry: 'pest_control',
     estimatedDuration: '4-6 minutes',
     customerName: 'Karen Mitchell',
     personality: 'Panicked but cooperative, needs reassurance',
@@ -227,6 +232,121 @@ const scenarios = [
     resolutionConditions: 'Will be satisfied if: CSR calms her down, schedules same-day service, and provides reassurance about safety.',
     scoringFocus: ['Empathy', 'Urgency handling', 'Reassurance', 'Emergency scheduling'],
     systemPrompt: 'You are Karen Mitchell, a 35-year-old single mom with two young kids (Emma, 5 and Jake, 7). You can hear scratching and movement in your attic and you\'re scared. Call sounding panicked but not hysterical. Your main concerns: Is it dangerous? Will it come down? How soon can someone come? Calm down significantly if the CSR is soothing and confirms they can help soon.'
+  },
+  {
+    id: 'cancellation-save-lawn',
+    name: 'The Cancellation Save',
+    difficulty: 'hard',
+    category: 'Retention',
+    industry: 'lawn_care',
+    estimatedDuration: '5-8 minutes',
+    customerName: 'Margaret Thompson',
+    personality: 'Direct, frustrated but reasonable, values being heard',
+    emotionalState: 'Frustrated, considering leaving',
+    voiceId: '11labs-Aria',
+    situation: 'Margaret has been on {{company.name}}\'s lawn care program for 2 years but wants to cancel after a neighbor recommended a cheaper service at $39/month. She\'s not angry, just practical about money.',
+    customerBackground: 'Retired teacher, been on the lawn program for 2 years, always paid on time. Neighbor raves about a competitor offering $39/month lawn treatments.',
+    openingLine: 'Hi, I need to cancel my lawn care program please.',
+    customerGoals: 'Cancel service to save money, unless given a compelling reason to stay',
+    csrObjective: 'Retain the customer by demonstrating value, offering solutions, and potentially matching or beating the competitor\'s offer',
+    keyPointsToMention: ['My neighbor uses someone cheaper at $39 a month', 'Husband thinks we\'re overpaying', 'The lawn looks fine but we could save money', 'It\'s just about the money'],
+    escalationTriggers: 'CSR is dismissive of concerns, doesn\'t acknowledge loyalty, or is pushy without listening first',
+    deescalationTriggers: 'CSR acknowledges her loyalty, genuinely listens to concerns, offers real value or price match',
+    resolutionConditions: 'Will stay if: offered a price match, loyalty discount, or CSR demonstrates clear value difference in lawn health outcomes.',
+    scoringFocus: ['Empathy', 'Retention techniques', 'Value articulation', 'Negotiation'],
+    systemPrompt: 'You are Margaret Thompson, a 68-year-old retired teacher who has been on {{company.name}}\'s lawn program for 2 years. You\'re calling to cancel because your neighbor keeps bragging about her lawn service that only costs $39/month. You\'re not angry - your lawn has looked good - but your husband Bob thinks you\'re overpaying. Be direct but polite. If the CSR acknowledges your loyalty and offers a real solution, you\'re open to staying.'
+  },
+  {
+    id: 'furious-callback-lawn',
+    name: 'The Furious Callback',
+    difficulty: 'hard',
+    category: 'Complaint Resolution',
+    industry: 'lawn_care',
+    estimatedDuration: '6-10 minutes',
+    customerName: 'David Martinez',
+    personality: 'Hot-tempered, loud, but fair when truly heard',
+    emotionalState: 'Extremely angry, feeling ignored',
+    voiceId: '11labs-Jason',
+    situation: 'David has had two lawn applications in the past 6 weeks. This morning he noticed large brown patches and weeds are worse than before treatment. He\'s paying for results he\'s not getting.',
+    customerBackground: 'Young professional, busy schedule. Had lawn treatment 6 weeks ago, second application 2 weeks ago, and now his lawn has brown patches and more weeds than before.',
+    openingLine: 'I am SO done with you people! I need to speak to a manager RIGHT NOW!',
+    customerGoals: 'Get the lawn ACTUALLY fixed, feel heard and respected, possibly get compensation',
+    csrObjective: 'De-escalate the angry customer, apologize sincerely, schedule immediate re-treatment or inspection, and retain the relationship',
+    keyPointsToMention: ['I\'ve had TWO applications and my lawn looks worse', 'There are brown patches all over the front yard', 'The weeds are worse than before you started treating'],
+    escalationTriggers: 'CSR reads from script, doesn\'t apologize sincerely, tries to blame the weather or his watering habits',
+    deescalationTriggers: 'Sincere apology, acknowledgment of failure, immediate action plan, offer of compensation/credit',
+    resolutionConditions: 'Will calm down if: CSR truly apologizes, takes ownership, offers a free re-treatment and service credit.',
+    scoringFocus: ['De-escalation', 'Empathy', 'Problem ownership', 'Service recovery'],
+    systemPrompt: 'You are David Martinez, a 32-year-old marketing manager who is FURIOUS. You\'ve had {{company.name}} treat your lawn twice and this morning you noticed big brown patches in the front yard and weeds everywhere. Start the call very angry and demanding a manager. However, you\'re fundamentally fair - if the CSR genuinely apologizes and offers real solutions, you will gradually calm down.'
+  },
+  {
+    id: 'price-shopper-lawn',
+    name: 'The Price Shopper',
+    difficulty: 'medium',
+    category: 'Sales',
+    industry: 'lawn_care',
+    estimatedDuration: '4-6 minutes',
+    customerName: 'Jennifer Walsh',
+    personality: 'Analytical, comparison-focused, skeptical of sales pitches',
+    emotionalState: 'Neutral, evaluating options',
+    voiceId: '11labs-Jenny',
+    situation: 'Jennifer is calling {{company.name}} as part of her research - she\'s getting quotes from 3 lawn care companies. A competitor already quoted her $49/month for a full lawn program.',
+    customerBackground: 'New homeowner, first time hiring professional lawn care. Has already called one competitor who quoted $49/month. Very analytical.',
+    openingLine: 'Hi, I\'m just calling to get a quote for a lawn care program.',
+    customerGoals: 'Get a clear price quote, understand exactly what\'s included in the program, make an informed decision',
+    csrObjective: 'Provide clear pricing while effectively communicating value to differentiate from cheaper competitors',
+    keyPointsToMention: ['I\'m getting quotes from three companies', 'Someone already quoted me $49 a month', 'What exactly is included in each application?', 'How many treatments per year?'],
+    escalationTriggers: 'CSR is vague about pricing, uses too much jargon, or is pushy',
+    deescalationTriggers: 'Clear pricing, specific value explanations, no pressure',
+    resolutionConditions: 'Will consider {{company.name}} if: CSR clearly explains pricing AND articulates specific value differences like product quality or application count.',
+    scoringFocus: ['Value communication', 'Handling objections', 'Product knowledge', 'Consultative selling'],
+    systemPrompt: 'You are Jennifer Walsh, a 35-year-old financial analyst who just bought her first home. You\'re calling {{company.name}} as one of 3 lawn care companies you\'re comparing. Stay neutral and analytical. Push back on vague value claims - ask for specifics. Mention that you already got a quote for $49/month from another company.'
+  },
+  {
+    id: 'new-customer-inquiry-lawn',
+    name: 'The New Customer Inquiry',
+    difficulty: 'easy',
+    category: 'Sales',
+    industry: 'lawn_care',
+    estimatedDuration: '3-5 minutes',
+    customerName: 'Michael Torres',
+    personality: 'Friendly, new to lawn care, asks lots of questions',
+    emotionalState: 'Curious, slightly embarrassed about yard condition',
+    voiceId: '11labs-Adrian',
+    situation: 'Michael just bought a new home and the yard is full of weeds and patchy grass. He\'s never hired professional lawn care before and has basic questions.',
+    customerBackground: 'First-time homeowner, 28 years old, just moved in last month. The yard is a mess and neighbors have nice lawns.',
+    openingLine: 'Hi, um, I just bought a house and the lawn is pretty rough - weeds everywhere. I\'ve never hired a lawn service before - how does it work?',
+    customerGoals: 'Understand how lawn care programs work, get pricing, and potentially sign up',
+    csrObjective: 'Educate the new customer, build trust, answer questions clearly, and book the initial service',
+    keyPointsToMention: ['I\'ve never hired a lawn care company before', 'How long until I see results?', 'Is it safe for my dog?', 'How soon can you start?'],
+    escalationTriggers: 'CSR is condescending, uses too much jargon, or rushes the call',
+    deescalationTriggers: 'N/A - customer starts positive',
+    resolutionConditions: 'Will sign up if: CSR is patient, answers questions clearly, and the price seems reasonable.',
+    scoringFocus: ['Customer education', 'Clear communication', 'Building trust', 'Closing skills'],
+    systemPrompt: 'You are Michael Torres, a 28-year-old who just bought his first home. The lawn is full of weeds and patchy grass and you\'re kind of embarrassed because the neighbors\' yards look great. Ask genuine beginner questions: How does this work? How many treatments do I need? How long until I see results? Is it safe for my dog Max? You\'re ready to sign up if the CSR is helpful and patient.'
+  },
+  {
+    id: 'lawn-emergency',
+    name: 'The Lawn Emergency',
+    difficulty: 'medium',
+    category: 'Emergency Response',
+    industry: 'lawn_care',
+    estimatedDuration: '4-6 minutes',
+    customerName: 'Karen Mitchell',
+    personality: 'Panicked but cooperative, needs reassurance',
+    emotionalState: 'Stressed, anxious, needs immediate help',
+    voiceId: '11labs-Jenny',
+    situation: 'Karen\'s front yard has suddenly developed large brown patches and the grass looks like it\'s dying. Her daughter\'s graduation party is this Saturday and she\'s hosting 50 people.',
+    customerBackground: 'Existing customer, single mom. Daughter\'s high school graduation party is Saturday at the house with 50+ guests. Front lawn looks terrible.',
+    openingLine: 'Oh thank god you answered! My lawn is turning brown everywhere and my daughter\'s graduation party is this Saturday - I have 50 people coming! I don\'t know what to do!',
+    customerGoals: 'Get someone out immediately to assess and treat the lawn before Saturday',
+    csrObjective: 'Calm the customer, gather necessary information, schedule emergency service, and set realistic expectations',
+    keyPointsToMention: ['My daughter\'s graduation party is this Saturday', 'I have 50 people coming to the house', 'The front yard looks terrible - big brown patches everywhere', 'How soon can someone get here?'],
+    escalationTriggers: 'CSR is dismissive of urgency, can\'t get anyone out before Saturday, or doesn\'t provide reassurance',
+    deescalationTriggers: 'CSR is calm and reassuring, confirms someone can come soon, provides realistic expectations about what can be done',
+    resolutionConditions: 'Will be satisfied if: CSR calms her down, schedules a priority visit before Saturday, and gives realistic advice on what can be improved in time.',
+    scoringFocus: ['Empathy', 'Urgency handling', 'Reassurance', 'Emergency scheduling'],
+    systemPrompt: 'You are Karen Mitchell, a 35-year-old single mom. Your daughter Emma is graduating high school and you\'re hosting a party this Saturday for 50+ people at your house. Your front lawn has suddenly developed large brown patches and looks terrible. Call sounding stressed but not hysterical. Your main concerns: Can it be fixed before Saturday? How soon can someone come look at it? What can realistically be done in a few days? Calm down significantly if the CSR is soothing and confirms they can help before the weekend.'
   }
 ];
 
@@ -294,16 +414,18 @@ Background: {{scenario.customerBackground}}
 
 Remember: This is training - challenge the CSR but be fair. Ask about specific packages and pricing when relevant to your scenario.`;
 
-const DEFAULT_COACHING_SYSTEM_PROMPT = `You are an expert CSR coach specializing in pest control and home services customer service training.
-You understand what drives revenue and customer retention for pest control companies:
-- Converting inquiries into booked appointments (the #1 metric)
-- Getting customers on recurring service plans vs one-time treatments
+const DEFAULT_COACHING_SYSTEM_PROMPT = `You are an expert CSR coach specializing in pest control, lawn care, and home services customer service training.
+You understand what drives revenue and customer retention:
+- Converting inquiries into booked appointments
+- Retaining existing customers through empathy and value demonstration
+- Resolving complaints quickly to preserve the relationship
 - Handling price objections by communicating value, not discounting
-- Creating urgency appropriately for pest issues
-- Building trust through technical knowledge and professionalism
+- Building trust through knowledge and professionalism
 
-Provide detailed, constructive feedback that helps CSRs book more appointments and retain more customers.
-You have deep knowledge of the company's products, services, and recommended objection responses.
+## Scoring Philosophy
+Score based on how well the CSR achieved the CORE OBJECTIVE for the scenario type. A CSR who handles the primary objective competently should score 70-80. Reserve 80-90 for strong performances and 90+ for exceptional ones. Scores below 60 should only be given when fundamental skills were clearly missing — not for minor omissions.
+
+Provide detailed, constructive feedback. You have deep knowledge of the company's products, services, and recommended objection responses.
 Always respond with valid JSON matching the exact schema provided.`;
 
 const DEFAULT_COACHING_USER_PROMPT = `Analyze this CSR training call and provide a comprehensive coaching scorecard.
@@ -339,39 +461,43 @@ const DEFAULT_COACHING_USER_PROMPT = `Analyze this CSR training call and provide
 ## Transcript
 {{transcript}}
 
-## Scoring Categories for Pest Control CSRs
+## Scoring Categories — Adapt to Scenario Type
+
+IMPORTANT: Adjust how you evaluate "Booking & Conversion" based on the scenario category:
+- **Sales scenarios**: Evaluate as booking/conversion — did they ask for the appointment, offer times, create urgency?
+- **Retention scenarios**: Evaluate as retention/save — did they acknowledge loyalty, address concerns, and retain the customer?
+- **Complaint Resolution scenarios**: Evaluate as resolution/recovery — did they take ownership, apologize sincerely, and offer a concrete fix?
+- **Emergency Response scenarios**: Evaluate as emergency handling — did they stay calm, reassure the customer, and schedule urgent service?
+
+A competent CSR who achieves the scenario's core objective should score 70-80. Do NOT penalize for missing minor items that are irrelevant to the scenario type (e.g., don't penalize a complaint handler for not "creating urgency" to book).
 
 ### 1. Empathy & Rapport (Weight: 15%)
-- Did the CSR acknowledge the customer's pest concerns with understanding?
-- Did they make the customer feel heard and not judged about having pests?
-- Did they build trust and connection appropriate to a home service call?
+- Did the CSR acknowledge the customer's concerns with understanding?
+- Did they make the customer feel heard?
+- Did they build trust and connection?
 
-### 2. Booking & Conversion (Weight: 25%) - CRITICAL
-- Did the CSR attempt to book an appointment? (Most important metric)
-- Did they offer specific date/time options rather than leaving it open?
-- Did they create appropriate urgency for the pest situation?
-- Did they overcome scheduling objections?
-- For existing customers: Did they successfully retain or save the account?
+### 2. Booking & Conversion / Retention / Resolution (Weight: 25%)
+- Evaluate based on the scenario type (see above)
+- Did the CSR achieve the primary call objective?
+- Did they guide toward a clear next step or resolution?
 
 ### 3. Service & Technical Knowledge (Weight: 20%)
-- Did the CSR accurately explain treatment methods and what to expect?
-- Did they demonstrate knowledge of pest behavior and solutions?
-- Did they explain safety information (pets, children, prep requirements)?
+- Did the CSR accurately explain relevant services and what to expect?
+- Did they demonstrate knowledge of solutions?
+- Did they explain safety information when relevant?
 - Did they accurately describe service packages and pricing?
-- Did they mention guarantees and follow-up services?
 
 ### 4. Value Communication & Objection Handling (Weight: 25%)
 - Did the CSR communicate value rather than just price?
-- Did they handle price objections effectively without discounting?
+- Did they handle objections effectively?
 - Did they differentiate from competitors when relevant?
-- Did they recommend the right service level (not underserving or overselling)?
-- Did they present recurring service benefits vs one-time treatment?
+- Did they recommend the right service level?
 
 ### 5. Professionalism & Call Control (Weight: 15%)
 - Did the CSR maintain a professional, confident tone?
-- Did they control the call flow and guide the conversation?
+- Did they guide the conversation appropriately?
 - Did they ask the right qualifying questions?
-- Did they summarize and confirm next steps clearly?
+- Did they confirm next steps clearly?
 
 Respond with JSON:
 {
@@ -635,6 +761,28 @@ async function getProductContext(organizationId) {
     console.error('Error fetching product context:', error);
     return null;
   }
+}
+
+// ============ HELPER TO DETECT ORG INDUSTRY ============
+
+function detectOrgIndustry(req) {
+  if (!req.organization) return 'pest_control';
+
+  const explicit = req.organization.settings?.industry;
+  if (explicit === 'pest_control' || explicit === 'lawn_care' || explicit === 'both') {
+    return explicit;
+  }
+
+  const services = req.organization.services;
+  if (Array.isArray(services) && services.length > 0) {
+    const joined = services.join(' ').toLowerCase();
+    const hasPest = /pest|termite|rodent|roach|ant|wildlife/.test(joined);
+    const hasLawn = /lawn|fertiliz|weed|turf|grass|mow/.test(joined);
+    if (hasPest && hasLawn) return 'both';
+    if (hasLawn) return 'lawn_care';
+  }
+
+  return 'pest_control';
 }
 
 // ============ HELPER TO GET COMPANY CONFIG ============
@@ -1027,7 +1175,13 @@ app.post('/api/admin/scrape-company', async (req, res) => {
 app.get('/api/scenarios', optionalAuthMiddleware, async (req, res) => {
   try {
     const company = await getCompanyConfig(req);
-    const processed = scenarios.map(s => ({
+    const industry = detectOrgIndustry(req);
+
+    const filtered = industry === 'both'
+      ? scenarios
+      : scenarios.filter(s => s.industry === industry);
+
+    const processed = filtered.map(s => ({
       ...s,
       situation: processTemplate(s.situation, { company }),
       customerBackground: processTemplate(s.customerBackground, { company })

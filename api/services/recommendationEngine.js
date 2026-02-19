@@ -299,8 +299,55 @@ export async function getSkillHistory(userId, days = 30) {
   return history || [];
 }
 
+/**
+ * Update skill profile from explicit user/manager feedback (pass/fail).
+ * This is the primary tuning mechanism after initial scenario calibration.
+ * Pass = bump relevant skills toward 80, Fail = pull toward 40.
+ */
+export async function updateSkillProfileFromFeedback(userId, orgId, sessionId, passed) {
+  const supabase = createAdminClient();
+
+  try {
+    const { data: session, error: sessionError } = await supabase
+      .from('training_sessions')
+      .select('category_scores')
+      .eq('id', sessionId)
+      .single();
+
+    if (sessionError) throw sessionError;
+
+    const categories = session.category_scores || {};
+    const feedbackScores = {};
+
+    for (const [key, data] of Object.entries(categories)) {
+      const original = data?.score;
+      if (original === undefined || original === null) continue;
+
+      if (passed) {
+        // Pass: nudge scores up — floor of 70 for any category
+        feedbackScores[key] = { ...data, score: Math.max(original, 70) };
+      } else {
+        // Fail: nudge scores down by 10, floor of 20
+        feedbackScores[key] = { ...data, score: Math.max(original - 10, 20) };
+      }
+    }
+
+    await updateSkillProfile(userId, orgId, {
+      session_id: sessionId,
+      categories: feedbackScores,
+      category_scores: feedbackScores
+    });
+
+    return { success: true, passed, adjustedCategories: feedbackScores };
+  } catch (error) {
+    console.error('Error updating skill profile from feedback:', error);
+    throw error;
+  }
+}
+
 export default {
   updateSkillProfile,
+  updateSkillProfileFromFeedback,
   generateRecommendations,
   getRecommendations,
   getSkillProfile,

@@ -3,6 +3,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { createAdminClient } from '../lib/supabase.js';
 import { authMiddleware } from '../lib/auth.js';
 import { queueAnalysis, getAnalysisStatus, retryFailedJobs } from '../services/asyncAnalysis.js';
+import { updateSkillProfileFromFeedback } from '../services/recommendationEngine.js';
 
 const router = express.Router();
 
@@ -22,15 +23,17 @@ router.post('/analyze', async (req, res) => {
 
     const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-    const systemPrompt = `You are an expert CSR coach specializing in pest control and home services customer service training.
-You understand what drives revenue and customer retention for pest control companies:
-- Converting inquiries into booked appointments (the #1 metric)
-- Getting customers on recurring service plans vs one-time treatments
+    const systemPrompt = `You are an expert CSR coach specializing in pest control, lawn care, and home services customer service training.
+You understand what drives revenue and customer retention:
+- Converting inquiries into booked appointments
+- Retaining existing customers through empathy and value demonstration
+- Resolving complaints quickly to preserve the relationship
 - Handling price objections by communicating value, not discounting
-- Creating urgency appropriately for pest issues
-- Building trust through technical knowledge and professionalism
+- Building trust through knowledge and professionalism
 
-Provide detailed, constructive feedback that helps CSRs book more appointments and retain more customers.
+Score based on how well the CSR achieved the CORE OBJECTIVE for the scenario type. A CSR who handles the primary objective competently should score 70-80. Reserve 80-90 for strong performances and 90+ for exceptional ones. Scores below 60 should only be given when fundamental skills were clearly missing.
+
+Provide detailed, constructive feedback.
 Always respond with valid JSON matching the exact schema provided.`;
 
     const userPrompt = `Analyze this CSR training call and provide a comprehensive coaching scorecard.
@@ -42,12 +45,14 @@ Always respond with valid JSON matching the exact schema provided.`;
 ## Transcript
 ${transcript}
 
-## Scoring Categories for Pest Control CSRs
+## Scoring Categories — Adapt to Scenario Type
 
-### 1. Empathy & Rapport (15%) - Building trust with customers about pest concerns
-### 2. Booking & Conversion (25%) - CRITICAL: Did they ask for and secure the appointment?
-### 3. Service & Technical Knowledge (20%) - Treatment methods, pest knowledge, safety info
-### 4. Value Communication (25%) - Handling price objections, communicating value vs competitors
+IMPORTANT: Adjust "Booking & Conversion" based on scenario type. For retention calls, evaluate as retention/save. For complaint calls, evaluate as resolution/recovery. For emergency calls, evaluate as emergency handling. Only evaluate as booking/conversion for sales calls. A competent CSR who achieves the core objective should score 70-80. Do NOT penalize for items irrelevant to the scenario type.
+
+### 1. Empathy & Rapport (15%) - Building trust with customer
+### 2. Booking & Conversion / Retention / Resolution (25%) - Based on scenario type: booking, retention, resolution, or emergency handling
+### 3. Service & Technical Knowledge (20%) - Treatment methods, service knowledge, safety info
+### 4. Value Communication (25%) - Handling objections, communicating value vs competitors
 ### 5. Professionalism & Call Control (15%) - Tone, call flow, qualifying questions
 
 Respond with JSON:
@@ -628,6 +633,56 @@ router.get('/user-progress', async (req, res) => {
   } catch (error) {
     console.error('Error getting user progress:', error);
     res.status(500).json({ error: 'Failed to get user progress' });
+  }
+});
+
+/**
+ * POST /api/analysis/feedback/:sessionId
+ * Submit pass/fail feedback for a session. Updates skill profile tuning.
+ * Only user feedback (not repeated scenario runs) drives ongoing calibration.
+ */
+router.post('/feedback/:sessionId', async (req, res) => {
+  try {
+    const { sessionId } = req.params;
+    const { passed } = req.body;
+    const { id: userId, orgId } = req.user;
+
+    if (typeof passed !== 'boolean') {
+      return res.status(400).json({ error: 'passed (boolean) is required' });
+    }
+
+    const supabase = createAdminClient();
+
+    // Verify session belongs to user's org
+    const { data: session, error: sessionError } = await supabase
+      .from('training_sessions')
+      .select('id, user_id, org_id')
+      .eq('id', sessionId)
+      .eq('org_id', orgId)
+      .single();
+
+    if (sessionError || !session) {
+      return res.status(404).json({ error: 'Session not found' });
+    }
+
+    const result = await updateSkillProfileFromFeedback(
+      session.user_id, orgId, sessionId, passed
+    );
+
+    // Store the feedback record
+    await supabase
+      .from('session_feedback')
+      .insert({
+        session_id: sessionId,
+        reviewer_id: userId,
+        feedback_type: passed ? 'praise' : 'coaching',
+        content: passed ? 'Marked as passed' : 'Marked as needs work'
+      });
+
+    res.json({ success: true, ...result });
+  } catch (error) {
+    console.error('Error submitting feedback:', error);
+    res.status(500).json({ error: 'Failed to submit feedback' });
   }
 });
 

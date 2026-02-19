@@ -87,7 +87,11 @@ router.get('/:id', authMiddleware, tenantMiddleware, async (req, res) => {
       // Situation
       situation: genScenario.situation_text,
       openingLine: genScenario.opening_line,
-      keyPointsToMention: profile.typical_objections || [],
+      keyPointsToMention: profile.typical_objections?.length
+        ? profile.typical_objections
+        : template?.customer_goals
+          ? [template.customer_goals]
+          : [],
 
       // Objectives — template-specific or generic fallback
       csrObjective,

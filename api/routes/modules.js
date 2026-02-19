@@ -100,7 +100,7 @@ router.post('/:id/start', authMiddleware, tenantMiddleware, async (req, res) => 
       .eq('module_id', req.params.id)
       .single();
 
-    // If already has scenarios, return them
+    // If already has progress AND scenarios, return them
     if (existingProgress) {
       const { data: existingScenarios } = await adminClient
         .from('generated_scenarios')
@@ -112,12 +112,15 @@ router.post('/:id/start', authMiddleware, tenantMiddleware, async (req, res) => 
         .eq('module_id', req.params.id)
         .order('sequence_number');
 
-      return res.json({
-        success: true,
-        progress: existingProgress,
-        scenarios: existingScenarios || [],
-        message: 'Module already started'
-      });
+      if (existingScenarios && existingScenarios.length > 0) {
+        return res.json({
+          success: true,
+          progress: existingProgress,
+          scenarios: existingScenarios,
+          message: 'Module already started'
+        });
+      }
+      // Progress exists but scenarios are missing (previous generation timed out) — fall through to regenerate
     }
 
     // Generate scenarios using the scenario generator service
@@ -127,15 +130,16 @@ router.post('/:id/start', authMiddleware, tenantMiddleware, async (req, res) => 
       module
     );
 
-    // Create module progress
+    // Create or update module progress (upsert handles the case where progress exists but scenarios were missing)
     const { data: progress, error: progressError } = await adminClient
       .from('user_module_progress')
-      .insert({
+      .upsert({
         user_id: req.user.id,
         module_id: module.id,
         status: 'in_progress',
-        started_at: new Date().toISOString()
-      })
+        started_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id,module_id' })
       .select()
       .single();
 

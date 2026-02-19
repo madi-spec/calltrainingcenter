@@ -341,63 +341,80 @@ export async function generateScenariosForModule(userId, organizationId, module)
 
   const scenarioCount = module.scenario_count || 10;
   const scenarios = [];
+  const templateCount = Math.min(templates.length, scenarioCount);
 
-  // Phase 1: Create scenarios from templates (use template's base_situation directly)
-  for (let i = 0; i < Math.min(templates.length, scenarioCount); i++) {
-    const template = templates[i];
-    const profileIndex = i % profiles.length;
-    const profile = profiles[profileIndex];
-    const willClose = determineOutcome(module.difficulty, profile);
+  // Phase 1: Create scenarios from templates — parallelize opening line generation
+  if (templateCount > 0) {
+    const templateJobs = templates.slice(0, templateCount).map(async (template, i) => {
+      const profile = profiles[i % profiles.length];
+      const willClose = determineOutcome(module.difficulty, profile);
 
-    // AI-generate a personalized opening line for the template situation
-    let openingLine;
-    try {
-      const response = await getAnthropicClient().messages.create({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 200,
-        messages: [{ role: 'user', content: `Generate a realistic opening line a customer would say when calling a pest control company. The customer's name is ${profile.name}, their communication style is ${profile.communication_style}, and the situation is: ${template.base_situation}\n\nRespond with ONLY the opening line, no quotes or explanation.` }]
-      });
-      openingLine = response.content[0].text.trim().replace(/^["']|["']$/g, '');
-    } catch (err) {
-      openingLine = generateFallbackOpeningLine(profile);
-    }
+      let openingLine;
+      try {
+        const response = await getAnthropicClient().messages.create({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 200,
+          messages: [{ role: 'user', content: `Generate a realistic opening line a customer would say when calling a pest control company. The customer's name is ${profile.name}, their communication style is ${profile.communication_style}, and the situation is: ${template.base_situation}\n\nRespond with ONLY the opening line, no quotes or explanation.` }]
+        });
+        openingLine = response.content[0].text.trim().replace(/^["']|["']$/g, '');
+      } catch (err) {
+        openingLine = generateFallbackOpeningLine(profile);
+      }
 
-    scenarios.push({
-      user_id: userId,
-      module_id: module.id,
-      template_id: template.id,
-      profile_id: profile.id,
-      sequence_number: i + 1,
-      situation_text: template.base_situation,
-      opening_line: openingLine,
-      will_close: willClose,
-      close_stage: willClose ? Math.floor(Math.random() * 3) + 1 : null,
-      status: 'pending'
+      return {
+        user_id: userId,
+        module_id: module.id,
+        template_id: template.id,
+        profile_id: profile.id,
+        sequence_number: i + 1,
+        situation_text: template.base_situation,
+        opening_line: openingLine,
+        will_close: willClose,
+        close_stage: willClose ? Math.floor(Math.random() * 3) + 1 : null,
+        status: 'pending'
+      };
     });
+
+    const templateScenarios = await Promise.all(templateJobs);
+    scenarios.push(...templateScenarios);
   }
 
-  // Phase 2: Generate remaining scenarios with AI (enhanced with guidelines + template examples)
-  for (let i = templates.length; i < scenarioCount; i++) {
-    const profileIndex = i % profiles.length;
-    const profile = profiles[profileIndex];
-    const willClose = determineOutcome(module.difficulty, profile);
+  // Phase 2: Generate remaining scenarios with AI (enhanced prompt, use fallback to stay within timeout)
+  const remainingCount = scenarioCount - templateCount;
+  if (remainingCount > 0) {
+    // Generate first 2 remaining with AI, rest with fallback to avoid timeout
+    const aiLimit = Math.min(2, remainingCount);
+    const aiJobs = [];
 
-    const scenarioText = await generateScenarioText(
-      module, profile, productContext, i,
-      { salesGuidelines, templateExamples: templates }
-    );
+    for (let i = templateCount; i < templateCount + aiLimit; i++) {
+      const profile = profiles[i % profiles.length];
+      const willClose = determineOutcome(module.difficulty, profile);
+      aiJobs.push(
+        generateScenarioText(module, profile, productContext, i, { salesGuidelines, templateExamples: templates })
+          .then(scenarioText => ({
+            user_id: userId, module_id: module.id, profile_id: profile.id,
+            sequence_number: i + 1, situation_text: scenarioText.situation,
+            opening_line: scenarioText.openingLine, will_close: willClose,
+            close_stage: willClose ? Math.floor(Math.random() * 3) + 1 : null, status: 'pending'
+          }))
+      );
+    }
+    const aiScenarios = await Promise.all(aiJobs);
+    scenarios.push(...aiScenarios);
 
-    scenarios.push({
-      user_id: userId,
-      module_id: module.id,
-      profile_id: profile.id,
-      sequence_number: i + 1,
-      situation_text: scenarioText.situation,
-      opening_line: scenarioText.openingLine,
-      will_close: willClose,
-      close_stage: willClose ? Math.floor(Math.random() * 3) + 1 : null,
-      status: 'pending'
-    });
+    // Fill the rest with fallback
+    for (let i = templateCount + aiLimit; i < scenarioCount; i++) {
+      const profile = profiles[i % profiles.length];
+      const willClose = determineOutcome(module.difficulty, profile);
+      scenarios.push({
+        user_id: userId, module_id: module.id, profile_id: profile.id,
+        sequence_number: i + 1,
+        situation_text: generateFallbackSituation(module, profile, productContext),
+        opening_line: generateFallbackOpeningLine(profile),
+        will_close: willClose,
+        close_stage: willClose ? Math.floor(Math.random() * 3) + 1 : null, status: 'pending'
+      });
+    }
   }
 
   // Insert all scenarios

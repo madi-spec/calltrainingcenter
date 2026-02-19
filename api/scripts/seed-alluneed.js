@@ -2,7 +2,7 @@
  * Seed script for All U Need Pest Control
  * Populates org-specific training data: packages, objections, guidelines, profiles, courses, scenarios
  *
- * Usage: node api/scripts/seed-alluneed.js <ORG_ID>
+ * Usage: node api/scripts/seed-alluneed.js <ORG_ID> [--clean]
  */
 
 import { createClient } from '@supabase/supabase-js';
@@ -29,8 +29,103 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
 
 const ORG_ID = process.argv[2];
 if (!ORG_ID) {
-  console.error('Usage: node api/scripts/seed-alluneed.js <ORG_ID>');
+  console.error('Usage: node api/scripts/seed-alluneed.js <ORG_ID> [--clean]');
   process.exit(1);
+}
+
+const CLEAN = process.argv.includes('--clean');
+
+// ---------------------------------------------------------------------------
+// Clean existing data (reverse dependency order)
+// ---------------------------------------------------------------------------
+async function cleanExistingData() {
+  if (!CLEAN) return;
+
+  console.log('--- Cleaning existing data for org ---');
+
+  // 1. Delete scenario_templates
+  const { error: e1 } = await supabase
+    .from('scenario_templates')
+    .delete()
+    .eq('organization_id', ORG_ID);
+  if (e1) console.error('  Failed to delete scenario_templates:', e1.message);
+  else console.log('  Deleted scenario_templates');
+
+  // 2. Get service_package ids, then delete package_selling_points and package_objections
+  const { data: packages } = await supabase
+    .from('service_packages')
+    .select('id')
+    .eq('organization_id', ORG_ID);
+
+  if (packages && packages.length > 0) {
+    const packageIds = packages.map((p) => p.id);
+
+    const { error: e2a } = await supabase
+      .from('package_selling_points')
+      .delete()
+      .in('package_id', packageIds);
+    if (e2a) console.error('  Failed to delete package_selling_points:', e2a.message);
+    else console.log('  Deleted package_selling_points');
+
+    const { error: e2b } = await supabase
+      .from('package_objections')
+      .delete()
+      .in('package_id', packageIds);
+    if (e2b) console.error('  Failed to delete package_objections:', e2b.message);
+    else console.log('  Deleted package_objections');
+  }
+
+  // 3. Get course ids, then delete course_modules
+  const { data: courses } = await supabase
+    .from('courses')
+    .select('id')
+    .eq('organization_id', ORG_ID);
+
+  if (courses && courses.length > 0) {
+    const courseIds = courses.map((c) => c.id);
+
+    const { error: e3 } = await supabase
+      .from('course_modules')
+      .delete()
+      .in('course_id', courseIds);
+    if (e3) console.error('  Failed to delete course_modules:', e3.message);
+    else console.log('  Deleted course_modules');
+  }
+
+  // 4. Delete courses
+  const { error: e4 } = await supabase
+    .from('courses')
+    .delete()
+    .eq('organization_id', ORG_ID);
+  if (e4) console.error('  Failed to delete courses:', e4.message);
+  else console.log('  Deleted courses');
+
+  // 5. Delete service_packages
+  const { error: e5 } = await supabase
+    .from('service_packages')
+    .delete()
+    .eq('organization_id', ORG_ID);
+  if (e5) console.error('  Failed to delete service_packages:', e5.message);
+  else console.log('  Deleted service_packages');
+
+  // 6. Delete sales_guidelines
+  const { error: e6 } = await supabase
+    .from('sales_guidelines')
+    .delete()
+    .eq('organization_id', ORG_ID);
+  if (e6) console.error('  Failed to delete sales_guidelines:', e6.message);
+  else console.log('  Deleted sales_guidelines');
+
+  // 7. Delete customer_profiles (non-system only)
+  const { error: e7 } = await supabase
+    .from('customer_profiles')
+    .delete()
+    .eq('organization_id', ORG_ID)
+    .eq('is_system', false);
+  if (e7) console.error('  Failed to delete customer_profiles:', e7.message);
+  else console.log('  Deleted customer_profiles (non-system)');
+
+  console.log('  Clean complete.\n');
 }
 
 // ---------------------------------------------------------------------------
@@ -1825,12 +1920,99 @@ async function seedScenarioTemplates(packageMap, courseModuleMap) {
 }
 
 // ---------------------------------------------------------------------------
+// Print summary stats
+// ---------------------------------------------------------------------------
+async function printSummary() {
+  console.log('\n--- Summary ---');
+
+  const { count: packageCount } = await supabase
+    .from('service_packages')
+    .select('*', { count: 'exact', head: true })
+    .eq('organization_id', ORG_ID);
+
+  const { data: pkgIds } = await supabase
+    .from('service_packages')
+    .select('id')
+    .eq('organization_id', ORG_ID);
+  const packageIdList = (pkgIds || []).map((p) => p.id);
+
+  let objectionCount = 0;
+  let sellingPointCount = 0;
+  if (packageIdList.length > 0) {
+    const { count: oc } = await supabase
+      .from('package_objections')
+      .select('*', { count: 'exact', head: true })
+      .in('package_id', packageIdList);
+    objectionCount = oc || 0;
+
+    const { count: sc } = await supabase
+      .from('package_selling_points')
+      .select('*', { count: 'exact', head: true })
+      .in('package_id', packageIdList);
+    sellingPointCount = sc || 0;
+  }
+
+  const { count: guidelineCount } = await supabase
+    .from('sales_guidelines')
+    .select('*', { count: 'exact', head: true })
+    .eq('organization_id', ORG_ID);
+
+  const { count: profileCount } = await supabase
+    .from('customer_profiles')
+    .select('*', { count: 'exact', head: true })
+    .eq('organization_id', ORG_ID)
+    .eq('is_system', false);
+
+  const { count: courseCount } = await supabase
+    .from('courses')
+    .select('*', { count: 'exact', head: true })
+    .eq('organization_id', ORG_ID);
+
+  const { data: courseIds } = await supabase
+    .from('courses')
+    .select('id')
+    .eq('organization_id', ORG_ID);
+  const courseIdList = (courseIds || []).map((c) => c.id);
+
+  let moduleCount = 0;
+  if (courseIdList.length > 0) {
+    const { count: mc } = await supabase
+      .from('course_modules')
+      .select('*', { count: 'exact', head: true })
+      .in('course_id', courseIdList);
+    moduleCount = mc || 0;
+  }
+
+  const { count: scenarioCount } = await supabase
+    .from('scenario_templates')
+    .select('*', { count: 'exact', head: true })
+    .eq('organization_id', ORG_ID);
+
+  const rows = [
+    ['service_packages', packageCount || 0],
+    ['package_objections', objectionCount],
+    ['package_selling_points', sellingPointCount],
+    ['sales_guidelines', guidelineCount || 0],
+    ['customer_profiles', profileCount || 0],
+    ['courses', courseCount || 0],
+    ['course_modules', moduleCount],
+    ['scenario_templates', scenarioCount || 0],
+  ];
+
+  const maxLabel = Math.max(...rows.map(([label]) => label.length));
+  for (const [label, count] of rows) {
+    console.log(`  ${label.padEnd(maxLabel)}  ${count}`);
+  }
+}
+
+// ---------------------------------------------------------------------------
 // main
 // ---------------------------------------------------------------------------
 async function main() {
   console.log('=== All U Need Pest Control — Seed Script ===\n');
 
   await verifyOrg();
+  await cleanExistingData();
 
   console.log('\n--- Service Packages ---');
   const packageMap = await seedServicePackages();
@@ -1849,6 +2031,8 @@ async function main() {
 
   console.log('\n--- Scenario Templates ---');
   await seedScenarioTemplates(packageMap, courseMap);
+
+  await printSummary();
 
   console.log('\n=== Seed complete ===');
 }

@@ -2,7 +2,9 @@
  * Seed script for All U Need Pest Control
  * Populates org-specific training data: packages, objections, guidelines, profiles, courses, scenarios
  *
- * Usage: node api/scripts/seed-alluneed.js <ORG_ID> [--clean]
+ * Usage:
+ *   node api/scripts/seed-alluneed.js <ORG_ID> [--clean]
+ *   node api/scripts/seed-alluneed.js --create-org [--clean]
  */
 
 import { createClient } from '@supabase/supabase-js';
@@ -27,13 +29,86 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   auth: { autoRefreshToken: false, persistSession: false }
 });
 
-const ORG_ID = process.argv[2];
-if (!ORG_ID) {
-  console.error('Usage: node api/scripts/seed-alluneed.js <ORG_ID> [--clean]');
+const CREATE_ORG = process.argv.includes('--create-org');
+const CLEAN = process.argv.includes('--clean');
+
+let ORG_ID = process.argv.find(a => a !== '--clean' && a !== '--create-org' && a !== process.argv[0] && a !== process.argv[1]);
+
+if (!ORG_ID && !CREATE_ORG) {
+  console.error('Usage:\n  node api/scripts/seed-alluneed.js <ORG_ID> [--clean]\n  node api/scripts/seed-alluneed.js --create-org [--clean]');
   process.exit(1);
 }
 
-const CLEAN = process.argv.includes('--clean');
+async function createOrg() {
+  const trialEndsAt = new Date();
+  trialEndsAt.setDate(trialEndsAt.getDate() + 365);
+
+  const { data: org, error } = await supabase
+    .from('organizations')
+    .insert({
+      name: 'All U Need Pest Control',
+      slug: `all-u-need-${Date.now()}`,
+      phone: '1-888-239-2847',
+      website: 'https://www.alluneedpest.com',
+      subscription_status: 'active',
+      subscription_plan: 'professional',
+      training_hours_included: 100,
+      training_hours_used: 0,
+      trial_ends_at: trialEndsAt.toISOString(),
+      onboarding_completed: true,
+      products_configured: true,
+      setup_completed_at: new Date().toISOString(),
+      address: '2840 Winkler Ave, Fort Myers, FL 33916',
+      services: ['Home Pest Control', 'Lawn Pest Control', 'Termite Control', 'Rodent Control', 'Bed Bug Treatment', 'Flea Treatment', 'Mosquito Service', 'TAP Insulation'],
+      guarantees: ['Satisfaction guarantee', 'Same-day service when available', 'Free service calls between visits', 'Family and pet safe treatments'],
+      value_propositions: ['Founded 2003', '30,000+ five-star reviews', '3x Inc. 5000 Fastest-Growing Company', 'PCT Top 100 Company'],
+      service_areas: [
+        { state: 'FL', offices: ['Fort Myers', 'Port Charlotte', 'Tampa Bay', 'Jacksonville', 'Melbourne'] },
+        { state: 'TX', offices: ['Houston'] },
+        { state: 'SC', offices: ['Charleston'] }
+      ],
+      settings: {
+        aiModel: 'claude-sonnet-4-20250514',
+        customPromptAdditions: 'All U Need Pest Control is a family- and pet-friendly pest management company operating across Florida, South Carolina, and Texas. 24/7 hours. Toll-free: 1-888-239-BUGS. Referral partner for non-offered services: Baton Service Pros (844) 699-4138.',
+        scoringWeights: {
+          empathyRapport: 20,
+          problemResolution: 25,
+          productKnowledge: 20,
+          professionalism: 15,
+          scenarioSpecific: 20
+        },
+        voicePreferences: {
+          defaultVoiceId: '11labs-Brian'
+        }
+      }
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Failed to create organization:', error.message);
+    process.exit(1);
+  }
+
+  // Create primary branch
+  const { error: branchErr } = await supabase
+    .from('branches')
+    .insert({
+      organization_id: org.id,
+      name: 'Main Office — Fort Myers',
+      is_primary: true,
+      timezone: 'America/New_York'
+    });
+
+  if (branchErr) {
+    console.warn('Branch creation failed (may not have branches table):', branchErr.message);
+  }
+
+  console.log(`Created organization: ${org.name}`);
+  console.log(`  ID: ${org.id}`);
+  console.log(`  Slug: ${org.slug}`);
+  return org.id;
+}
 
 // ---------------------------------------------------------------------------
 // Clean existing data (reverse dependency order)
@@ -482,7 +557,7 @@ async function seedServicePackages() {
 
   const { data, error } = await supabase
     .from('service_packages')
-    .upsert(rows, { onConflict: 'organization_id,internal_name' })
+    .insert(rows)
     .select('id, internal_name');
 
   if (error) {
@@ -778,7 +853,7 @@ async function seedObjectionsAndSellingPoints(packageMap) {
 
   const { error: objError } = await supabase
     .from('package_objections')
-    .upsert(objectionRows, { onConflict: 'package_id,objection_text' });
+    .insert(objectionRows);
 
   if (objError) {
     console.error('Failed to seed objections:', objError.message);
@@ -855,7 +930,7 @@ async function seedObjectionsAndSellingPoints(packageMap) {
 
   const { error: spError } = await supabase
     .from('package_selling_points')
-    .upsert(sellingPointRows, { onConflict: 'package_id,point' });
+    .insert(sellingPointRows);
 
   if (spError) {
     console.error('Failed to seed selling points:', spError.message);
@@ -1014,7 +1089,7 @@ async function seedSalesGuidelines() {
 
   const { error } = await supabase
     .from('sales_guidelines')
-    .upsert(rows, { onConflict: 'organization_id,title' });
+    .insert(rows);
 
   if (error) {
     console.error('Failed to seed sales guidelines:', error.message);
@@ -1227,7 +1302,7 @@ async function seedCustomerProfiles() {
 
   const { data, error } = await supabase
     .from('customer_profiles')
-    .upsert(rows, { onConflict: 'organization_id,name' })
+    .insert(rows)
     .select('id, name');
 
   if (error) {
@@ -1367,8 +1442,7 @@ async function seedCoursesAndModules() {
   for (const course of AUN_COURSES) {
     const { data: courseData, error: courseError } = await supabase
       .from('courses')
-      .upsert(
-        {
+      .insert({
           organization_id: ORG_ID,
           name: course.name,
           description: course.description,
@@ -1379,9 +1453,7 @@ async function seedCoursesAndModules() {
           is_system: false,
           is_active: true,
           display_order: course.display_order,
-        },
-        { onConflict: 'organization_id,name' }
-      )
+        })
       .select('id')
       .single();
 
@@ -1405,7 +1477,7 @@ async function seedCoursesAndModules() {
 
     const { data: moduleData, error: moduleError } = await supabase
       .from('course_modules')
-      .upsert(moduleRows, { onConflict: 'course_id,name' })
+      .insert(moduleRows)
       .select('id, name');
 
     if (moduleError) {
@@ -1906,7 +1978,7 @@ async function seedScenarioTemplates(packageMap, courseModuleMap) {
     const chunk = templates.slice(i, i + chunkSize);
     const { error } = await supabase
       .from('scenario_templates')
-      .upsert(chunk, { onConflict: 'organization_id,module_id,name' });
+      .insert(chunk);
 
     if (error) {
       console.error(`Failed to seed scenario templates (chunk ${Math.floor(i / chunkSize) + 1}):`, error.message);
@@ -2011,7 +2083,12 @@ async function printSummary() {
 async function main() {
   console.log('=== All U Need Pest Control — Seed Script ===\n');
 
-  await verifyOrg();
+  if (CREATE_ORG) {
+    ORG_ID = await createOrg();
+  } else {
+    await verifyOrg();
+  }
+
   await cleanExistingData();
 
   console.log('\n--- Service Packages ---');

@@ -1153,8 +1153,182 @@ async function seedCustomerProfiles() {
 // Stub seed functions (to be implemented in subsequent tasks)
 // ---------------------------------------------------------------------------
 async function seedCoursesAndModules() {
-  console.log('  [stub] seedCoursesAndModules — not yet implemented');
-  return {};
+  const AUN_COURSES = [
+    {
+      name: 'Service Knowledge Fundamentals',
+      description: 'Core knowledge of All U Need pest control services, treatment types, covered pests, and service terminology.',
+      category: 'product_knowledge',
+      icon: '🏠',
+      badge_name: 'Service Expert',
+      badge_icon: '🎓',
+      display_order: 1,
+      modules: [
+        { name: 'Home Pest Control (GHP)', description: 'General Home Pest service coverage, included pests, treatment methods, and warranty details.', difficulty: 'easy', scenario_count: 8, pass_threshold: 65 },
+        { name: 'Lawn Pest Control (SLP/QGG)', description: 'Standard Lawn Pest and Quarterly Granular programs, covered lawn pests, and application methods.', difficulty: 'easy', scenario_count: 8, pass_threshold: 65 },
+        { name: 'Specialty Services Overview', description: 'Overview of all specialty services including bed bugs, German roaches, Sentricon, rodent exclusion, TAP insulation, and more.', difficulty: 'medium', scenario_count: 10, pass_threshold: 60 },
+        { name: 'Non-Warrantied Pests', description: 'Identifying and explaining pests not covered under standard plans — German roaches, bed bugs, rodents, drywood termites, and more.', difficulty: 'medium', scenario_count: 8, pass_threshold: 60 },
+        { name: 'Service Lingo Fluency', description: 'Key terminology and abbreviations used at All U Need — GHP, SLP, QGG, CES, CIS, OTS, and more.', difficulty: 'easy', scenario_count: 6, pass_threshold: 70 },
+      ],
+    },
+    {
+      name: 'Pricing & Sales',
+      description: 'Mastering pricing structures, package tiers, upselling techniques, and handling price objections.',
+      category: 'sales_skills',
+      icon: '💰',
+      badge_name: 'Sales Pro',
+      badge_icon: '🏆',
+      display_order: 2,
+      modules: [
+        { name: 'Quoting New Customers', description: 'Building accurate quotes based on home size, location, and pest concerns. Includes initial and recurring pricing.', difficulty: 'medium', scenario_count: 10, pass_threshold: 65 },
+        { name: 'Package Tiers (Silver → Gold → Diamond)', description: 'Understanding and presenting the three package tiers, what each includes, and when to recommend each level.', difficulty: 'medium', scenario_count: 10, pass_threshold: 60 },
+        { name: 'Upselling & Bundling', description: 'Techniques for upgrading customers from Silver to Gold or Diamond, and bundling add-on services.', difficulty: 'hard', scenario_count: 12, pass_threshold: 55 },
+        { name: 'Handling Price Objections', description: 'Responding to price concerns with value-based selling, price drop guidelines, and competitive positioning.', difficulty: 'hard', scenario_count: 12, pass_threshold: 50 },
+        { name: 'Specialty Service Sales', description: 'Selling specialty services — bed bug treatment, Sentricon, rodent exclusion, TAP insulation, and more.', difficulty: 'hard', scenario_count: 12, pass_threshold: 50 },
+      ],
+    },
+    {
+      name: 'Scheduling & Service Call Triage',
+      description: 'Efficiently booking services, triaging service calls vs. full services, and managing scheduling workflows.',
+      category: 'customer_service',
+      icon: '📋',
+      badge_name: 'Scheduling Expert',
+      badge_icon: '📅',
+      display_order: 3,
+      modules: [
+        { name: 'Booking Initial Services', description: 'Scheduling first-time services including same-day requests, manager approvals, and service area confirmation.', difficulty: 'easy', scenario_count: 8, pass_threshold: 70 },
+        { name: 'Service Call vs. Full Service', description: 'Determining when a customer needs a free service call vs. waiting for their next regular service visit.', difficulty: 'medium', scenario_count: 10, pass_threshold: 60 },
+        { name: 'Avoiding Unnecessary Visits', description: 'Educating customers on normal post-treatment activity, expected timelines, and when to wait vs. schedule.', difficulty: 'medium', scenario_count: 10, pass_threshold: 60 },
+        { name: 'Rescheduling & Follow-Up', description: 'Handling reschedule requests, missed appointments, and proactive follow-up communication.', difficulty: 'medium', scenario_count: 10, pass_threshold: 60 },
+        { name: 'Multi-Visit Scheduling', description: 'Coordinating multi-visit treatments like German roach (3 visits) and flea (2 visits) service schedules.', difficulty: 'hard', scenario_count: 10, pass_threshold: 55 },
+      ],
+    },
+    {
+      name: 'Customer Retention & De-escalation',
+      description: 'Retaining customers through card decline handling, hold policies, cancellation saves, and de-escalation techniques.',
+      category: 'retention',
+      icon: '🛡️',
+      badge_name: 'Retention Champion',
+      badge_icon: '💎',
+      display_order: 4,
+      modules: [
+        { name: 'Card Decline Handling', description: 'Following card decline protocols for longstanding vs. new customers, templates, and AR follow-up.', difficulty: 'medium', scenario_count: 8, pass_threshold: 65 },
+        { name: 'Hold Policy Execution', description: 'Managing seasonal holds, snowbird accounts, and service pause requests per company policy.', difficulty: 'medium', scenario_count: 8, pass_threshold: 60 },
+        { name: 'Cancellation Saves', description: 'Techniques for saving customers who want to cancel — identifying root cause, offering solutions, and knowing when to let go.', difficulty: 'hard', scenario_count: 12, pass_threshold: 50 },
+        { name: 'Gate Access & Not-Home', description: 'Handling locked gates, no-access situations, and customers who are not home during scheduled service.', difficulty: 'easy', scenario_count: 8, pass_threshold: 70 },
+        { name: 'Angry Customer De-escalation', description: 'De-escalating frustrated or angry customers using empathy, acknowledgment, and concrete action plans.', difficulty: 'hard', scenario_count: 12, pass_threshold: 50 },
+      ],
+    },
+    {
+      name: 'Specialty Service Qualification',
+      description: 'Qualifying customers for specialty services through proper questioning, eligibility checks, and expectation setting.',
+      category: 'sales_skills',
+      icon: '🔍',
+      badge_name: 'Qualification Expert',
+      badge_icon: '🎯',
+      display_order: 5,
+      modules: [
+        { name: 'Rodent Qualification', description: 'Qualifying homes for rodent exclusion — home type, foundation, location restrictions, and alternative solutions.', difficulty: 'hard', scenario_count: 10, pass_threshold: 60 },
+        { name: 'German Roach Qualification', description: 'Pre-qualifying German roach treatments — species confirmation, infestation source, prep requirements.', difficulty: 'hard', scenario_count: 10, pass_threshold: 60 },
+        { name: 'Bed Bug Qualification', description: 'Qualifying bed bug treatments — confirming activity, setting timeline expectations, and explaining Aprehend process.', difficulty: 'hard', scenario_count: 10, pass_threshold: 55 },
+        { name: 'Sentricon Qualification', description: 'Qualifying Sentricon installations — subterranean vs. drywood, spray foam policy, new install vs. takeover vs. renewal.', difficulty: 'hard', scenario_count: 10, pass_threshold: 55 },
+        { name: 'TAP Insulation Qualification', description: 'Pre-selling TAP insulation — inspection scheduling, minimum pricing, whole-home requirement, and financing options.', difficulty: 'medium', scenario_count: 8, pass_threshold: 60 },
+      ],
+    },
+    {
+      name: 'Communication & Documentation',
+      description: 'Professional call handling, templates, task documentation, and service area routing.',
+      category: 'customer_service',
+      icon: '📝',
+      badge_name: 'Communication Pro',
+      badge_icon: '✍️',
+      display_order: 6,
+      modules: [
+        { name: 'Professional Call Handling', description: 'Greeting, tone, call flow, hold procedures, and professional closing techniques.', difficulty: 'easy', scenario_count: 6, pass_threshold: 70 },
+        { name: 'Text & Voicemail Templates', description: 'Using approved text and voicemail templates for card declines, follow-ups, scheduling confirmations, and more.', difficulty: 'medium', scenario_count: 10, pass_threshold: 60 },
+        { name: 'Task Documentation', description: 'Creating clear, actionable tasks in the CRM for technicians, AR, and management follow-up.', difficulty: 'medium', scenario_count: 8, pass_threshold: 60 },
+        { name: 'Service Area Routing', description: 'Confirming service areas, routing customers to correct branches, and handling out-of-area requests.', difficulty: 'easy', scenario_count: 6, pass_threshold: 75 },
+      ],
+    },
+    {
+      name: 'Complex Service Coordination',
+      description: 'Managing multi-step service workflows, approvals, technician issues, and business continuity procedures.',
+      category: 'advanced',
+      icon: '⚙️',
+      badge_name: 'Operations Expert',
+      badge_icon: '🔧',
+      display_order: 7,
+      modules: [
+        { name: 'Initial Service Approval Workflow', description: 'Processing initial service approvals including payment verification, scheduling confirmation, and technician assignment.', difficulty: 'medium', scenario_count: 8, pass_threshold: 65 },
+        { name: 'Recurring Service Approval', description: 'Managing recurring service approvals, auto-pay verification, and service continuation workflows.', difficulty: 'medium', scenario_count: 8, pass_threshold: 60 },
+        { name: 'Technician No-Show Recovery', description: 'Handling missed technician appointments — customer communication, rescheduling, compensation, and escalation.', difficulty: 'hard', scenario_count: 10, pass_threshold: 55 },
+        { name: 'Post-Treatment Follow-Up', description: 'Following up after specialty treatments to set expectations, check satisfaction, and schedule next steps.', difficulty: 'medium', scenario_count: 10, pass_threshold: 60 },
+        { name: 'BCP — Service During Disruptions', description: 'Business continuity procedures during weather events, system outages, staffing shortages, and other disruptions.', difficulty: 'medium', scenario_count: 6, pass_threshold: 60 },
+      ],
+    },
+  ];
+
+  const courseModuleMap = {};
+
+  for (const course of AUN_COURSES) {
+    const { data: courseData, error: courseError } = await supabase
+      .from('courses')
+      .upsert(
+        {
+          organization_id: ORG_ID,
+          name: course.name,
+          description: course.description,
+          category: course.category,
+          icon: course.icon,
+          badge_name: course.badge_name,
+          badge_icon: course.badge_icon,
+          is_system: false,
+          is_active: true,
+          display_order: course.display_order,
+        },
+        { onConflict: 'organization_id,name' }
+      )
+      .select('id')
+      .single();
+
+    if (courseError) {
+      console.error(`Failed to seed course "${course.name}":`, courseError.message);
+      process.exit(1);
+    }
+
+    const courseId = courseData.id;
+
+    const moduleRows = course.modules.map((mod, idx) => ({
+      course_id: courseId,
+      name: mod.name,
+      description: mod.description,
+      difficulty: mod.difficulty,
+      scenario_count: mod.scenario_count,
+      pass_threshold: mod.pass_threshold,
+      required_completions: 1,
+      unlock_order: idx,
+    }));
+
+    const { data: moduleData, error: moduleError } = await supabase
+      .from('course_modules')
+      .upsert(moduleRows, { onConflict: 'course_id,name' })
+      .select('id, name');
+
+    if (moduleError) {
+      console.error(`Failed to seed modules for "${course.name}":`, moduleError.message);
+      process.exit(1);
+    }
+
+    const modules = {};
+    for (const row of moduleData) {
+      modules[row.name] = row.id;
+    }
+
+    courseModuleMap[course.name] = { courseId, modules };
+
+    console.log(`  ${course.name}: ${moduleData.length} modules`);
+  }
+
+  return courseModuleMap;
 }
 
 async function seedScenarioTemplates(packageMap, courseMap) {

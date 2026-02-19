@@ -1,5 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { createAdminClient, TABLES } from '../lib/supabase.js';
+import { updateSkillProfile } from './recommendationEngine.js';
+import { getProductContext, getSalesGuidelines } from './scenarioGenerator.js';
 
 let anthropicClient = null;
 
@@ -198,6 +200,32 @@ export async function processNextJob() {
 
     console.log(`[AsyncAnalysis] Completed job ${job.job_id} in ${duration}ms`);
 
+    // Update skill profile only on first attempt per scenario
+    // Repeat attempts at the same scenario don't re-calibrate the profile
+    if (session.user_id && session.org_id && session.scenario_id) {
+      try {
+        const { data: priorSessions } = await supabase
+          .from(TABLES.TRAINING_SESSIONS)
+          .select('id')
+          .eq('user_id', session.user_id)
+          .eq('scenario_id', session.scenario_id)
+          .eq('status', 'completed')
+          .neq('id', session.id)
+          .limit(1);
+
+        if (!priorSessions || priorSessions.length === 0) {
+          await updateSkillProfile(session.user_id, session.org_id, {
+            session_id: session.id,
+            categories: analysis.categories,
+            category_scores: analysis.categories
+          });
+          console.log(`[AsyncAnalysis] Updated skill profile for user ${session.user_id} (first attempt at ${session.scenario_id})`);
+        }
+      } catch (profileError) {
+        console.error(`[AsyncAnalysis] Skill profile update failed (non-blocking):`, profileError);
+      }
+    }
+
     // Try to process next job
     setImmediate(() => processNextJob().catch(console.error));
 
@@ -235,7 +263,6 @@ export async function processNextJob() {
 async function performAnalysis(session) {
   const transcript = session.transcript_raw || '';
   const company = session.organization || {};
-  const scenario = { name: session.scenario_id, difficulty: 'medium' };
 
   if (!transcript || transcript.trim().length < 50) {
     return {
@@ -249,15 +276,101 @@ async function performAnalysis(session) {
     };
   }
 
-  const systemPrompt = `You are an expert CSR coach specializing in pest control and home services customer service training.
-You understand what drives revenue and customer retention for pest control companies:
-- Converting inquiries into booked appointments (the #1 metric)
-- Getting customers on recurring service plans vs one-time treatments
-- Handling price objections by communicating value, not discounting
-- Creating urgency appropriately for pest issues
-- Building trust through technical knowledge and professionalism
+  // Fetch org knowledge context for scoring
+  const orgId = session.org_id || session.organization_id;
+  let productContext = null;
+  let salesGuidelines = [];
+  let template = null;
 
-Provide detailed, constructive feedback that helps CSRs book more appointments and retain more customers.
+  try {
+    if (orgId) {
+      [productContext, salesGuidelines] = await Promise.all([
+        getProductContext(orgId),
+        getSalesGuidelines(orgId)
+      ]);
+    }
+
+    // Trace session → generated_scenario → scenario_template
+    if (session.scenario_id) {
+      const supabase = createAdminClient();
+      const { data: genScenario } = await supabase
+        .from('generated_scenarios')
+        .select('template_id')
+        .eq('id', session.scenario_id)
+        .single();
+
+      if (genScenario?.template_id) {
+        const { data: tmpl } = await supabase
+          .from('scenario_templates')
+          .select('*')
+          .eq('id', genScenario.template_id)
+          .single();
+        template = tmpl;
+      }
+    }
+  } catch (err) {
+    console.error('[AsyncAnalysis] Error fetching org context (non-blocking):', err.message);
+  }
+
+  // Build org context block
+  const orgContextLines = [];
+  if (productContext?.company?.name) {
+    orgContextLines.push(`Company: ${productContext.company.name}`);
+  }
+  if (productContext?.packages?.length) {
+    orgContextLines.push('Service Packages:');
+    for (const pkg of productContext.packages) {
+      const points = pkg.sellingPoints?.slice(0, 3).join('; ') || '';
+      orgContextLines.push(`  - ${pkg.name}: $${pkg.price}/${pkg.frequency || 'service'}${points ? ` | Key points: ${points}` : ''}`);
+    }
+  }
+  if (salesGuidelines.length > 0) {
+    orgContextLines.push('Key Policies:');
+    for (const g of salesGuidelines.slice(0, 8)) {
+      orgContextLines.push(`  - ${g.title}: ${g.content.slice(0, 150)}${g.content.length > 150 ? '...' : ''}`);
+    }
+  }
+  const orgContextBlock = orgContextLines.length > 0
+    ? `\n## Organization Knowledge Base\n${orgContextLines.join('\n')}\n`
+    : '';
+
+  // Build scenario-specific scoring context from template
+  const templateContextLines = [];
+  if (template) {
+    if (template.csr_objectives) {
+      templateContextLines.push(`CSR Objectives: ${template.csr_objectives}`);
+    }
+    if (template.resolution_conditions) {
+      templateContextLines.push(`Resolution Conditions: ${template.resolution_conditions}`);
+    }
+    if (template.scoring_focus) {
+      try {
+        const focus = typeof template.scoring_focus === 'string'
+          ? JSON.parse(template.scoring_focus) : template.scoring_focus;
+        const focusStr = Object.entries(focus)
+          .map(([k, v]) => `${k.replace(/_/g, ' ')}: ${Math.round(v * 100)}%`)
+          .join(', ');
+        templateContextLines.push(`Scoring Weights: ${focusStr}`);
+      } catch { /* ignore parse errors */ }
+    }
+  }
+  const templateContextBlock = templateContextLines.length > 0
+    ? `\n## Scenario-Specific Objectives (score against these)\n${templateContextLines.join('\n')}\n`
+    : '';
+
+  const systemPrompt = `You are an expert CSR coach specializing in pest control, lawn care, and home services customer service training.
+You understand what drives revenue and customer retention:
+- Converting inquiries into booked appointments
+- Retaining existing customers through empathy and value demonstration
+- Resolving complaints quickly to preserve the relationship
+- Handling price objections by communicating value, not discounting
+- Building trust through knowledge and professionalism
+${orgContextBlock}
+Score based on how well the CSR achieved the CORE OBJECTIVE for the scenario type. A CSR who handles the primary objective competently should score 70-80. Reserve 80-90 for strong performances and 90+ for exceptional ones. Scores below 60 should only be given when fundamental skills were clearly missing.
+
+${template ? 'IMPORTANT: This scenario has specific objectives. Score primarily against those objectives. Check whether the CSR quoted correct pricing, followed correct procedures, and met the resolution conditions.' : ''}
+
+Provide detailed, constructive feedback.
 Always respond with valid JSON matching the exact schema provided.`;
 
   const userPrompt = `Analyze this CSR training call and provide a comprehensive coaching scorecard.
@@ -265,16 +378,18 @@ Always respond with valid JSON matching the exact schema provided.`;
 ## Call Context
 - Company: ${company.name || 'Training Company'}
 - Call Duration: ${session.duration_seconds || 'Unknown'} seconds
-
+${templateContextBlock}
 ## Transcript
 ${transcript}
 
-## Scoring Categories for Pest Control CSRs
+## Scoring Categories — Adapt to Scenario Type
 
-### 1. Empathy & Rapport (15%) - Building trust with customers about pest concerns
-### 2. Booking & Conversion (25%) - CRITICAL: Did they ask for and secure the appointment?
-### 3. Service & Technical Knowledge (20%) - Treatment methods, pest knowledge, safety info
-### 4. Value Communication (25%) - Handling price objections, communicating value vs competitors
+IMPORTANT: Adjust "Booking & Conversion" based on scenario type. For retention calls, evaluate as retention/save. For complaint calls, evaluate as resolution/recovery. For emergency calls, evaluate as emergency handling. Only evaluate as booking/conversion for sales calls. A competent CSR who achieves the core objective should score 70-80. Do NOT penalize for items irrelevant to the scenario type.
+${template ? `\nSCENARIO-SPECIFIC: The CSR should have: ${template.csr_objectives || 'completed the scenario objectives'}. Score "Service & Technical Knowledge" based on whether they demonstrated knowledge of the correct procedures, pricing, and policies from the organization knowledge base.\n` : ''}
+### 1. Empathy & Rapport (15%) - Building trust with customer
+### 2. Booking & Conversion / Retention / Resolution (25%) - Based on scenario type: booking, retention, resolution, or emergency handling
+### 3. Service & Technical Knowledge (20%) - Treatment methods, service knowledge, safety info
+### 4. Value Communication (25%) - Handling objections, communicating value vs competitors
 ### 5. Professionalism & Call Control (15%) - Tone, call flow, qualifying questions
 
 Respond with JSON:

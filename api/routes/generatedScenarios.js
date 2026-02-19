@@ -39,21 +39,41 @@ router.get('/:id', authMiddleware, tenantMiddleware, async (req, res) => {
       return res.status(404).json({ error: 'Scenario not found' });
     }
 
-    // Get organization info for company context
-    const { data: org } = await adminClient
-      .from('organizations')
-      .select('*')
-      .eq('id', req.organization.id)
-      .single();
+    // Get organization info and scenario template in parallel
+    const templateFetch = genScenario.template_id
+      ? adminClient.from('scenario_templates').select('*').eq('id', genScenario.template_id).single()
+      : Promise.resolve({ data: null });
+
+    const [{ data: org }, { data: template }] = await Promise.all([
+      adminClient.from('organizations').select('*').eq('id', req.organization.id).single(),
+      templateFetch
+    ]);
 
     // Transform to match the scenario format expected by PreCall
     const profile = genScenario.profile || {};
     const module = genScenario.module || {};
     const course = module.course || {};
 
+    // Use template objectives when available, fall back to generic
+    const csrObjective = template?.csr_objectives
+      || getObjectiveForCategory(course.category, module.name);
+    const scoringFocus = template?.scoring_focus
+      ? parseScoringFocus(template.scoring_focus)
+      : getScoringFocusForCategory(course.category);
+    const resolutionConditions = template?.resolution_conditions
+      || (genScenario.will_close
+        ? 'Customer is open to purchasing if you handle the conversation well'
+        : 'Customer may not purchase today, focus on building rapport');
+    const escalationTriggers = template?.escalation_triggers
+      || profile.escalation_triggers
+      || 'Being dismissive or rushing through the conversation';
+    const deescalationTriggers = template?.deescalation_triggers
+      || profile.deescalation_triggers
+      || 'Showing empathy and understanding their concerns';
+
     const scenario = {
       id: genScenario.id,
-      type: 'generated', // Flag to indicate this is a generated scenario
+      type: 'generated',
       name: `${course.name || 'Practice'}: ${module.name || 'Scenario'}`,
       difficulty: module.difficulty || 'medium',
       category: course.category || 'service',
@@ -69,23 +89,24 @@ router.get('/:id', authMiddleware, tenantMiddleware, async (req, res) => {
       openingLine: genScenario.opening_line,
       keyPointsToMention: profile.typical_objections || [],
 
-      // Objectives based on course category
-      csrObjective: getObjectiveForCategory(course.category, module.name),
-      scoringFocus: getScoringFocusForCategory(course.category),
+      // Objectives — template-specific or generic fallback
+      csrObjective,
+      scoringFocus,
 
-      // Behavior triggers based on profile
-      deescalationTriggers: profile.deescalation_triggers || 'Showing empathy and understanding their concerns',
-      escalationTriggers: profile.escalation_triggers || 'Being dismissive or rushing through the conversation',
-      resolutionConditions: genScenario.will_close
-        ? 'Customer is open to purchasing if you handle the conversation well'
-        : 'Customer may not purchase today, focus on building rapport',
+      // Behavior triggers — template-specific or generic fallback
+      deescalationTriggers,
+      escalationTriggers,
+      resolutionConditions,
+
+      // Template extras
+      customerGoals: template?.customer_goals || null,
 
       // Module tracking info
       moduleId: module.id,
       sequenceNumber: genScenario.sequence_number,
       willClose: genScenario.will_close,
 
-      // Voice settings - use valid Retell voice IDs based on gender
+      // Voice settings
       voiceId: profile.voice_id || await getVoiceForProfile(profile),
 
       // Company context
@@ -113,6 +134,25 @@ async function getVoiceForProfile(profile) {
   const voiceId = await getVoiceFromService(profile);
   // Fallback if voice service returns null
   return voiceId || 'default';
+}
+
+/**
+ * Parse scoring_focus from template — can be JSON string or object
+ * Returns an array of focus area names for display
+ */
+function parseScoringFocus(scoringFocus) {
+  try {
+    const parsed = typeof scoringFocus === 'string' ? JSON.parse(scoringFocus) : scoringFocus;
+    if (parsed && typeof parsed === 'object') {
+      return Object.entries(parsed)
+        .sort(([, a], [, b]) => b - a)
+        .map(([key, weight]) => {
+          const label = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+          return `${label} (${Math.round(weight * 100)}%)`;
+        });
+    }
+  } catch { /* fall through */ }
+  return null;
 }
 
 /**

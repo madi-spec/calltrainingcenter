@@ -48,7 +48,7 @@ async function getProfilesForDifficulty(difficulty) {
 /**
  * Get product context for an organization
  */
-async function getProductContext(organizationId) {
+export async function getProductContext(organizationId) {
   const adminClient = createAdminClient();
 
   // Fetch organization info
@@ -128,12 +128,58 @@ function determineOutcome(difficulty, profile) {
 }
 
 /**
+ * Get scenario templates for a module
+ */
+async function getTemplatesForModule(moduleId) {
+  const adminClient = createAdminClient();
+  const { data, error } = await adminClient
+    .from('scenario_templates')
+    .select('*')
+    .eq('module_id', moduleId)
+    .eq('is_active', true);
+
+  if (error) {
+    console.error('Error fetching scenario templates:', error);
+    return [];
+  }
+  return data || [];
+}
+
+/**
+ * Get sales guidelines for an organization
+ */
+export async function getSalesGuidelines(organizationId) {
+  const adminClient = createAdminClient();
+  const { data, error } = await adminClient
+    .from('sales_guidelines')
+    .select('*')
+    .eq('organization_id', organizationId)
+    .eq('is_active', true)
+    .order('display_order', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching sales guidelines:', error);
+    return [];
+  }
+  return data || [];
+}
+
+/**
  * Generate scenario text using Claude
  */
-async function generateScenarioText(module, profile, productContext, index) {
+async function generateScenarioText(module, profile, productContext, index, { salesGuidelines = [], templateExamples = [] } = {}) {
   const courseCategory = module.course?.category || 'service';
   const moduleName = module.name;
+  const moduleDescription = module.description || '';
   const companyName = productContext.company.name;
+
+  const guidelinesBlock = salesGuidelines.length > 0
+    ? `\n## Sales Guidelines & Policies\n${salesGuidelines.map(g => `- **${g.title}** (${g.guideline_type}): ${g.content}`).join('\n')}`
+    : '';
+
+  const templateBlock = templateExamples.length > 0
+    ? `\n## Example Scenario Situations (match this quality and specificity)\n${templateExamples.slice(0, 3).map(t => `- ${t.base_situation}`).join('\n')}`
+    : '';
 
   const prompt = `Generate a realistic customer service training scenario for a pest control company.
 
@@ -141,6 +187,7 @@ async function generateScenarioText(module, profile, productContext, index) {
 - Company: ${companyName}
 - Course Category: ${courseCategory}
 - Module: ${moduleName}
+- Module Focus: ${moduleDescription}
 - Difficulty: ${module.difficulty}
 
 ## Customer Profile
@@ -153,15 +200,18 @@ async function generateScenarioText(module, profile, productContext, index) {
 ${productContext.hasProducts ? productContext.packages.map(pkg =>
   `- ${pkg.name}: $${pkg.price}/${pkg.frequency || 'service'}`
 ).join('\n') : 'No specific packages configured - use generic pest control services'}
+${guidelinesBlock}
+${templateBlock}
 
 ## Requirements
 Generate a brief, realistic scenario description (2-3 sentences) and an opening line the customer would say when calling.
 
 The scenario should:
-1. Match the course category (${courseCategory})
+1. Match the module focus (${moduleName}) — create a situation that tests the specific skill being trained
 2. Reflect the customer's personality traits
 3. Be appropriate for a ${module.difficulty} difficulty call
-4. Reference the company or its services naturally
+4. Reference the company, its specific services, or pricing naturally
+5. Include concrete details (square footage, pest types, service tiers, pricing) when relevant
 
 Respond with JSON only:
 {
@@ -282,33 +332,60 @@ export async function generateScenariosForModule(userId, organizationId, module)
     throw new Error('No customer profiles available for this difficulty level');
   }
 
-  // Get product context
-  const productContext = await getProductContext(organizationId);
+  // Get product context, templates, and sales guidelines in parallel
+  const [productContext, templates, salesGuidelines] = await Promise.all([
+    getProductContext(organizationId),
+    getTemplatesForModule(module.id),
+    getSalesGuidelines(organizationId)
+  ]);
 
-  // Generate scenarios
   const scenarioCount = module.scenario_count || 10;
   const scenarios = [];
 
-  for (let i = 0; i < scenarioCount; i++) {
-    // Pick a random profile (with some variety)
+  // Phase 1: Create scenarios from templates (use template's base_situation directly)
+  for (let i = 0; i < Math.min(templates.length, scenarioCount); i++) {
+    const template = templates[i];
     const profileIndex = i % profiles.length;
     const profile = profiles[profileIndex];
-
-    // Determine outcome
     const willClose = determineOutcome(module.difficulty, profile);
 
-    // Generate scenario text (can use AI or fallback)
-    let scenarioText;
-    if (i < 3) {
-      // Use AI for first few scenarios
-      scenarioText = await generateScenarioText(module, profile, productContext, i);
-    } else {
-      // Use fallback for the rest to save API calls
-      scenarioText = {
-        situation: generateFallbackSituation(module, profile, productContext),
-        openingLine: generateFallbackOpeningLine(profile)
-      };
+    // AI-generate a personalized opening line for the template situation
+    let openingLine;
+    try {
+      const response = await getAnthropicClient().messages.create({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 200,
+        messages: [{ role: 'user', content: `Generate a realistic opening line a customer would say when calling a pest control company. The customer's name is ${profile.name}, their communication style is ${profile.communication_style}, and the situation is: ${template.base_situation}\n\nRespond with ONLY the opening line, no quotes or explanation.` }]
+      });
+      openingLine = response.content[0].text.trim().replace(/^["']|["']$/g, '');
+    } catch (err) {
+      openingLine = generateFallbackOpeningLine(profile);
     }
+
+    scenarios.push({
+      user_id: userId,
+      module_id: module.id,
+      template_id: template.id,
+      profile_id: profile.id,
+      sequence_number: i + 1,
+      situation_text: template.base_situation,
+      opening_line: openingLine,
+      will_close: willClose,
+      close_stage: willClose ? Math.floor(Math.random() * 3) + 1 : null,
+      status: 'pending'
+    });
+  }
+
+  // Phase 2: Generate remaining scenarios with AI (enhanced with guidelines + template examples)
+  for (let i = templates.length; i < scenarioCount; i++) {
+    const profileIndex = i % profiles.length;
+    const profile = profiles[profileIndex];
+    const willClose = determineOutcome(module.difficulty, profile);
+
+    const scenarioText = await generateScenarioText(
+      module, profile, productContext, i,
+      { salesGuidelines, templateExamples: templates }
+    );
 
     scenarios.push({
       user_id: userId,
@@ -352,16 +429,21 @@ export async function regenerateScenario(userId, organizationId, moduleId, seque
 
   if (!module) throw new Error('Module not found');
 
-  // Get profiles
-  const profiles = await getProfilesForDifficulty(module.difficulty);
+  // Get profiles, product context, templates, and guidelines in parallel
+  const [profiles, productContext, templates, salesGuidelines] = await Promise.all([
+    getProfilesForDifficulty(module.difficulty),
+    getProductContext(organizationId),
+    getTemplatesForModule(moduleId),
+    getSalesGuidelines(organizationId)
+  ]);
   const profile = profiles[Math.floor(Math.random() * profiles.length)];
-
-  // Get product context
-  const productContext = await getProductContext(organizationId);
 
   // Generate new scenario
   const willClose = determineOutcome(module.difficulty, profile);
-  const scenarioText = await generateScenarioText(module, profile, productContext, 0);
+  const scenarioText = await generateScenarioText(
+    module, profile, productContext, 0,
+    { salesGuidelines, templateExamples: templates }
+  );
 
   // Update the scenario
   const { data, error } = await adminClient
@@ -392,5 +474,6 @@ export default {
   generateScenariosForModule,
   regenerateScenario,
   getProfilesForDifficulty,
-  getProductContext
+  getProductContext,
+  getSalesGuidelines
 };

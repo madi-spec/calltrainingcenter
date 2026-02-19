@@ -44,6 +44,7 @@ import helpAgentRoutes from './routes/helpAgent.js';
 import certificatesRoutes from './routes/certificates.js';
 import sessionNotesRoutes from './routes/sessionNotes.js';
 import devDashboardRoutes from './routes/devDashboard.js';
+import knowledgeBaseRoutes from './routes/knowledgeBase.js';
 
 // Import services
 import {
@@ -1079,6 +1080,7 @@ app.use('/api/help-agent', helpAgentRoutes);
 app.use('/api/certificates', certificatesRoutes);
 app.use('/api/session-notes', sessionNotesRoutes);
 app.use('/api/dev-dashboard', devDashboardRoutes);
+app.use('/api/knowledge-base', knowledgeBaseRoutes);
 
 // ============ LEGACY ROUTES (maintain backward compatibility) ============
 

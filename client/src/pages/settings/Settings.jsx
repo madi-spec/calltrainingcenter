@@ -9,7 +9,8 @@ import {
   Bot,
   Bell,
   Shield,
-  ChevronRight
+  ChevronRight,
+  Database
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -63,6 +64,14 @@ export default function Settings() {
       href: '/settings/ai',
       color: 'text-cyan-400 bg-cyan-500/10',
       permission: 'settings:ai'
+    },
+    {
+      title: 'Knowledge Base',
+      description: 'Upload documents to generate training content',
+      icon: Database,
+      href: '/settings/knowledge-base',
+      color: 'text-emerald-400 bg-emerald-500/10',
+      permission: 'settings:edit'
     },
     {
       title: 'Notifications',

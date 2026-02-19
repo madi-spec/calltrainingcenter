@@ -55,6 +55,7 @@ const CompanyOnboarding = lazy(() => import('./pages/onboarding/CompanyOnboardin
 const MyCertificates = lazy(() => import('./pages/certificates/MyCertificates'));
 const VerifyCertificate = lazy(() => import('./pages/certificates/VerifyCertificate'));
 const DevDashboard = lazy(() => import('./pages/dev/DevDashboard'));
+const KnowledgeBase = lazy(() => import('./pages/settings/KnowledgeBase'));
 
 // Loading component for lazy loaded pages
 function PageLoader() {
@@ -261,6 +262,14 @@ function App() {
                       element={
                         <RoleProtectedRoute allowedRoles={['admin', 'super_admin']}>
                           <BranchSettings />
+                        </RoleProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/settings/knowledge-base"
+                      element={
+                        <RoleProtectedRoute allowedRoles={['admin', 'super_admin']}>
+                          <KnowledgeBase />
                         </RoleProtectedRoute>
                       }
                     />

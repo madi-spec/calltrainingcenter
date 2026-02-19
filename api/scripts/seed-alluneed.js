@@ -1331,8 +1331,497 @@ async function seedCoursesAndModules() {
   return courseModuleMap;
 }
 
-async function seedScenarioTemplates(packageMap, courseMap) {
-  console.log('  [stub] seedScenarioTemplates — not yet implemented');
+function getScenarioTemplates(courseModuleMap) {
+  const templates = [];
+
+  function addTemplates(courseName, moduleName, templateArray) {
+    const course = courseModuleMap[courseName];
+    if (!course) {
+      console.warn(`  Warning: course "${courseName}" not found in courseModuleMap`);
+      return;
+    }
+    const moduleId = course.modules[moduleName];
+    if (!moduleId) {
+      console.warn(`  Warning: module "${moduleName}" not found in course "${courseName}"`);
+      return;
+    }
+    for (const t of templateArray) {
+      templates.push({
+        organization_id: ORG_ID,
+        module_id: moduleId,
+        name: t.name,
+        category: t.category,
+        base_situation: t.base_situation,
+        customer_goals: t.customer_goals,
+        csr_objectives: t.csr_objectives,
+        scoring_focus: t.scoring_focus,
+        escalation_triggers: t.escalation_triggers || null,
+        deescalation_triggers: t.deescalation_triggers || null,
+        resolution_conditions: t.resolution_conditions,
+        is_system: false,
+        is_active: true,
+      });
+    }
+  }
+
+  // =========================================================================
+  // COURSE 1: Service Knowledge Fundamentals
+  // =========================================================================
+
+  // --- Module: Home Pest Control (GHP) ---
+  addTemplates('Service Knowledge Fundamentals', 'Home Pest Control (GHP)', [
+    {
+      name: 'New Customer — What Does GHP Cover?',
+      category: 'product_knowledge',
+      base_situation: 'A new Florida homeowner is calling to ask about basic pest control options. They just moved from up north and are unfamiliar with Florida pests. They want to understand exactly what is and isn\'t covered before committing.',
+      customer_goals: 'Understand what pests GHP covers, what the service includes, and how often the technician visits.',
+      csr_objectives: 'Explain GHP coverage: ants (excluding BHA and fire ants), spiders, roaches (excluding German), silverfish, earwigs. Describe interior + exterior treatment, quarterly maintenance schedule, and lanai inclusion. Identify upsell opportunities for lawn or mosquito add-ons.',
+      scoring_focus: '{"product_knowledge": 0.4, "clarity": 0.3, "needs_discovery": 0.2, "professionalism": 0.1}',
+      resolution_conditions: 'Customer clearly understands GHP coverage, exclusions, visit frequency, and feels confident about what they\'re getting.',
+    },
+    {
+      name: 'Customer Reports Ants — Is It Covered?',
+      category: 'product_knowledge',
+      base_situation: 'An existing GHP customer is calling because they have ants in their kitchen. They\'re not sure what type of ants they are and want to know if a service call is covered under their plan.',
+      customer_goals: 'Get the ant problem resolved. Understand if this is covered or if there\'s an additional charge.',
+      csr_objectives: 'Determine ant type through questioning (size, color, location, mound shape). If regular ants, confirm coverage and check service call eligibility. If BHA or fire ants, explain these require QGG upgrade and present the option.',
+      scoring_focus: '{"needs_discovery": 0.35, "product_knowledge": 0.35, "clarity": 0.2, "professionalism": 0.1}',
+      escalation_triggers: 'Customer insists all ants should be covered and threatens cancellation.',
+      resolution_conditions: 'Ant type is identified. If covered, service call is scheduled or customer is reassured. If not covered, QGG upgrade is presented clearly.',
+    },
+    {
+      name: 'Quarterly Visit — Interior Request',
+      category: 'product_knowledge',
+      base_situation: 'A GHP customer is calling ahead of their upcoming quarterly service. They want to make sure the technician treats inside the home, not just outside. They\'ve noticed a few live bugs indoors recently.',
+      customer_goals: 'Ensure the technician treats the interior of the home during the next quarterly visit.',
+      csr_objectives: 'Explain that quarterly GHP service is exterior by default. Interior treatment is available on request when there is live activity. Note the interior request on the account so the technician is prepared. Reassure the customer this is included at no extra cost.',
+      scoring_focus: '{"product_knowledge": 0.35, "clarity": 0.3, "customer_service": 0.25, "professionalism": 0.1}',
+      resolution_conditions: 'Customer understands exterior-default policy, interior request is noted on the account, and customer is satisfied.',
+    },
+  ]);
+
+  // --- Module: Lawn Pest Control (SLP/QGG) ---
+  addTemplates('Service Knowledge Fundamentals', 'Lawn Pest Control (SLP/QGG)', [
+    {
+      name: 'Fire Ants in Lawn — SLP vs QGG',
+      category: 'product_knowledge',
+      base_situation: 'A GHP-only customer is calling about dome-shaped mounds in their yard. Their child was stung yesterday while playing outside. They\'re upset and want this taken care of immediately.',
+      customer_goals: 'Get rid of the fire ants in the yard as quickly as possible. Understand why this isn\'t already covered.',
+      csr_objectives: 'Identify fire ants from the dome mound description and stinging behavior. Explain GHP covers interior/perimeter pests but not lawn pests like fire ants. Recommend QGG (Quarterly Granular) specifically for fire ant coverage. Present pricing and schedule the upgrade.',
+      scoring_focus: '{"product_knowledge": 0.35, "needs_discovery": 0.25, "empathy": 0.2, "sales_technique": 0.2}',
+      escalation_triggers: 'Customer is angry their child was stung and demands immediate free service.',
+      deescalation_triggers: 'Acknowledge the child\'s safety concern. Express urgency and empathy before transitioning to the solution.',
+      resolution_conditions: 'Customer understands GHP vs QGG coverage distinction and either upgrades or has clear next steps.',
+    },
+    {
+      name: 'Grubs Damaging Lawn',
+      category: 'product_knowledge',
+      base_situation: 'A customer notices brown patches spreading across their St. Augustine lawn. When they pulled up a section, they found white C-shaped larvae underneath. They want All U Need to treat it.',
+      customer_goals: 'Stop the lawn damage and eliminate the grubs.',
+      csr_objectives: 'Identify the pest as grubs based on the description. Explain that grub treatment is not warrantied and AUN cannot reverse existing lawn damage. Refer the customer to Baton Service Pros at (844) 699-4138 for lawn care and grub treatment. Do NOT schedule a visit.',
+      scoring_focus: '{"product_knowledge": 0.4, "clarity": 0.3, "empathy": 0.2, "professionalism": 0.1}',
+      resolution_conditions: 'Customer understands grubs are not covered, has Baton referral information, and no unnecessary visit is scheduled.',
+    },
+  ]);
+
+  // --- Module: Non-Warrantied Pests ---
+  addTemplates('Service Knowledge Fundamentals', 'Non-Warrantied Pests', [
+    {
+      name: 'Pantry Moths — Customer Wants Service Call',
+      category: 'product_knowledge',
+      base_situation: 'A GHP customer is finding small moths flying around their kitchen and pantry. They\'ve noticed them especially near cereal boxes and flour. They want to schedule a service call to get them treated.',
+      customer_goals: 'Eliminate the moths in the kitchen. Expects this is covered under their GHP plan.',
+      csr_objectives: 'Identify the issue as pantry pests (Indian meal moths). Explain that pantry pests are not warrantied under GHP and insecticide treatment is not effective — the source must be found and removed. Guide the customer on DIY steps: find and discard the infested product, clean shelves, store dry goods in airtight containers. Do NOT schedule a service visit.',
+      scoring_focus: '{"product_knowledge": 0.35, "customer_education": 0.3, "empathy": 0.2, "professionalism": 0.15}',
+      escalation_triggers: 'Customer insists on a technician visit and threatens to cancel if they don\'t get one.',
+      resolution_conditions: 'Customer understands pantry moths are not warrantied, receives actionable DIY guidance, and no visit is scheduled.',
+    },
+    {
+      name: 'Drywood Termite — Baton Referral',
+      category: 'product_knowledge',
+      base_situation: 'A customer found small pellet-like droppings (frass) near their windowsill. They looked it up online and think it might be termites. They want to know if their Sentricon system covers this.',
+      customer_goals: 'Determine if it\'s termites and get it treated under their existing Sentricon coverage.',
+      csr_objectives: 'Distinguish between drywood and subterranean termites based on frass description. Explain that Sentricon targets subterranean termites (underground) and does not cover drywood termites (live inside the wood). Provide Baton Service Pros referral at (844) 699-4138 for drywood termite treatment.',
+      scoring_focus: '{"product_knowledge": 0.4, "clarity": 0.3, "customer_education": 0.2, "professionalism": 0.1}',
+      resolution_conditions: 'Customer understands the difference between drywood and subterranean termites, knows Sentricon doesn\'t cover drywood, and has Baton referral.',
+    },
+  ]);
+
+  // =========================================================================
+  // COURSE 2: Pricing & Sales
+  // =========================================================================
+
+  // --- Module: Quoting New Customers ---
+  addTemplates('Pricing & Sales', 'Quoting New Customers', [
+    {
+      name: 'New Customer — 2800 sq ft Home',
+      category: 'sales',
+      base_situation: 'A new customer is calling to get a quote for pest control on their 2,800 square foot home. They\'ve been seeing ants and spiders and want to know what it costs to get started.',
+      customer_goals: 'Get a clear price quote for pest control service. Understand what\'s included and when they can start.',
+      csr_objectives: 'Quote Silver tier for <3,000 sq ft bracket: $150 initial, $45/month. Explain what\'s included (exterior + interior on request, quarterly visits, free service calls). Ask about lawn pest or mosquito concerns to identify Gold or Diamond upsell opportunities.',
+      scoring_focus: '{"pricing_accuracy": 0.35, "needs_discovery": 0.25, "sales_technique": 0.25, "professionalism": 0.15}',
+      resolution_conditions: 'Accurate quote is provided. Customer understands what\'s included. CSR explored upsell opportunities without being pushy.',
+    },
+    {
+      name: 'Facebook Lead — $49 Initial',
+      category: 'sales',
+      base_situation: 'A customer is calling after seeing an All U Need ad on Facebook with a $49 initial service offer. They want to sign up for pest control and expect to pay the promotional price they saw.',
+      customer_goals: 'Sign up for pest control at the $49 promotional rate they saw on Facebook.',
+      csr_objectives: 'Recognize this as a lead generation customer — $49 initial applies (not standard $99 or $150). Collect square footage to determine the correct monthly rate. Complete the sign-up process efficiently. Do not upsell aggressively on the first call — focus on getting them started.',
+      scoring_focus: '{"pricing_accuracy": 0.35, "process_adherence": 0.3, "customer_service": 0.2, "professionalism": 0.15}',
+      resolution_conditions: 'Customer is quoted correctly with $49 initial. Correct monthly rate based on square footage is communicated. Sign-up is initiated.',
+    },
+  ]);
+
+  // --- Module: Upselling & Bundling ---
+  addTemplates('Pricing & Sales', 'Upselling & Bundling', [
+    {
+      name: 'Silver Customer Wants Lawn Treatment',
+      category: 'sales',
+      base_situation: 'An existing Silver (GHP) customer calls because they\'re seeing chinch bugs damaging their lawn. They assumed their pest control covered the lawn too. Their lot is approximately 6,000 square feet.',
+      customer_goals: 'Get their lawn treated for chinch bugs. Understand why it\'s not already covered.',
+      csr_objectives: 'Explain Silver covers perimeter/home pests only, not lawn pests. Present Gold SLP upgrade as the solution. Since they have GHP and lot is <=7,500 sqft, SLP can be paired at $60/quarter. Emphasize the value of bundling vs. standalone lawn treatment.',
+      scoring_focus: '{"sales_technique": 0.35, "product_knowledge": 0.3, "needs_discovery": 0.2, "professionalism": 0.15}',
+      resolution_conditions: 'Customer understands the coverage gap. Gold SLP upgrade is presented with the paired discount. Customer makes an informed decision.',
+    },
+  ]);
+
+  // --- Module: Handling Price Objections ---
+  addTemplates('Pricing & Sales', 'Handling Price Objections', [
+    {
+      name: 'Customer Says Too Expensive',
+      category: 'sales',
+      base_situation: 'A potential customer with a 3,500 sq ft home was quoted Gold SLP at $190 initial and $70/month. They say it\'s too expensive and are considering a cheaper competitor. They\'re price-sensitive but clearly have a pest problem that needs solving.',
+      customer_goals: 'Get pest control at a lower price. Feel like they\'re getting a good deal.',
+      csr_objectives: 'Do NOT immediately offer a discount. First, emphasize value: free service calls between visits (normally $150-200 each), full warranty, 30,000+ five-star reviews, 3x Inc. 5000 company. If customer remains resistant after value pitch, present price drop option: $150 initial, $65/month. Never go below $99 initial for any reason.',
+      scoring_focus: '{"sales_technique": 0.35, "objection_handling": 0.3, "product_knowledge": 0.2, "professionalism": 0.15}',
+      escalation_triggers: 'Customer demands a price lower than the approved drop or asks to speak to a manager about pricing.',
+      resolution_conditions: 'CSR leads with value before price drop. If price drop is used, stays within approved limits. Customer either commits or has clear next steps.',
+    },
+  ]);
+
+  // =========================================================================
+  // COURSE 3: Scheduling & Service Call Triage
+  // =========================================================================
+
+  // --- Module: Service Call vs. Full Service ---
+  addTemplates('Scheduling & Service Call Triage', 'Service Call vs. Full Service', [
+    {
+      name: 'Customer Due Next Week — Move Up Service',
+      category: 'service_triage',
+      base_situation: 'A GHP customer is calling about live ants in their kitchen. When you check their account, their next quarterly service is scheduled for 8 days from now. They want someone to come out today.',
+      customer_goals: 'Get the ant problem addressed as soon as possible.',
+      csr_objectives: 'Recognize that the customer is due within 10 days. Instead of creating a separate service call, move up the scheduled quarterly service to an earlier date. This is more efficient and avoids unnecessary extra visits. Explain to the customer that you\'re moving their regular service up.',
+      scoring_focus: '{"process_adherence": 0.35, "efficiency": 0.3, "customer_service": 0.25, "professionalism": 0.1}',
+      resolution_conditions: 'Quarterly service is moved up rather than a separate service call being created. Customer is satisfied with the earlier date.',
+    },
+    {
+      name: 'Incomplete Service — CES Not Service Call',
+      category: 'service_triage',
+      base_situation: 'A customer is calling because the technician came yesterday but couldn\'t access the backyard — the gate was locked and nobody was home. The customer wants to schedule a service call to complete the treatment.',
+      customer_goals: 'Get the full service completed since the backyard was missed.',
+      csr_objectives: 'Identify this as a CES (Customer Experience Specialist) issue, NOT a free service call. The technician didn\'t have full access, so the service was incomplete — this is different from pests returning between visits. Route through CES/CIS workflow. Do NOT schedule this as a regular service call.',
+      scoring_focus: '{"process_adherence": 0.4, "product_knowledge": 0.3, "clarity": 0.2, "professionalism": 0.1}',
+      resolution_conditions: 'Issue is correctly identified as CES, not a service call. Correct workflow is initiated. Customer understands next steps.',
+    },
+  ]);
+
+  // --- Module: Avoiding Unnecessary Visits ---
+  addTemplates('Scheduling & Service Call Triage', 'Avoiding Unnecessary Visits', [
+    {
+      name: 'Dead Bugs — Treatment Working',
+      category: 'service_triage',
+      base_situation: 'A GHP customer had their service 5 days ago and is now finding dead roaches in the kitchen and bathroom. They\'re concerned the treatment isn\'t working because they\'re seeing so many bugs.',
+      customer_goals: 'Understand why they\'re seeing dead bugs. Determine if the treatment was done correctly.',
+      csr_objectives: 'Reassure the customer: finding dead bugs means the treatment IS working. Non-repellent products take 7-10 days for full effect — bugs are contacting the treated surfaces and dying. This is a sign of success, not failure. Do NOT schedule a service visit. Set the expectation that dead bug sightings will taper off within 2 weeks.',
+      scoring_focus: '{"customer_education": 0.35, "empathy": 0.25, "process_adherence": 0.25, "professionalism": 0.15}',
+      resolution_conditions: 'Customer understands dead bugs indicate treatment is working. No unnecessary visit is scheduled. Customer is reassured.',
+    },
+    {
+      name: 'Customer Insists — Always Schedule',
+      category: 'service_triage',
+      base_situation: 'A GHP customer is calling about 1-2 occasional ants they\'re seeing near the kitchen window. This is normal Florida ant activity. After you explain that a few ants are expected and treatment is working, the customer becomes insistent and threatens to cancel if someone doesn\'t come out.',
+      customer_goals: 'Get a technician out to the house. Feels their concern isn\'t being taken seriously.',
+      csr_objectives: 'Educate the customer that 1-2 occasional ants is normal in Florida and doesn\'t indicate treatment failure. HOWEVER, if the customer insists or threatens cancellation, ALWAYS schedule the service call. Losing a customer over a service call is never worth it. Schedule the visit and note the account.',
+      scoring_focus: '{"customer_retention": 0.35, "empathy": 0.25, "customer_education": 0.2, "process_adherence": 0.2}',
+      escalation_triggers: 'Customer threatens cancellation or demands to speak with a manager.',
+      deescalation_triggers: 'Validate the customer\'s concern, express willingness to help, and offer to schedule.',
+      resolution_conditions: 'CSR attempts education first but schedules the visit when customer insists. Customer is retained. Cancellation is avoided.',
+    },
+    {
+      name: 'Plaster Bagworms — Never Schedule',
+      category: 'service_triage',
+      base_situation: 'A customer is calling about small cocoon-like cases hanging on their walls and ceiling. They think they\'re some kind of bug and want a technician to come spray for them.',
+      customer_goals: 'Get rid of the cocoon cases on the walls.',
+      csr_objectives: 'Identify the issue as plaster bagworms based on the description. Explain that plaster bagworms do NOT respond to insecticide treatment — scheduling a visit would be ineffective and waste the customer\'s time. Educate on the real solutions: reduce indoor humidity, increase cleaning frequency (vacuum webs/cases), reduce exterior lighting that attracts moths. This is a firm "do not schedule" situation.',
+      scoring_focus: '{"product_knowledge": 0.35, "customer_education": 0.3, "process_adherence": 0.2, "professionalism": 0.15}',
+      resolution_conditions: 'Customer understands plaster bagworms don\'t respond to treatment. Practical DIY advice is provided. No visit is scheduled.',
+    },
+  ]);
+
+  // =========================================================================
+  // COURSE 4: Customer Retention & De-escalation
+  // =========================================================================
+
+  // --- Module: Card Decline Handling ---
+  addTemplates('Customer Retention & De-escalation', 'Card Decline Handling', [
+    {
+      name: 'Longstanding Customer — Card Declined',
+      category: 'retention',
+      base_situation: 'A customer who has been with All U Need for 2 years with 8 completed paid visits is due for service today. The technician is on-site but the card on file was declined when the office tried to process payment.',
+      customer_goals: 'Get their scheduled service completed without interruption.',
+      csr_objectives: 'Identify this as a longstanding customer (8 visits = well above the 5-visit threshold). Approve the service — do NOT delay or cancel for longstanding customers. Send the longstanding customer card decline template (acknowledges service was completed). Add a note to the account for Accounts Receivable follow-up.',
+      scoring_focus: '{"process_adherence": 0.4, "product_knowledge": 0.3, "customer_service": 0.2, "professionalism": 0.1}',
+      resolution_conditions: 'Service is approved. Correct template (longstanding) is identified. AR note is created. Customer experiences no service interruption.',
+    },
+    {
+      name: 'New Customer — Wants to Pay Later',
+      category: 'retention',
+      base_situation: 'A customer with only 3 completed visits has their card declined. The technician is en route. The customer calls and says they can update their card on Friday (3 days from now) and asks if the tech can still come today.',
+      customer_goals: 'Get today\'s service completed and update payment later.',
+      csr_objectives: 'Identify this as a new customer (3 visits = under 5-visit threshold, new protocol applies). If allowing pay-later: obtain verbal approval (call is recorded), require signed agreement, get specific payment date, add RED NOTE to the account, and set a reminder for follow-up. Do NOT simply approve and forget — new customer card declines require documentation.',
+      scoring_focus: '{"process_adherence": 0.4, "risk_awareness": 0.3, "customer_service": 0.2, "professionalism": 0.1}',
+      resolution_conditions: 'New customer protocol is followed. All required documentation steps are completed or communicated. Payment date is specific and recorded.',
+    },
+  ]);
+
+  // --- Module: Angry Customer De-escalation ---
+  addTemplates('Customer Retention & De-escalation', 'Angry Customer De-escalation', [
+    {
+      name: 'Tech No-Show — Furious Customer',
+      category: 'de_escalation',
+      base_situation: 'A customer took a day off work to be home for their scheduled pest control service. The technician never showed up. The customer is furious, threatening to cancel their service and leave a 1-star review on Google.',
+      customer_goals: 'Wants acknowledgment of the inconvenience. Wants their service completed immediately. May want compensation.',
+      csr_objectives: 'Lead with empathy — acknowledge the wasted day and validate the frustration. Determine if this was an office-booked sale or a door-to-door (D2D) sale, as this affects who handles the follow-up. Apologize sincerely. Offer priority rescheduling. Add DNS (Did Not Service) notes to the account. Do NOT make excuses for the no-show.',
+      scoring_focus: '{"empathy": 0.35, "de_escalation": 0.3, "process_adherence": 0.2, "professionalism": 0.15}',
+      escalation_triggers: 'Customer demands refund, insists on speaking to a manager, or becomes verbally abusive.',
+      deescalation_triggers: 'Sincere apology, acknowledgment of wasted time, immediate action to reschedule with priority.',
+      resolution_conditions: 'Customer feels heard. Priority reschedule is arranged. DNS notes are added. Sale source (office vs D2D) is identified for proper follow-up routing.',
+    },
+    {
+      name: 'Bed Bug — 2 Weeks Post-Treatment',
+      category: 'de_escalation',
+      base_situation: 'A customer had Aprehend bed bug treatment 14 days ago. They\'re still getting bitten at night and are extremely frustrated. They want either a retreatment immediately or a full refund. They feel the treatment failed.',
+      customer_goals: 'Stop getting bitten. Get a refund or retreatment. Feels the $1,000 was wasted.',
+      csr_objectives: 'Empathize with the frustration and validate the discomfort. Educate on the Aprehend timeline: days 7-21 is when sharp decline begins, full resolution takes 3-6 weeks. Stress that the customer MUST keep sleeping in the treated bed for the treatment to work. Do NOT schedule a retreatment yet — it\'s too early. Ask if the customer used any over-the-counter products like Raid or cleaned the treated areas. If they did, escalate to Operations (these actions compromise the treatment).',
+      scoring_focus: '{"empathy": 0.3, "customer_education": 0.3, "de_escalation": 0.25, "process_adherence": 0.15}',
+      escalation_triggers: 'Customer used Raid or other OTC products, cleaned treated areas, or demands immediate refund.',
+      deescalation_triggers: 'Validate feelings, provide specific timeline data, explain the science behind the treatment working.',
+      resolution_conditions: 'Customer understands the treatment timeline. Retreatment is not prematurely scheduled. If OTC products were used, issue is escalated to Operations.',
+    },
+  ]);
+
+  // =========================================================================
+  // COURSE 5: Specialty Service Qualification
+  // =========================================================================
+
+  // --- Module: Rodent Qualification ---
+  addTemplates('Specialty Service Qualification', 'Rodent Qualification', [
+    {
+      name: 'Crawlspace Home — Must Decline',
+      category: 'qualification',
+      base_situation: 'A customer is hearing scratching sounds in their attic at night. They want rodent exclusion service. During the prequalification questions, they mention their home has a crawlspace foundation.',
+      customer_goals: 'Get rodent exclusion to stop the scratching in the attic.',
+      csr_objectives: 'Run through the full rodent exclusion prequalification checklist. When the customer mentions crawlspace, identify this as a disqualifying factor — crawlspace homes cannot be fully sealed. Explain WHY honestly (too many access points, can\'t guarantee complete seal, wouldn\'t be fair to charge for incomplete work). Suggest bait boxes as an alternative solution.',
+      scoring_focus: '{"qualification_accuracy": 0.35, "product_knowledge": 0.3, "empathy": 0.2, "professionalism": 0.15}',
+      resolution_conditions: 'Customer is correctly disqualified. Reason is explained clearly and empathetically. Alternative solution (bait boxes) is offered.',
+    },
+    {
+      name: 'Houston Customer — Texas Exclusion',
+      category: 'qualification',
+      base_situation: 'A customer from Katy, Texas (ZIP 77494) is calling about rodent problems in their attic. They want to schedule rodent exclusion service after finding droppings and hearing noises at night.',
+      customer_goals: 'Get rodent exclusion for their Texas home.',
+      csr_objectives: 'Identify the location as Texas. Rodent exclusion is not available in Texas — this is a location-based restriction. Explain the limitation clearly. If the customer has exterior-only rodent issues, offer bait boxes as an alternative. Do not attempt to schedule exclusion for Texas locations.',
+      scoring_focus: '{"qualification_accuracy": 0.4, "process_adherence": 0.3, "empathy": 0.2, "professionalism": 0.1}',
+      resolution_conditions: 'Texas exclusion restriction is identified. Customer is informed. Alternative options are presented where applicable.',
+    },
+    {
+      name: 'Qualified Customer — Full Scheduling',
+      category: 'qualification',
+      base_situation: 'A customer in Fort Myers, Florida has a single-family home on a slab foundation. They\'re hearing rodent activity in the attic and want to discuss exclusion. The home is single-story and not a crawlspace, townhome, or condo.',
+      customer_goals: 'Get a quote and schedule rodent exclusion service.',
+      csr_objectives: 'Run the full prequalification — single-family, slab, not in Texas, not a crawlspace. Customer qualifies. Quote starting at $1,195+. Explain the full service: entry point sealing, trap installation, 4 trap checks on Monday/Thursday schedule, optional DSV (Dead Squirrel Visit). Payment in full required before service begins. Signed agreement required.',
+      scoring_focus: '{"qualification_accuracy": 0.3, "pricing_accuracy": 0.25, "process_adherence": 0.25, "sales_technique": 0.2}',
+      resolution_conditions: 'Customer is correctly qualified. Accurate pricing is quoted. Service details are explained including trap check schedule. Payment and agreement requirements are communicated.',
+    },
+  ]);
+
+  // --- Module: German Roach Qualification ---
+  addTemplates('Specialty Service Qualification', 'German Roach Qualification', [
+    {
+      name: 'Used Refrigerator — Classic Vector',
+      category: 'qualification',
+      base_situation: 'A customer recently bought a used refrigerator from a neighbor. Within a week, they started seeing small, fast-moving roaches in the kitchen, especially at night. They want pest control to come spray.',
+      customer_goals: 'Eliminate the roaches they\'re seeing in the kitchen.',
+      csr_objectives: 'Identify German roaches from the description (small, fast, kitchen-concentrated, appeared after used appliance). Ask all 5 prequalification questions. Quote $400 minimum. Explain the 3-visit protocol spaced 14 days apart — all 3 visits must be booked on this call. Communicate customer prep requirements: clean out all kitchen cabinets, dispose of cardboard boxes, clear under sinks.',
+      scoring_focus: '{"qualification_accuracy": 0.3, "needs_discovery": 0.25, "process_adherence": 0.25, "pricing_accuracy": 0.2}',
+      resolution_conditions: 'German roaches are correctly identified. All prequalification questions are asked. 3-visit schedule is booked. Customer prep requirements are clearly communicated.',
+    },
+  ]);
+
+  // --- Module: Bed Bug Qualification ---
+  addTemplates('Specialty Service Qualification', 'Bed Bug Qualification', [
+    {
+      name: 'Customer Already Used Raid',
+      category: 'qualification',
+      base_situation: 'A customer has confirmed bed bugs — they found live bugs and blood spots on their mattress. Before calling All U Need, they bought Raid bed bug spray and treated the room themselves. They want professional treatment now.',
+      customer_goals: 'Get professional bed bug treatment. Already tried DIY and it didn\'t work.',
+      csr_objectives: 'Identify the prior Raid use as a failure risk indicator. OTC products like Raid can scatter bed bugs to other rooms and interfere with professional treatments. This situation requires escalation to Operations before quoting or scheduling. Quote $1,000. Explain 4-hour vacate requirement and full payment required before service. Escalate to Operations for approval due to the Raid complication.',
+      scoring_focus: '{"qualification_accuracy": 0.35, "risk_awareness": 0.3, "process_adherence": 0.2, "professionalism": 0.15}',
+      escalation_triggers: 'Prior OTC product use is identified — automatic escalation to Operations.',
+      resolution_conditions: 'Raid use is identified and flagged. Case is escalated to Operations. Customer is informed about pricing and requirements pending Operations approval.',
+    },
+  ]);
+
+  // --- Module: Sentricon Qualification ---
+  addTemplates('Specialty Service Qualification', 'Sentricon Qualification', [
+    {
+      name: 'Spray Foam — New Install Declined',
+      category: 'qualification',
+      base_situation: 'A homeowner wants to install Sentricon termite protection. During prequalification, they mention their home has spray foam insulation in the walls and around the foundation. They don\'t understand why this would be a problem.',
+      customer_goals: 'Get Sentricon installed for termite protection.',
+      csr_objectives: 'Identify spray foam insulation as a non-negotiable disqualifier for NEW Sentricon installations. Explain why: spray foam hides termite activity, covers critical inspection points, and traps moisture which can mask or worsen termite damage. This policy is non-negotiable — do NOT approve the installation under any circumstances. Explain clearly and empathetically.',
+      scoring_focus: '{"qualification_accuracy": 0.4, "product_knowledge": 0.3, "clarity": 0.2, "professionalism": 0.1}',
+      resolution_conditions: 'Spray foam is correctly identified as a disqualifier. Installation is declined. Customer understands the reasoning. No exceptions are made.',
+    },
+    {
+      name: 'Sentricon Takeover',
+      category: 'qualification',
+      base_situation: 'A customer has an existing Sentricon system installed by a different pest control company. They\'re switching to All U Need for their general pest control and want to transfer their Sentricon monitoring as well.',
+      customer_goals: 'Transfer their existing Sentricon system to All U Need\'s monitoring and warranty program.',
+      csr_objectives: 'Quote the Sentricon takeover at $375. Explain the process: the old provider\'s stations will be uninstalled and new stations installed by AUN. Interior access to the home is required during the service. Payment is required before service. Annual renewal is $375/year. Schedule both the uninstall and new install appointments.',
+      scoring_focus: '{"pricing_accuracy": 0.3, "process_adherence": 0.3, "product_knowledge": 0.25, "professionalism": 0.15}',
+      resolution_conditions: 'Correct takeover pricing is quoted ($375). Process is explained clearly. Payment-before-service requirement is communicated. Both appointments are scheduled.',
+    },
+  ]);
+
+  // --- Module: TAP Insulation Qualification ---
+  addTemplates('Specialty Service Qualification', 'TAP Insulation Qualification', [
+    {
+      name: 'Customer Wants One Room Only',
+      category: 'qualification',
+      base_situation: 'A customer is interested in TAP insulation but only wants it installed in their master bedroom area of the attic. They think they can save money by doing just one section rather than the whole attic.',
+      customer_goals: 'Get TAP insulation installed in just the master bedroom section. Save money on a partial install.',
+      csr_objectives: 'Explain that TAP insulation requires whole-home attic installation — partial attic jobs are not available. The product works as a complete system. Quote the minimum of $2,400. An inspection is required before a final price can be given — schedule the inspection with Ryan. Mention that financing is available for qualified customers.',
+      scoring_focus: '{"product_knowledge": 0.35, "process_adherence": 0.3, "clarity": 0.2, "professionalism": 0.15}',
+      resolution_conditions: 'Customer understands whole-home requirement. Minimum pricing is communicated. Inspection is scheduled with Ryan. Financing option is mentioned.',
+    },
+  ]);
+
+  // =========================================================================
+  // COURSE 6: Communication & Documentation
+  // =========================================================================
+
+  // --- Module: Text & Voicemail Templates ---
+  addTemplates('Communication & Documentation', 'Text & Voicemail Templates', [
+    {
+      name: 'Card Decline — Select Correct Template',
+      category: 'communication',
+      base_situation: 'A customer\'s card was declined. The technician is currently on-site completing the service. The customer has 7 completed paid visits (longstanding). You need to send the appropriate card decline notification.',
+      customer_goals: 'Resolve the payment issue without service interruption.',
+      csr_objectives: 'Identify the customer as longstanding (7 visits, well above 5-visit threshold). Select the LONGSTANDING customer card decline template, which acknowledges that service has been completed. Do NOT use the non-longstanding template (which says the technician is waiting). The distinction matters because longstanding customers get service completed regardless of payment status.',
+      scoring_focus: '{"process_adherence": 0.4, "product_knowledge": 0.3, "attention_to_detail": 0.2, "professionalism": 0.1}',
+      resolution_conditions: 'Correct template (longstanding) is selected. CSR can articulate why the longstanding template is appropriate vs. the non-longstanding template.',
+    },
+    {
+      name: 'Not Home — Determine Correct Template',
+      category: 'communication',
+      base_situation: 'A GHP quarterly service is scheduled for today. The technician arrives and nobody is home. You need to send the appropriate notification template to the customer.',
+      customer_goals: 'Be informed about what happened with their scheduled service.',
+      csr_objectives: 'Identify this as a GHP service where nobody is home. Select the "Exterior Completed" template — GHP services can proceed with exterior-only treatment when nobody is home. Do NOT use the "Customer Required" template, which is for services that require the customer to be present (Sentricon interior inspection, German roach prep verification, etc.).',
+      scoring_focus: '{"process_adherence": 0.4, "product_knowledge": 0.3, "attention_to_detail": 0.2, "professionalism": 0.1}',
+      resolution_conditions: 'Correct template ("Exterior Completed") is selected. CSR understands the distinction between services that can proceed without the customer and those that cannot.',
+    },
+  ]);
+
+  // --- Module: Service Area Routing ---
+  addTemplates('Communication & Documentation', 'Service Area Routing', [
+    {
+      name: 'ZIP Code to Office Routing',
+      category: 'communication',
+      base_situation: 'A new customer is calling from ZIP code 33916. They want to schedule pest control service. You need to confirm they\'re in a serviced area and route them to the correct branch office.',
+      customer_goals: 'Confirm their area is serviced and get connected to schedule.',
+      csr_objectives: 'Identify ZIP 33916 as the Fort Myers service area. Know the dial code (*3011) and local office number: (239) 424-8742. Route the customer correctly. If the ZIP were outside the service area, explain politely and provide the nearest serviced area if applicable.',
+      scoring_focus: '{"process_adherence": 0.4, "accuracy": 0.3, "customer_service": 0.2, "professionalism": 0.1}',
+      resolution_conditions: 'Correct office (Fort Myers) is identified. Dial code and local number are known. Customer is routed correctly.',
+    },
+  ]);
+
+  // =========================================================================
+  // COURSE 7: Complex Service Coordination
+  // =========================================================================
+
+  // --- Module: Initial Service Approval Workflow ---
+  addTemplates('Complex Service Coordination', 'Initial Service Approval Workflow', [
+    {
+      name: 'Agreement Not Signed — Cannot Approve',
+      category: 'operations',
+      base_situation: 'A technician is on-site for an initial service. The gate is open and the property is accessible, but the customer hasn\'t signed the service agreement yet. The technician is asking for approval to proceed with the treatment.',
+      customer_goals: 'Get the initial service completed today.',
+      csr_objectives: 'Do NOT approve the service without a signed agreement. The agreement is required before any service can be performed — this is non-negotiable regardless of property access. Attempt to contact the customer to get the agreement signed (phone, text, email). If the customer cannot be reached, the technician must wait or the service must be rescheduled.',
+      scoring_focus: '{"process_adherence": 0.45, "risk_awareness": 0.25, "problem_solving": 0.2, "professionalism": 0.1}',
+      escalation_triggers: 'Technician pressures to proceed without the agreement. Customer cannot be reached after multiple attempts.',
+      resolution_conditions: 'Service is NOT approved without a signed agreement. Attempt to contact the customer is made. If unsuccessful, service is rescheduled.',
+    },
+  ]);
+
+  // --- Module: Technician No-Show Recovery ---
+  addTemplates('Complex Service Coordination', 'Technician No-Show Recovery', [
+    {
+      name: 'D2D Sale No-Show',
+      category: 'operations',
+      base_situation: 'A customer signed up through a door-to-door sales rep 3 days ago. Their initial service was scheduled for today but the technician never showed up. The customer is upset and calls in wanting to know what happened.',
+      customer_goals: 'Get their service completed. Understand why nobody showed up. Considering cancellation.',
+      csr_objectives: 'Identify this as a D2D (door-to-door) sale — the scheduler handles ALL follow-ups for D2D sales, not the original rep. Apologize sincerely for the no-show. Add DNS (Did Not Service) notes to the account. Follow the 3-attempt protocol: attempt 1 is same-day reschedule, attempt 2 is 2-3 days later, attempt 3 is 1 week later. If all 3 attempts fail, cancel as "Initial Appointment Cancelled."',
+      scoring_focus: '{"process_adherence": 0.35, "empathy": 0.25, "de_escalation": 0.2, "accuracy": 0.2}',
+      escalation_triggers: 'Customer demands to speak to the D2D rep directly. Customer wants immediate cancellation and refund.',
+      deescalation_triggers: 'Sincere apology, immediate action to reschedule, clear communication of next steps.',
+      resolution_conditions: 'D2D follow-up routing is correctly identified. DNS notes are added. 3-attempt protocol is initiated. Customer is offered same-day reschedule as first attempt.',
+    },
+  ]);
+
+  // --- Module: BCP — Service During Disruptions ---
+  addTemplates('Complex Service Coordination', 'BCP — Service During Disruptions', [
+    {
+      name: 'Internet Outage — Phones Working',
+      category: 'operations',
+      base_situation: 'The office internet is down but the phone system is still working. You\'re receiving calls but cannot access customer accounts, the CRM, or scheduling system. Customers are calling with service requests and questions.',
+      customer_goals: 'Get their service request handled despite the outage.',
+      csr_objectives: 'Switch to the mobile app using BCP binder credentials for limited account access. Use the approved script: "We are experiencing a temporary internet outage..." Document EVERY call manually with: customer name, phone number, callback time, address, reason for call, and urgency level. Use the paper log from the BCP binder. Prioritize urgent calls (active infestations, technician issues) over routine scheduling.',
+      scoring_focus: '{"process_adherence": 0.35, "problem_solving": 0.25, "customer_service": 0.25, "professionalism": 0.15}',
+      resolution_conditions: 'BCP procedure is followed. Mobile app is used for limited access. All calls are documented with required fields. Customers are informed of the situation professionally.',
+    },
+  ]);
+
+  return templates;
+}
+
+async function seedScenarioTemplates(packageMap, courseModuleMap) {
+  const templates = getScenarioTemplates(courseModuleMap);
+
+  if (templates.length === 0) {
+    console.log('  No scenario templates generated — check courseModuleMap');
+    return;
+  }
+
+  const chunkSize = 20;
+  let inserted = 0;
+
+  for (let i = 0; i < templates.length; i += chunkSize) {
+    const chunk = templates.slice(i, i + chunkSize);
+    const { error } = await supabase
+      .from('scenario_templates')
+      .upsert(chunk, { onConflict: 'organization_id,module_id,name' });
+
+    if (error) {
+      console.error(`Failed to seed scenario templates (chunk ${Math.floor(i / chunkSize) + 1}):`, error.message);
+      process.exit(1);
+    }
+
+    inserted += chunk.length;
+  }
+
+  console.log(`  Inserted ${inserted} scenario templates across ${Object.keys(courseModuleMap).length} courses`);
 }
 
 // ---------------------------------------------------------------------------

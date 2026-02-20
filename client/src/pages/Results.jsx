@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useSearchParams, useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   ArrowLeft,
@@ -30,6 +30,8 @@ import DecisionTreeVisualization from '../components/practice/DecisionTreeVisual
 
 function Results() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { sessionId: paramSessionId } = useParams();
   const { lastResults, setLastResults, clearSession } = useConfig();
   const { authFetch } = useAuth();
 
@@ -37,23 +39,74 @@ function Results() {
   const [currentStep, setCurrentStep] = useState('processing');
   const [recoveredFromStorage, setRecoveredFromStorage] = useState(false);
   const [usingSyncFallback, setUsingSyncFallback] = useState(false);
+  const [loadingHistory, setLoadingHistory] = useState(false);
+
+  // Load historical session from ?session= param or :sessionId route param
+  const historicalSessionId = searchParams.get('session') || paramSessionId;
+
+  useEffect(() => {
+    if (historicalSessionId && !lastResults?.analysis) {
+      loadHistoricalSession(historicalSessionId);
+    }
+  }, [historicalSessionId]);
+
+  const loadHistoricalSession = async (sessionId) => {
+    setLoadingHistory(true);
+    try {
+      const response = await authFetch(`/api/training/session/${sessionId}`);
+      if (!response.ok) throw new Error('Session not found');
+
+      const data = await response.json();
+      const session = data.session;
+
+      if (session && session.overall_score !== null) {
+        setLastResults({
+          sessionId: session.id,
+          analysis: {
+            overallScore: session.overall_score,
+            categories: session.category_scores,
+            strengths: session.strengths,
+            improvements: session.improvements,
+            summary: session.category_scores
+              ? `Score: ${session.overall_score}/100 across ${Object.keys(session.category_scores).length} categories.`
+              : null,
+            keyMoment: null,
+            nextSteps: session.improvements?.map(i => i.alternative).filter(Boolean)?.slice(0, 3) || []
+          },
+          scenario: {
+            id: session.scenario_id,
+            name: session.scenario_name
+          },
+          duration: session.duration_seconds,
+          analysisStatus: 'completed',
+          transcript: {
+            raw: session.transcript_raw,
+            formatted: session.transcript_formatted
+          }
+        });
+      }
+    } catch (err) {
+      console.error('Error loading historical session:', err);
+    } finally {
+      setLoadingHistory(false);
+    }
+  };
 
   // Try to recover results from sessionStorage if not in context
   useEffect(() => {
-    if (!lastResults && !recoveredFromStorage) {
+    if (!lastResults && !recoveredFromStorage && !historicalSessionId) {
       setRecoveredFromStorage(true);
       try {
         const stored = sessionStorage.getItem('lastTrainingResults');
         if (stored) {
           const parsed = JSON.parse(stored);
-          console.log('Recovered results from sessionStorage:', parsed);
           setLastResults(parsed);
         }
       } catch (e) {
         console.error('Error recovering from sessionStorage:', e);
       }
     }
-  }, [lastResults, recoveredFromStorage, setLastResults]);
+  }, [lastResults, recoveredFromStorage, setLastResults, historicalSessionId]);
 
   // Save session results to database
   const saveSessionResults = useCallback(async (analysis) => {
@@ -276,13 +329,12 @@ function Results() {
     }
   }, [lastResults?.analysisStatus, lastResults?.sessionId, pollAnalysis]);
 
-  // Redirect if no results (but wait for recovery attempt)
+  // Redirect if no results (but wait for recovery attempt and historical load)
   useEffect(() => {
-    if (!lastResults && recoveredFromStorage) {
-      // Only redirect after we've tried to recover from storage
+    if (!lastResults && recoveredFromStorage && !historicalSessionId && !loadingHistory) {
       navigate('/');
     }
-  }, [lastResults, recoveredFromStorage, navigate]);
+  }, [lastResults, recoveredFromStorage, historicalSessionId, loadingHistory, navigate]);
 
   // Helper function - defined early since it's used in loading states
   const formatDuration = (seconds) => {
@@ -292,9 +344,9 @@ function Results() {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // Show loading while trying to recover
+  // Show loading while trying to recover or load historical session
   if (!lastResults) {
-    if (!recoveredFromStorage) {
+    if (!recoveredFromStorage || loadingHistory || historicalSessionId) {
       return (
         <div className="max-w-2xl mx-auto px-4 py-16 text-center">
           <Loader2 className="w-12 h-12 text-primary-400 mx-auto animate-spin" />

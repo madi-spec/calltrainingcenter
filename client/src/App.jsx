@@ -163,6 +163,7 @@ function App() {
                     <Route path="/training" element={<Training />} />
                     <Route path="/results" element={<Results />} />
                     <Route path="/results/:sessionId" element={<Results />} />
+                    {/* Legacy query param route also handled by Results component */}
                     <Route path="/replay/:sessionId" element={<CallReplay />} />
                     <Route path="/playback/:sessionId" element={<SessionPlayback />} />
                     <Route path="/analysis/:scenarioId" element={<ComparativeAnalysis />} />

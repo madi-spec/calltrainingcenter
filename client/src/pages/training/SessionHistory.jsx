@@ -162,7 +162,7 @@ export default function SessionHistory() {
                           className="px-2 py-1 bg-gray-700 rounded text-xs text-gray-400"
                           title={key}
                         >
-                          {value}%
+                          {typeof value === 'object' ? value.score : value}%
                         </div>
                       ))}
                     </div>

@@ -2,11 +2,12 @@
  * Seed Gecko Green with lawn care courses and modules.
  * Run: node api/scripts/seed-geckogreen-courses.js
  */
+import 'dotenv/config';
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
-  'https://eeejffbynrowrykbhqfc.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlZWpmZmJ5bnJvd3J5a2JocWZjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTI1Mjk5OSwiZXhwIjoyMDg0ODI4OTk5fQ.mUagxEzMGTXH-mcvU0ryA22jBX7oPE28qizkY0s3rck'
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
 const GECKO_GREEN_ORG_ID = '3fed37dd-0818-45d7-8007-8d096088205c';

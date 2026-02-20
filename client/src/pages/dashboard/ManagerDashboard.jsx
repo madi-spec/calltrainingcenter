@@ -390,9 +390,10 @@ export default function ManagerDashboard() {
         {recentSessions.length > 0 ? (
           <div className="space-y-3">
             {recentSessions.map((session) => (
-              <div
+              <Link
                 key={session.id}
-                className="flex items-center justify-between p-4 bg-gray-700/50 rounded-lg"
+                to={`/results/${session.id}`}
+                className="flex items-center justify-between p-4 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors cursor-pointer"
               >
                 <div className="flex items-center gap-4">
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg ${
@@ -409,15 +410,18 @@ export default function ManagerDashboard() {
                     <p className="text-sm text-gray-400">{session.scenario_name}</p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm text-gray-300">
-                    {new Date(session.created_at).toLocaleDateString()}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {Math.round((session.duration_seconds || 0) / 60)} min
-                  </p>
+                <div className="flex items-center gap-4">
+                  <div className="text-right">
+                    <p className="text-sm text-gray-300">
+                      {new Date(session.created_at).toLocaleDateString()}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {Math.round((session.duration_seconds || 0) / 60)} min
+                    </p>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-gray-500" />
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         ) : (

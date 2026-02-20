@@ -9,10 +9,10 @@ import {
   AlertTriangle,
   CheckCircle,
   Save,
-  Play,
   Volume2
 } from 'lucide-react';
 import { useOrganization } from '../context/OrganizationContext';
+import { useAuth } from '../context/AuthContext';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import Input, { Textarea, Select } from '../components/ui/Input';
@@ -57,9 +57,11 @@ const defaultScenario = {
 function Builder() {
   const navigate = useNavigate();
   const { organization: company } = useOrganization();
+  const { authFetch } = useAuth();
   const [scenario, setScenario] = useState(defaultScenario);
   const [voices, setVoices] = useState([]);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -68,7 +70,7 @@ function Builder() {
 
   const fetchVoices = async () => {
     try {
-      const response = await fetch('/api/scenarios/meta/voices');
+      const response = await authFetch('/api/scenarios/meta/voices');
       if (response.ok) {
         const data = await response.json();
         setVoices(data.voices || []);
@@ -83,11 +85,6 @@ function Builder() {
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: null }));
     }
-  };
-
-  const insertVariable = (field, variable) => {
-    const currentValue = scenario[field] || '';
-    updateField(field, currentValue + `{{${variable}}}`);
   };
 
   const validate = () => {
@@ -105,8 +102,8 @@ function Builder() {
     if (!validate()) return;
 
     setSaving(true);
+    setSaveError('');
     try {
-      // Format arrays from comma-separated strings
       const formattedScenario = {
         ...scenario,
         keyPointsToMention: scenario.keyPointsToMention
@@ -115,24 +112,25 @@ function Builder() {
         scoringFocus: scenario.scoringFocus
           ? scenario.scoringFocus.split(',').map(s => s.trim()).filter(Boolean)
           : [],
-        // Build system prompt
         systemPrompt: buildSystemPrompt(scenario)
       };
 
-      const response = await fetch('/api/scenarios', {
+      const response = await authFetch('/api/scenarios', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formattedScenario)
       });
 
       if (!response.ok) {
-        throw new Error('Failed to save scenario');
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to save scenario');
       }
 
       const data = await response.json();
       navigate(`/scenario/${data.scenario.id}`);
     } catch (error) {
       console.error('Error saving scenario:', error);
+      setSaveError(error.message);
     } finally {
       setSaving(false);
     }
@@ -201,6 +199,17 @@ ${s.resolutionConditions || 'Accept a reasonable solution that addresses your co
           </div>
         </Card>
       </motion.div>
+
+      {/* Save Error */}
+      {saveError && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg"
+        >
+          <p className="text-red-400 text-sm">{saveError}</p>
+        </motion.div>
+      )}
 
       {/* Form */}
       <div className="space-y-6">

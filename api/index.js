@@ -1173,7 +1173,7 @@ app.post('/api/admin/scrape-company', async (req, res) => {
   }
 });
 
-// Get scenarios
+// Get scenarios (built-in + custom)
 app.get('/api/scenarios', optionalAuthMiddleware, async (req, res) => {
   try {
     const company = await getCompanyConfig(req);
@@ -1188,19 +1188,147 @@ app.get('/api/scenarios', optionalAuthMiddleware, async (req, res) => {
       situation: processTemplate(s.situation, { company }),
       customerBackground: processTemplate(s.customerBackground, { company })
     }));
-    res.json({ success: true, scenarios: processed });
+
+    // Merge custom scenarios from org settings
+    const customScenarios = req.organization?.settings?.customScenarios || [];
+    const processedCustom = customScenarios.map(s => ({
+      ...s,
+      isCustom: true,
+      situation: processTemplate(s.situation, { company }),
+      customerBackground: processTemplate(s.customerBackground, { company })
+    }));
+
+    res.json({ success: true, scenarios: [...processed, ...processedCustom] });
   } catch (error) {
     console.error('Error fetching scenarios:', error);
     res.status(500).json({ error: 'Failed to fetch scenarios', message: error.message });
   }
 });
 
-// Get single scenario
+// Create custom scenario
+app.post('/api/scenarios', authMiddleware, async (req, res) => {
+  try {
+    if (!req.organization) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+
+    const scenario = req.body;
+    if (!scenario.name || !scenario.situation) {
+      return res.status(400).json({ error: 'Name and situation are required' });
+    }
+
+    scenario.id = `custom-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
+    scenario.isCustom = true;
+    scenario.createdAt = new Date().toISOString();
+    scenario.createdBy = req.user?.id;
+
+    const currentSettings = req.organization.settings || {};
+    const customScenarios = currentSettings.customScenarios || [];
+    customScenarios.push(scenario);
+
+    const adminClient = createAdminClient();
+    const { error: updateError } = await adminClient
+      .from(TABLES.ORGANIZATIONS)
+      .update({ settings: { ...currentSettings, customScenarios } })
+      .eq('id', req.organization.id);
+
+    if (updateError) throw updateError;
+
+    res.json({ success: true, scenario });
+  } catch (error) {
+    console.error('Error creating scenario:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update custom scenario
+app.put('/api/scenarios/:id', authMiddleware, async (req, res) => {
+  try {
+    if (!req.organization) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+
+    const { id } = req.params;
+    if (!id.startsWith('custom-')) {
+      return res.status(400).json({ error: 'Can only edit custom scenarios' });
+    }
+
+    const currentSettings = req.organization.settings || {};
+    const customScenarios = currentSettings.customScenarios || [];
+    const index = customScenarios.findIndex(s => s.id === id);
+
+    if (index === -1) {
+      return res.status(404).json({ error: 'Custom scenario not found' });
+    }
+
+    customScenarios[index] = {
+      ...customScenarios[index],
+      ...req.body,
+      id,
+      isCustom: true,
+      updatedAt: new Date().toISOString()
+    };
+
+    const adminClient = createAdminClient();
+    const { error: updateError } = await adminClient
+      .from(TABLES.ORGANIZATIONS)
+      .update({ settings: { ...currentSettings, customScenarios } })
+      .eq('id', req.organization.id);
+
+    if (updateError) throw updateError;
+
+    res.json({ success: true, scenario: customScenarios[index] });
+  } catch (error) {
+    console.error('Error updating scenario:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Delete custom scenario
+app.delete('/api/scenarios/:id', authMiddleware, async (req, res) => {
+  try {
+    if (!req.organization) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+
+    const { id } = req.params;
+    if (!id.startsWith('custom-')) {
+      return res.status(400).json({ error: 'Can only delete custom scenarios' });
+    }
+
+    const currentSettings = req.organization.settings || {};
+    const customScenarios = (currentSettings.customScenarios || []).filter(s => s.id !== id);
+
+    const adminClient = createAdminClient();
+    const { error: updateError } = await adminClient
+      .from(TABLES.ORGANIZATIONS)
+      .update({ settings: { ...currentSettings, customScenarios } })
+      .eq('id', req.organization.id);
+
+    if (updateError) throw updateError;
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting scenario:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get single scenario (built-in or custom)
 app.get('/api/scenarios/:id', optionalAuthMiddleware, async (req, res) => {
-  const scenario = scenarios.find(s => s.id === req.params.id);
+  const company = await getCompanyConfig(req);
+
+  // Check built-in scenarios
+  let scenario = scenarios.find(s => s.id === req.params.id);
+
+  // Check custom scenarios
+  if (!scenario && req.organization) {
+    const customScenarios = req.organization.settings?.customScenarios || [];
+    scenario = customScenarios.find(s => s.id === req.params.id);
+  }
+
   if (!scenario) return res.status(404).json({ error: 'Scenario not found' });
 
-  const company = await getCompanyConfig(req);
   const processed = {
     ...scenario,
     situation: processTemplate(scenario.situation, { company }),

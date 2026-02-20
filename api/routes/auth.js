@@ -28,7 +28,8 @@ router.post('/sync-user', authMiddleware, async (req, res) => {
     const clerkUserId = req.clerkUserId;
     if (email) {
       const lookupClient = createAdminClient();
-      const { data: emailUser } = await lookupClient
+      // Use .limit(1) instead of .single() to avoid errors when multiple rows exist (e.g. same email in different orgs)
+      const { data: emailUsers } = await lookupClient
         .from(TABLES.USERS)
         .select(`
           *,
@@ -36,7 +37,10 @@ router.post('/sync-user', authMiddleware, async (req, res) => {
           branch:branches(*)
         `)
         .eq('email', email.toLowerCase())
-        .single();
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      const emailUser = emailUsers?.[0];
 
       if (emailUser && (!emailUser.clerk_id || emailUser.clerk_id !== clerkUserId)) {
         // Found a user by email with null or different clerk_id - update it
@@ -68,8 +72,8 @@ router.post('/sync-user', authMiddleware, async (req, res) => {
       }
     }
 
-    // User truly doesn't exist - create new user
-    console.log('[Auth] User not found in database, creating new user...');
+    // User truly doesn't exist - check for pending invitations before creating new org
+    console.log('[Auth] User not found in database, checking for pending invitations...');
     console.log('[Auth] Request body:', { clerkId, email, fullName, imageUrl: imageUrl ? 'present' : 'missing' });
 
     if (!clerkId || !email) {
@@ -80,7 +84,77 @@ router.post('/sync-user', authMiddleware, async (req, res) => {
     console.log('[Auth] Creating admin client for insert...');
     const adminClient = createAdminClient();
 
-    // Create organization for new user
+    // Check for pending invitation — if found, join that org instead of creating a new one
+    const { data: pendingInvitations } = await adminClient
+      .from('invitations')
+      .select('*, organization:organizations(*)')
+      .eq('email', email.toLowerCase())
+      .in('status', ['pending', 'accepted'])
+      .order('created_at', { ascending: false })
+      .limit(1);
+
+    const pendingInvite = pendingInvitations?.[0];
+
+    if (pendingInvite && pendingInvite.organization) {
+      const isExpired = pendingInvite.status === 'pending' && new Date(pendingInvite.expires_at) < new Date();
+
+      if (!isExpired) {
+        console.log(`[Auth] Found invitation for ${email} in org "${pendingInvite.organization.name}" (status: ${pendingInvite.status})`);
+
+        // Find primary branch for the org
+        const { data: primaryBranch } = await adminClient
+          .from('branches')
+          .select('id')
+          .eq('organization_id', pendingInvite.organization_id)
+          .eq('is_primary', true)
+          .single();
+
+        const { data: invitedUser, error: inviteUserError } = await adminClient
+          .from('users')
+          .insert({
+            clerk_id: clerkId,
+            organization_id: pendingInvite.organization_id,
+            branch_id: primaryBranch?.id || null,
+            email: email.toLowerCase(),
+            full_name: fullName || email.split('@')[0],
+            role: pendingInvite.role,
+            status: 'active',
+            total_points: 0,
+            current_streak: 0,
+            longest_streak: 0,
+            level: 1
+          })
+          .select(`
+            *,
+            organization:organizations(*),
+            branch:branches(*)
+          `)
+          .single();
+
+        if (!inviteUserError && invitedUser) {
+          // Mark invitation as accepted if still pending
+          if (pendingInvite.status === 'pending') {
+            await adminClient
+              .from('invitations')
+              .update({ status: 'accepted', accepted_at: new Date().toISOString() })
+              .eq('id', pendingInvite.id);
+          }
+
+          console.log(`[Auth] User ${email} joined org "${pendingInvite.organization.name}" via invitation (role: ${pendingInvite.role})`);
+          return res.json({
+            success: true,
+            user: invitedUser,
+            organization: invitedUser.organization,
+            isNewUser: true
+          });
+        }
+
+        console.error('[Auth] Failed to create user from invitation:', inviteUserError);
+        // Fall through to create new org as last resort
+      }
+    }
+
+    // No pending invitation found — create organization for new user
     const organizationName = fullName ? `${fullName}'s Organization` : 'My Organization';
     console.log('[Auth] Creating organization:', organizationName);
     const slug = organizationName

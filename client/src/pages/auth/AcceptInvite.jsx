@@ -106,54 +106,79 @@ export default function AcceptInvite() {
 
     try {
       // Step 1: Create Clerk account
-      let signUpAttempt = await signUp.create({
-        emailAddress: inviteData.email,
-        password: formData.password,
-        firstName: formData.fullName.split(' ')[0],
-        lastName: formData.fullName.split(' ').slice(1).join(' ') || '',
-        unsafeMetadata: {
-          invitationToken: token
+      let signUpAttempt;
+      try {
+        signUpAttempt = await signUp.create({
+          emailAddress: inviteData.email,
+          password: formData.password,
+          firstName: formData.fullName.split(' ')[0],
+          lastName: formData.fullName.split(' ').slice(1).join(' ') || '',
+          unsafeMetadata: {
+            invitationToken: token
+          }
+        });
+      } catch (signUpError) {
+        // If email is already taken, redirect to sign in — sync-user will auto-accept the invitation
+        const errorCode = signUpError.errors?.[0]?.code;
+        if (errorCode === 'form_identifier_exists' || signUpError.message?.includes('already exists')) {
+          setError(
+            'An account with this email already exists. Please sign in at the login page — you will be automatically added to the team.'
+          );
+          setSubmitting(false);
+          return;
         }
-      });
+        throw signUpError;
+      }
 
       // Step 2: Handle email verification if required by Clerk
-      // For invited users, attempt to prepare email verification and complete it
       if (signUpAttempt.status === 'missing_requirements') {
-        try {
-          // Try to prepare email verification
-          await signUpAttempt.prepareEmailAddressVerification({ strategy: 'email_code' });
-        } catch (prepError) {
-          // If preparation fails, try updating the email to trigger completion
-          console.log('[AcceptInvite] Email verification prep failed, trying update:', prepError.message);
-          await signUpAttempt.update({
-            emailAddress: inviteData.email
-          });
+        const missingFields = signUpAttempt.requiredFields?.filter(
+          f => !signUpAttempt.verifications?.emailAddress?.status ||
+               signUpAttempt.verifications?.emailAddress?.status !== 'verified'
+        );
+
+        // If email verification is needed, prepare it and show verification UI
+        if (signUpAttempt.verifications?.emailAddress?.status !== 'verified') {
+          try {
+            await signUpAttempt.prepareEmailAddressVerification({ strategy: 'email_code' });
+            // Redirect to sign-in since verification is needed
+            // The sync-user endpoint will auto-accept the invitation when they eventually sign in
+            setError(
+              'A verification email has been sent to your inbox. Please verify your email, then sign in at the login page to join your team.'
+            );
+            setSubmitting(false);
+            return;
+          } catch (prepError) {
+            console.log('[AcceptInvite] Email verification prep error:', prepError.message);
+          }
         }
       }
 
       // Step 3: Wait for sign-up to complete and set session active
-      // Poll for completion if sign-up isn't done yet
       let attempts = 0;
       while (!signUpAttempt.createdSessionId && attempts < 10) {
         await new Promise(resolve => setTimeout(resolve, 500));
-        // Reload the sign-up attempt to check for updates
         if (signUpAttempt.status === 'complete') break;
         attempts++;
       }
 
       if (signUpAttempt.createdSessionId) {
         await setActive({ session: signUpAttempt.createdSessionId });
-        // Wait for session to fully propagate
         await new Promise(resolve => setTimeout(resolve, 1000));
       }
 
-      // Step 4: Get the authenticated user's clerk ID from the session
-      // CRITICAL: Use the Clerk session token as source of truth, not signUpAttempt
+      // Step 4: Get the authenticated user's clerk ID
       const clerkToken = await getToken();
       const clerkUserId = signUpAttempt.createdUserId;
 
       if (!clerkUserId) {
-        throw new Error('Account creation incomplete. Please try signing in with your email and password.');
+        // Account was created but session isn't ready — redirect to sign in
+        // sync-user will auto-accept the invitation when they sign in
+        setError(
+          'Account created! Please sign in at the login page to complete setup and join your team.'
+        );
+        setSubmitting(false);
+        return;
       }
 
       // Step 5: Accept the invitation in our backend
@@ -172,11 +197,15 @@ export default function AcceptInvite() {
 
       if (!response.ok) {
         const data = await response.json();
+        // If user already registered, just redirect — sync-user handles it
+        if (data.error?.includes('already registered')) {
+          window.location.href = '/';
+          return;
+        }
         throw new Error(data.error || 'Failed to accept invitation');
       }
 
       // Success! Navigate to dashboard
-      // Use window.location instead of navigate to ensure a full page load
       window.location.href = '/';
     } catch (err) {
       console.error('Invitation acceptance error:', err);
@@ -292,10 +321,22 @@ export default function AcceptInvite() {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center gap-3"
+              className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg"
             >
-              <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
-              <p className="text-red-400 text-sm">{error}</p>
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-red-400 text-sm">{error}</p>
+                  {(error.includes('sign in') || error.includes('login page')) && (
+                    <Link
+                      to="/auth/login"
+                      className="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-lg transition-colors"
+                    >
+                      Go to Login Page
+                    </Link>
+                  )}
+                </div>
+              </div>
             </motion.div>
           )}
 

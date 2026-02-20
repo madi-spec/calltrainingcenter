@@ -251,6 +251,14 @@ router.post('/accept', async (req, res) => {
       if (updateError) throw updateError;
       user = updatedUser;
     } else {
+      // Find primary branch for the org
+      const { data: primaryBranch } = await adminClient
+        .from('branches')
+        .select('id')
+        .eq('organization_id', invitation.organization_id)
+        .eq('is_primary', true)
+        .single();
+
       // Create new user
       const { data: newUser, error: userError } = await adminClient
         .from('users')
@@ -260,7 +268,7 @@ router.post('/accept', async (req, res) => {
           email: invitation.email,
           full_name: full_name || invitation.email.split('@')[0],
           role: invitation.role,
-          branch_id: invitation.branch_id,
+          branch_id: primaryBranch?.id || null,
           status: 'active',
           total_points: 0,
           current_streak: 0,

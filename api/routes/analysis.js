@@ -9,7 +9,10 @@ router.use(authMiddleware);
 
 /**
  * POST /api/analysis/queue
- * Run analysis for a training session (runs inline, saves to training_sessions)
+ * Run analysis for a training session synchronously.
+ * Previous version tried fire-and-forget background processing, but Vercel
+ * serverless kills the function after the response is sent, so the analysis
+ * never completed. Now we await it and return the result.
  */
 router.post('/queue', async (req, res) => {
   try {
@@ -20,20 +23,22 @@ router.post('/queue', async (req, res) => {
       return res.status(400).json({ error: 'Session ID is required' });
     }
 
-    // Return immediately — run analysis in background
+    // Run analysis synchronously — Vercel serverless kills background work
+    const analysis = await runAnalysis(sessionId, orgId);
+
     res.json({
       success: true,
-      status: 'processing',
-      message: 'Analysis started'
-    });
-
-    // Run analysis in background (don't await)
-    runAnalysis(sessionId, orgId).catch(err => {
-      console.error(`[Analysis] Background analysis failed for session ${sessionId}:`, err.message);
+      status: 'completed',
+      analysis
     });
   } catch (error) {
-    console.error('Error starting analysis:', error);
-    res.status(500).json({ error: 'Failed to start analysis' });
+    console.error('Error running analysis:', error);
+    // Return 200 with processing status so frontend falls back to sync
+    res.json({
+      success: false,
+      status: 'failed',
+      error: error.message
+    });
   }
 });
 

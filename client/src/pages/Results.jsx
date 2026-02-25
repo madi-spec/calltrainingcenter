@@ -40,6 +40,7 @@ function Results() {
   const [recoveredFromStorage, setRecoveredFromStorage] = useState(false);
   const [usingSyncFallback, setUsingSyncFallback] = useState(false);
   const [loadingHistory, setLoadingHistory] = useState(false);
+  const [pollingStartedAt, setPollingStartedAt] = useState(null);
 
   // Load historical session from ?session= param or :sessionId route param
   const historicalSessionId = searchParams.get('session') || paramSessionId;
@@ -236,12 +237,19 @@ function Results() {
   const pollAnalysis = useCallback(async () => {
     if (!lastResults?.sessionId || lastResults?.analysis || usingSyncFallback) return;
 
+    // If we've been polling for more than 15 seconds with no result,
+    // the background analysis likely died (Vercel serverless kills it after response).
+    // Fall back to sync analysis which runs inline.
+    if (pollingStartedAt && Date.now() - pollingStartedAt > 15000) {
+      console.log('[Analysis] Polling timeout — background analysis likely dead, falling back to sync');
+      runSyncAnalysis();
+      return;
+    }
+
     try {
       const response = await authFetch(`/api/analysis/status/${lastResults.sessionId}`);
 
       if (!response.ok) {
-        // Polling failed - fall back to sync analysis immediately
-        // (Vercel serverless doesn't maintain in-memory state between requests)
         runSyncAnalysis();
         return;
       }
@@ -307,11 +315,12 @@ function Results() {
       console.error('Error polling analysis:', err);
       runSyncAnalysis();
     }
-  }, [lastResults?.sessionId, lastResults?.analysis, lastResults?.scenario, usingSyncFallback, authFetch, setLastResults, runSyncAnalysis, saveSessionResults]);
+  }, [lastResults?.sessionId, lastResults?.analysis, lastResults?.scenario, usingSyncFallback, pollingStartedAt, authFetch, setLastResults, runSyncAnalysis, saveSessionResults]);
 
   // Start polling when we have an analysis in progress
   useEffect(() => {
     if (lastResults?.analysisStatus === 'processing' && lastResults?.sessionId) {
+      if (!pollingStartedAt) setPollingStartedAt(Date.now());
       const interval = setInterval(pollAnalysis, 2000);
       pollAnalysis(); // Initial poll
 

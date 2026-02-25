@@ -45,7 +45,7 @@ function Results() {
   const historicalSessionId = searchParams.get('session') || paramSessionId;
 
   useEffect(() => {
-    if (historicalSessionId && !lastResults?.analysis) {
+    if (historicalSessionId && historicalSessionId !== lastResults?.sessionId) {
       loadHistoricalSession(historicalSessionId);
     }
   }, [historicalSessionId]);
@@ -59,10 +59,11 @@ function Results() {
       const data = await response.json();
       const session = data.session;
 
-      if (session && session.overall_score !== null) {
+      if (session) {
+        const hasAnalysis = session.overall_score !== null && session.overall_score !== undefined;
         setLastResults({
           sessionId: session.id,
-          analysis: {
+          analysis: hasAnalysis ? {
             overallScore: session.overall_score,
             categories: session.category_scores,
             strengths: session.strengths,
@@ -72,13 +73,13 @@ function Results() {
               : null,
             keyMoment: null,
             nextSteps: session.improvements?.map(i => i.alternative).filter(Boolean)?.slice(0, 3) || []
-          },
+          } : null,
           scenario: {
             id: session.scenario_id,
             name: session.scenario_name
           },
           duration: session.duration_seconds,
-          analysisStatus: 'completed',
+          analysisStatus: hasAnalysis ? 'completed' : 'unavailable',
           transcript: {
             raw: session.transcript_raw,
             formatted: session.transcript_formatted

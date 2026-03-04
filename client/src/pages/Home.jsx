@@ -46,6 +46,17 @@ function Home() {
     }
   };
 
+  const handleDeleteScenario = async (scenarioId) => {
+    try {
+      const response = await authFetch(`/api/scenarios/${scenarioId}`, { method: 'DELETE' });
+      if (response.ok) {
+        setScenarios(prev => prev.filter(s => s.id !== scenarioId));
+      }
+    } catch (err) {
+      console.error('Error deleting scenario:', err);
+    }
+  };
+
   const filteredScenarios = scenarios.filter(scenario => {
     const matchesSearch =
       scenario.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -175,7 +186,7 @@ function Home() {
           ))}
         </div>
       ) : (
-        <ScenarioGrid scenarios={filteredScenarios} />
+        <ScenarioGrid scenarios={filteredScenarios} canEdit={canCreate} onDelete={handleDeleteScenario} />
       )}
 
       {/* Empty State */}

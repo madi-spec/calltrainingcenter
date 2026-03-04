@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import ScenarioCard from './ScenarioCard';
 
-function ScenarioGrid({ scenarios }) {
+function ScenarioGrid({ scenarios, canEdit, onDelete }) {
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -30,7 +30,7 @@ function ScenarioGrid({ scenarios }) {
           variants={item}
           data-tutorial={index === 0 ? 'scenario-card' : undefined}
         >
-          <ScenarioCard scenario={scenario} />
+          <ScenarioCard scenario={scenario} canEdit={canEdit} onDelete={onDelete} />
         </motion.div>
       ))}
     </motion.div>

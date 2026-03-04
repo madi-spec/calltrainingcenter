@@ -298,7 +298,7 @@ function App() {
                       }
                     />
                     <Route
-                      path="/builder"
+                      path="/builder/:scenarioId?"
                       element={
                         <RoleProtectedRoute allowedRoles={['manager', 'admin', 'super_admin']}>
                           <Builder />

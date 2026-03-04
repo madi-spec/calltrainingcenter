@@ -1430,7 +1430,8 @@ app.post('/api/calls/create-training-call', optionalAuthMiddleware, async (req, 
       situation: processTemplate(scenario.situation, { company })
     };
 
-    const agentPrompt = buildAgentPrompt(processedScenario, company, customPrompts?.agent);
+    // Use custom systemPrompt if provided (e.g. from Builder), otherwise build from template
+    const agentPrompt = processedScenario.systemPrompt || buildAgentPrompt(processedScenario, company, customPrompts?.agent);
 
     // Build opening instruction into prompt to prevent echo from begin_message
     const openingLine = processedScenario.openingLine || 'Hello?';
@@ -1847,7 +1848,7 @@ app.get('/api/admin/prompts', optionalAuthMiddleware, async (req, res) => {
     };
 
     // Build the actual prompts as they would be used
-    const agentPrompt = buildAgentPrompt(processedScenario, company);
+    const agentPrompt = processedScenario.systemPrompt || buildAgentPrompt(processedScenario, company);
     const coachingPrompts = buildCoachingPrompt(
       '[Sample transcript would appear here]',
       { scenario: processedScenario, company, callDuration: 300 }
@@ -1913,7 +1914,7 @@ app.get('/api/admin/prompts/:scenarioId', optionalAuthMiddleware, async (req, re
       situation: processTemplate(scenario.situation, { company })
     };
 
-    const agentPrompt = buildAgentPrompt(processedScenario, company, customPrompts?.agent);
+    const agentPrompt = processedScenario.systemPrompt || buildAgentPrompt(processedScenario, company, customPrompts?.agent);
     const coachingPrompts = buildCoachingPrompt(
       '[Transcript would appear here]',
       { scenario: processedScenario, company, callDuration: 300 },

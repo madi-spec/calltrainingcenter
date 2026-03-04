@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   PlusCircle,
@@ -56,6 +56,8 @@ const defaultScenario = {
 
 function Builder() {
   const navigate = useNavigate();
+  const { scenarioId } = useParams();
+  const isEditMode = !!scenarioId;
   const { organization: company } = useOrganization();
   const { authFetch } = useAuth();
   const [scenario, setScenario] = useState(defaultScenario);
@@ -63,10 +65,49 @@ function Builder() {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
   const [errors, setErrors] = useState({});
+  const [loadingScenario, setLoadingScenario] = useState(false);
 
   useEffect(() => {
     fetchVoices();
-  }, []);
+    if (scenarioId) {
+      loadScenario(scenarioId);
+    }
+  }, [scenarioId]);
+
+  const loadScenario = async (id) => {
+    setLoadingScenario(true);
+    try {
+      const response = await authFetch(`/api/scenarios/${id}`);
+      if (response.ok) {
+        const data = await response.json();
+        const s = data.scenario;
+        setScenario({
+          name: s.name || '',
+          difficulty: s.difficulty || 'medium',
+          category: s.category || 'General Inquiry',
+          customerName: s.customerName || '',
+          personality: s.personality || '',
+          emotionalState: s.emotionalState || '',
+          voiceId: s.voiceId || '11labs-Adrian',
+          situation: s.situation || '',
+          customerBackground: s.customerBackground || '',
+          openingLine: s.openingLine || '',
+          customerGoals: s.customerGoals || '',
+          csrObjective: s.csrObjective || '',
+          keyPointsToMention: Array.isArray(s.keyPointsToMention) ? s.keyPointsToMention.join('\n') : (s.keyPointsToMention || ''),
+          escalationTriggers: s.escalationTriggers || '',
+          deescalationTriggers: s.deescalationTriggers || '',
+          resolutionConditions: s.resolutionConditions || '',
+          scoringFocus: Array.isArray(s.scoringFocus) ? s.scoringFocus.join(', ') : (s.scoringFocus || '')
+        });
+      }
+    } catch (err) {
+      console.error('Error loading scenario:', err);
+      setSaveError('Failed to load scenario');
+    } finally {
+      setLoadingScenario(false);
+    }
+  };
 
   const fetchVoices = async () => {
     try {
@@ -115,8 +156,11 @@ function Builder() {
         systemPrompt: buildSystemPrompt(scenario)
       };
 
-      const response = await authFetch('/api/scenarios', {
-        method: 'POST',
+      const url = isEditMode ? `/api/scenarios/${scenarioId}` : '/api/scenarios';
+      const method = isEditMode ? 'PUT' : 'POST';
+
+      const response = await authFetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formattedScenario)
       });
@@ -174,7 +218,7 @@ ${s.resolutionConditions || 'Accept a reasonable solution that addresses your co
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
             <PlusCircle className="w-5 h-5 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-white">Create Scenario</h1>
+          <h1 className="text-3xl font-bold text-white">{isEditMode ? 'Edit Scenario' : 'Create Scenario'}</h1>
         </div>
         <p className="text-gray-400">
           Build a custom training scenario for your team
@@ -478,7 +522,7 @@ We've never had problems with your service"
             loading={saving}
             icon={Save}
           >
-            Save Scenario
+            {isEditMode ? 'Update Scenario' : 'Save Scenario'}
           </Button>
         </motion.div>
       </div>

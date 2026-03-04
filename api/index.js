@@ -1044,6 +1044,39 @@ app.delete('/api/cleanup-invitation/:email', async (req, res) => {
   }
 });
 
+// Diagnostic endpoint — no auth required
+app.get('/api/diagnostic', async (req, res) => {
+  const checks = { anthropicKey: false, supabase: false, claude: false, timestamp: new Date().toISOString() };
+  try {
+    checks.anthropicKey = !!process.env.ANTHROPIC_API_KEY;
+    checks.retellKey = !!process.env.RETELL_API_KEY;
+
+    const supabase = createAdminClient();
+    const { count, error: dbErr } = await supabase
+      .from(TABLES.TRAINING_SESSIONS)
+      .select('*', { count: 'exact', head: true })
+      .limit(1);
+    checks.supabase = !dbErr;
+    if (dbErr) checks.supabaseError = dbErr.message;
+    checks.sessionCount = count;
+
+    // Quick Claude test
+    const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    const start = Date.now();
+    const resp = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 10,
+      messages: [{ role: 'user', content: 'Say ok' }]
+    });
+    checks.claude = true;
+    checks.claudeMs = Date.now() - start;
+    checks.claudeResponse = resp.content[0].text;
+  } catch (err) {
+    checks.error = err.message;
+  }
+  res.json(checks);
+});
+
 // Mount modular routes
 app.use('/api/auth', authRoutes);
 app.use('/api/training', trainingRoutes);

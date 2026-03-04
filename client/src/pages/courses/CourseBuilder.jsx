@@ -352,7 +352,7 @@ export default function CourseBuilder() {
             <div>
               <h2 className="text-lg font-semibold text-white">Course Modules</h2>
               <p className="text-sm text-gray-400 mt-1">
-                Modules unlock sequentially as trainees complete them
+                Add modules to organize your course content
               </p>
             </div>
             <button

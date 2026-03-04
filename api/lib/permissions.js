@@ -127,9 +127,12 @@ export const ROLE_PERMISSIONS = {
     'users:view_all',
     'users:invite',
     'users:edit',
+    'users:change_role',
+    'users:delete',
     'branches:view',
     'branches:create',
     'branches:edit',
+    'branches:delete',
     'reports:view_own',
     'reports:view_team',
     'reports:view_all',
@@ -230,6 +233,8 @@ export function isRoleAtLeast(roleA, roleB) {
 export function getAssignableRoles(role) {
   const roleIndex = ROLE_HIERARCHY.indexOf(role);
   if (roleIndex <= 0) return [];
+  // Super admins can assign all roles including super_admin
+  if (role === 'super_admin') return [...ROLE_HIERARCHY];
   return ROLE_HIERARCHY.slice(0, roleIndex);
 }
 
@@ -298,8 +303,8 @@ export function validateRoleTransition(actorRole, targetCurrentRole, targetNewRo
     return { valid: false, message: 'You do not have permission to change roles' };
   }
 
-  // Cannot promote someone to your level or higher
-  if (!isHigherRole(actorRole, targetNewRole)) {
+  // Super admins can assign any role including super_admin; others cannot promote to their level or above
+  if (actorRole !== 'super_admin' && !isHigherRole(actorRole, targetNewRole)) {
     return { valid: false, message: 'Cannot assign a role equal to or higher than your own' };
   }
 

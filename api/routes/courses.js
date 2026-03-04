@@ -113,28 +113,21 @@ router.get('/:id', authMiddleware, tenantMiddleware, async (req, res) => {
       moduleProgressMap[mp.module_id] = mp;
     });
 
-    // Merge module progress and determine unlock status
+    // Merge module progress — all modules are unlocked (no sequential gating)
     const modulesWithProgress = course.modules
       ?.sort((a, b) => a.unlock_order - b.unlock_order)
-      .map((module, idx) => {
+      .map((module) => {
         const mp = moduleProgressMap[module.id];
-        const prevModule = idx > 0 ? course.modules[idx - 1] : null;
-        const prevProgress = prevModule ? moduleProgressMap[prevModule.id] : null;
-
-        // First module is always unlocked, others require previous to be completed
-        const isUnlocked = idx === 0 ||
-          prevProgress?.status === 'completed' ||
-          prevProgress?.status === 'mastered';
 
         return {
           ...module,
           progress: {
-            status: mp?.status || (isUnlocked ? 'in_progress' : 'locked'),
+            status: mp?.status || 'in_progress',
             scenariosCompleted: mp?.scenarios_completed || 0,
             scenariosWon: mp?.scenarios_won || 0,
             closeRate: mp?.best_close_rate || 0,
             attempts: mp?.attempts || 0,
-            isUnlocked
+            isUnlocked: true
           }
         };
       }) || [];
@@ -198,18 +191,18 @@ router.post('/:id/start', authMiddleware, tenantMiddleware, async (req, res) => 
       .eq('id', req.params.id)
       .single();
 
+    // Unlock all modules at once
     if (course?.modules?.length > 0) {
-      const firstModule = course.modules.sort((a, b) => a.unlock_order - b.unlock_order)[0];
+      const moduleRecords = course.modules.map(m => ({
+        user_id: req.user.id,
+        module_id: m.id,
+        status: 'in_progress',
+        started_at: new Date().toISOString()
+      }));
 
-      // Create module progress for first module
       await adminClient
         .from('user_module_progress')
-        .insert({
-          user_id: req.user.id,
-          module_id: firstModule.id,
-          status: 'in_progress',
-          started_at: new Date().toISOString()
-        });
+        .insert(moduleRecords);
     }
 
     res.json({ success: true, progress: courseProgress });

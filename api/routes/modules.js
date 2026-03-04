@@ -345,28 +345,7 @@ router.post('/:id/complete-scenario', authMiddleware, tenantMiddleware, async (r
         }
       }
 
-      // Unlock next module if exists
-      const { data: nextModule } = await adminClient
-        .from('course_modules')
-        .select('id')
-        .eq('course_id', module.course_id)
-        .gt('unlock_order', module.unlock_order)
-        .order('unlock_order')
-        .limit(1)
-        .single();
-
-      if (nextModule) {
-        await adminClient
-          .from('user_module_progress')
-          .upsert({
-            user_id: req.user.id,
-            module_id: nextModule.id,
-            status: 'in_progress',
-            started_at: new Date().toISOString()
-          }, {
-            onConflict: 'user_id,module_id'
-          });
-      }
+      // All modules are already unlocked at course start — no sequential gating
     }
 
     res.json({

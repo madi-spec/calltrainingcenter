@@ -117,6 +117,16 @@ function Training() {
       };
     }
 
+    // If server returned empty transcript, use the live transcript from Retell SDK
+    const serverRaw = callData.transcript?.raw || '';
+    if (serverRaw.length < 50 && transcript && transcript.length > 0) {
+      console.log('[CALL] Server transcript empty, using live transcript as fallback');
+      callData.transcript = {
+        raw: callData.transcript?.raw || '',
+        formatted: transcript
+      };
+    }
+
     // Save branching path score before ending
     if (sessionId && branchingPoints) {
       try {

@@ -228,7 +228,7 @@ export default function CourseDetail() {
               module={module}
               index={index}
               courseStarted={!!progress}
-              isLocked={index > 0 && !course.modules[index - 1]?.progress?.status?.match(/completed|mastered/)}
+              isLocked={false}
             />
           ))}
         </div>

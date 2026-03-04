@@ -146,15 +146,13 @@ router.post('/retry/:sessionId', async (req, res) => {
     const { sessionId } = req.params;
     const orgId = req.organization?.id || req.user?.organization_id;
 
-    // Kick off analysis again
-    runAnalysis(sessionId, orgId).catch(err => {
-      console.error(`[Analysis] Retry failed for session ${sessionId}:`, err.message);
-    });
+    // Await analysis — fire-and-forget dies on Vercel serverless
+    const analysis = await runAnalysis(sessionId, orgId);
 
-    res.json({ success: true, message: 'Analysis re-queued' });
+    res.json({ success: true, status: 'completed', analysis });
   } catch (error) {
     console.error('Error retrying analysis:', error);
-    res.status(500).json({ error: 'Failed to retry analysis' });
+    res.json({ success: false, status: 'failed', error: error.message });
   }
 });
 
@@ -268,8 +266,8 @@ async function runAnalysis(sessionId, orgId) {
 
   const transcript = session.transcript_raw || '';
   if (!transcript || transcript.trim().length < 50) {
-    console.log(`[Analysis] Skipping — transcript too short (${transcript.length} chars)`);
-    return;
+    console.log(`[Analysis] Failed — transcript too short (${transcript.length} chars)`);
+    throw new Error(`Transcript too short for analysis (${transcript.length} chars). The call recording may not have been captured properly.`);
   }
 
   const startTime = Date.now();

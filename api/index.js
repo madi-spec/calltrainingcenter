@@ -1558,28 +1558,36 @@ app.post('/api/calls/end', async (req, res) => {
       // Continue - the call may have already ended naturally
     }
 
-    // Wait for transcript to be available
-    await new Promise(r => setTimeout(r, 2000));
-
-    // Try to retrieve the call data
+    // Retry retrieving transcript — Retell may need time to process after call ends
     let call = null;
-    try {
-      call = await getRetellClient().call.retrieve(callId);
-    } catch (retrieveErr) {
-      console.log('[CALLS/END] Error retrieving call:', retrieveErr.message);
-      // Return empty transcript if we can't retrieve
-      return res.json({
-        success: true,
-        callId,
-        transcript: {
-          raw: '',
-          formatted: [],
-          duration: 0
-        }
-      });
-    }
+    const maxRetries = 4;
+    const delays = [2000, 3000, 5000, 5000]; // Total: up to 15s of waiting
 
-    console.log('[CALLS/END] Call retrieved, transcript length:', call.transcript?.length || 0);
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      await new Promise(r => setTimeout(r, delays[attempt]));
+
+      try {
+        call = await getRetellClient().call.retrieve(callId);
+        if (call?.transcript && call.transcript.length > 0) {
+          console.log(`[CALLS/END] Got transcript on attempt ${attempt + 1}, length: ${call.transcript.length}`);
+          break;
+        }
+        console.log(`[CALLS/END] Attempt ${attempt + 1}: transcript empty, retrying...`);
+      } catch (retrieveErr) {
+        console.log(`[CALLS/END] Attempt ${attempt + 1} error:`, retrieveErr.message);
+        if (attempt === maxRetries - 1) {
+          return res.json({
+            success: true,
+            callId,
+            transcript: {
+              raw: '',
+              formatted: [],
+              duration: 0
+            }
+          });
+        }
+      }
+    }
 
     res.json({
       success: true,

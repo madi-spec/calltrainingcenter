@@ -1073,6 +1073,10 @@ app.get('/api/diagnostic', async (req, res) => {
     checks.claudeResponse = resp.content[0].text;
   } catch (err) {
     checks.error = err.message;
+    checks.errorType = err.constructor.name;
+    checks.errorStatus = err.status;
+    checks.errorHeaders = err.headers;
+    if (err.error) checks.errorDetail = err.error;
   }
   res.json(checks);
 });

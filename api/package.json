@@ -7,7 +7,7 @@
     "dev": "node --watch index.js"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.24.0",
+    "@anthropic-ai/sdk": "^0.78.0",
     "@clerk/clerk-sdk-node": "^4.13.23",
     "@supabase/supabase-js": "^2.47.0",
     "axios": "^1.6.7",

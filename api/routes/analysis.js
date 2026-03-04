@@ -5,6 +5,38 @@ import { authMiddleware } from '../lib/auth.js';
 
 const router = express.Router();
 
+/**
+ * GET /api/analysis/diagnostic
+ * Unauthenticated diagnostic — tests Claude + Supabase connectivity
+ */
+router.get('/diagnostic', async (req, res) => {
+  const checks = { anthropicKey: false, supabase: false, claude: false };
+  try {
+    checks.anthropicKey = !!process.env.ANTHROPIC_API_KEY;
+
+    const supabase = createAdminClient();
+    const { count, error: dbErr } = await supabase
+      .from(TABLES.TRAINING_SESSIONS)
+      .select('*', { count: 'exact', head: true })
+      .limit(1);
+    checks.supabase = !dbErr;
+    checks.supabaseError = dbErr?.message;
+    checks.sessionCount = count;
+
+    const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    const resp = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 10,
+      messages: [{ role: 'user', content: 'Say "ok"' }]
+    });
+    checks.claude = true;
+    checks.claudeResponse = resp.content[0].text;
+  } catch (err) {
+    checks.error = err.message;
+  }
+  res.json(checks);
+});
+
 router.use(authMiddleware);
 
 /**

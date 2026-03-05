@@ -129,13 +129,13 @@ export function AuthProvider({ children }) {
     if (!user) return null;
 
     try {
-      const token = await getToken();
+      let token = await getToken();
 
-      const response = await fetch(`${apiUrl}/api/auth/sync-user`, {
+      const doSync = (t) => fetch(`${apiUrl}/api/auth/sync-user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${t}`
         },
         body: JSON.stringify({
           clerkId: user.id,
@@ -144,6 +144,14 @@ export function AuthProvider({ children }) {
           imageUrl: user.imageUrl
         })
       });
+
+      let response = await doSync(token);
+
+      // Retry with fresh token on 401
+      if (response.status === 401) {
+        token = await getToken({ skipCache: true });
+        if (token) response = await doSync(token);
+      }
 
       if (response.ok) {
         const data = await response.json();
@@ -209,17 +217,30 @@ export function AuthProvider({ children }) {
     return userIndex >= requiredIndex;
   }, [profile]);
 
-  // Make authenticated API request
+  // Make authenticated API request with automatic token refresh on 401
   const authFetch = useCallback(async (url, options = {}) => {
-    const token = await getToken();
-    const headers = {
-      ...options.headers,
-      'Authorization': `Bearer ${token}`
-    };
-
-    // Prepend API URL if the url starts with /api
+    let token = await getToken();
     const fullUrl = url.startsWith('/api') ? `${apiUrl}${url}` : url;
-    const response = await fetch(fullUrl, { ...options, headers });
+
+    const makeRequest = (t) => fetch(fullUrl, {
+      ...options,
+      headers: { ...options.headers, 'Authorization': `Bearer ${t}` }
+    });
+
+    let response = await makeRequest(token);
+
+    // If 401, force token refresh and retry once
+    if (response.status === 401) {
+      try {
+        token = await getToken({ skipCache: true });
+        if (token) {
+          response = await makeRequest(token);
+        }
+      } catch (refreshErr) {
+        console.error('[AUTH] Token refresh failed:', refreshErr);
+      }
+    }
+
     return response;
   }, [getToken]);
 

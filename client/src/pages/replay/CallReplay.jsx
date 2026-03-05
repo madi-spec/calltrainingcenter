@@ -31,7 +31,7 @@ function CallReplay() {
       // Fetch recording, session details, and bookmarks in parallel
       const [recordingRes, sessionRes, bookmarksRes] = await Promise.all([
         authFetch(`/api/recordings/${sessionId}`),
-        authFetch(`/api/training/sessions/${sessionId}`),
+        authFetch(`/api/training/session/${sessionId}`),
         authFetch(`/api/recordings/${sessionId}/bookmarks`)
       ]);
 

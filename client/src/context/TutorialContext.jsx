@@ -14,7 +14,7 @@ const TutorialContext = createContext(null);
 export function TutorialProvider({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { profile, authFetch } = useAuth();
+  const { profile, authFetch, refreshProfile } = useAuth();
 
   const [isActive, setIsActive] = useState(false);
   const [currentStep, setCurrentStep] = useState(null);
@@ -55,7 +55,7 @@ export function TutorialProvider({ children }) {
             if (!stored?.isActive) {
               setIsActive(false);
             }
-          } else if (!profile.onboarding_skipped) {
+          } else if (!profile.onboarding_skipped && !stored?.skipped) {
             // New user who hasn't started or completed onboarding
             const progress = profile.onboarding_progress || {};
             if (progress.steps_completed) {
@@ -196,31 +196,30 @@ export function TutorialProvider({ children }) {
     setCompletedSteps(allStepIds);
     saveState(allStepIds, null, false);
 
-    // Update backend
+    // Update backend and refresh profile so onboarding_completed is true locally
     try {
-      await authFetch('/api/onboarding/complete', {
-        method: 'POST'
-      });
+      await authFetch('/api/onboarding/complete', { method: 'POST' });
+      await refreshProfile();
     } catch (error) {
       console.error('Error completing tutorial:', error);
     }
-  }, [authFetch, saveState]);
+  }, [authFetch, saveState, refreshProfile]);
 
   // Skip the tutorial
   const skipTutorial = useCallback(async () => {
     setIsActive(false);
     setCurrentStep(null);
-    localStorage.removeItem(TUTORIAL_STORAGE_KEY);
+    // Keep a "skipped" marker in localStorage as a safety net
+    localStorage.setItem(TUTORIAL_STORAGE_KEY, JSON.stringify({ skipped: true }));
 
-    // Update backend
+    // Update backend and refresh profile
     try {
-      await authFetch('/api/onboarding/skip', {
-        method: 'POST'
-      });
+      await authFetch('/api/onboarding/skip', { method: 'POST' });
+      await refreshProfile();
     } catch (error) {
       console.error('Error skipping tutorial:', error);
     }
-  }, [authFetch]);
+  }, [authFetch, refreshProfile]);
 
   // Resume tutorial from where user left off
   const resumeTutorial = useCallback(() => {

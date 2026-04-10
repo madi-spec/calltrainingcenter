@@ -109,21 +109,25 @@ export async function generateTrainingProgram(orgId, sessionId, interviewContext
         );
 
         for (const scenario of scenarios) {
-          await supabase.from('scenario_templates').insert({
+          const { error: scenarioError } = await supabase.from('scenario_templates').insert({
+            organization_id: orgId,
             module_id: mod.id,
             version_id: version.id,
             name: scenario.name,
-            difficulty: mod.difficulty,
             base_situation: scenario.baseSituation,
-            csr_objectives: scenario.csrObjectives,
+            csr_objectives: JSON.stringify(scenario.csrObjectives),
             scoring_focus: scenario.scoringFocus,
-            customer_goals: scenario.customerGoals,
-            resolution_conditions: scenario.resolutionConditions,
+            customer_goals: JSON.stringify(scenario.customerGoals),
+            resolution_conditions: JSON.stringify(scenario.resolutionConditions),
             voice_agent_context: scenario.voiceAgentContext,
             scoring_rubric: scenario.scoringRubric,
             knowledge_item_ids: scenario.knowledgeItemIds || []
           });
-          scenarioCount++;
+          if (scenarioError) {
+            console.error('[Generator] Scenario insert error:', scenarioError.message);
+          } else {
+            scenarioCount++;
+          }
         }
       }
     }
@@ -260,7 +264,9 @@ Respond with JSON only:
     return JSON.parse(response.content[0].text);
   } catch {
     const match = response.content[0].text.match(/\[[\s\S]*\]/);
-    if (match) return JSON.parse(match[0]);
+    if (match) {
+      try { return JSON.parse(match[0]); } catch { /* fall through */ }
+    }
     throw new Error('Failed to parse course structure from AI response');
   }
 }
@@ -321,8 +327,11 @@ Respond with JSON only:
     return JSON.parse(response.content[0].text);
   } catch {
     const match = response.content[0].text.match(/\[[\s\S]*\]/);
-    if (match) return JSON.parse(match[0]);
-    throw new Error('Failed to parse scenarios from AI response');
+    if (match) {
+      try { return JSON.parse(match[0]); } catch { /* fall through */ }
+    }
+    console.error('[Generator] Failed to parse scenarios, returning empty array');
+    return [];
   }
 }
 
@@ -375,7 +384,9 @@ Use REAL company data from the knowledge graph — actual prices, service names,
     return JSON.parse(response.content[0].text);
   } catch {
     const match = response.content[0].text.match(/\[[\s\S]*\]/);
-    if (match) return JSON.parse(match[0]);
+    if (match) {
+      try { return JSON.parse(match[0]); } catch { /* fall through */ }
+    }
     throw new Error('Failed to parse scripts from AI response');
   }
 }

@@ -457,7 +457,8 @@ router.get('/sessions/:id/versions/:vId/scripts', async (req, res) => {
       .from('generated_scripts')
       .select('*')
       .eq('version_id', req.params.vId)
-      .order('script_type, created_at');
+      .order('script_type')
+      .order('created_at');
 
     if (req.query.type) query = query.eq('script_type', req.query.type);
 

@@ -398,37 +398,93 @@ Only include clear, meaningful relationships. Don't force links.`
 export async function ingestDocument(orgId, sessionId, docRecord, buffer, base64Data) {
   const supabase = createAdminClient();
 
-  // Step 1: Update status to parsing
   await supabase.from('kb_documents').update({ parse_status: 'parsing' }).eq('id', docRecord.id);
 
   try {
-    // Step 2: Extract text
+    // Step 1: Extract text from file
+    console.log('[Ingestion] Extracting text from', docRecord.filename);
     const { text, metadata } = await extractText(docRecord.file_type, buffer, base64Data);
+    console.log('[Ingestion] Extracted', text.length, 'chars from', docRecord.filename);
 
-    // Step 3: Store raw text
+    // Step 2: Store raw text
     await supabase.from('kb_documents').update({ raw_text: text }).eq('id', docRecord.id);
 
-    // Step 4: Classify
-    const { classification, summary } = await classifyDocument(text, docRecord.filename);
+    // Step 3: Single Claude call — classify AND extract in one shot
+    // This replaces separate classify + chunk + extract-per-chunk (was 3-5 calls, now 1)
+    const docPreview = text.substring(0, 30000); // Send up to 30K chars in one call
+    console.log('[Ingestion] Calling Claude for classification + extraction...');
+
+    const response = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 8192,
+      messages: [{
+        role: 'user',
+        content: `Analyze this document from a pest control / home services company. Do two things:
+
+1. CLASSIFY the document type
+2. EXTRACT all knowledge items
+
+Filename: ${docRecord.filename}
+Document content:
+${docPreview}
+
+Respond with JSON only:
+{
+  "classification": "pricing|playbook|handbook|sop|transcript|competitive|other",
+  "summary": "one sentence summary",
+  "items": [
+    {
+      "domain": "products|objections|processes|sales_playbook|competitive_intel|tribal_knowledge",
+      "itemType": "service_package|pricing_tier|selling_point|objection_response|call_procedure|escalation_rule|qualification_question|closing_technique|competitor_comparison|faq|best_practice",
+      "title": "clear descriptive name",
+      "content": { "relevant": "structured data" },
+      "confidence": 0.95
+    }
+  ]
+}
+
+Extract EVERY piece of actionable knowledge: service packages with pricing, selling points, objection handlers with responses, call procedures, sales techniques, competitor info, policies, FAQ answers. Be thorough.`
+      }]
+    });
+
+    const responseText = response.content[0].text;
+    console.log('[Ingestion] Claude responded, parsing...');
+
+    let parsed;
+    try {
+      parsed = JSON.parse(responseText);
+    } catch {
+      const match = responseText.match(/\{[\s\S]*\}/);
+      if (match) {
+        try { parsed = JSON.parse(match[0]); } catch { parsed = null; }
+      }
+    }
+
+    if (!parsed) {
+      console.error('[Ingestion] Failed to parse Claude response for', docRecord.filename);
+      await supabase.from('kb_documents').update({
+        parse_status: 'parsed',
+        doc_classification: 'other'
+      }).eq('id', docRecord.id);
+      return { document: { ...docRecord, doc_classification: 'other' }, items: [], summary: 'Could not extract structured data' };
+    }
+
+    const classification = parsed.classification || 'other';
+    const summary = parsed.summary || '';
+    const extractedItems = Array.isArray(parsed.items) ? parsed.items : [];
+
+    console.log('[Ingestion] Classified as', classification, '— extracted', extractedItems.length, 'items');
+
+    // Step 4: Update classification
     await supabase.from('kb_documents').update({ doc_classification: classification }).eq('id', docRecord.id);
 
-    // Step 5: Chunk
-    const chunks = chunkText(text);
-
-    // Step 6: Extract knowledge items from each chunk
-    const allExtracted = [];
-    for (const chunk of chunks) {
-      const items = await extractKnowledgeFromChunk(chunk, classification, allExtracted);
-      allExtracted.push(...items);
-    }
-
-    if (allExtracted.length === 0) {
+    if (extractedItems.length === 0) {
       await supabase.from('kb_documents').update({ parse_status: 'parsed' }).eq('id', docRecord.id);
-      return { document: docRecord, items: [] };
+      return { document: { ...docRecord, doc_classification: classification }, items: [], summary };
     }
 
-    // Step 7: Store knowledge items
-    const dbItems = await createKnowledgeItems(orgId, allExtracted.map(item => ({
+    // Step 5: Store knowledge items
+    const dbItems = await createKnowledgeItems(orgId, extractedItems.map(item => ({
       documentId: docRecord.id,
       domain: item.domain,
       itemType: item.itemType,
@@ -437,24 +493,9 @@ export async function ingestDocument(orgId, sessionId, docRecord, buffer, base64
       confidence: item.confidence
     })));
 
-    // Step 8: Identify and store links
-    const existingItems = await getKnowledgeItems(orgId);
-    const linkSuggestions = await identifyLinks(existingItems);
-    if (linkSuggestions.length > 0) {
-      const validLinks = linkSuggestions
-        .filter(l => l.sourceIndex < existingItems.length && l.targetIndex < existingItems.length)
-        .map(l => ({
-          sourceItemId: existingItems[l.sourceIndex].id,
-          targetItemId: existingItems[l.targetIndex].id,
-          linkType: l.linkType
-        }));
+    console.log('[Ingestion] Stored', dbItems.length, 'knowledge items');
 
-      if (validLinks.length > 0) {
-        await createKnowledgeLinks(validLinks);
-      }
-    }
-
-    // Step 9: Mark parsed
+    // Step 6: Mark parsed (skip linking for now — done lazily when needed)
     await supabase.from('kb_documents').update({ parse_status: 'parsed' }).eq('id', docRecord.id);
 
     return {
@@ -464,6 +505,7 @@ export async function ingestDocument(orgId, sessionId, docRecord, buffer, base64
       metadata
     };
   } catch (error) {
+    console.error('[Ingestion] Error processing', docRecord.filename, ':', error.message);
     await supabase.from('kb_documents').update({
       parse_status: 'failed',
       parse_error: error.message

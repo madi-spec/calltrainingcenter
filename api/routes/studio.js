@@ -10,6 +10,15 @@ import { publishVersion, getVersionDetails } from '../services/programPublisher.
 
 const router = Router();
 
+const DEFAULT_TOPICS = [
+  { name: 'Sales & Qualification', description: 'Discovery flow, qualification questions, closing techniques', icon: '💰', display_order: 1 },
+  { name: 'Objection Handling', description: 'Price objections, competitor comparisons, rebuttals', icon: '🛡️', display_order: 2 },
+  { name: 'Retention & Cancellation Saves', description: 'Save techniques, discount policies, re-service guarantees', icon: '🔄', display_order: 3 },
+  { name: 'Customer Service & De-escalation', description: 'Complaint handling, empathy, escalation rules', icon: '🎧', display_order: 4 },
+  { name: 'Product Knowledge', description: 'Service packages, pricing, warranties, service areas', icon: '📦', display_order: 5 },
+  { name: 'Competitive Intel', description: 'Competitor positioning, differentiators, win-back strategies', icon: '⚔️', display_order: 6 },
+];
+
 // All routes require admin
 router.use(authMiddleware, tenantMiddleware, requireRole('admin', 'super_admin'));
 
@@ -30,6 +39,22 @@ router.post('/sessions', async (req, res) => {
       .single();
 
     if (error) throw error;
+
+    // Auto-create default topics
+    if (data) {
+      await supabase.from('studio_topics').insert(
+        DEFAULT_TOPICS.map(t => ({
+          session_id: data.id,
+          organization_id: req.organization.id,
+          name: t.name,
+          description: t.description,
+          icon: t.icon,
+          source: 'default',
+          display_order: t.display_order
+        }))
+      );
+    }
+
     res.json(data);
   } catch (error) {
     console.error('[Studio] Create session error:', error.message);
@@ -67,13 +92,14 @@ router.get('/sessions/:id', async (req, res) => {
 
     if (error || !data) return res.status(404).json({ error: 'Session not found' });
 
-    // Also fetch documents and coverage stats
-    const [{ data: docs }, coverageStats] = await Promise.all([
+    // Also fetch documents, topics, and coverage stats
+    const [{ data: docs }, { data: topics }, coverageStats] = await Promise.all([
       supabase.from('kb_documents').select('*').eq('session_id', data.id).order('created_at'),
+      supabase.from('studio_topics').select('*').eq('session_id', data.id).order('display_order'),
       getKnowledgeCoverageStats(req.organization.id)
     ]);
 
-    res.json({ ...data, documents: docs || [], coverageStats });
+    res.json({ ...data, documents: docs || [], topics: topics || [], coverageStats });
   } catch (error) {
     console.error('[Studio] Get session error:', error.message);
     res.status(500).json({ error: error.message });
@@ -293,10 +319,10 @@ router.get('/sessions/:id/documents', async (req, res) => {
 
 router.post('/sessions/:id/chat', async (req, res) => {
   try {
-    const { message } = req.body;
+    const { message, topic_id } = req.body;
     if (!message) return res.status(400).json({ error: 'No message provided' });
 
-    const result = await processMessage(req.params.id, message);
+    const result = await processMessage(req.params.id, message, topic_id || null);
     res.json(result);
   } catch (error) {
     console.error('[Studio] Chat error:', error.message);
@@ -309,17 +335,189 @@ router.get('/sessions/:id/chat', async (req, res) => {
     const supabase = createAdminClient();
     const limit = parseInt(req.query.limit) || 50;
     const offset = parseInt(req.query.offset) || 0;
+    const topicId = req.query.topic_id;
 
-    const { data, error } = await supabase
+    let query = supabase
       .from('studio_messages')
       .select('*')
       .eq('session_id', req.params.id)
       .order('created_at', { ascending: true })
       .range(offset, offset + limit - 1);
 
+    if (topicId && topicId !== 'general') {
+      query = query.eq('topic_id', topicId);
+    } else {
+      query = query.is('topic_id', null);
+    }
+
+    const { data, error } = await query;
+
     if (error) throw error;
     res.json(data || []);
   } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ============================================================
+// TOPIC MANAGEMENT
+// ============================================================
+
+router.get('/sessions/:id/topics', async (req, res) => {
+  try {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from('studio_topics')
+      .select('*')
+      .eq('session_id', req.params.id)
+      .order('display_order');
+
+    if (error) throw error;
+    res.json(data || []);
+  } catch (error) {
+    console.error('[Studio] List topics error:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.post('/sessions/:id/topics', async (req, res) => {
+  try {
+    const { name, description, icon } = req.body;
+    if (!name) return res.status(400).json({ error: 'Topic name required' });
+
+    const supabase = createAdminClient();
+
+    // Get next display_order
+    const { data: existing } = await supabase
+      .from('studio_topics')
+      .select('display_order')
+      .eq('session_id', req.params.id)
+      .order('display_order', { ascending: false })
+      .limit(1);
+
+    const nextOrder = (existing?.[0]?.display_order || 0) + 1;
+
+    const { data, error } = await supabase
+      .from('studio_topics')
+      .insert({
+        session_id: req.params.id,
+        organization_id: req.organization.id,
+        name,
+        description: description || '',
+        icon: icon || '📝',
+        source: 'custom',
+        display_order: nextOrder
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    res.json(data);
+  } catch (error) {
+    console.error('[Studio] Create topic error:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.patch('/sessions/:id/topics/:tid', async (req, res) => {
+  try {
+    const { name, description, icon, status, display_order } = req.body;
+    const updates = { updated_at: new Date().toISOString() };
+    if (name !== undefined) updates.name = name;
+    if (description !== undefined) updates.description = description;
+    if (icon !== undefined) updates.icon = icon;
+    if (status !== undefined) updates.status = status;
+    if (display_order !== undefined) updates.display_order = display_order;
+
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from('studio_topics')
+      .update(updates)
+      .eq('id', req.params.tid)
+      .eq('session_id', req.params.id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    res.json(data);
+  } catch (error) {
+    console.error('[Studio] Update topic error:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.delete('/sessions/:id/topics/:tid', async (req, res) => {
+  try {
+    const supabase = createAdminClient();
+    // Only allow deleting custom topics
+    const { data: topic } = await supabase
+      .from('studio_topics')
+      .select('source')
+      .eq('id', req.params.tid)
+      .single();
+
+    if (topic?.source === 'default') {
+      return res.status(400).json({ error: 'Cannot delete default topics' });
+    }
+
+    const { error } = await supabase
+      .from('studio_topics')
+      .delete()
+      .eq('id', req.params.tid)
+      .eq('session_id', req.params.id);
+
+    if (error) throw error;
+    res.json({ deleted: true });
+  } catch (error) {
+    console.error('[Studio] Delete topic error:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.post('/sessions/:id/topics/:tid/generate', async (req, res) => {
+  try {
+    const supabase = createAdminClient();
+    const sessionId = req.params.id;
+    const topicId = req.params.tid;
+    const orgId = req.organization.id;
+
+    // Get topic and its interview context
+    const { data: topic } = await supabase
+      .from('studio_topics')
+      .select('*')
+      .eq('id', topicId)
+      .single();
+
+    if (!topic) return res.status(404).json({ error: 'Topic not found' });
+
+    // Update topic status
+    await supabase.from('studio_topics').update({ status: 'generating', updated_at: new Date().toISOString() }).eq('id', topicId);
+
+    // Generate with topic context
+    const version = await generateTrainingProgram(
+      orgId, sessionId, topic.interview_context || {}, null, topicId, topic.name
+    );
+
+    // Link version to topic
+    await supabase.from('studio_topics').update({
+      status: 'generated',
+      generated_version_id: version.id,
+      updated_at: new Date().toISOString()
+    }).eq('id', topicId);
+
+    // Store generation message in topic thread
+    await supabase.from('studio_messages').insert({
+      session_id: sessionId,
+      topic_id: topicId,
+      role: 'assistant',
+      content: `Training content for "${topic.name}" generated! Created ${version.generation_stats.courses} course, ${version.generation_stats.scenarios} scenarios, and ${version.generation_stats.scripts} scripts. Check the preview panels to review.`,
+      message_type: 'generation',
+      metadata: { versionId: version.id, stats: version.generation_stats }
+    });
+
+    res.json(version);
+  } catch (error) {
+    console.error('[Studio] Topic generate error:', error.message);
     res.status(500).json({ error: error.message });
   }
 });

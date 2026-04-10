@@ -42,7 +42,7 @@ export default function ChatPanel({ messages, loading, onSendMessage, onUploadFi
 
   return (
     <div
-      className="flex flex-col h-full bg-gray-900 border-r border-gray-700"
+      className="flex flex-col h-full bg-gray-900 border-b border-gray-700"
       onDragOver={e => e.preventDefault()}
       onDrop={handleDrop}
     >

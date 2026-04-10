@@ -193,14 +193,16 @@ export default function ContentStudio() {
         </div>
       </div>
 
-      {/* Main content: chat + preview */}
-      <div className="flex-1 grid grid-cols-[360px_1fr] min-h-0">
-        <ChatPanel
-          messages={messages}
-          loading={loading}
-          onSendMessage={sendMessage}
-          onUploadFiles={uploadFiles}
-        />
+      {/* Main content: chat on top, preview below */}
+      <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+        <div className="h-[280px] shrink-0">
+          <ChatPanel
+            messages={messages}
+            loading={loading}
+            onSendMessage={sendMessage}
+            onUploadFiles={uploadFiles}
+          />
+        </div>
         <PreviewPanel
           activeTab={activeTab}
           onTabChange={setActiveTab}

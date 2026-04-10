@@ -195,7 +195,7 @@ export default function ContentStudio() {
 
       {/* Main content: chat on top, preview below */}
       <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
-        <div className="h-[280px] shrink-0">
+        <div className="h-[560px] shrink-0">
           <ChatPanel
             messages={messages}
             loading={loading}

@@ -80,7 +80,12 @@ export function useStudioChat(sessionId) {
       const fileData = await Promise.all(
         Array.from(files).map(async (file) => {
           const buffer = await file.arrayBuffer();
-          const base64 = btoa(String.fromCharCode(...new Uint8Array(buffer)));
+          const bytes = new Uint8Array(buffer);
+          let binary = '';
+          for (let i = 0; i < bytes.length; i++) {
+            binary += String.fromCharCode(bytes[i]);
+          }
+          const base64 = btoa(binary);
           return { name: file.name, type: file.type, size: file.size, data: base64 };
         })
       );

@@ -331,69 +331,100 @@ router.post('/sessions/:id/chat', async (req, res) => {
     const generateTriggers = /\b(generate|create the (courses?|training|program|content)|i'?m ready|ready to generate|let'?s go|build (it|the|my)|do it|make (it|the|my))\b/i;
     const wantsGeneration = generateTriggers.test(message);
 
-    if (wantsGeneration && topicId) {
-      // Auto-trigger per-topic generation
-      console.log('[Studio] Generation intent detected for topic', topicId);
+    if (wantsGeneration) {
+      console.log('[Studio] Generation intent detected, topicId:', topicId || 'session-level');
 
-      const { data: topic } = await supabase
-        .from('studio_topics')
-        .select('*')
-        .eq('id', topicId)
-        .single();
+      // Determine generation context — topic-scoped or session-level
+      let topic = null;
+      let genTopicId = null;
+      let genTopicName = null;
+      let interviewCtx = {};
 
-      if (topic && ['interviewing', 'ready', 'not_started'].includes(topic.status)) {
-        // Store the user's message
-        await supabase.from('studio_messages').insert({
-          session_id: sessionId, topic_id: topicId,
-          role: 'user', content: message, message_type: 'chat'
-        });
+      if (topicId) {
+        const { data } = await supabase.from('studio_topics').select('*').eq('id', topicId).single();
+        topic = data;
+        if (topic) {
+          genTopicId = topic.id;
+          genTopicName = topic.name;
+          interviewCtx = topic.interview_context || {};
+        }
+      }
 
-        // Update topic status
+      if (!topic) {
+        // Session-level generation (no topics, or General thread)
+        const { data: session } = await supabase.from('studio_sessions').select('interview_context').eq('id', sessionId).single();
+        interviewCtx = session?.interview_context || {};
+      }
+
+      // Store user's message
+      await supabase.from('studio_messages').insert({
+        session_id: sessionId, topic_id: genTopicId,
+        role: 'user', content: message, message_type: 'chat'
+      });
+
+      // Update topic status if applicable
+      if (topic) {
         await supabase.from('studio_topics')
           .update({ status: 'generating', updated_at: new Date().toISOString() })
-          .eq('id', topicId);
+          .eq('id', genTopicId);
+      } else {
+        await supabase.from('studio_sessions')
+          .update({ status: 'generating', updated_at: new Date().toISOString() })
+          .eq('id', sessionId);
+      }
 
-        // Store "generating" message
+      const label = genTopicName ? `"${genTopicName}"` : 'your training program';
+      await supabase.from('studio_messages').insert({
+        session_id: sessionId, topic_id: genTopicId,
+        role: 'assistant', content: `Great — generating ${label} now. This takes 1-2 minutes...`,
+        message_type: 'generation'
+      });
+
+      try {
+        const version = await generateTrainingProgram(
+          orgId, sessionId, interviewCtx, null, genTopicId, genTopicName
+        );
+
+        if (topic) {
+          await supabase.from('studio_topics').update({
+            status: 'generated', generated_version_id: version.id, updated_at: new Date().toISOString()
+          }).eq('id', genTopicId);
+        } else {
+          await supabase.from('studio_sessions').update({
+            status: 'reviewing', updated_at: new Date().toISOString()
+          }).eq('id', sessionId);
+        }
+
+        const stats = version.generation_stats || {};
+        const doneMsg = `Done! Created ${stats.courses || 0} course${(stats.courses || 0) !== 1 ? 's' : ''}, ${stats.scenarios || 0} scenarios, and ${stats.scripts || 0} scripts${genTopicName ? ` for "${genTopicName}"` : ''}.${version.quality_score ? ` Quality score: ${Math.round(version.quality_score)}/100.` : ''}\n\nCheck the preview panels to review.${topic ? ' Click **Publish** on the topic tab when you\'re happy.' : ''}`;
+
         await supabase.from('studio_messages').insert({
-          session_id: sessionId, topic_id: topicId,
-          role: 'assistant', content: `Great — generating training content for "${topic.name}" now. This takes 1-2 minutes...`,
-          message_type: 'generation'
+          session_id: sessionId, topic_id: genTopicId,
+          role: 'assistant', content: doneMsg, message_type: 'generation',
+          metadata: { versionId: version.id, stats }
         });
 
-        try {
-          const version = await generateTrainingProgram(
-            orgId, sessionId, topic.interview_context || {}, null, topicId, topic.name
-          );
+        return res.json({ message: doneMsg, generated: true, versionId: version.id });
+      } catch (genError) {
+        console.error('[Studio] Generation failed:', genError.message);
 
-          await supabase.from('studio_topics').update({
-            status: 'generated',
-            generated_version_id: version.id,
-            updated_at: new Date().toISOString()
-          }).eq('id', topicId);
-
-          const doneMsg = `Done! Created ${version.generation_stats.courses || 0} course, ${version.generation_stats.scenarios || 0} scenarios, and ${version.generation_stats.scripts || 0} scripts for "${topic.name}".${version.quality_score ? ` Quality score: ${Math.round(version.quality_score)}/100.` : ''}\n\nCheck the preview panels to review, then click **Publish** on the topic tab when you're happy.`;
-
-          await supabase.from('studio_messages').insert({
-            session_id: sessionId, topic_id: topicId,
-            role: 'assistant', content: doneMsg, message_type: 'generation',
-            metadata: { versionId: version.id, stats: version.generation_stats }
-          });
-
-          return res.json({ message: doneMsg, generated: true, versionId: version.id });
-        } catch (genError) {
-          console.error('[Studio] Generation failed:', genError.message);
+        if (topic) {
           await supabase.from('studio_topics')
             .update({ status: 'interviewing', updated_at: new Date().toISOString() })
-            .eq('id', topicId);
-
-          const errorMsg = `Generation failed: ${genError.message}. Let's keep talking — you can try again when you're ready.`;
-          await supabase.from('studio_messages').insert({
-            session_id: sessionId, topic_id: topicId,
-            role: 'assistant', content: errorMsg, message_type: 'chat'
-          });
-
-          return res.json({ message: errorMsg, generated: false });
+            .eq('id', genTopicId);
+        } else {
+          await supabase.from('studio_sessions')
+            .update({ status: 'interviewing', updated_at: new Date().toISOString() })
+            .eq('id', sessionId);
         }
+
+        const errorMsg = `Generation failed: ${genError.message}. Let's keep talking — you can try again when you're ready.`;
+        await supabase.from('studio_messages').insert({
+          session_id: sessionId, topic_id: genTopicId,
+          role: 'assistant', content: errorMsg, message_type: 'chat'
+        });
+
+        return res.json({ message: errorMsg, generated: false });
       }
     }
 

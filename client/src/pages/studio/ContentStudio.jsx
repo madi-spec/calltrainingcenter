@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useStudioChat } from '../../hooks/useStudioChat';
 import ChatPanel from '../../components/studio/ChatPanel';
 import PreviewPanel from '../../components/studio/PreviewPanel';
+import TopicBar from '../../components/studio/TopicBar';
 import { ArrowLeft } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
@@ -12,7 +13,9 @@ export default function ContentStudio() {
   const { id: sessionId } = useParams();
   const navigate = useNavigate();
   const { getToken } = useAuth();
-  const { messages, setMessages, loading, coverageStats, fetchMessages, sendMessage, uploadFiles } = useStudioChat(sessionId);
+  const [topics, setTopics] = useState([]);
+  const [activeTopic, setActiveTopic] = useState(null);
+  const { messages, setMessages, loading, coverageStats, fetchMessages, sendMessage, uploadFiles } = useStudioChat(sessionId, activeTopic);
 
   const [activeTab, setActiveTab] = useState('knowledge');
   const [versions, setVersions] = useState([]);
@@ -25,25 +28,38 @@ export default function ContentStudio() {
   useEffect(() => {
     if (sessionId) {
       fetchMessages();
+      fetchTopics();
       fetchKnowledge();
       fetchVersions();
     }
   }, [sessionId]);
 
+  // Re-fetch messages when activeTopic changes
+  useEffect(() => {
+    fetchMessages();
+  }, [activeTopic]);
+
   // If knowledge exists but chat is empty, prompt the user
   useEffect(() => {
     if (messages.length === 0 && knowledgeStats?.total > 0 && !loading) {
-      // Knowledge exists from a previous session — nudge the user
-      const nudge = {
-        id: 'system-nudge',
-        role: 'assistant',
-        content: `I already have ${knowledgeStats.total} knowledge items from your previous uploads. You can:\n\n• **Upload more documents** using the 📎 button\n• **Ask me questions** about what I know ("What products did you find?")\n• **Tell me to generate** a training program ("Generate my training program")\n\nWhat would you like to do?`,
-        message_type: 'chat',
-        created_at: new Date().toISOString()
-      };
+      const nudge = activeTopic
+        ? {
+            id: 'system-nudge',
+            role: 'assistant',
+            content: `Let's work on this topic. I can see the knowledge graph has ${knowledgeStats.total} items. Type a message to start the interview for this topic, or say "generate" if you're ready.`,
+            message_type: 'chat',
+            created_at: new Date().toISOString()
+          }
+        : {
+            id: 'system-nudge',
+            role: 'assistant',
+            content: `I have ${knowledgeStats.total} knowledge items from your uploads. Select a topic above to start a focused interview, or upload more documents here.`,
+            message_type: 'chat',
+            created_at: new Date().toISOString()
+          };
       setMessages([nudge]);
     }
-  }, [knowledgeStats, messages.length, loading]);
+  }, [knowledgeStats, messages.length, loading, activeTopic]);
 
   // Poll for new messages after upload (background ingestion produces messages)
   useEffect(() => {
@@ -108,6 +124,51 @@ export default function ContentStudio() {
       }
     } catch (error) {
       console.error('Failed to fetch versions:', error);
+    }
+  }
+
+  async function fetchTopics() {
+    try {
+      const token = await getToken();
+      const res = await fetch(`${API_URL}/api/studio/sessions/${sessionId}/topics`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) setTopics(await res.json());
+    } catch (error) {
+      console.error('Failed to fetch topics:', error);
+    }
+  }
+
+  async function handleAddTopic() {
+    const name = prompt('Topic name:');
+    if (!name) return;
+    try {
+      const token = await getToken();
+      await fetch(`${API_URL}/api/studio/sessions/${sessionId}/topics`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name })
+      });
+      fetchTopics();
+    } catch (error) {
+      console.error('Failed to add topic:', error);
+    }
+  }
+
+  async function handleTopicGenerate(topicId) {
+    try {
+      const token = await getToken();
+      const res = await fetch(`${API_URL}/api/studio/sessions/${sessionId}/topics/${topicId}/generate`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        fetchTopics();
+        fetchVersions();
+        fetchMessages();
+      }
+    } catch (error) {
+      console.error('Topic generate error:', error);
     }
   }
 
@@ -192,6 +253,14 @@ export default function ContentStudio() {
           )}
         </div>
       </div>
+
+      {/* Topic selector */}
+      <TopicBar
+        topics={topics}
+        activeTopic={activeTopic}
+        onSelectTopic={setActiveTopic}
+        onAddTopic={handleAddTopic}
+      />
 
       {/* Main content: chat on top, preview below */}
       <div className="flex-1 flex flex-col min-h-0 overflow-hidden">

@@ -10,7 +10,7 @@ const supabase = SUPABASE_URL && SUPABASE_ANON_KEY
   ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
   : null;
 
-export function useStudioChat(sessionId) {
+export function useStudioChat(sessionId, topicId) {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [coverageStats, setCoverageStats] = useState(null);
@@ -21,7 +21,8 @@ export function useStudioChat(sessionId) {
     if (!sessionId) return;
     try {
       const token = await getToken();
-      const res = await fetch(`${API_URL}/api/studio/sessions/${sessionId}/chat`, {
+      const topicParam = topicId ? `?topic_id=${topicId}` : '?topic_id=general';
+      const res = await fetch(`${API_URL}/api/studio/sessions/${sessionId}/chat${topicParam}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {
@@ -31,7 +32,7 @@ export function useStudioChat(sessionId) {
     } catch (error) {
       console.error('Failed to fetch messages:', error);
     }
-  }, [sessionId, getToken]);
+  }, [sessionId, topicId, getToken]);
 
   const sendMessage = useCallback(async (text) => {
     if (!sessionId || !text.trim()) return;
@@ -48,7 +49,7 @@ export function useStudioChat(sessionId) {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ message: text })
+        body: JSON.stringify({ message: text, topic_id: topicId || null })
       });
 
       if (!res.ok) throw new Error('Chat request failed');
@@ -76,7 +77,7 @@ export function useStudioChat(sessionId) {
     } finally {
       setLoading(false);
     }
-  }, [sessionId, getToken]);
+  }, [sessionId, topicId, getToken]);
 
   const uploadFiles = useCallback(async (files) => {
     if (!sessionId) return;

@@ -181,6 +181,16 @@ async function generateScenarioText(module, profile, productContext, index, { sa
     ? `\n## Example Scenario Situations (match this quality and specificity)\n${templateExamples.slice(0, 3).map(t => `- ${t.base_situation}`).join('\n')}`
     : '';
 
+  // Enhanced template context from Content Studio
+  const firstTemplate = templateExamples[0];
+  const voiceContextBlock = firstTemplate?.voice_agent_context
+    ? `\n## Voice Agent Context (use this to shape the customer personality)\n${firstTemplate.voice_agent_context}`
+    : '';
+
+  const rubricBlock = firstTemplate?.scoring_rubric
+    ? `\n## Scoring Rubric (this scenario will be evaluated on)\n${JSON.stringify(firstTemplate.scoring_rubric)}`
+    : '';
+
   const prompt = `Generate a realistic customer service training scenario for a pest control company.
 
 ## Context
@@ -201,7 +211,7 @@ ${productContext.hasProducts ? productContext.packages.map(pkg =>
   `- ${pkg.name}: $${pkg.price}/${pkg.frequency || 'service'}`
 ).join('\n') : 'No specific packages configured - use generic pest control services'}
 ${guidelinesBlock}
-${templateBlock}
+${templateBlock}${voiceContextBlock}${rubricBlock}
 
 ## Requirements
 Generate a brief, realistic scenario description (2-3 sentences) and an opening line the customer would say when calling.
@@ -403,13 +413,25 @@ export async function generateScenariosForModule(userId, organizationId, module)
     scenarios.push(...aiScenarios);
 
     // Fill the rest with fallback
+    // Prefer Content Studio templates with voice context over hardcoded fallbacks
+    const enhancedTemplates = templates.filter(t => t.voice_agent_context);
+
     for (let i = templateCount + aiLimit; i < scenarioCount; i++) {
       const profile = profiles[i % profiles.length];
       const willClose = determineOutcome(module.difficulty, profile);
+
+      let situationText;
+      if (enhancedTemplates.length > 0) {
+        const enhancedTemplate = enhancedTemplates[i % enhancedTemplates.length];
+        situationText = enhancedTemplate.base_situation;
+      } else {
+        situationText = generateFallbackSituation(module, profile, productContext);
+      }
+
       scenarios.push({
         user_id: userId, module_id: module.id, profile_id: profile.id,
         sequence_number: i + 1,
-        situation_text: generateFallbackSituation(module, profile, productContext),
+        situation_text: situationText,
         opening_line: generateFallbackOpeningLine(profile),
         will_close: willClose,
         close_stage: willClose ? Math.floor(Math.random() * 3) + 1 : null, status: 'pending'

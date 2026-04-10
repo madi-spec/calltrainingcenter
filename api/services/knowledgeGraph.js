@@ -7,7 +7,7 @@ export async function createKnowledgeItem(orgId, { documentId, domain, itemType,
   const { data, error } = await supabase
     .from('kb_knowledge_items')
     .insert({
-      org_id: orgId,
+      organization_id: orgId,
       document_id: documentId,
       domain,
       item_type: itemType,
@@ -26,7 +26,7 @@ export async function createKnowledgeItems(orgId, items) {
   if (!items.length) return [];
   const supabase = createAdminClient();
   const rows = items.map(({ documentId, domain, itemType, title, content, confidence }) => ({
-    org_id: orgId,
+    organization_id: orgId,
     document_id: documentId,
     domain,
     item_type: itemType,
@@ -67,7 +67,7 @@ export async function getKnowledgeItems(orgId, { domain, documentId } = {}) {
   let query = supabase
     .from('kb_knowledge_items')
     .select('*, document:kb_documents(id, filename, doc_classification)')
-    .eq('org_id', orgId)
+    .eq('organization_id', orgId)
     .order('domain')
     .order('created_at');
 
@@ -85,7 +85,7 @@ export async function getKnowledgeLinks(orgId) {
   const { data: items, error: itemsError } = await supabase
     .from('kb_knowledge_items')
     .select('id')
-    .eq('org_id', orgId);
+    .eq('organization_id', orgId);
 
   if (itemsError) throw new Error(`Failed to fetch item IDs: ${itemsError.message}`);
   if (!items.length) return [];
@@ -130,7 +130,7 @@ export async function getKnowledgeCoverageStats(orgId) {
   const { data: items, error } = await supabase
     .from('kb_knowledge_items')
     .select('domain, confidence, verified')
-    .eq('org_id', orgId);
+    .eq('organization_id', orgId);
 
   if (error) throw new Error(`Failed to get coverage stats: ${error.message}`);
 
@@ -205,7 +205,7 @@ export async function clearOrgKnowledge(orgId) {
   const { error } = await supabase
     .from('kb_knowledge_items')
     .delete()
-    .eq('org_id', orgId);
+    .eq('organization_id', orgId);
 
   if (error) throw new Error(`Failed to clear org knowledge: ${error.message}`);
 }

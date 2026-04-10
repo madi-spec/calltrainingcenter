@@ -10,7 +10,7 @@ const anthropic = new Anthropic();
  * Creates a new program_version with courses, scenarios, and scripts.
  * Returns the version record with generation stats.
  */
-export async function generateTrainingProgram(orgId, sessionId, interviewContext = {}, onProgress) {
+export async function generateTrainingProgram(orgId, sessionId, interviewContext = {}, onProgress, topicId = null, topicName = null) {
   const supabase = createAdminClient();
   const progress = (step, detail) => onProgress?.({ step, detail });
 
@@ -29,6 +29,7 @@ export async function generateTrainingProgram(orgId, sessionId, interviewContext
     .insert({
       organization_id: orgId,
       session_id: sessionId,
+      topic_id: topicId,
       version_number: nextVersion,
       status: 'generating',
       generation_stats: { started_at: new Date().toISOString() }
@@ -52,7 +53,7 @@ export async function generateTrainingProgram(orgId, sessionId, interviewContext
 
     // Step 2: Generate course structure
     progress('courses', 'Designing course structure...');
-    const courses = await generateCourseStructure(graphSummary, priorities, painPoints, items);
+    const courses = await generateCourseStructure(graphSummary, priorities, painPoints, items, topicName);
 
     // Step 3: Store courses and modules
     progress('storing_courses', 'Saving courses...');
@@ -217,7 +218,7 @@ export async function generateTrainingProgram(orgId, sessionId, interviewContext
 // COURSE STRUCTURE GENERATION
 // ============================================================
 
-async function generateCourseStructure(graphSummary, priorities, painPoints, items) {
+async function generateCourseStructure(graphSummary, priorities, painPoints, items, topicName = null) {
   const priorityContext = priorities.length > 0
     ? `\n\nAdmin priorities (ordered):\n${priorities.map((p, i) => `${i + 1}. ${p.topic}${p.reason ? ` — ${p.reason}` : ''}`).join('\n')}`
     : '';
@@ -225,6 +226,10 @@ async function generateCourseStructure(graphSummary, priorities, painPoints, ite
   const painContext = painPoints.length > 0
     ? `\n\nKey pain points:\n${painPoints.map(p => `- ${p}`).join('\n')}`
     : '';
+
+  const scopeInstruction = topicName
+    ? `Create exactly 1 course focused on "${topicName}" with 3 modules (easy, medium, hard). The course should thoroughly cover this topic using the relevant knowledge from the graph.`
+    : `Create 3-6 courses, each with 3 modules (easy, medium, hard). Courses should be ordered from foundational to advanced. Priority topics should get dedicated courses with more scenarios.`;
 
   const response = await anthropic.messages.create({
     model: 'claude-sonnet-4-20250514',
@@ -237,7 +242,7 @@ ${graphSummary}
 ${priorityContext}
 ${painContext}
 
-Create 3-6 courses, each with 3 modules (easy, medium, hard). Courses should be ordered from foundational to advanced. Priority topics should get dedicated courses with more scenarios.
+${scopeInstruction}
 
 Respond with JSON only:
 [

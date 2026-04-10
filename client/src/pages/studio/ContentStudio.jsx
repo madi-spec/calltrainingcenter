@@ -30,6 +30,22 @@ export default function ContentStudio() {
     }
   }, [sessionId]);
 
+  // Poll for new messages after upload (background ingestion produces messages)
+  useEffect(() => {
+    const lastMsg = messages[messages.length - 1];
+    const isProcessing = lastMsg?.message_type === 'upload' ||
+      lastMsg?.content?.includes('analyzing them now');
+
+    if (!isProcessing) return;
+
+    const interval = setInterval(() => {
+      fetchMessages();
+      fetchKnowledge();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [messages, fetchMessages]);
+
   // Reload data when messages change (new content generated)
   useEffect(() => {
     const lastMsg = messages[messages.length - 1];

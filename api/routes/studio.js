@@ -111,10 +111,10 @@ router.post('/sessions/:id/documents', async (req, res) => {
     const supabase = createAdminClient();
     const sessionId = req.params.id;
     const orgId = req.organization.id;
-    const results = [];
+    const docRecords = [];
 
+    // Step 1: Store documents immediately (fast)
     for (const file of files) {
-      // Create document record
       const { data: docRecord, error: docError } = await supabase
         .from('kb_documents')
         .insert({
@@ -128,31 +128,63 @@ router.post('/sessions/:id/documents', async (req, res) => {
         .select()
         .single();
 
-      if (docError) {
-        results.push({ filename: file.name, error: docError.message });
-        continue;
-      }
+      if (docError) continue;
 
-      // Decode and ingest
+      // Store raw text from base64 immediately
       try {
         const buffer = Buffer.from(file.data, 'base64');
-        const result = await ingestDocument(orgId, sessionId, docRecord, buffer, file.data);
-        results.push({
-          filename: file.name,
-          documentId: docRecord.id,
-          classification: result.document.doc_classification,
-          itemsExtracted: result.items.length,
-          summary: result.summary
-        });
-      } catch (ingestError) {
-        results.push({ filename: file.name, documentId: docRecord.id, error: ingestError.message });
+        // Just extract text — don't call Claude yet
+        const { extractText: extractTextFn } = await import('../services/documentIngestion.js');
+        const { text } = await extractTextFn(file.type, buffer, file.data);
+        await supabase.from('kb_documents').update({
+          raw_text: text,
+          parse_status: 'parsing'
+        }).eq('id', docRecord.id);
+        docRecords.push({ ...docRecord, raw_text: text, _base64: file.data });
+      } catch (extractError) {
+        await supabase.from('kb_documents').update({
+          parse_status: 'failed',
+          parse_error: extractError.message
+        }).eq('id', docRecord.id);
       }
     }
 
-    // Generate welcome/update message after all docs processed
-    const welcome = await generateWelcomeMessage(sessionId);
+    // Step 2: Return immediately with upload confirmation message
+    const uploadMsg = `I've received ${docRecords.length} document${docRecords.length !== 1 ? 's' : ''}:\n\n${docRecords.map(d => `📄 **${d.filename}**`).join('\n')}\n\nI'm analyzing them now — this may take a moment. Send me a message or just wait, and I'll report what I found.`;
 
-    res.json({ documents: results, message: welcome.message, coverageStats: welcome.coverageStats });
+    await supabase.from('studio_messages').insert({
+      session_id: sessionId,
+      role: 'assistant',
+      content: uploadMsg,
+      message_type: 'upload'
+    });
+
+    // Step 3: Kick off ingestion in background (don't await)
+    // This processes with Claude and will be available when user sends next message
+    (async () => {
+      try {
+        for (const doc of docRecords) {
+          const buffer = Buffer.from(doc._base64, 'base64');
+          await ingestDocument(orgId, sessionId, doc, buffer, doc._base64);
+        }
+        // Generate welcome message after ingestion
+        await generateWelcomeMessage(sessionId);
+      } catch (bgError) {
+        console.error('[Studio] Background ingestion error:', bgError.message);
+        // Store error message in chat
+        await supabase.from('studio_messages').insert({
+          session_id: sessionId,
+          role: 'assistant',
+          content: `I had trouble analyzing some of your documents: ${bgError.message}. You can try uploading them again or send me a message to continue.`,
+          message_type: 'chat'
+        });
+      }
+    })();
+
+    res.json({
+      documents: docRecords.map(d => ({ filename: d.filename, documentId: d.id, status: 'processing' })),
+      message: uploadMsg
+    });
   } catch (error) {
     console.error('[Studio] Upload error:', error.message);
     res.status(500).json({ error: error.message });

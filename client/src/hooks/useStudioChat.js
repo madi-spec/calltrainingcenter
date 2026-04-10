@@ -1,7 +1,10 @@
 import { useState, useCallback, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { createClient } from '@supabase/supabase-js';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 export function useStudioChat(sessionId) {
   const [messages, setMessages] = useState([]);
@@ -77,37 +80,54 @@ export function useStudioChat(sessionId) {
 
     try {
       const token = await getToken();
-      const fileData = await Promise.all(
-        Array.from(files).map(async (file) => {
-          const buffer = await file.arrayBuffer();
-          const bytes = new Uint8Array(buffer);
-          let binary = '';
-          for (let i = 0; i < bytes.length; i++) {
-            binary += String.fromCharCode(bytes[i]);
-          }
-          const base64 = btoa(binary);
-          return { name: file.name, type: file.type, size: file.size, data: base64 };
-        })
-      );
 
+      // Upload files directly to Supabase Storage (bypasses Vercel 4.5MB body limit)
+      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const uploadedFiles = [];
+
+      for (const file of Array.from(files)) {
+        const storagePath = `${sessionId}/${Date.now()}-${file.name}`;
+        const { error: uploadError } = await supabase.storage
+          .from('studio-documents')
+          .upload(storagePath, file);
+
+        if (uploadError) {
+          console.error('Storage upload error:', uploadError.message);
+          continue;
+        }
+
+        uploadedFiles.push({
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          storagePath
+        });
+      }
+
+      if (uploadedFiles.length === 0) {
+        throw new Error('No files could be uploaded');
+      }
+
+      // Show upload message
       setMessages(prev => [...prev, {
         id: Date.now(),
         role: 'user',
-        content: `Uploaded ${fileData.length} file${fileData.length !== 1 ? 's' : ''}: ${fileData.map(f => f.name).join(', ')}`,
+        content: `Uploaded ${uploadedFiles.length} file${uploadedFiles.length !== 1 ? 's' : ''}: ${uploadedFiles.map(f => f.name).join(', ')}`,
         message_type: 'upload',
         created_at: new Date().toISOString()
       }]);
 
+      // Tell the API to process the uploaded files
       const res = await fetch(`${API_URL}/api/studio/sessions/${sessionId}/documents`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ files: fileData })
+        body: JSON.stringify({ files: uploadedFiles })
       });
 
-      if (!res.ok) throw new Error('Upload failed');
+      if (!res.ok) throw new Error('Processing failed');
       const data = await res.json();
 
       if (data.message) {
@@ -124,6 +144,13 @@ export function useStudioChat(sessionId) {
       return data;
     } catch (error) {
       console.error('Upload error:', error);
+      setMessages(prev => [...prev, {
+        id: Date.now() + 1,
+        role: 'assistant',
+        content: `Upload failed: ${error.message}. Please try again.`,
+        message_type: 'chat',
+        created_at: new Date().toISOString()
+      }]);
     } finally {
       setLoading(false);
     }

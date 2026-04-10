@@ -133,8 +133,28 @@ router.post('/sessions/:id/documents', async (req, res) => {
       }
 
       try {
-        const buffer = Buffer.from(file.data, 'base64');
-        const result = await ingestDocument(orgId, sessionId, docRecord, buffer, file.data);
+        let buffer, base64Data;
+
+        if (file.storagePath) {
+          // File uploaded to Supabase Storage — download it
+          const { data: fileData, error: downloadError } = await supabase.storage
+            .from('studio-documents')
+            .download(file.storagePath);
+
+          if (downloadError) throw new Error(`Storage download failed: ${downloadError.message}`);
+
+          const arrayBuffer = await fileData.arrayBuffer();
+          buffer = Buffer.from(arrayBuffer);
+          base64Data = buffer.toString('base64');
+        } else if (file.data) {
+          // Legacy: base64 data sent directly
+          buffer = Buffer.from(file.data, 'base64');
+          base64Data = file.data;
+        } else {
+          throw new Error('No file data or storage path provided');
+        }
+
+        const result = await ingestDocument(orgId, sessionId, docRecord, buffer, base64Data);
         results.push({
           filename: file.name,
           documentId: docRecord.id,

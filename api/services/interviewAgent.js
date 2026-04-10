@@ -29,7 +29,7 @@ function buildContextBlock(graphSummary, coverageStats, validationIssues, interv
   context += `Total items: ${coverageStats.total} | Verified: ${coverageStats.verified}\n\n`;
 
   context += `### Domain Coverage\n`;
-  for (const [domain, stats] of Object.entries(coverageStats.domains)) {
+  for (const [domain, stats] of Object.entries(coverageStats.byDomain)) {
     const bar = stats.count > 0 ? '✅' : '⬜';
     context += `${bar} ${domain}: ${stats.count} items (${stats.verified} verified)\n`;
   }
@@ -187,7 +187,7 @@ export async function generateWelcomeMessage(sessionId) {
     welcomeContent += `📄 **${doc.filename}** — classified as ${doc.doc_classification}\n`;
   }
 
-  welcomeContent += `\n**Knowledge extracted:** ${coverageStats.total} items across ${Object.values(coverageStats.domains).filter(d => d.count > 0).length} domains.\n`;
+  welcomeContent += `\n**Knowledge extracted:** ${coverageStats.total} items across ${Object.values(coverageStats.byDomain).filter(d => d.count > 0).length} domains.\n`;
 
   if (validationIssues.length > 0) {
     const errors = validationIssues.filter(i => i.severity === 'error');
@@ -197,7 +197,7 @@ export async function generateWelcomeMessage(sessionId) {
     }
   } else {
     // Ask a deepening question
-    const emptyDomains = Object.entries(coverageStats.domains)
+    const emptyDomains = Object.entries(coverageStats.byDomain)
       .filter(([, stats]) => stats.count === 0)
       .map(([domain]) => domain);
 

@@ -129,18 +129,18 @@ export async function getKnowledgeCoverageStats(orgId) {
 
   const { data: items, error } = await supabase
     .from('kb_knowledge_items')
-    .select('domain, confidence, verified')
+    .select('domain, confidence, admin_verified')
     .eq('organization_id', orgId);
 
   if (error) throw new Error(`Failed to get coverage stats: ${error.message}`);
 
   const total = items.length;
-  const verified = items.filter(i => i.verified).length;
+  const verified = items.filter(i => i.admin_verified).length;
 
   const byDomain = {};
   for (const domain of DOMAINS) {
     const domainItems = items.filter(i => i.domain === domain);
-    const domainVerified = domainItems.filter(i => i.verified).length;
+    const domainVerified = domainItems.filter(i => i.admin_verified).length;
     const avgConfidence = domainItems.length
       ? domainItems.reduce((sum, i) => sum + (i.confidence || 0), 0) / domainItems.length
       : 0;

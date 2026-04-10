@@ -219,7 +219,7 @@ function KnowledgeGraphView({ stats, items }) {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-3 gap-3">
-        {Object.entries(stats.domains).map(([domain, data]) => {
+        {Object.entries(stats.byDomain || stats.domains || {}).map(([domain, data]) => {
           const config = domainLabels[domain] || { label: domain, color: 'bg-gray-500' };
           return (
             <div key={domain} className="bg-gray-800 rounded-lg p-3">

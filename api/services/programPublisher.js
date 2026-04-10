@@ -6,14 +6,14 @@ export async function publishVersion(orgId, sessionId, versionId) {
 
   const { data: version, error: versionError } = await supabase
     .from('program_versions')
-    .select('id, status, org_id')
+    .select('id, status, organization_id')
     .eq('id', versionId)
     .single();
 
   if (versionError || !version) {
     throw new Error(`Version not found: ${versionError?.message ?? 'no record'}`);
   }
-  if (version.org_id !== orgId) {
+  if (version.organization_id !== orgId) {
     throw new Error('Version does not belong to this organization');
   }
   if (version.status === 'published') {
@@ -26,7 +26,7 @@ export async function publishVersion(orgId, sessionId, versionId) {
   const { error: archiveError } = await supabase
     .from('program_versions')
     .update({ status: 'archived' })
-    .eq('org_id', orgId)
+    .eq('organization_id', orgId)
     .eq('status', 'published');
 
   if (archiveError) {

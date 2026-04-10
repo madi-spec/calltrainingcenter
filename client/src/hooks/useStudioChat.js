@@ -177,5 +177,5 @@ export function useStudioChat(sessionId) {
     }
   }, [sessionId, getToken]);
 
-  return { messages, loading, coverageStats, fetchMessages, sendMessage, uploadFiles, setCoverageStats };
+  return { messages, setMessages, loading, coverageStats, fetchMessages, sendMessage, uploadFiles, setCoverageStats };
 }

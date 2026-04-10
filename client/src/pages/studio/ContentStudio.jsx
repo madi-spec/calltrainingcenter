@@ -12,7 +12,7 @@ export default function ContentStudio() {
   const { id: sessionId } = useParams();
   const navigate = useNavigate();
   const { getToken } = useAuth();
-  const { messages, loading, coverageStats, fetchMessages, sendMessage, uploadFiles } = useStudioChat(sessionId);
+  const { messages, setMessages, loading, coverageStats, fetchMessages, sendMessage, uploadFiles } = useStudioChat(sessionId);
 
   const [activeTab, setActiveTab] = useState('knowledge');
   const [versions, setVersions] = useState([]);
@@ -29,6 +29,21 @@ export default function ContentStudio() {
       fetchVersions();
     }
   }, [sessionId]);
+
+  // If knowledge exists but chat is empty, prompt the user
+  useEffect(() => {
+    if (messages.length === 0 && knowledgeStats?.total > 0 && !loading) {
+      // Knowledge exists from a previous session — nudge the user
+      const nudge = {
+        id: 'system-nudge',
+        role: 'assistant',
+        content: `I already have ${knowledgeStats.total} knowledge items from your previous uploads. You can:\n\n• **Upload more documents** using the 📎 button\n• **Ask me questions** about what I know ("What products did you find?")\n• **Tell me to generate** a training program ("Generate my training program")\n\nWhat would you like to do?`,
+        message_type: 'chat',
+        created_at: new Date().toISOString()
+      };
+      setMessages([nudge]);
+    }
+  }, [knowledgeStats, messages.length, loading]);
 
   // Poll for new messages after upload (background ingestion produces messages)
   useEffect(() => {

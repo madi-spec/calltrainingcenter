@@ -61,8 +61,10 @@ export default function ChatPanel({ messages, loading, onSendMessage, onUploadFi
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {messages.length === 0 && !loading && (
           <div className="text-center py-12 text-gray-500">
-            <p className="text-sm">Upload documents to get started</p>
-            <p className="text-xs mt-1">Drag & drop files or use the 📎 button</p>
+            <p className="text-sm font-medium text-gray-400">Welcome to Content Studio</p>
+            <p className="text-xs mt-2">Upload documents using the 📎 button below</p>
+            <p className="text-xs mt-1">or type a message to start the conversation</p>
+            <p className="text-xs mt-3 text-gray-600">Try: "What do you know about my company?" or upload a PDF, DOCX, or spreadsheet</p>
           </div>
         )}
         {messages.map((msg, i) => (

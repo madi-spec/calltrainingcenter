@@ -45,6 +45,7 @@ import certificatesRoutes from './routes/certificates.js';
 import sessionNotesRoutes from './routes/sessionNotes.js';
 import devDashboardRoutes from './routes/devDashboard.js';
 import knowledgeBaseRoutes from './routes/knowledgeBase.js';
+import studioRoutes from './routes/studio.js';
 
 // Import services
 import {
@@ -1083,6 +1084,7 @@ app.use('/api/certificates', certificatesRoutes);
 app.use('/api/session-notes', sessionNotesRoutes);
 app.use('/api/dev-dashboard', devDashboardRoutes);
 app.use('/api/knowledge-base', knowledgeBaseRoutes);
+app.use('/api/studio', studioRoutes);
 
 // ============ LEGACY ROUTES (maintain backward compatibility) ============
 

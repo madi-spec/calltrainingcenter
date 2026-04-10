@@ -172,6 +172,43 @@ export default function ContentStudio() {
     }
   }
 
+  async function handleMarkReady(topicId) {
+    try {
+      const token = await getToken();
+      await fetch(`${API_URL}/api/studio/sessions/${sessionId}/topics/${topicId}`, {
+        method: 'PATCH',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'ready' })
+      });
+      fetchTopics();
+    } catch (error) {
+      console.error('Mark ready error:', error);
+    }
+  }
+
+  async function handleTopicPublish(topicId, versionId) {
+    if (!versionId) return;
+    try {
+      const token = await getToken();
+      const res = await fetch(`${API_URL}/api/studio/sessions/${sessionId}/versions/${versionId}/publish`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        // Update topic status
+        await fetch(`${API_URL}/api/studio/sessions/${sessionId}/topics/${topicId}`, {
+          method: 'PATCH',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'published' })
+        });
+        fetchTopics();
+        fetchVersions();
+      }
+    } catch (error) {
+      console.error('Topic publish error:', error);
+    }
+  }
+
   async function fetchVersionDetails(versionId) {
     try {
       const token = await getToken();
@@ -260,6 +297,9 @@ export default function ContentStudio() {
         activeTopic={activeTopic}
         onSelectTopic={setActiveTopic}
         onAddTopic={handleAddTopic}
+        onGenerate={handleTopicGenerate}
+        onPublish={handleTopicPublish}
+        onMarkReady={handleMarkReady}
       />
 
       {/* Main content: chat on top, preview below */}

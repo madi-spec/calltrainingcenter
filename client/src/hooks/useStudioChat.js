@@ -6,6 +6,10 @@ const API_URL = import.meta.env.VITE_API_URL || '';
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
+const supabase = SUPABASE_URL && SUPABASE_ANON_KEY
+  ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  : null;
+
 export function useStudioChat(sessionId) {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -81,27 +85,44 @@ export function useStudioChat(sessionId) {
     try {
       const token = await getToken();
 
-      // Upload files directly to Supabase Storage (bypasses Vercel 4.5MB body limit)
-      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       const uploadedFiles = [];
 
-      for (const file of Array.from(files)) {
-        const storagePath = `${sessionId}/${Date.now()}-${file.name}`;
-        const { error: uploadError } = await supabase.storage
-          .from('studio-documents')
-          .upload(storagePath, file);
+      if (supabase) {
+        // Upload files to Supabase Storage (bypasses Vercel 4.5MB body limit)
+        for (const file of Array.from(files)) {
+          const storagePath = `${sessionId}/${Date.now()}-${file.name}`;
+          const { error: uploadError } = await supabase.storage
+            .from('studio-documents')
+            .upload(storagePath, file);
 
-        if (uploadError) {
-          console.error('Storage upload error:', uploadError.message);
-          continue;
+          if (uploadError) {
+            console.error('Storage upload error:', uploadError.message);
+            continue;
+          }
+
+          uploadedFiles.push({
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            storagePath
+          });
         }
-
-        uploadedFiles.push({
-          name: file.name,
-          type: file.type,
-          size: file.size,
-          storagePath
-        });
+      } else {
+        // Fallback: send as base64 (works for small files < 4MB)
+        for (const file of Array.from(files)) {
+          const buffer = await file.arrayBuffer();
+          const bytes = new Uint8Array(buffer);
+          let binary = '';
+          for (let i = 0; i < bytes.length; i++) {
+            binary += String.fromCharCode(bytes[i]);
+          }
+          uploadedFiles.push({
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            data: btoa(binary)
+          });
+        }
       }
 
       if (uploadedFiles.length === 0) {

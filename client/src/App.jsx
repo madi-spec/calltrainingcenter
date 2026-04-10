@@ -56,6 +56,8 @@ const MyCertificates = lazy(() => import('./pages/certificates/MyCertificates'))
 const VerifyCertificate = lazy(() => import('./pages/certificates/VerifyCertificate'));
 const DevDashboard = lazy(() => import('./pages/dev/DevDashboard'));
 const KnowledgeBase = lazy(() => import('./pages/settings/KnowledgeBase'));
+const StudioSessions = lazy(() => import('./pages/studio/StudioSessions'));
+const ContentStudio = lazy(() => import('./pages/studio/ContentStudio'));
 
 // Loading component for lazy loaded pages
 function PageLoader() {
@@ -284,6 +286,10 @@ function App() {
                         </RoleProtectedRoute>
                       }
                     />
+
+                    {/* Content Studio */}
+                    <Route path="/studio" element={<StudioSessions />} />
+                    <Route path="/studio/:id" element={<ContentStudio />} />
 
                     {/* Dev Dashboard */}
                     <Route path="/dev" element={<DevDashboard />} />

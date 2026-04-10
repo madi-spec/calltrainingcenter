@@ -19,7 +19,8 @@ import {
   Sun,
   Moon,
   Award,
-  Activity
+  Activity,
+  Sparkles
 } from 'lucide-react';
 import { useOrganization } from '../context/OrganizationContext';
 import { useAuth } from '../context/AuthContext';
@@ -110,6 +111,7 @@ function Layout({ children }) {
 
   const settingsItems = [
     { to: '/setup', icon: Wand2, label: 'Setup Wizard', roles: ['admin', 'super_admin'] },
+    { to: '/studio', icon: Sparkles, label: 'Content Studio', roles: ['admin', 'super_admin'] },
     { to: '/settings', icon: Settings, label: 'Settings', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
   ];
 

@@ -51,6 +51,21 @@ After priorities are confirmed:
 - When knowledge exists but you haven't started the interview yet, begin with Phase 1 immediately.
 - The admin should never be confused about what to do next — always end your message with a clear question or action.`;
 
+const TOPIC_PROMPTS = {
+  'Sales & Qualification': 'Focus on: discovery flow, qualification questions, how to identify customer needs, presenting solutions, closing techniques, upselling/cross-selling triggers. Don\'t ask about retention, complaints, or competitor details — those have their own threads.',
+  'Objection Handling': 'Focus on: common price objections, competitor comparison rebuttals, "I need to think about it" responses, timing objections, value framing techniques. Don\'t ask about general sales flow or complaint handling — those have their own threads.',
+  'Retention & Cancellation Saves': 'Focus on: why customers cancel, save techniques that work, discount/credit policies CSRs can offer, re-service guarantees, the difference between a complaint and a true cancellation intent. Don\'t ask about new customer sales — that has its own thread.',
+  'Customer Service & De-escalation': 'Focus on: complaint handling procedures, empathy techniques, de-escalation language, when to escalate to supervisor, service recovery after a bad experience. Don\'t ask about sales techniques or pricing — those have their own threads.',
+  'Product Knowledge': 'Focus on: service packages and what\'s included, pricing tiers, warranties and guarantees, service frequency, add-on options, service area boundaries. Don\'t ask about sales techniques or competitor comparisons — those have their own threads.',
+  'Competitive Intel': 'Focus on: which competitors operate in the same area, how your services compare, pricing differences, unique differentiators, what to say when a customer mentions a competitor, win-back strategies. Don\'t ask about internal processes — those have their own threads.',
+};
+
+function getTopicPromptSection(topicName) {
+  const specific = TOPIC_PROMPTS[topicName];
+  if (!specific) return `\n\nYou are currently interviewing about: ${topicName}\nKeep your questions focused on this topic.`;
+  return `\n\nYou are currently interviewing about: ${topicName}\n${specific}\n\nWhen you have enough context for this topic specifically, offer to mark it as ready for generation.`;
+}
+
 function buildContextBlock(graphSummary, coverageStats, validationIssues, interviewContext, phase) {
   let context = `## Current Knowledge Graph State\n\n`;
   context += `Total items: ${coverageStats.total} | Verified: ${coverageStats.verified}\n\n`;
@@ -89,7 +104,7 @@ function buildContextBlock(graphSummary, coverageStats, validationIssues, interv
  * Process a chat message from the admin.
  * Returns the AI response text and any side effects (knowledge updates, generation triggers).
  */
-export async function processMessage(sessionId, userMessage) {
+export async function processMessage(sessionId, userMessage, topicId = null) {
   const supabase = createAdminClient();
 
   // Fetch session
@@ -102,7 +117,28 @@ export async function processMessage(sessionId, userMessage) {
   if (sessionError || !session) throw new Error('Session not found');
 
   const orgId = session.organization_id;
-  const interviewContext = session.interview_context || {};
+  let interviewContext = session.interview_context || {};
+  let topicName = null;
+
+  if (topicId) {
+    const { data: topic } = await supabase
+      .from('studio_topics')
+      .select('*')
+      .eq('id', topicId)
+      .single();
+
+    if (topic) {
+      interviewContext = topic.interview_context || {};
+      topicName = topic.name;
+
+      // Update topic status to interviewing if not_started
+      if (topic.status === 'not_started') {
+        await supabase.from('studio_topics')
+          .update({ status: 'interviewing', updated_at: new Date().toISOString() })
+          .eq('id', topicId);
+      }
+    }
+  }
 
   // Build context
   const [graphSummary, coverageStats, validationIssues] = await Promise.all([
@@ -115,13 +151,21 @@ export async function processMessage(sessionId, userMessage) {
     graphSummary, coverageStats, validationIssues, interviewContext, session.status
   );
 
-  // Fetch recent chat history
-  const { data: recentMessages } = await supabase
+  // Fetch recent chat history (scoped by topic)
+  let messageQuery = supabase
     .from('studio_messages')
     .select('role, content')
     .eq('session_id', sessionId)
     .order('created_at', { ascending: true })
     .limit(30);
+
+  if (topicId) {
+    messageQuery = messageQuery.eq('topic_id', topicId);
+  } else {
+    messageQuery = messageQuery.is('topic_id', null);
+  }
+
+  const { data: recentMessages } = await messageQuery;
 
   // Build messages array
   const messages = (recentMessages || []).map(m => ({
@@ -132,29 +176,28 @@ export async function processMessage(sessionId, userMessage) {
   messages.push({ role: 'user', content: userMessage });
 
   // Call Claude
+  const topicSection = topicName ? getTopicPromptSection(topicName) : '';
   const response = await anthropic.messages.create({
     model: 'claude-sonnet-4-20250514',
     max_tokens: 2048,
-    system: `${SYSTEM_PROMPT}\n\n${contextBlock}`,
+    system: `${SYSTEM_PROMPT}${topicSection}\n\n${contextBlock}`,
     messages
   });
 
   const assistantMessage = response.content[0].text;
 
-  // Store both messages
+  // Store both messages (with topic_id)
   await supabase.from('studio_messages').insert([
-    { session_id: sessionId, role: 'user', content: userMessage, message_type: 'chat' },
-    { session_id: sessionId, role: 'assistant', content: assistantMessage, message_type: 'chat' }
+    { session_id: sessionId, topic_id: topicId, role: 'user', content: userMessage, message_type: 'chat' },
+    { session_id: sessionId, topic_id: topicId, role: 'assistant', content: assistantMessage, message_type: 'chat' }
   ]);
 
   // Parse any context updates from the AI response
-  // Look for structured signals in the response
   const updatedContext = { ...interviewContext };
   let contextChanged = false;
 
   // Simple heuristic: if the AI confirmed resolving a conflict, note it
   if (userMessage.toLowerCase().includes('current') || userMessage.toLowerCase().includes('correct') || userMessage.toLowerCase().includes('right')) {
-    // Could be confirming a price or fact — mark as noted
     if (!updatedContext.resolved_conflicts) updatedContext.resolved_conflicts = [];
     contextChanged = true;
   }
@@ -165,10 +208,17 @@ export async function processMessage(sessionId, userMessage) {
   }
 
   if (contextChanged) {
-    await supabase.from('studio_sessions').update({
-      interview_context: updatedContext,
-      updated_at: new Date().toISOString()
-    }).eq('id', sessionId);
+    if (topicId) {
+      await supabase.from('studio_topics').update({
+        interview_context: updatedContext,
+        updated_at: new Date().toISOString()
+      }).eq('id', topicId);
+    } else {
+      await supabase.from('studio_sessions').update({
+        interview_context: updatedContext,
+        updated_at: new Date().toISOString()
+      }).eq('id', sessionId);
+    }
   }
 
   return {

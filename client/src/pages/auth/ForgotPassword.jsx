@@ -34,7 +34,7 @@ export default function ForgotPassword() {
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md"
       >
-        <div className="bg-card rounded-2xl shadow-xl p-8 border border-border">
+        <div className="bg-card rounded-lg shadow-xl p-8 border border-border">
           {/* Back Link */}
           <Link
             to="/auth/login"

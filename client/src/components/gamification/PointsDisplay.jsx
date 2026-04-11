@@ -179,7 +179,7 @@ export function PointsEarned({ points, reason, animate = true }) {
 
 export function StatsCard({ points, level, streak, sessionsThisWeek, avgScore }) {
   return (
-    <div className="bg-card/50 rounded-xl p-6 border border-border">
+    <div className="bg-card/50 rounded-lg p-6 border border-border">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-foreground">Your Stats</h3>
         <PointsBadge points={points} size="md" />

@@ -97,7 +97,7 @@ export default function MicroPractice() {
         animate={{ opacity: 1, y: 0 }}
         className="text-center"
       >
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-2xl mb-4 shadow-lg shadow-yellow-500/25">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-lg mb-4 shadow-lg shadow-yellow-500/25">
           <Zap className="w-8 h-8 text-foreground" />
         </div>
         <h1 className="text-3xl font-bold text-foreground mb-2">Quick Drills</h1>
@@ -115,28 +115,28 @@ export default function MicroPractice() {
           transition={{ delay: 0.1 }}
           className="grid grid-cols-2 md:grid-cols-4 gap-4"
         >
-          <div className="bg-card rounded-xl p-4 border border-border">
+          <div className="bg-card rounded-lg p-4 border border-border">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Target className="w-4 h-4" />
               <span className="text-sm">Drills Completed</span>
             </div>
             <p className="text-2xl font-bold text-foreground">{stats.total_sessions}</p>
           </div>
-          <div className="bg-card rounded-xl p-4 border border-border">
+          <div className="bg-card rounded-lg p-4 border border-border">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Trophy className="w-4 h-4" />
               <span className="text-sm">Pass Rate</span>
             </div>
             <p className="text-2xl font-bold text-green-400">{stats.pass_rate}%</p>
           </div>
-          <div className="bg-card rounded-xl p-4 border border-border">
+          <div className="bg-card rounded-lg p-4 border border-border">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Star className="w-4 h-4" />
               <span className="text-sm">Avg Score</span>
             </div>
             <p className="text-2xl font-bold text-yellow-400">{stats.avg_score}</p>
           </div>
-          <div className="bg-card rounded-xl p-4 border border-border">
+          <div className="bg-card rounded-lg p-4 border border-border">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Clock className="w-4 h-4" />
               <span className="text-sm">Total Time</span>
@@ -154,11 +154,11 @@ export default function MicroPractice() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-xl p-6 border border-purple-500/30"
+          className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg p-6 border border-purple-500/30"
         >
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-purple-500/20 rounded-xl flex items-center justify-center">
+              <div className="w-14 h-14 bg-purple-500/20 rounded-lg flex items-center justify-center">
                 <Sparkles className="w-5 h-5 text-purple-400" />
               </div>
               <div>
@@ -180,7 +180,7 @@ export default function MicroPractice() {
             </div>
             <button
               onClick={() => handleStart(dailyChallenge.micro_scenario.id)}
-              className="flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-foreground font-medium rounded-xl transition-colors"
+              className="flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-foreground font-medium rounded-lg transition-colors"
             >
               Start
               <ChevronRight className="w-5 h-5" />
@@ -246,7 +246,7 @@ export default function MicroPractice() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 + index * 0.05 }}
-            className="bg-card rounded-xl border border-border p-5 hover:border-border transition-colors"
+            className="bg-card rounded-lg border border-border p-5 hover:border-border transition-colors"
           >
             <div className="flex items-start justify-between mb-3">
               <span className={`px-2 py-1 text-xs font-medium rounded-full ${getDifficultyColor(scenario.difficulty)}`}>

@@ -126,11 +126,11 @@ export default function SessionHistory() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
-              className="bg-card rounded-xl p-6 border border-border hover:border-border transition-colors"
+              className="bg-card rounded-lg p-6 border border-border hover:border-border transition-colors"
             >
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div className="flex items-center gap-4">
-                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-xl font-bold ${getScoreColor(session.overall_score)}`}>
+                  <div className={`w-14 h-14 rounded-lg flex items-center justify-center text-xl font-bold ${getScoreColor(session.overall_score)}`}>
                     {session.overall_score || '-'}
                   </div>
                   <div>

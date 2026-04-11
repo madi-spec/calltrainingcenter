@@ -274,7 +274,7 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Website Auto-Fill - First! */}
-      <div className="bg-gradient-to-r from-purple-900/50 to-blue-900/50 rounded-xl p-6 border border-purple-500/30">
+      <div className="bg-gradient-to-r from-purple-900/50 to-blue-900/50 rounded-lg p-6 border border-purple-500/30">
         <h3 className="text-lg font-semibold text-foreground mb-2 flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-purple-400" />
           Quick Start - Enter Your Website
@@ -363,7 +363,7 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
       </div>
 
       {/* Basic Info */}
-      <div className="bg-card rounded-xl p-6 border border-border">
+      <div className="bg-card rounded-lg p-6 border border-border">
         <h3 className="text-lg font-semibold text-foreground mb-4">Company Details</h3>
 
         <div className="grid md:grid-cols-2 gap-4">
@@ -419,7 +419,7 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
       </div>
 
       {/* Branding */}
-      <div className="bg-card rounded-xl p-6 border border-border">
+      <div className="bg-card rounded-lg p-6 border border-border">
         <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
           <Palette className="w-5 h-5 text-primary-400" />
           Branding
@@ -560,7 +560,7 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
       </div>
 
       {/* Services */}
-      <div className="bg-card rounded-xl p-6 border border-border">
+      <div className="bg-card rounded-lg p-6 border border-border">
         <h3 className="text-lg font-semibold text-foreground mb-4">Services Offered</h3>
         <p className="text-sm text-muted-foreground mb-4">
           Select the services your company provides
@@ -585,7 +585,7 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
       </div>
 
       {/* Guarantees */}
-      <div className="bg-card rounded-xl p-6 border border-border">
+      <div className="bg-card rounded-lg p-6 border border-border">
         <h3 className="text-lg font-semibold text-foreground mb-4">Service Guarantees</h3>
         <p className="text-sm text-muted-foreground mb-4">
           Select the guarantees you offer to customers

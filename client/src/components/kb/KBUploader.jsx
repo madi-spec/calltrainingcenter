@@ -91,7 +91,7 @@ export default function KBUploader({ authFetch, onUploadComplete, onError }) {
   };
 
   return (
-    <div className="bg-card rounded-xl p-6 border border-border space-y-4">
+    <div className="bg-card rounded-lg p-6 border border-border space-y-4">
       <h2 className="text-lg font-semibold text-foreground">Upload Training Documents</h2>
       <p className="text-muted-foreground text-sm">
         Upload your training manuals, pricing sheets, and SOPs. We'll extract structured content automatically.
@@ -99,7 +99,7 @@ export default function KBUploader({ authFetch, onUploadComplete, onError }) {
 
       {/* Drop zone */}
       <div
-        className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-pointer ${
+        className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer ${
           dragOver
             ? 'border-primary-500 bg-primary-500/5'
             : 'border-border hover:border-border'

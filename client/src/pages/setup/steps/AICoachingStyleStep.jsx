@@ -111,7 +111,7 @@ export default function AICoachingStyleStep({ data, onComplete, authFetch, organ
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-xl p-6 border border-purple-500/30">
+      <div className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-lg p-6 border border-purple-500/30">
         <div className="flex items-center gap-3 mb-2">
           <div className="p-2 bg-purple-500/20 rounded-lg">
             <MessageSquare className="w-5 h-5 text-purple-400" />
@@ -125,7 +125,7 @@ export default function AICoachingStyleStep({ data, onComplete, authFetch, organ
 
       {/* Single Select Options */}
       {Object.entries(COACHING_OPTIONS).map(([key, config]) => (
-        <div key={key} className="bg-card rounded-xl p-6 border border-border">
+        <div key={key} className="bg-card rounded-lg p-6 border border-border">
           <h4 className="text-md font-semibold text-foreground mb-2">{config.title}</h4>
           <p className="text-sm text-muted-foreground mb-4">{config.description}</p>
 
@@ -161,7 +161,7 @@ export default function AICoachingStyleStep({ data, onComplete, authFetch, organ
       ))}
 
       {/* Priority Skills */}
-      <div className="bg-card rounded-xl p-6 border border-border">
+      <div className="bg-card rounded-lg p-6 border border-border">
         <h4 className="text-md font-semibold text-foreground mb-2">Priority Skills</h4>
         <p className="text-sm text-muted-foreground mb-4">
           Which skills are most important to evaluate? Select all that apply.

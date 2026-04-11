@@ -390,10 +390,10 @@ export default function SetupWizard() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-card rounded-2xl p-8 max-w-lg w-full border border-border shadow-2xl"
+              className="bg-card rounded-lg p-8 max-w-lg w-full border border-border shadow-2xl"
             >
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500 to-purple-600 mb-6">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-lg bg-gradient-to-br from-primary-500 to-purple-600 mb-6">
                   <Rocket className="w-8 h-8 text-foreground" />
                 </div>
                 <h2 className="text-2xl font-bold text-foreground mb-3">
@@ -458,7 +458,7 @@ export default function SetupWizard() {
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-primary-500/10 rounded-xl">
+              <div className="p-2 bg-primary-500/10 rounded-lg">
                 <Settings2 className="w-5 h-5 text-primary-400" />
               </div>
               <div>

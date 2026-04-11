@@ -60,7 +60,7 @@ export default function WelcomeModal({
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="relative bg-card rounded-2xl border border-border shadow-2xl max-w-lg w-full overflow-hidden"
+          className="relative bg-card rounded-lg border border-border shadow-2xl max-w-lg w-full overflow-hidden"
         >
           {/* Header decoration */}
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500" />
@@ -80,7 +80,7 @@ export default function WelcomeModal({
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="mx-auto w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-500/25"
+              className="mx-auto w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mb-6 shadow-lg shadow-blue-500/25"
             >
               {isComplete ? (
                 <Sparkles className="w-10 h-10 text-foreground" />
@@ -147,7 +147,7 @@ export default function WelcomeModal({
                   { icon: Award, label: 'Earn Badges', color: 'yellow' }
                 ].map(({ icon: Icon, label, color }) => (
                   <div key={label} className="text-center">
-                    <div className={`w-12 h-12 mx-auto mb-2 bg-${color}-500/20 rounded-xl flex items-center justify-center`}>
+                    <div className={`w-12 h-12 mx-auto mb-2 bg-${color}-500/20 rounded-lg flex items-center justify-center`}>
                       <Icon className={`w-5 h-5 text-${color}-400`} />
                     </div>
                     <span className="text-xs text-muted-foreground">{label}</span>
@@ -167,13 +167,13 @@ export default function WelcomeModal({
                 <>
                   <button
                     onClick={handleSecondaryAction}
-                    className="px-6 py-3 bg-muted hover:bg-muted text-foreground font-medium rounded-xl transition-colors"
+                    className="px-6 py-3 bg-muted hover:bg-muted text-foreground font-medium rounded-lg transition-colors"
                   >
                     {step.secondaryAction.label}
                   </button>
                   <button
                     onClick={handlePrimaryAction}
-                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-foreground font-medium rounded-xl transition-colors"
+                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-foreground font-medium rounded-lg transition-colors"
                   >
                     {step.primaryAction.label}
                   </button>
@@ -182,13 +182,13 @@ export default function WelcomeModal({
                 <>
                   <button
                     onClick={onSkip}
-                    className="px-6 py-3 text-muted-foreground hover:text-foreground font-medium rounded-xl transition-colors"
+                    className="px-6 py-3 text-muted-foreground hover:text-foreground font-medium rounded-lg transition-colors"
                   >
                     Skip Tutorial
                   </button>
                   <button
                     onClick={onNext}
-                    className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-foreground font-medium rounded-xl transition-colors"
+                    className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-foreground font-medium rounded-lg transition-colors"
                   >
                     Get Started
                   </button>

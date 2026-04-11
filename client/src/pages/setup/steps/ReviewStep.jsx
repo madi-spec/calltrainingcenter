@@ -168,9 +168,9 @@ export default function ReviewStep({ data, allStepData, onComplete, authFetch, o
   return (
     <div className="space-y-6">
       {/* Summary Banner */}
-      <div className="bg-gradient-to-r from-primary-500/10 to-purple-500/10 rounded-xl p-6 border border-primary-500/20">
+      <div className="bg-gradient-to-r from-primary-500/10 to-purple-500/10 rounded-lg p-6 border border-primary-500/20">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-primary-500/20 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-lg bg-primary-500/20 flex items-center justify-center">
             <Rocket className="w-5 h-5 text-primary-400" />
           </div>
           <div>
@@ -208,7 +208,7 @@ export default function ReviewStep({ data, allStepData, onComplete, authFetch, o
           return (
             <div
               key={section.id}
-              className={`rounded-xl border p-4 transition-colors ${getStatusColor(section.status)}`}
+              className={`rounded-lg border p-4 transition-colors ${getStatusColor(section.status)}`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -247,7 +247,7 @@ export default function ReviewStep({ data, allStepData, onComplete, authFetch, o
       </div>
 
       {/* What Happens Next */}
-      <div className="bg-card rounded-xl p-6 border border-border">
+      <div className="bg-card rounded-lg p-6 border border-border">
         <h4 className="font-medium text-foreground mb-4">What happens next?</h4>
         <ul className="space-y-3">
           <li className="flex items-start gap-3">

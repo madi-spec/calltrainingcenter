@@ -112,7 +112,7 @@ export default function VoiceSelector({
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute z-50 w-full mt-2 bg-card border border-border rounded-xl shadow-xl overflow-hidden"
+            className="absolute z-50 w-full mt-2 bg-card border border-border rounded-lg shadow-xl overflow-hidden"
           >
             <div className="max-h-80 overflow-y-auto">
               {voices.length === 0 ? (

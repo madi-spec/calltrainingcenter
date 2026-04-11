@@ -14,7 +14,7 @@ export default function ChatMessage({ message }) {
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
       <div
-        className={`max-w-[85%] rounded-xl px-4 py-3 text-sm leading-relaxed ${
+        className={`max-w-[85%] rounded-lg px-4 py-3 text-sm leading-relaxed ${
           isUser
             ? 'bg-primary-600/20 text-foreground rounded-tr-none'
             : 'bg-card text-foreground rounded-tl-none'

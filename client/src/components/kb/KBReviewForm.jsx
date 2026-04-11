@@ -38,7 +38,7 @@ export default function KBReviewForm({ parsedData, onSave, onGenerate }) {
 
   return (
     <div className="space-y-4">
-      <div className="bg-card rounded-xl border border-border">
+      <div className="bg-card rounded-lg border border-border">
         {/* Tabs */}
         <div className="flex border-b border-border">
           {TABS.map(tab => (
@@ -116,7 +116,7 @@ export default function KBReviewForm({ parsedData, onSave, onGenerate }) {
       {/* Confirmation modal */}
       {showConfirm && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-          <div className="bg-card rounded-xl p-6 max-w-md w-full border border-border space-y-4">
+          <div className="bg-card rounded-lg p-6 max-w-md w-full border border-border space-y-4">
             <h3 className="text-lg font-semibold text-foreground">Confirm Generation</h3>
             <p className="text-muted-foreground text-sm">
               This will <span className="text-yellow-400 font-medium">replace all existing</span> packages,

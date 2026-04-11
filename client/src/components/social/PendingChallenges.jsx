@@ -60,12 +60,12 @@ export default function PendingChallenges({ maxDisplay = 3, onUpdate }) {
 
   if (loading) {
     return (
-      <div className="bg-card rounded-xl p-6 border border-border">
+      <div className="bg-card rounded-lg p-6 border border-border">
         <div className="animate-pulse">
           <div className="h-6 w-40 bg-muted rounded mb-4" />
           <div className="space-y-3">
             {[1, 2].map(i => (
-              <div key={i} className="h-16 bg-muted rounded-xl" />
+              <div key={i} className="h-16 bg-muted rounded-lg" />
             ))}
           </div>
         </div>
@@ -81,7 +81,7 @@ export default function PendingChallenges({ maxDisplay = 3, onUpdate }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-card rounded-xl p-6 border border-border"
+      className="bg-card rounded-lg p-6 border border-border"
     >
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-semibold text-foreground flex items-center gap-2">
@@ -104,7 +104,7 @@ export default function PendingChallenges({ maxDisplay = 3, onUpdate }) {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
-              className="bg-purple-500/10 border border-purple-500/30 rounded-xl p-4"
+              className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4"
             >
               <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3 min-w-0">
@@ -161,7 +161,7 @@ export default function PendingChallenges({ maxDisplay = 3, onUpdate }) {
         {challenges.active.slice(0, maxDisplay - challenges.incoming.length).map(challenge => (
           <div
             key={challenge.id}
-            className="bg-muted/50 rounded-xl p-4 border border-border"
+            className="bg-muted/50 rounded-lg p-4 border border-border"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">

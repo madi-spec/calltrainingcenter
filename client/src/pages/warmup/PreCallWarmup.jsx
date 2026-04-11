@@ -73,7 +73,7 @@ export default function PreCallWarmup() {
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-8"
       >
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl mb-6 shadow-lg shadow-purple-500/25">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg mb-6 shadow-lg shadow-purple-500/25">
           <Brain className="w-8 h-8 text-foreground" />
         </div>
         <h1 className="text-3xl font-bold text-foreground mb-2">Pre-Call Warm-up</h1>

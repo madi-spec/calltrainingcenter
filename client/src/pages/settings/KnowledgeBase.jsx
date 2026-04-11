@@ -150,7 +150,7 @@ export default function KnowledgeBase() {
         )}
 
         {state === STATES.COMPLETE && (
-          <div className="bg-card rounded-xl p-8 border border-border text-center space-y-4">
+          <div className="bg-card rounded-lg p-8 border border-border text-center space-y-4">
             <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto">
               <Database className="w-8 h-8 text-green-400" />
             </div>

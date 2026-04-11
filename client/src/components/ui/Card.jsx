@@ -18,12 +18,11 @@ function Card({
 
   return (
     <motion.div
-      whileHover={hover ? { y: -2, scale: 1.01 } : {}}
+      whileHover={hover ? { y: -1 } : {}}
       transition={{ duration: 0.2 }}
       className={`
-        glass-card
-        ${hover ? 'glass-card-hover cursor-pointer' : ''}
-        ${glow ? 'glow' : ''}
+        bg-card border border-border rounded-lg
+        ${hover ? 'hover:shadow-sm transition-shadow cursor-pointer' : ''}
         ${paddingClasses[padding]}
         ${className}
       `}

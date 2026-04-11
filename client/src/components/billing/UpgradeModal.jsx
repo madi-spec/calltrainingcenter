@@ -41,7 +41,7 @@ function UpgradeModal({ isOpen, onClose }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.2 }}
-            className="relative w-full max-w-md bg-gradient-to-br from-background via-card to-background rounded-2xl p-6 shadow-2xl border border-border"
+            className="relative w-full max-w-md bg-gradient-to-br from-background via-card to-background rounded-lg p-6 shadow-2xl border border-border"
           >
             {/* Close button */}
             <button

@@ -40,12 +40,12 @@ export default function BadgeShowcase({ maxDisplay = 6, showFeatured = true }) {
 
   if (loading) {
     return (
-      <div className="bg-card rounded-xl p-6 border border-border">
+      <div className="bg-card rounded-lg p-6 border border-border">
         <div className="animate-pulse">
           <div className="h-6 w-32 bg-muted rounded mb-4" />
           <div className="grid grid-cols-3 gap-4">
             {[1, 2, 3].map(i => (
-              <div key={i} className="h-20 bg-muted rounded-xl" />
+              <div key={i} className="h-20 bg-muted rounded-lg" />
             ))}
           </div>
         </div>
@@ -63,7 +63,7 @@ export default function BadgeShowcase({ maxDisplay = 6, showFeatured = true }) {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-card rounded-xl p-6 border border-border"
+        className="bg-card rounded-lg p-6 border border-border"
       >
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
@@ -81,7 +81,7 @@ export default function BadgeShowcase({ maxDisplay = 6, showFeatured = true }) {
         {/* Featured badge */}
         {featuredBadge && (
           <div
-            className="mb-6 p-4 bg-gradient-to-r from-yellow-500/10 to-amber-500/10 rounded-xl border border-yellow-500/20 cursor-pointer"
+            className="mb-6 p-4 bg-gradient-to-r from-yellow-500/10 to-amber-500/10 rounded-lg border border-yellow-500/20 cursor-pointer"
             onClick={() => setSelectedBadge(featuredBadge)}
           >
             <div className="flex items-center gap-4">
@@ -156,7 +156,7 @@ export default function BadgeShowcase({ maxDisplay = 6, showFeatured = true }) {
               initial={{ scale: 0.95 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.95 }}
-              className="bg-card rounded-2xl w-full max-w-sm p-6 border border-border"
+              className="bg-card rounded-lg w-full max-w-sm p-6 border border-border"
               onClick={e => e.stopPropagation()}
             >
               <div className="flex items-start justify-between mb-4">

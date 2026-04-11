@@ -262,7 +262,7 @@ export default function Billing() {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-xl p-4"
+          className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-lg p-4"
         >
           <div className="flex items-center gap-3">
             <div className="p-2 bg-green-500/20 rounded-lg">
@@ -284,7 +284,7 @@ export default function Billing() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-xl p-5"
+          className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-lg p-5"
         >
           <div className="flex flex-col md:flex-row md:items-center gap-4">
             <div className="flex items-center gap-3 flex-1">
@@ -339,7 +339,7 @@ export default function Billing() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-card rounded-xl p-6 border border-border"
+          className="bg-card rounded-lg p-6 border border-border"
         >
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-foreground">Current Plan</h2>
@@ -370,7 +370,7 @@ export default function Billing() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-card rounded-xl p-6 border border-border"
+          className="bg-card rounded-lg p-6 border border-border"
         >
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-foreground">Training Hours</h2>
@@ -455,7 +455,7 @@ export default function Billing() {
           return (
             <div
               key={planId}
-              className={`relative rounded-2xl p-6 border-2 transition-all ${
+              className={`relative rounded-lg p-6 border-2 transition-all ${
                 plan.featured
                   ? 'border-transparent bg-gradient-to-b from-card to-card shadow-lg'
                   : isCurrent
@@ -526,7 +526,7 @@ export default function Billing() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.25 }}
-        className="bg-card rounded-2xl p-6 border border-border"
+        className="bg-card rounded-lg p-6 border border-border"
       >
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           <div>
@@ -537,7 +537,7 @@ export default function Billing() {
 
         <div className="grid md:grid-cols-3 gap-4 mb-6">
           {HOUR_BLOCKS.map((block) => (
-            <div key={block.hours} className="bg-muted border border-border rounded-xl p-5">
+            <div key={block.hours} className="bg-muted border border-border rounded-lg p-5">
               <div className="flex items-center justify-between mb-4">
                 <h4 className="text-lg font-semibold text-foreground">{block.hours}-Hour Block</h4>
                 <span className="text-sm text-muted-foreground">
@@ -563,7 +563,7 @@ export default function Billing() {
           ))}
         </div>
 
-        <div className="p-4 bg-gradient-to-r from-pink-500/10 to-orange-500/10 border border-pink-500/20 rounded-xl flex items-start gap-4">
+        <div className="p-4 bg-gradient-to-r from-pink-500/10 to-orange-500/10 border border-pink-500/20 rounded-lg flex items-start gap-4">
           <div className="p-2 bg-gradient-to-r from-pink-500 to-orange-500 rounded-lg flex-shrink-0">
             <Clock className="w-5 h-5 text-foreground" />
           </div>
@@ -581,7 +581,7 @@ export default function Billing() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="bg-card rounded-xl p-6 border border-border"
+        className="bg-card rounded-lg p-6 border border-border"
       >
         <h2 className="text-lg font-semibold text-foreground mb-6">Recent Invoices</h2>
         {invoices.length > 0 ? (

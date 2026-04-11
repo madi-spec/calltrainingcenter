@@ -122,7 +122,7 @@ export default function HelpAgent() {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-6 right-6 z-50 w-96 h-[32rem] bg-background border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+            className="fixed bottom-6 right-6 z-50 w-96 h-[32rem] bg-background border border-border rounded-lg shadow-2xl flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-3 flex items-center justify-between">
@@ -185,7 +185,7 @@ export default function HelpAgent() {
                         : <Bot className="w-4 h-4 text-purple-400" />
                       }
                     </div>
-                    <div className={`max-w-[80%] px-4 py-2.5 rounded-2xl ${
+                    <div className={`max-w-[80%] px-4 py-2.5 rounded-lg ${
                       msg.role === 'user'
                         ? 'bg-primary-600 text-foreground rounded-br-md'
                         : 'bg-card text-foreground rounded-bl-md'
@@ -201,7 +201,7 @@ export default function HelpAgent() {
                   <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center">
                     <Bot className="w-4 h-4 text-purple-400" />
                   </div>
-                  <div className="bg-card px-4 py-3 rounded-2xl rounded-bl-md">
+                  <div className="bg-card px-4 py-3 rounded-lg rounded-bl-md">
                     <Loader2 className="w-5 h-5 text-purple-400 animate-spin" />
                   </div>
                 </div>
@@ -220,12 +220,12 @@ export default function HelpAgent() {
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask me anything..."
                   disabled={loading}
-                  className="flex-1 px-4 py-2.5 bg-card border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-purple-500 disabled:opacity-50"
+                  className="flex-1 px-4 py-2.5 bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-purple-500 disabled:opacity-50"
                 />
                 <button
                   type="submit"
                   disabled={loading || !input.trim()}
-                  className="p-2.5 bg-purple-600 hover:bg-purple-700 disabled:bg-muted disabled:text-muted-foreground text-foreground rounded-xl transition-colors"
+                  className="p-2.5 bg-purple-600 hover:bg-purple-700 disabled:bg-muted disabled:text-muted-foreground text-foreground rounded-lg transition-colors"
                 >
                   <Send className="w-5 h-5" />
                 </button>

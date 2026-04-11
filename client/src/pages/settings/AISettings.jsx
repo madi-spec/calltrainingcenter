@@ -725,7 +725,7 @@ Respond with JSON in this exact format:
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
-          className="bg-card rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
+          className="bg-card rounded-lg max-w-2xl w-full max-h-[90vh] overflow-hidden"
         >
           {/* Header */}
           <div className="p-6 border-b border-border">
@@ -764,7 +764,7 @@ Respond with JSON in this exact format:
                   <button
                     key={option.value}
                     onClick={() => handleWizardAnswer(step.id, option.value)}
-                    className={`w-full p-4 rounded-xl border text-left transition-all ${
+                    className={`w-full p-4 rounded-lg border text-left transition-all ${
                       currentAnswers[step.id] === option.value
                         ? 'border-primary-500 bg-primary-500/10'
                         : 'border-border hover:border-border bg-muted'
@@ -792,7 +792,7 @@ Respond with JSON in this exact format:
                     <button
                       key={option.value}
                       onClick={() => handleMultiselectToggle(step.id, option.value)}
-                      className={`w-full p-4 rounded-xl border text-left transition-all ${
+                      className={`w-full p-4 rounded-lg border text-left transition-all ${
                         selected
                           ? 'border-primary-500 bg-primary-500/10'
                           : 'border-border hover:border-border bg-muted'
@@ -873,7 +873,7 @@ Respond with JSON in this exact format:
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-card rounded-xl p-6 border border-border"
+        className="bg-card rounded-lg p-6 border border-border"
       >
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
@@ -955,7 +955,7 @@ Respond with JSON in this exact format:
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-card rounded-xl p-6 border border-border"
+        className="bg-card rounded-lg p-6 border border-border"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -1021,7 +1021,7 @@ Respond with JSON in this exact format:
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="bg-card rounded-xl p-6 border border-border"
+        className="bg-card rounded-lg p-6 border border-border"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -1087,7 +1087,7 @@ Respond with JSON in this exact format:
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.25 }}
-        className="bg-card rounded-xl border border-border overflow-hidden"
+        className="bg-card rounded-lg border border-border overflow-hidden"
       >
         <button
           onClick={() => setCriteriaExpanded(!criteriaExpanded)}
@@ -1349,7 +1349,7 @@ Respond with JSON in this exact format:
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="bg-card rounded-xl border border-border overflow-hidden"
+        className="bg-card rounded-lg border border-border overflow-hidden"
       >
         <button
           onClick={() => setVoicesExpanded(!voicesExpanded)}

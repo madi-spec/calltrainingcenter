@@ -38,12 +38,12 @@ export default function ChallengeList({ maxDisplay = 3, showViewAll = true }) {
 
   if (loading) {
     return (
-      <div className="bg-card rounded-xl p-6 border border-border">
+      <div className="bg-card rounded-lg p-6 border border-border">
         <div className="animate-pulse">
           <div className="h-6 w-40 bg-muted rounded mb-4" />
           <div className="space-y-3">
             {[1, 2, 3].map(i => (
-              <div key={i} className="h-24 bg-muted rounded-xl" />
+              <div key={i} className="h-24 bg-muted rounded-lg" />
             ))}
           </div>
         </div>
@@ -58,7 +58,7 @@ export default function ChallengeList({ maxDisplay = 3, showViewAll = true }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-card rounded-xl p-6 border border-border"
+      className="bg-card rounded-lg p-6 border border-border"
     >
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">

@@ -49,7 +49,7 @@ export default function KeyboardShortcutsModal({ isOpen, onClose }) {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           onClick={(e) => e.stopPropagation()}
-          className="relative bg-card rounded-2xl border border-border shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
+          className="relative bg-card rounded-lg border border-border shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
         >
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-border">

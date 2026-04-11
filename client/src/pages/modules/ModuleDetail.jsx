@@ -133,7 +133,7 @@ export default function ModuleDetail() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-card rounded-2xl p-6 md:p-8 border border-border"
+        className="bg-card rounded-lg p-6 md:p-8 border border-border"
       >
         <div className="flex flex-col md:flex-row md:items-start gap-6">
           <div className="flex-1">
@@ -220,7 +220,7 @@ export default function ModuleDetail() {
 
           {/* Completion Status */}
           {isCompleted && (
-            <div className="bg-green-500/10 rounded-xl p-6 text-center border border-green-500/20">
+            <div className="bg-green-500/10 rounded-lg p-6 text-center border border-green-500/20">
               <Trophy className="w-12 h-12 text-green-400 mx-auto mb-3" />
               <h3 className="text-lg font-semibold text-green-400">Module Complete!</h3>
               <p className="text-sm text-muted-foreground mt-1">
@@ -261,7 +261,7 @@ export default function ModuleDetail() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-6"
+          className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-6"
         >
           <h3 className="font-semibold text-blue-300 mb-3">Tips for Success</h3>
           <ul className="space-y-2 text-sm text-secondary-foreground">
@@ -296,7 +296,7 @@ function ScenarioCard({ scenario, index, onStart }) {
   const profile = scenario.profile || {};
 
   return (
-    <div className={`bg-card rounded-xl border border-border p-5 ${
+    <div className={`bg-card rounded-lg border border-border p-5 ${
       isCompleted ? 'opacity-75' : ''
     }`}>
       <div className="flex items-start gap-4">

@@ -72,7 +72,7 @@ export default function ChatPanel({ messages, loading, onSendMessage, onUploadFi
         ))}
         {loading && (
           <div className="flex justify-start">
-            <div className="bg-card rounded-xl px-4 py-3 rounded-tl-none">
+            <div className="bg-card rounded-lg px-4 py-3 rounded-tl-none">
               <Loader2 className="w-4 h-4 text-muted-foreground animate-spin" />
             </div>
           </div>

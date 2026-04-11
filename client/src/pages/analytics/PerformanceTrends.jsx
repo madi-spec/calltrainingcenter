@@ -122,7 +122,7 @@ export default function PerformanceTrends() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-card rounded-xl p-12 border border-border text-center"
+          className="bg-card rounded-lg p-12 border border-border text-center"
         >
           <Target className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-foreground mb-2">No Data Yet</h2>
@@ -143,7 +143,7 @@ export default function PerformanceTrends() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-card rounded-xl p-6 border border-border"
+              className="bg-card rounded-lg p-6 border border-border"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="p-2 bg-blue-500/10 rounded-lg">
@@ -160,7 +160,7 @@ export default function PerformanceTrends() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-card rounded-xl p-6 border border-border"
+              className="bg-card rounded-lg p-6 border border-border"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="p-2 bg-green-500/10 rounded-lg">
@@ -182,7 +182,7 @@ export default function PerformanceTrends() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-card rounded-xl p-6 border border-border"
+              className="bg-card rounded-lg p-6 border border-border"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="p-2 bg-purple-500/10 rounded-lg">
@@ -210,7 +210,7 @@ export default function PerformanceTrends() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-card rounded-xl p-6 border border-border"
+              className="bg-card rounded-lg p-6 border border-border"
             >
               <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-6">Score Trends Over Time</h2>
               <ResponsiveContainer width="100%" height={300}>
@@ -251,7 +251,7 @@ export default function PerformanceTrends() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="bg-card rounded-xl p-6 border border-border"
+              className="bg-card rounded-lg p-6 border border-border"
             >
               <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-6">Performance by Category</h2>
               <ResponsiveContainer width="100%" height={300}>
@@ -287,7 +287,7 @@ export default function PerformanceTrends() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="bg-card rounded-xl p-6 border border-border"
+              className="bg-card rounded-lg p-6 border border-border"
             >
               <div className="flex items-center gap-2 mb-4">
                 <div className="p-2 bg-green-500/10 rounded-lg">
@@ -328,7 +328,7 @@ export default function PerformanceTrends() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="bg-card rounded-xl p-6 border border-border"
+              className="bg-card rounded-lg p-6 border border-border"
             >
               <div className="flex items-center gap-2 mb-4">
                 <div className="p-2 bg-yellow-500/10 rounded-lg">

@@ -80,14 +80,14 @@ export default function ChallengeColleagueModal({ scenario, onClose, onChallenge
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
-        className="bg-card rounded-2xl w-full max-w-md border border-border shadow-xl overflow-hidden"
+        className="bg-card rounded-lg w-full max-w-md border border-border shadow-xl overflow-hidden"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
         <div className="p-6 border-b border-border">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-purple-500/20 rounded-xl">
+              <div className="p-3 bg-purple-500/20 rounded-lg">
                 <Swords className="w-5 h-5 text-purple-400" />
               </div>
               <div>
@@ -134,7 +134,7 @@ export default function ChallengeColleagueModal({ scenario, onClose, onChallenge
                 key={colleague.id}
                 onClick={() => setSelectedColleague(colleague)}
                 className={`
-                  w-full flex items-center gap-3 p-3 rounded-xl transition-colors
+                  w-full flex items-center gap-3 p-3 rounded-lg transition-colors
                   ${selectedColleague?.id === colleague.id
                     ? 'bg-primary-500/20 border-primary-500/50 border'
                     : 'bg-muted/50 hover:bg-muted border border-transparent'}
@@ -215,14 +215,14 @@ export default function ChallengeColleagueModal({ scenario, onClose, onChallenge
         <div className="p-4 border-t border-border flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 px-4 py-3 bg-muted hover:bg-muted text-foreground font-medium rounded-xl transition-colors"
+            className="flex-1 px-4 py-3 bg-muted hover:bg-muted text-foreground font-medium rounded-lg transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleSendChallenge}
             disabled={!selectedColleague || sending}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 hover:bg-purple-700 disabled:bg-muted disabled:cursor-not-allowed text-foreground font-medium rounded-xl transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 hover:bg-purple-700 disabled:bg-muted disabled:cursor-not-allowed text-foreground font-medium rounded-lg transition-colors"
           >
             {sending ? (
               <>

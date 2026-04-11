@@ -307,7 +307,7 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
     <div className="space-y-6">
       {/* Extracted Packages Notice */}
       {usedExtractedData && packages.length > 0 && (
-        <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
+        <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
           <div className="flex items-center gap-2 text-green-400">
             <CheckCircle2 className="w-5 h-5" />
             <span className="font-medium">
@@ -322,7 +322,7 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
 
       {/* Quick Start Options */}
       {packages.length === 0 && (
-        <div className="bg-card rounded-xl p-6 border border-border">
+        <div className="bg-card rounded-lg p-6 border border-border">
           <h3 className="text-lg font-semibold text-foreground mb-4">Quick Start</h3>
           <p className="text-muted-foreground mb-6">
             Choose how you'd like to set up your service packages
@@ -331,7 +331,7 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
           <div className="grid md:grid-cols-2 gap-4">
             <button
               onClick={handleUseDefaults}
-              className="p-4 bg-muted hover:bg-muted rounded-xl border border-border text-left transition-colors"
+              className="p-4 bg-muted hover:bg-muted rounded-lg border border-border text-left transition-colors"
             >
               <h4 className="font-medium text-foreground mb-1">Use Template</h4>
               <p className="text-sm text-muted-foreground">
@@ -342,7 +342,7 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
             <button
               onClick={handleGenerateWithAI}
               disabled={generating}
-              className="p-4 bg-primary-500/10 hover:bg-primary-500/20 rounded-xl border border-primary-500/30 text-left transition-colors"
+              className="p-4 bg-primary-500/10 hover:bg-primary-500/20 rounded-lg border border-primary-500/30 text-left transition-colors"
             >
               <div className="flex items-center gap-2 mb-1">
                 {generating ? (
@@ -366,7 +366,7 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
           {packages.map((pkg, index) => (
             <div
               key={index}
-              className="bg-card rounded-xl border border-border overflow-hidden"
+              className="bg-card rounded-lg border border-border overflow-hidden"
             >
               <button
                 onClick={() => setExpandedPackage(expandedPackage === index ? null : index)}
@@ -518,7 +518,7 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
 
           <button
             onClick={addPackage}
-            className="w-full flex items-center justify-center gap-2 p-4 bg-card hover:bg-muted rounded-xl border border-border border-dashed text-muted-foreground hover:text-secondary-foreground transition-colors"
+            className="w-full flex items-center justify-center gap-2 p-4 bg-card hover:bg-muted rounded-lg border border-border border-dashed text-muted-foreground hover:text-secondary-foreground transition-colors"
           >
             <Plus className="w-5 h-5" />
             Add Another Package

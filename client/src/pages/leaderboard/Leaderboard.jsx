@@ -113,7 +113,7 @@ export default function Leaderboard() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-primary-600/20 border border-primary-500/30 rounded-xl p-6"
+          className="bg-primary-600/20 border border-primary-500/30 rounded-lg p-6"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -161,7 +161,7 @@ export default function Leaderboard() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
-                className={`rounded-xl p-4 border transition-colors ${
+                className={`rounded-lg p-4 border transition-colors ${
                   isCurrentUser ? 'ring-2 ring-primary-500' : ''
                 } ${getRankBgColor(rank)}`}
               >
@@ -245,7 +245,7 @@ export default function Leaderboard() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="bg-card rounded-xl p-12 border border-border text-center"
+            className="bg-card rounded-lg p-12 border border-border text-center"
           >
             <Trophy className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-foreground mb-2">

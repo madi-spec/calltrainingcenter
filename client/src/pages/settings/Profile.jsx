@@ -167,7 +167,7 @@ export default function Profile() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-card rounded-xl p-6 border border-border"
+        className="bg-card rounded-lg p-6 border border-border"
       >
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-blue-500/10 rounded-lg">
@@ -209,7 +209,7 @@ export default function Profile() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-card rounded-xl p-6 border border-border"
+        className="bg-card rounded-lg p-6 border border-border"
       >
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-orange-500/10 rounded-lg">
@@ -277,7 +277,7 @@ export default function Profile() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="bg-card rounded-xl p-6 border border-border"
+        className="bg-card rounded-lg p-6 border border-border"
       >
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-purple-500/10 rounded-lg">
@@ -297,7 +297,7 @@ export default function Profile() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="bg-card rounded-xl p-6 border border-border"
+        className="bg-card rounded-lg p-6 border border-border"
       >
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-green-500/10 rounded-lg">

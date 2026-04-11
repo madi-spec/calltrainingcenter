@@ -153,7 +153,7 @@ function CallReplay() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-card rounded-xl border border-border"
+            className="bg-card rounded-lg border border-border"
           >
             <div className="px-5 py-4 border-b border-border">
               <h3 className="font-semibold text-foreground">Conversation Transcript</h3>
@@ -175,7 +175,7 @@ function CallReplay() {
                     }`}>
                       {entry.role === 'customer' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
                     </div>
-                    <div className={`max-w-[80%] px-4 py-3 rounded-xl text-sm ${
+                    <div className={`max-w-[80%] px-4 py-3 rounded-lg text-sm ${
                       entry.role === 'customer'
                         ? 'bg-muted text-foreground'
                         : 'bg-primary-600/20 text-foreground'
@@ -199,7 +199,7 @@ function CallReplay() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-card rounded-xl border border-border p-5"
+            className="bg-card rounded-lg border border-border p-5"
           >
             <h3 className="font-semibold text-foreground mb-3">Session Details</h3>
             <dl className="space-y-2 text-sm">

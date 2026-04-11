@@ -101,7 +101,7 @@ export default function Settings() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-card rounded-xl p-6 border border-border"
+        className="bg-card rounded-lg p-6 border border-border"
       >
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 bg-primary-500/10 rounded-full flex items-center justify-center">
@@ -131,7 +131,7 @@ export default function Settings() {
           >
             <Link
               to={section.href}
-              className="block bg-card rounded-xl p-6 border border-border hover:border-border transition-colors group"
+              className="block bg-card rounded-lg p-6 border border-border hover:border-border transition-colors group"
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-4">

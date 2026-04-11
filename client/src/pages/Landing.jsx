@@ -205,14 +205,14 @@ function Landing() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
               <Link
                 to="/auth/signup"
-                className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-pink-500 to-orange-400 hover:from-pink-600 hover:to-orange-500 rounded-xl font-semibold text-foreground transition-all shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-pink-500 to-orange-400 hover:from-pink-600 hover:to-orange-500 rounded-lg font-semibold text-foreground transition-all shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 flex items-center justify-center gap-2"
               >
                 Start Free Trial
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <button
                 onClick={() => setIsDemoOpen(true)}
-                className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-accent border border-border rounded-xl font-semibold text-foreground transition-colors flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-accent border border-border rounded-lg font-semibold text-foreground transition-colors flex items-center justify-center gap-2"
               >
                 <Play className="w-5 h-5" />
                 Watch Demo
@@ -259,9 +259,9 @@ function Landing() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 hover:border-white/20 transition-all"
+                className="bg-white/5 border border-white/10 rounded-lg p-8 hover:bg-white/10 hover:border-white/20 transition-all"
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-pink-500/20 to-orange-400/20 rounded-xl flex items-center justify-center mb-5">
+                <div className="w-12 h-12 bg-gradient-to-br from-pink-500/20 to-orange-400/20 rounded-lg flex items-center justify-center mb-5">
                   <problem.icon className="w-5 h-5 text-pink-400" />
                 </div>
                 <h3 className="text-lg font-semibold mb-3">{problem.title}</h3>
@@ -292,7 +292,7 @@ function Landing() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-white border border-border rounded-2xl p-8 hover:border-purple-300 hover:shadow-lg hover:-translate-y-0.5 transition-all"
+                className="bg-white border border-border rounded-lg p-8 hover:border-purple-300 hover:shadow-lg hover:-translate-y-0.5 transition-all"
               >
                 <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-orange-400 rounded-lg flex items-center justify-center text-foreground text-sm font-semibold mb-5">
                   {solution.number}
@@ -325,7 +325,7 @@ function Landing() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
                 viewport={{ once: true }}
-                className="bg-muted border border-border rounded-xl p-6 hover:border-purple-300 transition-colors"
+                className="bg-muted border border-border rounded-lg p-6 hover:border-purple-300 transition-colors"
               >
                 <span className={`inline-block px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wide mb-4 ${getDifficultyColor(scenario.difficulty)}`}>
                   {scenario.difficulty}
@@ -360,7 +360,7 @@ function Landing() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className={`relative bg-white rounded-2xl p-10 ${
+                className={`relative bg-white rounded-lg p-10 ${
                   plan.popular
                     ? 'border-2 border-transparent bg-gradient-to-br from-pink-500 to-orange-400 p-[2px]'
                     : 'border border-border'
@@ -412,7 +412,7 @@ function Landing() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="bg-white border border-border rounded-2xl p-10 max-w-5xl mx-auto"
+            className="bg-white border border-border rounded-lg p-10 max-w-5xl mx-auto"
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-10">
               <div>
@@ -421,7 +421,7 @@ function Landing() {
               </div>
             </div>
             <div className="grid md:grid-cols-3 gap-5">
-              <div className="bg-muted border border-border rounded-xl p-6">
+              <div className="bg-muted border border-border rounded-lg p-6">
                 <div className="flex items-center justify-between mb-5">
                   <h4 className="font-semibold text-foreground">5-Hour Block</h4>
                   <span className="text-xs text-muted-foreground">~60 training calls</span>
@@ -432,7 +432,7 @@ function Landing() {
                   <div className="flex justify-between"><span className="text-muted-foreground">Enterprise</span><span className="font-semibold text-foreground">$115</span></div>
                 </div>
               </div>
-              <div className="bg-muted border border-border rounded-xl p-6">
+              <div className="bg-muted border border-border rounded-lg p-6">
                 <div className="flex items-center justify-between mb-5">
                   <h4 className="font-semibold text-foreground">10-Hour Block</h4>
                   <span className="text-xs text-muted-foreground">~120 calls · 4% off</span>
@@ -443,7 +443,7 @@ function Landing() {
                   <div className="flex justify-between"><span className="text-muted-foreground">Enterprise</span><span className="font-semibold text-foreground">$219</span></div>
                 </div>
               </div>
-              <div className="bg-muted border border-border rounded-xl p-6">
+              <div className="bg-muted border border-border rounded-lg p-6">
                 <div className="flex items-center justify-between mb-5">
                   <h4 className="font-semibold text-foreground">25-Hour Block</h4>
                   <span className="text-xs text-muted-foreground">~300 calls · 7% off</span>
@@ -457,7 +457,7 @@ function Landing() {
             </div>
 
             {/* Rollover Banner */}
-            <div className="mt-10 bg-gradient-to-r from-pink-500/10 to-orange-400/10 border border-pink-500/20 rounded-xl p-6 flex items-start gap-4">
+            <div className="mt-10 bg-gradient-to-r from-pink-500/10 to-orange-400/10 border border-pink-500/20 rounded-lg p-6 flex items-start gap-4">
               <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-orange-400 rounded-lg flex items-center justify-center flex-shrink-0">
                 <Clock className="w-5 h-5 text-foreground" />
               </div>
@@ -483,7 +483,7 @@ function Landing() {
           </p>
           <Link
             to="/auth/signup"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-white hover:bg-accent rounded-xl font-semibold text-foreground transition-colors shadow-lg"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-white hover:bg-accent rounded-lg font-semibold text-foreground transition-colors shadow-lg"
           >
             Start Free Trial
             <ArrowRight className="w-5 h-5" />

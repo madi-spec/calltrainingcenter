@@ -277,7 +277,7 @@ export default function Assignments() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-card rounded-xl border border-border overflow-hidden"
+        className="bg-card rounded-lg border border-border overflow-hidden"
       >
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -359,7 +359,7 @@ export default function Assignments() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-card rounded-xl p-6 max-w-2xl w-full border border-border my-8"
+            className="bg-card rounded-lg p-6 max-w-2xl w-full border border-border my-8"
           >
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-foreground">Create Assignment</h2>

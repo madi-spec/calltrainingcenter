@@ -189,7 +189,7 @@ export default function SessionPlayer({
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className={`bg-card rounded-xl p-6 border border-border ${className}`}>
+    <div className={`bg-card rounded-lg p-6 border border-border ${className}`}>
       <audio ref={audioRef} src={audioUrl} preload="metadata" />
 
       {/* Progress Bar */}

@@ -158,7 +158,7 @@ export default function Reports() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-card rounded-xl p-6 border border-border"
+          className="bg-card rounded-lg p-6 border border-border"
         >
           <div className="flex items-center justify-between mb-3">
             <div className="p-2 bg-blue-500/10 rounded-lg">
@@ -183,7 +183,7 @@ export default function Reports() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-card rounded-xl p-6 border border-border"
+          className="bg-card rounded-lg p-6 border border-border"
         >
           <div className="flex items-center justify-between mb-3">
             <div className="p-2 bg-green-500/10 rounded-lg">
@@ -208,7 +208,7 @@ export default function Reports() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-card rounded-xl p-6 border border-border"
+          className="bg-card rounded-lg p-6 border border-border"
         >
           <div className="flex items-center justify-between mb-3">
             <div className="p-2 bg-purple-500/10 rounded-lg">
@@ -225,7 +225,7 @@ export default function Reports() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-card rounded-xl p-6 border border-border"
+          className="bg-card rounded-lg p-6 border border-border"
         >
           <div className="flex items-center justify-between mb-3">
             <div className="p-2 bg-yellow-500/10 rounded-lg">
@@ -244,7 +244,7 @@ export default function Reports() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="bg-card rounded-xl p-6 border border-border"
+        className="bg-card rounded-lg p-6 border border-border"
       >
         <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-6">Performance by Category</h2>
         <div className="space-y-4">
@@ -280,7 +280,7 @@ export default function Reports() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="bg-card rounded-xl p-6 border border-border"
+          className="bg-card rounded-lg p-6 border border-border"
         >
           <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-6">Team Performance</h2>
           <div className="overflow-x-auto">

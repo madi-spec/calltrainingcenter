@@ -64,7 +64,7 @@ export default function TieredBadge({
       <div
         className={`
           relative flex items-center justify-center
-          rounded-xl border-2 shadow-lg
+          rounded-lg border-2 shadow-lg
           ${sizeClasses[size]}
           ${colors.bg}
           ${colors.border}

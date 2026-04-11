@@ -116,7 +116,7 @@ export default function MyCertificates() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-card rounded-xl border border-border overflow-hidden hover:border-primary-500 transition-all"
+                className="bg-card rounded-lg border border-border overflow-hidden hover:border-primary-500 transition-all"
               >
                 {/* Certificate Header - Gradient Background */}
                 <div className="bg-gradient-to-br from-primary-600 to-primary-800 p-6 relative overflow-hidden">

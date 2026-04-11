@@ -142,7 +142,7 @@ export default function Recommendations() {
           transition={{ delay: 0.1 }}
           className="lg:col-span-1"
         >
-          <div className="bg-card rounded-xl border border-border p-6">
+          <div className="bg-card rounded-lg border border-border p-6">
             <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-purple-400" />
               Skill Profile
@@ -201,7 +201,7 @@ export default function Recommendations() {
           transition={{ delay: 0.2 }}
           className="lg:col-span-2"
         >
-          <div className="bg-card rounded-xl border border-border p-6">
+          <div className="bg-card rounded-lg border border-border p-6">
             <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
               <Lightbulb className="w-5 h-5 text-yellow-400" />
               Recommended Actions
@@ -219,7 +219,7 @@ export default function Recommendations() {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
-                      className="p-4 bg-muted rounded-xl border border-border hover:border-border transition-colors"
+                      className="p-4 bg-muted rounded-lg border border-border hover:border-border transition-colors"
                     >
                       <div className="flex items-start gap-4">
                         <div className={`w-10 h-10 rounded-lg flex items-center justify-center bg-${color}-500/20`}>
@@ -294,7 +294,7 @@ export default function Recommendations() {
                 </p>
                 <Link
                   to="/scenarios"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-foreground font-medium rounded-xl transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-foreground font-medium rounded-lg transition-colors"
                 >
                   Browse Scenarios
                   <ChevronRight className="w-5 h-5" />

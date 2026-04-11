@@ -115,7 +115,7 @@ export default function ManagerDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-card rounded-xl p-6 border border-border"
+          className="bg-card rounded-lg p-6 border border-border"
         >
           <div className="flex items-center gap-3 mb-3">
             <div className="p-2 bg-blue-500/10 rounded-lg">
@@ -132,7 +132,7 @@ export default function ManagerDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="bg-card rounded-xl p-6 border border-border"
+          className="bg-card rounded-lg p-6 border border-border"
         >
           <div className="flex items-center gap-3 mb-3">
             <div className="p-2 bg-green-500/10 rounded-lg">
@@ -152,7 +152,7 @@ export default function ManagerDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-card rounded-xl p-6 border border-border"
+          className="bg-card rounded-lg p-6 border border-border"
         >
           <div className="flex items-center gap-3 mb-3">
             <div className="p-2 bg-yellow-500/10 rounded-lg">
@@ -169,7 +169,7 @@ export default function ManagerDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
-          className="bg-card rounded-xl p-6 border border-border"
+          className="bg-card rounded-lg p-6 border border-border"
         >
           <div className="flex items-center gap-3 mb-3">
             <div className="p-2 bg-purple-500/10 rounded-lg">
@@ -188,7 +188,7 @@ export default function ManagerDashboard() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="bg-card rounded-xl border border-border overflow-hidden"
+        className="bg-card rounded-lg border border-border overflow-hidden"
       >
         <div className="p-6 border-b border-border">
           <div className="flex items-center justify-between">
@@ -331,7 +331,7 @@ export default function ManagerDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35 }}
-          className="bg-card rounded-xl p-6 border border-border"
+          className="bg-card rounded-lg p-6 border border-border"
         >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">All Teams</h2>
@@ -381,7 +381,7 @@ export default function ManagerDashboard() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="bg-card rounded-xl p-6 border border-border"
+        className="bg-card rounded-lg p-6 border border-border"
       >
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Recent Team Sessions</h2>
@@ -447,7 +447,7 @@ export default function ManagerDashboard() {
       >
         <Link
           to="/assignments"
-          className="p-6 bg-card rounded-xl border border-border hover:border-primary-500 transition-colors group"
+          className="p-6 bg-card rounded-lg border border-border hover:border-primary-500 transition-colors group"
         >
           <UserPlus className="w-5 h-5 text-muted-foreground mb-3" />
           <h3 className="font-semibold text-foreground mb-1">Assign Training</h3>
@@ -456,7 +456,7 @@ export default function ManagerDashboard() {
 
         <Link
           to="/reports"
-          className="p-6 bg-card rounded-xl border border-border hover:border-primary-500 transition-colors group"
+          className="p-6 bg-card rounded-lg border border-border hover:border-primary-500 transition-colors group"
         >
           <BarChart3 className="w-5 h-5 text-muted-foreground mb-3" />
           <h3 className="font-semibold text-foreground mb-1">View Reports</h3>
@@ -465,7 +465,7 @@ export default function ManagerDashboard() {
 
         <Link
           to="/settings/team"
-          className="p-6 bg-card rounded-xl border border-border hover:border-primary-500 transition-colors group"
+          className="p-6 bg-card rounded-lg border border-border hover:border-primary-500 transition-colors group"
         >
           <Settings className="w-5 h-5 text-muted-foreground mb-3" />
           <h3 className="font-semibold text-foreground mb-1">Manage Team</h3>

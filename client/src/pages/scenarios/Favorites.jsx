@@ -146,7 +146,7 @@ export default function Favorites() {
           animate={{ opacity: 1, x: 0 }}
           className="lg:col-span-1"
         >
-          <div className="bg-card rounded-xl border border-border p-4 sticky top-4">
+          <div className="bg-card rounded-lg border border-border p-4 sticky top-4">
             <h2 className="font-semibold text-foreground mb-4 flex items-center gap-2">
               <Folder className="w-4 h-4" />
               Folders
@@ -196,7 +196,7 @@ export default function Favorites() {
           className="lg:col-span-3"
         >
           {filteredBookmarks.length === 0 ? (
-            <div className="bg-card rounded-xl border border-border p-12 text-center">
+            <div className="bg-card rounded-lg border border-border p-12 text-center">
               <Heart className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-foreground mb-2">
                 {bookmarks.length === 0 ? 'No bookmarks yet' : 'No matching bookmarks'}
@@ -209,7 +209,7 @@ export default function Favorites() {
               {bookmarks.length === 0 && (
                 <Link
                   to="/scenarios"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-xl transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
                 >
                   Browse Scenarios
                   <ChevronRight className="w-4 h-4" />
@@ -224,7 +224,7 @@ export default function Favorites() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="bg-card rounded-xl border border-border p-5 hover:border-border transition-colors"
+                  className="bg-card rounded-lg border border-border p-5 hover:border-border transition-colors"
                 >
                   <div className="flex items-start gap-4">
                     <div className="flex-1 min-w-0">

@@ -109,7 +109,7 @@ export default function Courses() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-card rounded-xl p-4 border border-border"
+          className="bg-card rounded-lg p-4 border border-border"
         >
           <div className="flex items-center gap-3">
             <div className="p-2 bg-blue-500/10 rounded-lg">
@@ -126,7 +126,7 @@ export default function Courses() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="bg-card rounded-xl p-4 border border-border"
+          className="bg-card rounded-lg p-4 border border-border"
         >
           <div className="flex items-center gap-3">
             <div className="p-2 bg-yellow-500/10 rounded-lg">
@@ -145,7 +145,7 @@ export default function Courses() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-card rounded-xl p-4 border border-border"
+          className="bg-card rounded-lg p-4 border border-border"
         >
           <div className="flex items-center gap-3">
             <div className="p-2 bg-green-500/10 rounded-lg">
@@ -206,7 +206,7 @@ function CourseCard({ course }) {
   return (
     <Link
       to={`/courses/${course.id}`}
-      className={`block bg-card rounded-xl border border-border overflow-hidden hover:border-border transition-all group ${
+      className={`block bg-card rounded-lg border border-border overflow-hidden hover:border-border transition-all group ${
         isLocked ? 'opacity-60 cursor-not-allowed' : ''
       }`}
     >

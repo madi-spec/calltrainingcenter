@@ -87,7 +87,7 @@ export default function IndustryStep({ data, onComplete }) {
               onClick={() => handleSelect(option.id)}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className={`relative p-6 rounded-xl border-2 transition-all text-left ${
+              className={`relative p-6 rounded-lg border-2 transition-all text-left ${
                 isSelected
                   ? `${colors.border} ${colors.bg} ring-2 ${colors.ring}`
                   : `border-border bg-card/50 ${colors.hover}`

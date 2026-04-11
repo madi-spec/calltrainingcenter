@@ -154,7 +154,7 @@ export default function NotesPanel({
   };
 
   return (
-    <div className={`bg-card rounded-xl border border-border flex flex-col ${className}`}>
+    <div className={`bg-card rounded-lg border border-border flex flex-col ${className}`}>
       {/* Header */}
       <div className="px-6 py-4 border-b border-border flex items-center justify-between">
         <div>

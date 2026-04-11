@@ -66,7 +66,7 @@ export default function WarmupCard({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-card rounded-xl border border-border p-6"
+      className="bg-card rounded-lg border border-border p-6"
     >
       {/* Header with type and timer */}
       <div className="flex items-center justify-between mb-4">

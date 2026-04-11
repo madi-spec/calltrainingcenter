@@ -136,7 +136,7 @@ export default function ServiceLinesStep({ data, allStepData, onComplete, authFe
     <div className="space-y-6">
       {/* Auto-matched Notice */}
       {autoMatched && selectedCategories.length > 0 && (
-        <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
+        <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
           <div className="flex items-center gap-2 text-green-400">
             <CheckCircle2 className="w-5 h-5" />
             <span className="font-medium">
@@ -150,7 +150,7 @@ export default function ServiceLinesStep({ data, allStepData, onComplete, authFe
       )}
 
       {/* Instructions */}
-      <div className="bg-card rounded-xl p-6 border border-border">
+      <div className="bg-card rounded-lg p-6 border border-border">
         <h3 className="text-lg font-semibold text-foreground mb-2">Select Your Service Lines</h3>
         <p className="text-muted-foreground">
           Choose which types of pest control services your company offers.
@@ -167,7 +167,7 @@ export default function ServiceLinesStep({ data, allStepData, onComplete, authFe
           return (
             <div
               key={category.id}
-              className={`relative rounded-xl border-2 transition-all cursor-pointer ${
+              className={`relative rounded-lg border-2 transition-all cursor-pointer ${
                 isSelected
                   ? isPrimary
                     ? 'bg-primary-500/10 border-primary-500'
@@ -213,7 +213,7 @@ export default function ServiceLinesStep({ data, allStepData, onComplete, authFe
 
       {/* Selection Summary */}
       {selectedCategories.length > 0 && (
-        <div className="bg-card rounded-xl p-4 border border-border">
+        <div className="bg-card rounded-lg p-4 border border-border">
           <div className="flex items-center justify-between">
             <div>
               <span className="text-secondary-foreground">

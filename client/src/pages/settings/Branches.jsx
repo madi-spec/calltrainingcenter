@@ -130,7 +130,7 @@ export default function Branches() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className={`bg-card rounded-xl p-6 border ${
+              className={`bg-card rounded-lg p-6 border ${
                 branch.is_primary ? 'border-primary-500' : 'border-border'
               }`}
             >
@@ -197,7 +197,7 @@ export default function Branches() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="col-span-full bg-card rounded-xl p-12 border border-border text-center"
+            className="col-span-full bg-card rounded-lg p-12 border border-border text-center"
           >
             <GitBranch className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-foreground mb-2">
@@ -223,7 +223,7 @@ export default function Branches() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-card rounded-xl p-6 max-w-md w-full border border-border"
+            className="bg-card rounded-lg p-6 max-w-md w-full border border-border"
           >
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-foreground">

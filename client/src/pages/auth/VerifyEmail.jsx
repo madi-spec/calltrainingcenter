@@ -13,7 +13,7 @@ export default function VerifyEmail() {
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md text-center"
       >
-        <div className="bg-card rounded-2xl shadow-xl p-8 border border-border">
+        <div className="bg-card rounded-lg shadow-xl p-8 border border-border">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-primary-500/10 rounded-full mb-6">
             <Mail className="w-10 h-10 text-primary-500" />
           </div>

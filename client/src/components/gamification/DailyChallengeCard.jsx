@@ -48,7 +48,7 @@ export default function DailyChallengeCard({ challenge, onProgressUpdate }) {
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       className={`
-        relative overflow-hidden rounded-xl border
+        relative overflow-hidden rounded-lg border
         ${progress.is_completed
           ? 'bg-green-500/10 border-green-500/30'
           : 'bg-card border-border'}

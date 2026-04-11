@@ -94,7 +94,7 @@ export default function VerifyCertificate() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-card rounded-xl p-8 border border-border mb-8"
+            className="bg-card rounded-lg p-8 border border-border mb-8"
           >
             <form onSubmit={handleSearch} className="space-y-4">
               <div>
@@ -131,7 +131,7 @@ export default function VerifyCertificate() {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-card rounded-xl p-8 border border-red-500/50"
+            className="bg-card rounded-lg p-8 border border-red-500/50"
           >
             <div className="text-center">
               <XCircle className="w-20 h-20 text-red-500 mx-auto mb-4" />
@@ -160,7 +160,7 @@ export default function VerifyCertificate() {
             className="space-y-6"
           >
             {/* Verification Success Banner */}
-            <div className="bg-green-500/10 border border-green-500/50 rounded-xl p-6">
+            <div className="bg-green-500/10 border border-green-500/50 rounded-lg p-6">
               <div className="flex items-center gap-4">
                 <CheckCircle className="w-12 h-12 text-green-500 flex-shrink-0" />
                 <div>
@@ -175,11 +175,11 @@ export default function VerifyCertificate() {
             </div>
 
             {/* Certificate Details Card */}
-            <div className="bg-card rounded-xl border border-border overflow-hidden">
+            <div className="bg-card rounded-lg border border-border overflow-hidden">
               {/* Header with gradient */}
               <div className="bg-gradient-to-r from-primary-600 to-primary-800 p-8">
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                  <div className="w-16 h-16 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
                     {certificate.course?.icon ? (
                       <span className="text-3xl">{certificate.course.icon}</span>
                     ) : (
@@ -283,7 +283,7 @@ export default function VerifyCertificate() {
             </div>
 
             {/* Footer Info */}
-            <div className="bg-card/50 rounded-xl p-6 border border-border/50">
+            <div className="bg-card/50 rounded-lg p-6 border border-border/50">
               <p className="text-sm text-muted-foreground text-center">
                 This certificate was verified on {new Date().toLocaleDateString('en-US', {
                   year: 'numeric',

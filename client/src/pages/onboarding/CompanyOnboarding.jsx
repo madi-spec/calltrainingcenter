@@ -92,7 +92,7 @@ export default function CompanyOnboarding() {
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-lg"
       >
-        <div className="bg-card rounded-2xl shadow-xl p-8 border border-border">
+        <div className="bg-card rounded-lg shadow-xl p-8 border border-border">
           {/* Header */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-500/10 rounded-full mb-4">

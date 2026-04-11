@@ -108,7 +108,7 @@ export default function AgentDashboard() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-r from-primary-600 to-purple-700 rounded-2xl p-6 md:p-8"
+        className="bg-gradient-to-r from-primary-600 to-purple-700 rounded-lg p-6 md:p-8"
       >
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
@@ -138,7 +138,7 @@ export default function AgentDashboard() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className={`rounded-2xl p-6 border-2 ${
+        className={`rounded-lg p-6 border-2 ${
           metRequirement
             ? 'bg-green-500/10 border-green-500/30'
             : 'bg-card border-primary-500/30'
@@ -148,11 +148,11 @@ export default function AgentDashboard() {
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-4">
               {metRequirement ? (
-                <div className="p-3 bg-green-500/20 rounded-xl">
+                <div className="p-3 bg-green-500/20 rounded-lg">
                   <CheckCircle2 className="w-5 h-5 text-green-400" />
                 </div>
               ) : (
-                <div className="p-3 bg-primary-500/20 rounded-xl">
+                <div className="p-3 bg-primary-500/20 rounded-lg">
                   <Target className="w-5 h-5 text-primary-400" />
                 </div>
               )}
@@ -199,7 +199,7 @@ export default function AgentDashboard() {
           <div className="flex-shrink-0">
             <Link
               to="/courses"
-              className={`flex items-center justify-center gap-3 px-8 py-4 font-semibold rounded-xl transition-all shadow-lg ${
+              className={`flex items-center justify-center gap-3 px-8 py-4 font-semibold rounded-lg transition-all shadow-lg ${
                 metRequirement
                   ? 'bg-green-600 hover:bg-green-700 text-white shadow-green-500/20'
                   : 'bg-primary-600 hover:bg-primary-700 text-white shadow-primary-500/30 animate-pulse hover:animate-none'
@@ -257,7 +257,7 @@ export default function AgentDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-card rounded-xl p-5 border border-border"
+          className="bg-card rounded-lg p-5 border border-border"
         >
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-blue-500/10 rounded-lg">
@@ -272,7 +272,7 @@ export default function AgentDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
-          className="bg-card rounded-xl p-5 border border-border"
+          className="bg-card rounded-lg p-5 border border-border"
         >
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-green-500/10 rounded-lg">
@@ -287,7 +287,7 @@ export default function AgentDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-card rounded-xl p-5 border border-border"
+          className="bg-card rounded-lg p-5 border border-border"
         >
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-orange-500/10 rounded-lg">
@@ -302,7 +302,7 @@ export default function AgentDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35 }}
-          className="bg-card rounded-xl p-5 border border-border"
+          className="bg-card rounded-lg p-5 border border-border"
         >
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-purple-500/10 rounded-lg">
@@ -321,7 +321,7 @@ export default function AgentDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-card rounded-xl p-6 border border-border"
+          className="bg-card rounded-lg p-6 border border-border"
         >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
@@ -342,7 +342,7 @@ export default function AgentDashboard() {
                 <Link
                   key={course.id}
                   to={`/courses/${course.id}`}
-                  className="flex items-center justify-between p-4 bg-muted/50 rounded-xl hover:bg-accent transition-colors group"
+                  className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-accent transition-colors group"
                 >
                   <div className="flex items-center gap-3">
                     <div className="text-2xl">{course.icon || '📚'}</div>
@@ -386,7 +386,7 @@ export default function AgentDashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.45 }}
           data-tutorial="gamification"
-          className="bg-card rounded-xl p-6 border border-border"
+          className="bg-card rounded-lg p-6 border border-border"
         >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
@@ -406,7 +406,7 @@ export default function AgentDashboard() {
               {badges.map((badge) => (
                 <div
                   key={badge.id}
-                  className="flex flex-col items-center p-4 bg-muted/50 rounded-xl hover:bg-accent transition-colors cursor-default"
+                  className="flex flex-col items-center p-4 bg-muted/50 rounded-lg hover:bg-accent transition-colors cursor-default"
                   title={badge.description}
                 >
                   <div className="text-3xl mb-2">{badge.icon || '🏅'}</div>
@@ -434,7 +434,7 @@ export default function AgentDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="bg-card rounded-xl p-6 border border-border"
+          className="bg-card rounded-lg p-6 border border-border"
         >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
@@ -453,9 +453,9 @@ export default function AgentDashboard() {
             {recentSessions.map((session) => (
               <div
                 key={session.id}
-                className="flex items-center gap-4 p-4 bg-muted/50 rounded-xl"
+                className="flex items-center gap-4 p-4 bg-muted/50 rounded-lg"
               >
-                <div className={`w-14 h-14 rounded-xl flex items-center justify-center font-bold text-xl ${
+                <div className={`w-14 h-14 rounded-lg flex items-center justify-center font-bold text-xl ${
                   session.overall_score >= 80
                     ? 'bg-green-500/20 text-green-400'
                     : session.overall_score >= 60
@@ -483,7 +483,7 @@ export default function AgentDashboard() {
       <div className="md:hidden fixed bottom-6 left-4 right-4">
         <Link
           to="/courses"
-          className="flex items-center justify-center gap-2 w-full py-4 bg-primary-600 text-white font-semibold rounded-xl shadow-lg shadow-primary-500/30"
+          className="flex items-center justify-center gap-2 w-full py-4 bg-primary-600 text-white font-semibold rounded-lg shadow-lg shadow-primary-500/30"
         >
           <Play className="w-5 h-5" />
           Start Training

@@ -176,7 +176,7 @@ export default function TranscriptViewer({
 
   if (!segments || segments.length === 0) {
     return (
-      <div className={`bg-card rounded-xl p-6 border border-border ${className}`}>
+      <div className={`bg-card rounded-lg p-6 border border-border ${className}`}>
         <div className="text-center text-muted-foreground py-12">
           <Phone className="w-12 h-12 mx-auto mb-3 opacity-50" />
           <p>No transcript available</p>
@@ -186,7 +186,7 @@ export default function TranscriptViewer({
   }
 
   return (
-    <div className={`bg-card rounded-xl border border-border ${className}`}>
+    <div className={`bg-card rounded-lg border border-border ${className}`}>
       <div className="px-6 py-4 border-b border-border">
         <h3 className="text-lg font-semibold text-foreground">Transcript</h3>
         <p className="text-sm text-muted-foreground mt-1">

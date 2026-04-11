@@ -64,7 +64,7 @@ function DemoVideoModal({ isOpen, onClose }) {
             </button>
 
             {/* Video container */}
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl bg-black">
+            <div className="relative rounded-lg overflow-hidden shadow-2xl bg-black">
               <video
                 ref={videoRef}
                 src="/demo-video.mp4"
@@ -86,7 +86,7 @@ function DemoVideoModal({ isOpen, onClose }) {
             >
               <a
                 href="/auth/signup"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-pink-500 to-orange-400 hover:from-pink-600 hover:to-orange-500 rounded-xl font-semibold text-white transition-all shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-pink-500 to-orange-400 hover:from-pink-600 hover:to-orange-500 rounded-lg font-semibold text-white transition-all shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40"
               >
                 Start Your Free Trial
               </a>

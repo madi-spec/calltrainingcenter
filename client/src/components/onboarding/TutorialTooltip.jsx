@@ -122,7 +122,7 @@ export default function TutorialTooltip({
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      className="fixed z-[10001] bg-card rounded-xl border border-blue-500/50 shadow-xl shadow-blue-500/10"
+      className="fixed z-[10001] bg-card rounded-lg border border-blue-500/50 shadow-xl shadow-blue-500/10"
       style={style}
     >
       {/* Arrow - only show when we have a target */}

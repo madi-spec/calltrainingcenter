@@ -187,7 +187,7 @@ export default function CourseBuilder() {
         </button>
 
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-primary-500/20 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-lg bg-primary-500/20 flex items-center justify-center">
             <BookOpen className="w-5 h-5 text-primary-400" />
           </div>
           <div>
@@ -202,7 +202,7 @@ export default function CourseBuilder() {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6 p-4 bg-green-500/20 border border-green-500/50 rounded-xl flex items-center gap-3"
+          className="mb-6 p-4 bg-green-500/20 border border-green-500/50 rounded-lg flex items-center gap-3"
         >
           <CheckCircle className="w-5 h-5 text-green-400" />
           <span className="text-green-300">Course created successfully! Redirecting...</span>
@@ -214,7 +214,7 @@ export default function CourseBuilder() {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-xl flex items-center gap-3"
+          className="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg flex items-center gap-3"
         >
           <AlertCircle className="w-5 h-5 text-red-400" />
           <span className="text-red-300">{error}</span>
@@ -226,7 +226,7 @@ export default function CourseBuilder() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-card rounded-xl border border-border p-6"
+          className="bg-card rounded-lg border border-border p-6"
         >
           <h2 className="text-lg font-semibold text-foreground mb-6">Course Details</h2>
 
@@ -346,7 +346,7 @@ export default function CourseBuilder() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-card rounded-xl border border-border p-6"
+          className="bg-card rounded-lg border border-border p-6"
         >
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -366,7 +366,7 @@ export default function CourseBuilder() {
           </div>
 
           {modules.length === 0 ? (
-            <div className="text-center py-12 border-2 border-dashed border-border rounded-xl">
+            <div className="text-center py-12 border-2 border-dashed border-border rounded-lg">
               <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
               <p className="text-muted-foreground mb-4">No modules yet</p>
               <button
@@ -384,7 +384,7 @@ export default function CourseBuilder() {
                   key={module.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="bg-muted/50 rounded-xl border border-border overflow-hidden"
+                  className="bg-muted/50 rounded-lg border border-border overflow-hidden"
                 >
                   {/* Module Header */}
                   <div
@@ -545,10 +545,10 @@ export default function CourseBuilder() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-card rounded-xl border border-border p-6"
+            className="bg-card rounded-lg border border-border p-6"
           >
             <h2 className="text-lg font-semibold text-foreground mb-4">Preview</h2>
-            <div className="bg-muted/50 rounded-xl p-4">
+            <div className="bg-muted/50 rounded-lg p-4">
               <div className="flex items-start gap-4">
                 <div className="text-4xl">{course.icon}</div>
                 <div className="flex-1">

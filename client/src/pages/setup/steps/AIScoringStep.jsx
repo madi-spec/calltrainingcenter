@@ -114,7 +114,7 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-orange-900/50 to-red-900/50 rounded-xl p-6 border border-orange-500/30">
+      <div className="bg-gradient-to-r from-orange-900/50 to-red-900/50 rounded-lg p-6 border border-orange-500/30">
         <div className="flex items-center gap-3 mb-2">
           <div className="p-2 bg-orange-500/20 rounded-lg">
             <Sliders className="w-5 h-5 text-orange-400" />
@@ -127,7 +127,7 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
       </div>
 
       {/* Scoring Weights */}
-      <div className="bg-card rounded-xl p-6 border border-border">
+      <div className="bg-card rounded-lg p-6 border border-border">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h4 className="text-md font-semibold text-foreground">Category Weights</h4>
@@ -182,7 +182,7 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
       </div>
 
       {/* Required Phrases */}
-      <div className="bg-card rounded-xl p-6 border border-border">
+      <div className="bg-card rounded-lg p-6 border border-border">
         <div className="flex items-center gap-2 mb-2">
           <CheckCircle className="w-5 h-5 text-green-400" />
           <h4 className="text-md font-semibold text-foreground">Required Behaviors</h4>
@@ -246,7 +246,7 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
       </div>
 
       {/* Prohibited Phrases */}
-      <div className="bg-card rounded-xl p-6 border border-border">
+      <div className="bg-card rounded-lg p-6 border border-border">
         <div className="flex items-center gap-2 mb-2">
           <XCircle className="w-5 h-5 text-red-400" />
           <h4 className="text-md font-semibold text-foreground">Prohibited Behaviors</h4>

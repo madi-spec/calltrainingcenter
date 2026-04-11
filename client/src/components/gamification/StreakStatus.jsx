@@ -98,7 +98,7 @@ export default function StreakStatus({ compact = false }) {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         className={`
-          rounded-xl p-4 border
+          rounded-lg p-4 border
           ${streak.atRisk
             ? 'bg-orange-500/10 border-orange-500/30'
             : recovery.available
@@ -109,7 +109,7 @@ export default function StreakStatus({ compact = false }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className={`
-              p-2 rounded-xl
+              p-2 rounded-lg
               ${streak.current > 0
                 ? 'bg-orange-500/20'
                 : 'bg-muted'}

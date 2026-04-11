@@ -124,7 +124,7 @@ export default function SessionPlayback() {
   if (error || !session) {
     return (
       <div className="max-w-2xl mx-auto mt-12">
-        <div className="bg-card rounded-xl p-8 border border-border text-center">
+        <div className="bg-card rounded-lg p-8 border border-border text-center">
           <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-foreground mb-2">
             Unable to Load Session
@@ -200,7 +200,7 @@ export default function SessionPlayback() {
           duration={recording?.duration_seconds || session.duration_seconds}
         />
       ) : (
-        <div className="bg-card rounded-xl p-8 border border-border text-center">
+        <div className="bg-card rounded-lg p-8 border border-border text-center">
           <Play className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
           <p className="text-muted-foreground mb-2">No recording available</p>
           <p className="text-sm text-muted-foreground">
@@ -241,7 +241,7 @@ export default function SessionPlayback() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-card rounded-xl p-6 border border-border"
+          className="bg-card rounded-lg p-6 border border-border"
         >
           <h3 className="text-lg font-semibold text-foreground mb-4">
             Performance Breakdown
@@ -270,7 +270,7 @@ export default function SessionPlayback() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-card rounded-xl p-6 border border-border"
+              className="bg-card rounded-lg p-6 border border-border"
             >
               <h3 className="text-lg font-semibold text-green-400 mb-4">
                 Strengths
@@ -296,7 +296,7 @@ export default function SessionPlayback() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-card rounded-xl p-6 border border-border"
+              className="bg-card rounded-lg p-6 border border-border"
             >
               <h3 className="text-lg font-semibold text-yellow-400 mb-4">
                 Areas to Improve

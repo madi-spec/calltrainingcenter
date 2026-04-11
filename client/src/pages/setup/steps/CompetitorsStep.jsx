@@ -119,7 +119,7 @@ export default function CompetitorsStep({ data, allStepData, onComplete, authFet
     <div className="space-y-6">
       {/* Extracted Competitors Notice */}
       {usedExtractedData && competitors.length > 0 && (
-        <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
+        <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
           <div className="flex items-center gap-2 text-green-400">
             <CheckCircle2 className="w-5 h-5" />
             <span className="font-medium">
@@ -133,7 +133,7 @@ export default function CompetitorsStep({ data, allStepData, onComplete, authFet
       )}
 
       {/* Info Box */}
-      <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
+      <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
         <p className="text-blue-300 text-sm">
           Adding competitor information helps train CSRs to effectively differentiate your services
           and handle objections when customers mention competing companies.
@@ -145,7 +145,7 @@ export default function CompetitorsStep({ data, allStepData, onComplete, authFet
         {competitors.map((comp, index) => (
           <div
             key={index}
-            className="bg-card rounded-xl border border-border overflow-hidden"
+            className="bg-card rounded-lg border border-border overflow-hidden"
           >
             <button
               onClick={() => setExpandedCompetitor(expandedCompetitor === index ? null : index)}
@@ -285,7 +285,7 @@ export default function CompetitorsStep({ data, allStepData, onComplete, authFet
 
         <button
           onClick={addCompetitor}
-          className="w-full flex items-center justify-center gap-2 p-4 bg-card hover:bg-muted rounded-xl border border-border border-dashed text-muted-foreground hover:text-secondary-foreground transition-colors"
+          className="w-full flex items-center justify-center gap-2 p-4 bg-card hover:bg-muted rounded-lg border border-border border-dashed text-muted-foreground hover:text-secondary-foreground transition-colors"
         >
           <Plus className="w-5 h-5" />
           Add Competitor

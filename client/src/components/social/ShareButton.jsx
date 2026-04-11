@@ -92,7 +92,7 @@ export default function ShareButton({
             initial={{ opacity: 0, scale: 0.95, y: -10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
-            className="absolute right-0 top-full mt-2 w-56 bg-card rounded-xl border border-border shadow-xl overflow-hidden z-50"
+            className="absolute right-0 top-full mt-2 w-56 bg-card rounded-lg border border-border shadow-xl overflow-hidden z-50"
           >
             <div className="p-2">
               <p className="text-xs text-muted-foreground uppercase tracking-wide px-2 py-1">

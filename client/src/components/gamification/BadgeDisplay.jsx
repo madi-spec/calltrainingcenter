@@ -90,7 +90,7 @@ export function BadgeCard({ badge, earned = false, showProgress = false, onClick
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
       className={`
-        relative p-4 rounded-xl border text-left w-full
+        relative p-4 rounded-lg border text-left w-full
         ${earned ? `${style.bg} ${style.border}` : 'bg-card/50 border-border'}
         ${earned && badge.rarity !== 'common' ? `shadow-lg ${style.glow}` : ''}
         hover:bg-opacity-80 transition-all duration-200

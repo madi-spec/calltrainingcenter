@@ -33,7 +33,7 @@ export default function QuickPracticeButton({ className = '' }) {
         px-6 py-3
         bg-gradient-to-r from-yellow-500 to-orange-500
         hover:from-yellow-600 hover:to-orange-600
-        text-white font-semibold rounded-xl
+        text-white font-semibold rounded-lg
         shadow-lg shadow-orange-500/20
         transition-all duration-200
         disabled:opacity-50 disabled:cursor-not-allowed

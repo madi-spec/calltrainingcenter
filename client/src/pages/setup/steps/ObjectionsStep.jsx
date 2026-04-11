@@ -134,7 +134,7 @@ export default function ObjectionsStep({ data, allStepData, onComplete, authFetc
   return (
     <div className="space-y-6">
       {/* Instructions */}
-      <div className="bg-card rounded-xl p-6 border border-border">
+      <div className="bg-card rounded-lg p-6 border border-border">
         <h3 className="text-lg font-semibold text-foreground mb-2">Configure Objection Handling</h3>
         <p className="text-muted-foreground">
           Select common objections your team encounters and customize the recommended responses.
@@ -150,7 +150,7 @@ export default function ObjectionsStep({ data, allStepData, onComplete, authFetc
           const isExpanded = expandedCategory === category.id;
 
           return (
-            <div key={category.id} className="bg-card rounded-xl border border-border overflow-hidden">
+            <div key={category.id} className="bg-card rounded-lg border border-border overflow-hidden">
               <button
                 onClick={() => setExpandedCategory(isExpanded ? null : category.id)}
                 className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors"
@@ -267,7 +267,7 @@ export default function ObjectionsStep({ data, allStepData, onComplete, authFetc
       </div>
 
       {/* Custom Objections */}
-      <div className="bg-card rounded-xl border border-border">
+      <div className="bg-card rounded-lg border border-border">
         <div className="p-4 border-b border-border">
           <div className="flex items-center justify-between">
             <h4 className="font-medium text-foreground">Custom Objections</h4>

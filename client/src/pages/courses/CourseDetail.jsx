@@ -103,7 +103,7 @@ export default function CourseDetail() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-card rounded-2xl p-6 md:p-8 border border-border"
+        className="bg-card rounded-lg p-6 md:p-8 border border-border"
       >
         <div className="flex flex-col md:flex-row md:items-start gap-6">
           {/* Course Icon */}
@@ -192,7 +192,7 @@ export default function CourseDetail() {
 
           {/* Badge Preview */}
           {course.badge_name && (
-            <div className="bg-muted/50 rounded-xl p-4 text-center min-w-[160px]">
+            <div className="bg-muted/50 rounded-lg p-4 text-center min-w-[160px]">
               <div className="text-4xl mb-2">
                 {isCompleted ? (
                   course.badge_icon || '🏆'
@@ -249,7 +249,7 @@ function ModuleCard({ module, index, courseStarted, isLocked }) {
   return (
     <Link
       to={isLocked || !courseStarted ? '#' : `/modules/${module.id}`}
-      className={`block bg-card rounded-xl border border-border overflow-hidden transition-all ${
+      className={`block bg-card rounded-lg border border-border overflow-hidden transition-all ${
         isLocked || !courseStarted
           ? 'opacity-60 cursor-not-allowed'
           : 'hover:border-border'
@@ -258,7 +258,7 @@ function ModuleCard({ module, index, courseStarted, isLocked }) {
       <div className="p-5">
         <div className="flex items-center gap-4">
           {/* Module Number */}
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg ${
+          <div className={`w-12 h-12 rounded-lg flex items-center justify-center font-bold text-lg ${
             isCompleted
               ? 'bg-green-500/20 text-green-400'
               : isInProgress

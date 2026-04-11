@@ -61,12 +61,12 @@ export default function StreakRecoveryModal({ recoveryData, tokensAvailable, onC
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
-        className="bg-card rounded-2xl w-full max-w-md p-6 border border-border shadow-xl"
+        className="bg-card rounded-lg w-full max-w-md p-6 border border-border shadow-xl"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-start justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-red-500/20 rounded-xl">
+            <div className="p-3 bg-red-500/20 rounded-lg">
               <Flame className="w-5 h-5 text-red-400" />
             </div>
             <div>
@@ -84,7 +84,7 @@ export default function StreakRecoveryModal({ recoveryData, tokensAvailable, onC
 
         <div className="space-y-4">
           {/* Streak info */}
-          <div className="bg-muted/50 rounded-xl p-4 text-center">
+          <div className="bg-muted/50 rounded-lg p-4 text-center">
             <p className="text-sm text-muted-foreground mb-1">Your broken streak</p>
             <div className="flex items-center justify-center gap-2">
               <Flame className="w-8 h-8 text-orange-400" />
@@ -102,7 +102,7 @@ export default function StreakRecoveryModal({ recoveryData, tokensAvailable, onC
           </div>
 
           {/* Recovery tokens */}
-          <div className="bg-muted/50 rounded-xl p-4">
+          <div className="bg-muted/50 rounded-lg p-4">
             <div className="flex items-center justify-between">
               <span className="text-secondary-foreground">Recovery Tokens Available</span>
               <span className={`font-bold ${tokensAvailable > 0 ? 'text-green-400' : 'text-red-400'}`}>
@@ -126,14 +126,14 @@ export default function StreakRecoveryModal({ recoveryData, tokensAvailable, onC
           <div className="flex gap-3 pt-2">
             <button
               onClick={onClose}
-              className="flex-1 px-4 py-3 bg-muted hover:bg-muted text-foreground font-medium rounded-xl transition-colors"
+              className="flex-1 px-4 py-3 bg-muted hover:bg-muted text-foreground font-medium rounded-lg transition-colors"
             >
               Cancel
             </button>
             <button
               onClick={handleRecover}
               disabled={recovering || tokensAvailable < 1}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-green-600 hover:bg-green-700 disabled:bg-muted disabled:cursor-not-allowed text-foreground font-medium rounded-xl transition-colors"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-green-600 hover:bg-green-700 disabled:bg-muted disabled:cursor-not-allowed text-foreground font-medium rounded-lg transition-colors"
             >
               {recovering ? (
                 <>

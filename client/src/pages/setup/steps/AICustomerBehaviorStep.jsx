@@ -99,7 +99,7 @@ export default function AICustomerBehaviorStep({ data, onComplete, authFetch, or
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-900/50 to-purple-900/50 rounded-xl p-6 border border-blue-500/30">
+      <div className="bg-gradient-to-r from-blue-900/50 to-purple-900/50 rounded-lg p-6 border border-blue-500/30">
         <div className="flex items-center gap-3 mb-2">
           <div className="p-2 bg-blue-500/20 rounded-lg">
             <Bot className="w-5 h-5 text-blue-400" />
@@ -113,7 +113,7 @@ export default function AICustomerBehaviorStep({ data, onComplete, authFetch, or
 
       {/* Single Select Options */}
       {Object.entries(BEHAVIOR_OPTIONS).map(([key, config]) => (
-        <div key={key} className="bg-card rounded-xl p-6 border border-border">
+        <div key={key} className="bg-card rounded-lg p-6 border border-border">
           <h4 className="text-md font-semibold text-foreground mb-2">{config.title}</h4>
           <p className="text-sm text-muted-foreground mb-4">{config.description}</p>
 
@@ -149,7 +149,7 @@ export default function AICustomerBehaviorStep({ data, onComplete, authFetch, or
       ))}
 
       {/* Escalation Triggers */}
-      <div className="bg-card rounded-xl p-6 border border-border">
+      <div className="bg-card rounded-lg p-6 border border-border">
         <h4 className="text-md font-semibold text-foreground mb-2">Escalation Triggers</h4>
         <p className="text-sm text-muted-foreground mb-4">
           What should cause customers to become more upset? Select all that apply.
@@ -185,7 +185,7 @@ export default function AICustomerBehaviorStep({ data, onComplete, authFetch, or
       </div>
 
       {/* De-escalation Triggers */}
-      <div className="bg-card rounded-xl p-6 border border-border">
+      <div className="bg-card rounded-lg p-6 border border-border">
         <h4 className="text-md font-semibold text-foreground mb-2">De-escalation Triggers</h4>
         <p className="text-sm text-muted-foreground mb-4">
           What should help calm frustrated customers? Select all that apply.

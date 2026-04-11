@@ -184,7 +184,7 @@ function PreCall() {
           transition={{ delay: 0.05 }}
           className="mb-6"
         >
-          <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl p-4">
+          <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-lg p-4">
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center">
@@ -432,7 +432,7 @@ function PreCall() {
           transition={{ delay: 0.55 }}
           className="mt-6"
         >
-          <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
+          <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center">
@@ -462,7 +462,7 @@ function PreCall() {
           transition={{ delay: 0.6 }}
           className="mt-8"
         >
-          <div className="bg-gradient-to-r from-red-500/10 via-orange-500/10 to-amber-500/10 border border-red-500/30 rounded-2xl p-6">
+          <div className="bg-gradient-to-r from-red-500/10 via-orange-500/10 to-amber-500/10 border border-red-500/30 rounded-lg p-6">
             <div className="flex flex-col items-center text-center">
               <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mb-4">
                 <Lock className="w-8 h-8 text-red-400" />

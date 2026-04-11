@@ -725,23 +725,23 @@ Respond with JSON in this exact format:
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
-          className="bg-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
+          className="bg-card rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
         >
           {/* Header */}
-          <div className="p-6 border-b border-gray-700">
+          <div className="p-6 border-b border-border">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold text-gray-100">
+              <h2 className="text-xl font-semibold text-foreground">
                 {activeWizard === 'agent' ? 'Customer Behavior Setup' : 'Coaching Style Setup'}
               </h2>
               <button
                 onClick={() => { setActiveWizard(null); setWizardStep(0); }}
-                className="text-gray-400 hover:text-gray-300"
+                className="text-muted-foreground hover:text-secondary-foreground"
               >
                 ✕
               </button>
             </div>
             {/* Progress bar */}
-            <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+            <div className="h-2 bg-muted rounded-full overflow-hidden">
               <motion.div
                 className="h-full bg-primary-500"
                 initial={{ width: 0 }}
@@ -749,14 +749,14 @@ Respond with JSON in this exact format:
                 transition={{ duration: 0.3 }}
               />
             </div>
-            <p className="text-sm text-gray-400 mt-2">
+            <p className="text-sm text-muted-foreground mt-2">
               Step {wizardStep + 1} of {steps.length}: {step.title}
             </p>
           </div>
 
           {/* Content */}
           <div className="p-6">
-            <h3 className="text-lg font-medium text-gray-100 mb-6">{step.question}</h3>
+            <h3 className="text-lg font-medium text-foreground mb-6">{step.question}</h3>
 
             {step.type === 'select' && (
               <div className="space-y-3">
@@ -767,17 +767,17 @@ Respond with JSON in this exact format:
                     className={`w-full p-4 rounded-xl border text-left transition-all ${
                       currentAnswers[step.id] === option.value
                         ? 'border-primary-500 bg-primary-500/10'
-                        : 'border-gray-700 hover:border-gray-600 bg-gray-750'
+                        : 'border-border hover:border-border bg-muted'
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-medium text-gray-100">{option.label}</span>
+                      <span className="font-medium text-foreground">{option.label}</span>
                       {currentAnswers[step.id] === option.value && (
                         <Check className="w-5 h-5 text-primary-400" />
                       )}
                     </div>
                     {option.description && (
-                      <p className="text-sm text-gray-400 mt-1">{option.description}</p>
+                      <p className="text-sm text-muted-foreground mt-1">{option.description}</p>
                     )}
                   </button>
                 ))}
@@ -795,31 +795,31 @@ Respond with JSON in this exact format:
                       className={`w-full p-4 rounded-xl border text-left transition-all ${
                         selected
                           ? 'border-primary-500 bg-primary-500/10'
-                          : 'border-gray-700 hover:border-gray-600 bg-gray-750'
+                          : 'border-border hover:border-border bg-muted'
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-medium text-gray-100">{option.label}</span>
+                        <span className="font-medium text-foreground">{option.label}</span>
                         <div className={`w-5 h-5 rounded border flex items-center justify-center ${
-                          selected ? 'bg-primary-500 border-primary-500' : 'border-gray-600'
+                          selected ? 'bg-primary-500 border-primary-500' : 'border-border'
                         }`}>
-                          {selected && <Check className="w-3 h-3 text-white" />}
+                          {selected && <Check className="w-3 h-3 text-foreground" />}
                         </div>
                       </div>
                     </button>
                   );
                 })}
-                <p className="text-sm text-gray-500 mt-2">Select all that apply</p>
+                <p className="text-sm text-muted-foreground mt-2">Select all that apply</p>
               </div>
             )}
           </div>
 
           {/* Footer */}
-          <div className="p-6 border-t border-gray-700 flex items-center justify-between">
+          <div className="p-6 border-t border-border flex items-center justify-between">
             <button
               onClick={() => setWizardStep(prev => prev - 1)}
               disabled={wizardStep === 0}
-              className="flex items-center gap-2 px-4 py-2 text-gray-400 hover:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-4 py-2 text-muted-foreground hover:text-secondary-foreground disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <ArrowLeft className="w-4 h-4" />
               Back
@@ -829,7 +829,7 @@ Respond with JSON in this exact format:
               <button
                 onClick={() => setWizardStep(prev => prev + 1)}
                 disabled={!canProceed()}
-                className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-700 disabled:text-gray-500 text-white font-medium rounded-lg transition-colors"
+                className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-muted disabled:text-muted-foreground text-foreground font-medium rounded-lg transition-colors"
               >
                 Next
                 <ArrowRight className="w-4 h-4" />
@@ -838,7 +838,7 @@ Respond with JSON in this exact format:
               <button
                 onClick={handleFinishWizard}
                 disabled={!canProceed() || savingPrompts}
-                className="flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-700 disabled:text-gray-500 text-white font-medium rounded-lg transition-colors"
+                className="flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 disabled:bg-muted disabled:text-muted-foreground text-foreground font-medium rounded-lg transition-colors"
               >
                 {savingPrompts ? (
                   <>
@@ -863,8 +863,8 @@ Respond with JSON in this exact format:
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-100">AI Configuration</h1>
-        <p className="text-gray-400 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">AI Configuration</h1>
+        <p className="text-muted-foreground mt-1">
           Customize how AI customers behave and how coaching feedback is delivered
         </p>
       </div>
@@ -873,7 +873,7 @@ Respond with JSON in this exact format:
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+        className="bg-card rounded-xl p-6 border border-border"
       >
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
@@ -881,15 +881,15 @@ Respond with JSON in this exact format:
               <Sliders className="w-6 h-6 text-purple-400" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-gray-100">Scoring Weights</h2>
-              <p className="text-sm text-gray-400">Adjust how different categories impact the overall score</p>
+              <h2 className="text-lg font-semibold text-foreground">Scoring Weights</h2>
+              <p className="text-sm text-muted-foreground">Adjust how different categories impact the overall score</p>
             </div>
           </div>
           {hasWeightChanges && (
             <button
               onClick={handleSaveWeights}
               disabled={savingWeights || totalWeight !== 100}
-              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-700 text-white font-medium rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-muted text-foreground font-medium rounded-lg transition-colors"
             >
               {savingWeights ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               Save
@@ -916,8 +916,8 @@ Respond with JSON in this exact format:
           ].map((category) => (
             <div key={category.key} className="flex items-center gap-4">
               <div className="w-48 flex items-center gap-2">
-                <category.icon className="w-4 h-4 text-gray-500" />
-                <span className="text-gray-300">{category.label}</span>
+                <category.icon className="w-4 h-4 text-muted-foreground" />
+                <span className="text-secondary-foreground">{category.label}</span>
               </div>
               <input
                 type="range"
@@ -934,16 +934,16 @@ Respond with JSON in this exact format:
                   max="100"
                   value={scoringWeights[category.key]}
                   onChange={(e) => handleWeightChange(category.key, e.target.value)}
-                  className="w-14 px-2 py-1 bg-gray-700 border border-gray-600 rounded text-gray-100 text-center"
+                  className="w-14 px-2 py-1 bg-muted border border-border rounded text-foreground text-center"
                 />
-                <span className="text-gray-400">%</span>
+                <span className="text-muted-foreground">%</span>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="mt-4 pt-4 border-t border-gray-700 flex justify-between">
-          <span className="text-gray-400">Total</span>
+        <div className="mt-4 pt-4 border-t border-border flex justify-between">
+          <span className="text-muted-foreground">Total</span>
           <span className={`font-medium ${totalWeight === 100 ? 'text-green-400' : 'text-red-400'}`}>
             {totalWeight}%
           </span>
@@ -955,7 +955,7 @@ Respond with JSON in this exact format:
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+        className="bg-card rounded-xl p-6 border border-border"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -963,8 +963,8 @@ Respond with JSON in this exact format:
               <Bot className="w-6 h-6 text-cyan-400" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-gray-100">Customer Behavior</h2>
-              <p className="text-sm text-gray-400">
+              <h2 className="text-lg font-semibold text-foreground">Customer Behavior</h2>
+              <p className="text-sm text-muted-foreground">
                 Configure how AI customers act during training calls
                 {hasCustomPrompts.agent && (
                   <span className="ml-2 text-xs text-cyan-400">(Customized)</span>
@@ -976,7 +976,7 @@ Respond with JSON in this exact format:
             {hasCustomPrompts.agent && (
               <button
                 onClick={() => handleResetPrompt('agent')}
-                className="flex items-center gap-2 px-3 py-2 text-gray-400 hover:text-gray-300 text-sm"
+                className="flex items-center gap-2 px-3 py-2 text-muted-foreground hover:text-secondary-foreground text-sm"
               >
                 <RotateCcw className="w-4 h-4" />
                 Reset
@@ -984,7 +984,7 @@ Respond with JSON in this exact format:
             )}
             <button
               onClick={() => { setActiveWizard('agent'); setWizardStep(0); }}
-              className="flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white font-medium rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-foreground font-medium rounded-lg transition-colors"
             >
               <Sparkles className="w-4 h-4" />
               {hasCustomPrompts.agent ? 'Reconfigure' : 'Configure'}
@@ -993,21 +993,21 @@ Respond with JSON in this exact format:
         </div>
 
         {hasCustomPrompts.agent && Object.keys(agentWizardAnswers).length > 0 && (
-          <div className="mt-4 pt-4 border-t border-gray-700">
-            <p className="text-sm text-gray-400 mb-3">Current configuration:</p>
+          <div className="mt-4 pt-4 border-t border-border">
+            <p className="text-sm text-muted-foreground mb-3">Current configuration:</p>
             <div className="flex flex-wrap gap-2">
               {agentWizardAnswers.industry && (
-                <span className="px-3 py-1 bg-gray-700 rounded-full text-sm text-gray-300">
+                <span className="px-3 py-1 bg-muted rounded-full text-sm text-secondary-foreground">
                   {AGENT_WIZARD_STEPS.find(s => s.id === 'industry')?.options.find(o => o.value === agentWizardAnswers.industry)?.label}
                 </span>
               )}
               {agentWizardAnswers.customerRealism && (
-                <span className="px-3 py-1 bg-gray-700 rounded-full text-sm text-gray-300">
+                <span className="px-3 py-1 bg-muted rounded-full text-sm text-secondary-foreground">
                   {AGENT_WIZARD_STEPS.find(s => s.id === 'customerRealism')?.options.find(o => o.value === agentWizardAnswers.customerRealism)?.label}
                 </span>
               )}
               {agentWizardAnswers.challengeLevel && (
-                <span className="px-3 py-1 bg-gray-700 rounded-full text-sm text-gray-300">
+                <span className="px-3 py-1 bg-muted rounded-full text-sm text-secondary-foreground">
                   {AGENT_WIZARD_STEPS.find(s => s.id === 'challengeLevel')?.options.find(o => o.value === agentWizardAnswers.challengeLevel)?.label} challenge
                 </span>
               )}
@@ -1021,7 +1021,7 @@ Respond with JSON in this exact format:
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+        className="bg-card rounded-xl p-6 border border-border"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -1029,8 +1029,8 @@ Respond with JSON in this exact format:
               <MessageSquare className="w-6 h-6 text-purple-400" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-gray-100">Coaching Style</h2>
-              <p className="text-sm text-gray-400">
+              <h2 className="text-lg font-semibold text-foreground">Coaching Style</h2>
+              <p className="text-sm text-muted-foreground">
                 Configure how feedback and scores are delivered
                 {hasCustomPrompts.coaching && (
                   <span className="ml-2 text-xs text-purple-400">(Customized)</span>
@@ -1042,7 +1042,7 @@ Respond with JSON in this exact format:
             {hasCustomPrompts.coaching && (
               <button
                 onClick={() => handleResetPrompt('coaching')}
-                className="flex items-center gap-2 px-3 py-2 text-gray-400 hover:text-gray-300 text-sm"
+                className="flex items-center gap-2 px-3 py-2 text-muted-foreground hover:text-secondary-foreground text-sm"
               >
                 <RotateCcw className="w-4 h-4" />
                 Reset
@@ -1050,7 +1050,7 @@ Respond with JSON in this exact format:
             )}
             <button
               onClick={() => { setActiveWizard('coaching'); setWizardStep(0); }}
-              className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-foreground font-medium rounded-lg transition-colors"
             >
               <Sparkles className="w-4 h-4" />
               {hasCustomPrompts.coaching ? 'Reconfigure' : 'Configure'}
@@ -1059,21 +1059,21 @@ Respond with JSON in this exact format:
         </div>
 
         {hasCustomPrompts.coaching && Object.keys(coachingWizardAnswers).length > 0 && (
-          <div className="mt-4 pt-4 border-t border-gray-700">
-            <p className="text-sm text-gray-400 mb-3">Current configuration:</p>
+          <div className="mt-4 pt-4 border-t border-border">
+            <p className="text-sm text-muted-foreground mb-3">Current configuration:</p>
             <div className="flex flex-wrap gap-2">
               {coachingWizardAnswers.coachingStyle && (
-                <span className="px-3 py-1 bg-gray-700 rounded-full text-sm text-gray-300">
+                <span className="px-3 py-1 bg-muted rounded-full text-sm text-secondary-foreground">
                   {COACHING_WIZARD_STEPS.find(s => s.id === 'coachingStyle')?.options.find(o => o.value === coachingWizardAnswers.coachingStyle)?.label}
                 </span>
               )}
               {coachingWizardAnswers.feedbackDetail && (
-                <span className="px-3 py-1 bg-gray-700 rounded-full text-sm text-gray-300">
+                <span className="px-3 py-1 bg-muted rounded-full text-sm text-secondary-foreground">
                   {COACHING_WIZARD_STEPS.find(s => s.id === 'feedbackDetail')?.options.find(o => o.value === coachingWizardAnswers.feedbackDetail)?.label} detail
                 </span>
               )}
               {coachingWizardAnswers.prioritySkills?.length > 0 && (
-                <span className="px-3 py-1 bg-gray-700 rounded-full text-sm text-gray-300">
+                <span className="px-3 py-1 bg-muted rounded-full text-sm text-secondary-foreground">
                   {coachingWizardAnswers.prioritySkills.length} priority skills
                 </span>
               )}
@@ -1087,19 +1087,19 @@ Respond with JSON in this exact format:
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.25 }}
-        className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden"
+        className="bg-card rounded-xl border border-border overflow-hidden"
       >
         <button
           onClick={() => setCriteriaExpanded(!criteriaExpanded)}
-          className="w-full p-6 flex items-center justify-between hover:bg-gray-750 transition-colors"
+          className="w-full p-6 flex items-center justify-between hover:bg-muted transition-colors"
         >
           <div className="flex items-center gap-3">
             <div className="p-2 bg-orange-500/10 rounded-lg">
               <ListChecks className="w-6 h-6 text-orange-400" />
             </div>
             <div className="text-left">
-              <h2 className="text-lg font-semibold text-gray-100">Custom Scoring Criteria</h2>
-              <p className="text-sm text-gray-400">
+              <h2 className="text-lg font-semibold text-foreground">Custom Scoring Criteria</h2>
+              <p className="text-sm text-muted-foreground">
                 Define specific behaviors that impact scores
                 {(scoringCriteria.requiredPhrases.length > 0 || scoringCriteria.prohibitedPhrases.length > 0) && (
                   <span className="ml-2 text-orange-400">
@@ -1110,9 +1110,9 @@ Respond with JSON in this exact format:
             </div>
           </div>
           {criteriaExpanded ? (
-            <ChevronUp className="w-5 h-5 text-gray-400" />
+            <ChevronUp className="w-5 h-5 text-muted-foreground" />
           ) : (
-            <ChevronDown className="w-5 h-5 text-gray-400" />
+            <ChevronDown className="w-5 h-5 text-muted-foreground" />
           )}
         </button>
 
@@ -1124,14 +1124,14 @@ Respond with JSON in this exact format:
               exit={{ height: 0, opacity: 0 }}
               className="overflow-hidden"
             >
-              <div className="p-6 pt-0 border-t border-gray-700 space-y-6">
+              <div className="p-6 pt-0 border-t border-border space-y-6">
                 {/* Required Phrases Section */}
                 <div>
                   <h3 className="flex items-center gap-2 text-sm font-medium text-green-400 mb-3">
                     <CheckCircle className="w-4 h-4" />
                     Required Behaviors (Reward if present)
                   </h3>
-                  <p className="text-xs text-gray-500 mb-3">
+                  <p className="text-xs text-muted-foreground mb-3">
                     CSRs will be rewarded when they include these phrases or behaviors
                   </p>
 
@@ -1141,19 +1141,19 @@ Respond with JSON in this exact format:
                       <div className="flex-1">
                         <span className="text-sm text-green-300">"{item.phrase}"</span>
                         {item.description && (
-                          <span className="text-xs text-gray-500 ml-2">- {item.description}</span>
+                          <span className="text-xs text-muted-foreground ml-2">- {item.description}</span>
                         )}
                       </div>
                       <span className={`text-xs px-2 py-0.5 rounded ${
                         item.impact === 'high' ? 'bg-green-500/20 text-green-400' :
-                        item.impact === 'low' ? 'bg-gray-500/20 text-gray-400' :
+                        item.impact === 'low' ? 'bg-muted/50 text-muted-foreground' :
                         'bg-yellow-500/20 text-yellow-400'
                       }`}>
                         {item.impact}
                       </span>
                       <button
                         onClick={() => removeItem('requiredPhrases', index)}
-                        className="p-1 text-gray-500 hover:text-red-400"
+                        className="p-1 text-muted-foreground hover:text-red-400"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -1167,12 +1167,12 @@ Respond with JSON in this exact format:
                       placeholder="Phrase or behavior..."
                       value={newRequired.phrase}
                       onChange={(e) => setNewRequired(prev => ({ ...prev, phrase: e.target.value }))}
-                      className="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-100 placeholder-gray-500"
+                      className="flex-1 px-3 py-2 bg-muted border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground"
                     />
                     <select
                       value={newRequired.impact}
                       onChange={(e) => setNewRequired(prev => ({ ...prev, impact: e.target.value }))}
-                      className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-100"
+                      className="px-3 py-2 bg-muted border border-border rounded-lg text-sm text-foreground"
                     >
                       <option value="low">Low</option>
                       <option value="medium">Medium</option>
@@ -1181,7 +1181,7 @@ Respond with JSON in this exact format:
                     <button
                       onClick={addRequiredPhrase}
                       disabled={!newRequired.phrase.trim()}
-                      className="px-3 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-700 text-white rounded-lg"
+                      className="px-3 py-2 bg-green-600 hover:bg-green-700 disabled:bg-muted text-foreground rounded-lg"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -1194,7 +1194,7 @@ Respond with JSON in this exact format:
                     <XCircle className="w-4 h-4" />
                     Prohibited Behaviors (Penalize if present)
                   </h3>
-                  <p className="text-xs text-gray-500 mb-3">
+                  <p className="text-xs text-muted-foreground mb-3">
                     CSRs will be penalized when they use these phrases or behaviors
                   </p>
 
@@ -1204,19 +1204,19 @@ Respond with JSON in this exact format:
                       <div className="flex-1">
                         <span className="text-sm text-red-300">"{item.phrase}"</span>
                         {item.description && (
-                          <span className="text-xs text-gray-500 ml-2">- {item.description}</span>
+                          <span className="text-xs text-muted-foreground ml-2">- {item.description}</span>
                         )}
                       </div>
                       <span className={`text-xs px-2 py-0.5 rounded ${
                         item.impact === 'high' ? 'bg-red-500/20 text-red-400' :
-                        item.impact === 'low' ? 'bg-gray-500/20 text-gray-400' :
+                        item.impact === 'low' ? 'bg-muted/50 text-muted-foreground' :
                         'bg-yellow-500/20 text-yellow-400'
                       }`}>
                         {item.impact}
                       </span>
                       <button
                         onClick={() => removeItem('prohibitedPhrases', index)}
-                        className="p-1 text-gray-500 hover:text-red-400"
+                        className="p-1 text-muted-foreground hover:text-red-400"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -1230,12 +1230,12 @@ Respond with JSON in this exact format:
                       placeholder="Phrase to avoid..."
                       value={newProhibited.phrase}
                       onChange={(e) => setNewProhibited(prev => ({ ...prev, phrase: e.target.value }))}
-                      className="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-100 placeholder-gray-500"
+                      className="flex-1 px-3 py-2 bg-muted border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground"
                     />
                     <select
                       value={newProhibited.impact}
                       onChange={(e) => setNewProhibited(prev => ({ ...prev, impact: e.target.value }))}
-                      className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-100"
+                      className="px-3 py-2 bg-muted border border-border rounded-lg text-sm text-foreground"
                     >
                       <option value="low">Low</option>
                       <option value="medium">Medium</option>
@@ -1244,7 +1244,7 @@ Respond with JSON in this exact format:
                     <button
                       onClick={addProhibitedPhrase}
                       disabled={!newProhibited.phrase.trim()}
-                      className="px-3 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-700 text-white rounded-lg"
+                      className="px-3 py-2 bg-red-600 hover:bg-red-700 disabled:bg-muted text-foreground rounded-lg"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -1257,7 +1257,7 @@ Respond with JSON in this exact format:
                     <Target className="w-4 h-4" />
                     Custom Success Criteria
                   </h3>
-                  <p className="text-xs text-gray-500 mb-3">
+                  <p className="text-xs text-muted-foreground mb-3">
                     Additional criteria specific to your business
                   </p>
 
@@ -1266,18 +1266,18 @@ Respond with JSON in this exact format:
                     <div key={index} className="flex items-center gap-2 mb-2 p-2 bg-blue-500/10 rounded-lg">
                       <div className="flex-1">
                         <span className="text-sm text-blue-300">{item.criterion}</span>
-                        <span className="text-xs text-gray-500 ml-2">({item.category})</span>
+                        <span className="text-xs text-muted-foreground ml-2">({item.category})</span>
                       </div>
                       <span className={`text-xs px-2 py-0.5 rounded ${
                         item.impact === 'high' ? 'bg-blue-500/20 text-blue-400' :
-                        item.impact === 'low' ? 'bg-gray-500/20 text-gray-400' :
+                        item.impact === 'low' ? 'bg-muted/50 text-muted-foreground' :
                         'bg-yellow-500/20 text-yellow-400'
                       }`}>
                         {item.impact}
                       </span>
                       <button
                         onClick={() => removeItem('customCriteria', index)}
-                        className="p-1 text-gray-500 hover:text-red-400"
+                        className="p-1 text-muted-foreground hover:text-red-400"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -1291,12 +1291,12 @@ Respond with JSON in this exact format:
                       placeholder="Success criterion..."
                       value={newCustom.criterion}
                       onChange={(e) => setNewCustom(prev => ({ ...prev, criterion: e.target.value }))}
-                      className="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-100 placeholder-gray-500"
+                      className="flex-1 px-3 py-2 bg-muted border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground"
                     />
                     <select
                       value={newCustom.category}
                       onChange={(e) => setNewCustom(prev => ({ ...prev, category: e.target.value }))}
-                      className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-100"
+                      className="px-3 py-2 bg-muted border border-border rounded-lg text-sm text-foreground"
                     >
                       <option value="empathyRapport">Empathy</option>
                       <option value="problemResolution">Resolution</option>
@@ -1307,7 +1307,7 @@ Respond with JSON in this exact format:
                     <select
                       value={newCustom.impact}
                       onChange={(e) => setNewCustom(prev => ({ ...prev, impact: e.target.value }))}
-                      className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-100"
+                      className="px-3 py-2 bg-muted border border-border rounded-lg text-sm text-foreground"
                     >
                       <option value="low">Low</option>
                       <option value="medium">Medium</option>
@@ -1316,7 +1316,7 @@ Respond with JSON in this exact format:
                     <button
                       onClick={addCustomCriterion}
                       disabled={!newCustom.criterion.trim()}
-                      className="px-3 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 text-white rounded-lg"
+                      className="px-3 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-muted text-foreground rounded-lg"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -1324,11 +1324,11 @@ Respond with JSON in this exact format:
                 </div>
 
                 {/* Save button */}
-                <div className="flex justify-end pt-4 border-t border-gray-700">
+                <div className="flex justify-end pt-4 border-t border-border">
                   <button
                     onClick={handleSaveCriteria}
                     disabled={savingCriteria}
-                    className="flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 disabled:bg-gray-700 text-white font-medium rounded-lg transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 disabled:bg-muted text-foreground font-medium rounded-lg transition-colors"
                   >
                     {savingCriteria ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -1349,19 +1349,19 @@ Respond with JSON in this exact format:
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden"
+        className="bg-card rounded-xl border border-border overflow-hidden"
       >
         <button
           onClick={() => setVoicesExpanded(!voicesExpanded)}
-          className="w-full p-6 flex items-center justify-between hover:bg-gray-750 transition-colors"
+          className="w-full p-6 flex items-center justify-between hover:bg-muted transition-colors"
         >
           <div className="flex items-center gap-3">
             <div className="p-2 bg-green-500/10 rounded-lg">
               <Volume2 className="w-6 h-6 text-green-400" />
             </div>
             <div className="text-left">
-              <h2 className="text-lg font-semibold text-gray-100">Voice Preferences</h2>
-              <p className="text-sm text-gray-400">
+              <h2 className="text-lg font-semibold text-foreground">Voice Preferences</h2>
+              <p className="text-sm text-muted-foreground">
                 Default voice for AI customer simulations
                 {selectedVoice && (
                   <span className="ml-2 text-green-400">
@@ -1372,9 +1372,9 @@ Respond with JSON in this exact format:
             </div>
           </div>
           {voicesExpanded ? (
-            <ChevronUp className="w-5 h-5 text-gray-400" />
+            <ChevronUp className="w-5 h-5 text-muted-foreground" />
           ) : (
-            <ChevronDown className="w-5 h-5 text-gray-400" />
+            <ChevronDown className="w-5 h-5 text-muted-foreground" />
           )}
         </button>
 
@@ -1386,9 +1386,9 @@ Respond with JSON in this exact format:
               exit={{ height: 0, opacity: 0 }}
               className="overflow-hidden"
             >
-              <div className="p-6 pt-0 border-t border-gray-700">
+              <div className="p-6 pt-0 border-t border-border">
                 {voicesLoading ? (
-                  <div className="flex items-center gap-2 text-gray-400 py-4">
+                  <div className="flex items-center gap-2 text-muted-foreground py-4">
                     <Loader2 className="w-4 h-4 animate-spin" />
                     <span>Loading available voices...</span>
                   </div>
@@ -1408,11 +1408,11 @@ Respond with JSON in this exact format:
                           className={`p-3 rounded-lg border text-left transition-colors ${
                             selectedVoice === voice.id
                               ? 'border-primary-500 bg-primary-500/10'
-                              : 'border-gray-700 hover:border-gray-600'
+                              : 'border-border hover:border-border'
                           }`}
                         >
-                          <p className="font-medium text-gray-100">{voice.name}</p>
-                          <p className="text-xs text-gray-400 mt-1">
+                          <p className="font-medium text-foreground">{voice.name}</p>
+                          <p className="text-xs text-muted-foreground mt-1">
                             {voice.gender} {voice.provider ? `(${voice.provider})` : ''}
                           </p>
                         </button>
@@ -1421,7 +1421,7 @@ Respond with JSON in this exact format:
                     <div className="mt-4 flex justify-end">
                       <button
                         onClick={handleSaveVoice}
-                        className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-foreground font-medium rounded-lg transition-colors"
                       >
                         <Save className="w-4 h-4" />
                         Save Voice Preference

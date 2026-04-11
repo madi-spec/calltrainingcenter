@@ -71,7 +71,7 @@ function PageLoader() {
 // Auth page wrapper with dark styling
 function AuthPageWrapper({ children }) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
       {children}
     </div>
   );

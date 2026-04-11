@@ -283,36 +283,36 @@ export default function Assignments() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-border">
-                <th className="text-left py-4 px-6 text-sm font-medium text-muted-foreground">User</th>
-                <th className="text-left py-4 px-6 text-sm font-medium text-muted-foreground">Scenario/Course</th>
-                <th className="text-left py-4 px-6 text-sm font-medium text-muted-foreground">Due Date</th>
-                <th className="text-left py-4 px-6 text-sm font-medium text-muted-foreground">Status</th>
-                <th className="text-left py-4 px-6 text-sm font-medium text-muted-foreground">Progress</th>
-                <th className="py-4 px-6"></th>
+                <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">User</th>
+                <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Scenario/Course</th>
+                <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Due Date</th>
+                <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
+                <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Progress</th>
+                <th className="px-6 py-3"></th>
               </tr>
             </thead>
             <tbody>
               {filteredAssignments.length > 0 ? (
                 filteredAssignments.map((assignment) => (
-                  <tr key={assignment.id} className="border-b border-border/50 hover:bg-muted/30">
-                    <td className="py-4 px-6">
+                  <tr key={assignment.id} className="border-b border-border border-l-2 border-l-transparent hover:border-l-primary-500 hover:bg-accent transition-colors">
+                    <td className="px-6 py-3 text-sm text-foreground">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 bg-primary-500/10 rounded-full flex items-center justify-center">
                           <span className="text-primary-400 text-sm font-medium">
                             {assignment.user_name?.charAt(0).toUpperCase()}
                           </span>
                         </div>
-                        <span className="text-foreground">{assignment.user_name}</span>
+                        <span>{assignment.user_name}</span>
                       </div>
                     </td>
-                    <td className="py-4 px-6 text-secondary-foreground">
+                    <td className="px-6 py-3 text-sm text-foreground">
                       {assignment.scenario_name || assignment.course_name || assignment.suite_name}
                     </td>
-                    <td className="py-4 px-6 text-muted-foreground">
+                    <td className="px-6 py-3 text-sm text-muted-foreground">
                       {new Date(assignment.due_date).toLocaleDateString()}
                     </td>
-                    <td className="py-4 px-6">{getStatusBadge(assignment.status)}</td>
-                    <td className="py-4 px-6">
+                    <td className="px-6 py-3 text-sm text-foreground">{getStatusBadge(assignment.status)}</td>
+                    <td className="px-6 py-3 text-sm text-foreground">
                       <div className="flex items-center gap-2">
                         <div className="w-20 h-2 bg-muted rounded-full overflow-hidden">
                           <div
@@ -325,7 +325,7 @@ export default function Assignments() {
                         </span>
                       </div>
                     </td>
-                    <td className="py-4 px-6">
+                    <td className="px-6 py-3 text-sm text-foreground">
                       <button className="p-2 hover:bg-muted rounded-lg text-muted-foreground">
                         <MoreVertical className="w-5 h-5" />
                       </button>

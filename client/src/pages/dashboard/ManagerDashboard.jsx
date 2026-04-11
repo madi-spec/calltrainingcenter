@@ -218,20 +218,20 @@ export default function ManagerDashboard() {
 
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-muted/50">
-              <tr>
-                <th className="text-left py-3 px-4 text-secondary-foreground font-medium text-sm">
+            <thead>
+              <tr className="border-b border-border">
+                <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Team Member
                 </th>
-                <th className="text-center py-3 px-3 text-secondary-foreground font-medium text-sm">
+                <th className="text-center px-3 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Streak
                 </th>
                 {dayNames.slice(0, compliance?.daysElapsed || 7).map((day, i) => (
-                  <th key={day} className="text-center py-3 px-2 text-secondary-foreground font-medium text-sm">
+                  <th key={day} className="text-center px-2 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">
                     {day}
                   </th>
                 ))}
-                <th className="text-center py-3 px-4 text-secondary-foreground font-medium text-sm">
+                <th className="text-center px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Rate
                 </th>
               </tr>
@@ -239,8 +239,8 @@ export default function ManagerDashboard() {
             <tbody className="divide-y divide-border">
               {selectedTeamData?.members?.length > 0 ? (
                 selectedTeamData.members.map((member) => (
-                  <tr key={member.id} className="hover:bg-accent/30 transition-colors">
-                    <td className="py-3 px-4">
+                  <tr key={member.id} className="border-b border-border border-l-2 border-l-transparent hover:border-l-primary-500 hover:bg-accent transition-colors">
+                    <td className="px-6 py-3 text-sm text-foreground">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center text-white font-medium text-sm">
                           {member.name?.charAt(0) || '?'}

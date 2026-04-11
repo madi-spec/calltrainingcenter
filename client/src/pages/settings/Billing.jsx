@@ -589,24 +589,24 @@ export default function Billing() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-border">
-                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Date</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Invoice</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Amount</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Status</th>
-                  <th className="py-3 px-4"></th>
+                  <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Date</th>
+                  <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Invoice</th>
+                  <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Amount</th>
+                  <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3"></th>
                 </tr>
               </thead>
               <tbody>
                 {invoices.map((invoice) => (
-                  <tr key={invoice.id} className="border-b border-border/50">
-                    <td className="py-3 px-4 text-secondary-foreground">
+                  <tr key={invoice.id} className="border-b border-border border-l-2 border-l-transparent hover:border-l-primary-500 hover:bg-accent transition-colors">
+                    <td className="px-6 py-3 text-sm text-foreground">
                       {new Date(invoice.created_at).toLocaleDateString()}
                     </td>
-                    <td className="py-3 px-4 text-secondary-foreground">{invoice.number}</td>
-                    <td className="py-3 px-4 text-secondary-foreground">
+                    <td className="px-6 py-3 text-sm text-foreground">{invoice.number}</td>
+                    <td className="px-6 py-3 text-sm text-foreground">
                       ${(invoice.amount_paid / 100).toFixed(2)}
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="px-6 py-3 text-sm">
                       <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${
                         invoice.status === 'paid' ? 'bg-green-500/10 text-green-400' :
                         invoice.status === 'open' ? 'bg-yellow-500/10 text-yellow-400' :
@@ -615,7 +615,7 @@ export default function Billing() {
                         {invoice.status}
                       </span>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="px-6 py-3 text-sm">
                       {invoice.invoice_url && (
                         <a
                           href={invoice.invoice_url}

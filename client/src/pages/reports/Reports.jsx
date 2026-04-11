@@ -287,36 +287,36 @@ export default function Reports() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-border">
-                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Member</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Sessions</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Avg Score</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Points</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Trend</th>
+                  <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Member</th>
+                  <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Sessions</th>
+                  <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Avg Score</th>
+                  <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Points</th>
+                  <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Trend</th>
                 </tr>
               </thead>
               <tbody>
                 {stats.team_members.map((member) => (
-                  <tr key={member.id} className="border-b border-border/50">
-                    <td className="py-3 px-4">
+                  <tr key={member.id} className="border-b border-border border-l-2 border-l-transparent hover:border-l-primary-500 hover:bg-accent transition-colors">
+                    <td className="px-6 py-3 text-sm text-foreground">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 bg-primary-500/10 rounded-full flex items-center justify-center">
                           <span className="text-primary-400 text-sm font-medium">
                             {member.name?.charAt(0).toUpperCase()}
                           </span>
                         </div>
-                        <span className="text-foreground">{member.name}</span>
+                        <span>{member.name}</span>
                       </div>
                     </td>
-                    <td className="py-3 px-4 text-secondary-foreground">{member.sessions}</td>
-                    <td className="py-3 px-4">
+                    <td className="px-6 py-3 text-sm text-foreground">{member.sessions}</td>
+                    <td className="px-6 py-3 text-sm">
                       <span className={`font-medium ${
                         member.avg_score >= 80 ? 'text-green-400' : member.avg_score >= 60 ? 'text-yellow-400' : 'text-red-400'
                       }`}>
                         {member.avg_score}%
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-secondary-foreground">{member.points}</td>
-                    <td className="py-3 px-4">
+                    <td className="px-6 py-3 text-sm text-foreground">{member.points}</td>
+                    <td className="px-6 py-3 text-sm">
                       <span className={`flex items-center gap-1 ${
                         member.trend >= 0 ? 'text-green-400' : 'text-red-400'
                       }`}>

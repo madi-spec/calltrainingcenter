@@ -92,9 +92,9 @@ function HeatmapGrid({ users, categories, averages, onUserClick, onCategoryClick
     <div className="overflow-x-auto">
       <table className="w-full min-w-[600px]">
         <thead>
-          <tr className="border-b border-border dark:border-border">
+          <tr className="border-b border-border">
             <th
-              className="py-3 px-4 text-left text-sm font-medium text-muted-foreground dark:text-muted-foreground cursor-pointer hover:text-muted-foreground dark:hover:text-foreground"
+              className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider cursor-pointer hover:text-foreground"
               onClick={() => handleSort('name')}
             >
               <div className="flex items-center gap-1">
@@ -109,7 +109,7 @@ function HeatmapGrid({ users, categories, averages, onUserClick, onCategoryClick
             {categories.map(category => (
               <th
                 key={category}
-                className="py-3 px-2 text-center text-sm font-medium text-muted-foreground dark:text-muted-foreground cursor-pointer hover:text-muted-foreground dark:hover:text-foreground"
+                className="px-2 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider cursor-pointer hover:text-foreground"
                 onClick={() => handleSort(category)}
               >
                 <div className="flex flex-col items-center">
@@ -126,7 +126,7 @@ function HeatmapGrid({ users, categories, averages, onUserClick, onCategoryClick
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100 dark:divide-border">
+        <tbody className="divide-y divide-border">
           {/* Averages row */}
           <tr className="bg-muted dark:bg-card/50">
             <td className="py-3 px-4">
@@ -154,7 +154,7 @@ function HeatmapGrid({ users, categories, averages, onUserClick, onCategoryClick
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.02 }}
-              className="hover:bg-accent dark:hover:bg-card/30"
+              className="border-l-2 border-l-transparent hover:border-l-primary-500 hover:bg-accent transition-colors"
             >
               <td className="py-3 px-4">
                 <button

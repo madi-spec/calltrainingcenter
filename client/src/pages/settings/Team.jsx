@@ -293,19 +293,19 @@ export default function Team() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-border">
-                <th className="text-left py-4 px-6 text-sm font-medium text-muted-foreground">Member</th>
-                <th className="text-left py-4 px-6 text-sm font-medium text-muted-foreground">Role</th>
-                <th className="text-left py-4 px-6 text-sm font-medium text-muted-foreground">Branch</th>
-                <th className="text-left py-4 px-6 text-sm font-medium text-muted-foreground">Status</th>
-                <th className="text-left py-4 px-6 text-sm font-medium text-muted-foreground">Sessions</th>
-                <th className="py-4 px-6"></th>
+                <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Member</th>
+                <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Role</th>
+                <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Branch</th>
+                <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
+                <th className="text-left px-6 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Sessions</th>
+                <th className="px-6 py-3"></th>
               </tr>
             </thead>
             <tbody>
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => (
-                  <tr key={user.id} className="border-b border-border/50 hover:bg-muted/30">
-                    <td className="py-4 px-6">
+                  <tr key={user.id} className="border-b border-border border-l-2 border-l-transparent hover:border-l-primary-500 hover:bg-accent transition-colors">
+                    <td className="px-6 py-3 text-sm text-foreground">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-primary-500/10 rounded-full flex items-center justify-center">
                           <span className="text-primary-400 font-medium">
@@ -318,7 +318,7 @@ export default function Team() {
                         </div>
                       </div>
                     </td>
-                    <td className="py-4 px-6">
+                    <td className="px-6 py-3 text-sm text-foreground">
                       {canEditRoles && user.id !== profile?.id ? (
                         <select
                           value={user.role}
@@ -337,10 +337,10 @@ export default function Team() {
                         </span>
                       )}
                     </td>
-                    <td className="py-4 px-6 text-muted-foreground">
+                    <td className="px-6 py-3 text-sm text-muted-foreground">
                       {user.branch?.name || 'No branch'}
                     </td>
-                    <td className="py-4 px-6">
+                    <td className="px-6 py-3 text-sm">
                       <span className={`px-2 py-1 text-xs font-medium rounded-full ${
                         user.status === 'active' ? 'bg-green-500/10 text-green-400' :
                         user.status === 'pending' ? 'bg-yellow-500/10 text-yellow-400' :
@@ -349,10 +349,10 @@ export default function Team() {
                         {user.status}
                       </span>
                     </td>
-                    <td className="py-4 px-6 text-secondary-foreground">
+                    <td className="px-6 py-3 text-sm text-foreground">
                       {user.total_sessions || 0}
                     </td>
-                    <td className="py-4 px-6">
+                    <td className="px-6 py-3 text-sm">
                       {user.id !== profile?.id && (
                         <button className="p-2 hover:bg-muted rounded-lg text-muted-foreground">
                           <MoreVertical className="w-5 h-5" />

@@ -38,7 +38,7 @@ function Layout({ children }) {
   const { user } = useUser();
   const { organization } = useOrganization();
   const { profile, role, actualRole, roleOverride, setRoleOverride } = useAuth();
-  const { theme, toggleTheme, isDark } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
@@ -124,7 +124,7 @@ function Layout({ children }) {
   };
 
   return (
-    <div className={`min-h-screen flex ${isDark ? 'bg-gray-900' : 'bg-gray-100'}`}>
+    <div className="min-h-screen flex bg-background">
       {/* Mobile sidebar backdrop */}
       <AnimatePresence>
         {sidebarOpen && (
@@ -141,13 +141,13 @@ function Layout({ children }) {
       {/* Sidebar */}
       <aside
         data-tutorial="sidebar"
-        className={`fixed inset-y-0 left-0 z-50 w-64 ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-r transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-sidebar border-r border-sidebar-border transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className={`flex items-center justify-between h-16 px-4 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+          <div className="flex items-center justify-between h-16 px-4 border-b border-sidebar-border">
             <Link to="/dashboard" className="flex items-center gap-3">
               {organization?.logo_url ? (
                 <img
@@ -161,13 +161,13 @@ function Layout({ children }) {
                 </div>
               )}
               <div>
-                <h1 className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>CSR Training</h1>
-                <p className={`text-xs truncate max-w-[140px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{organization?.name || 'Your Company'}</p>
+                <h1 className="text-sm font-semibold text-foreground">CSR Training</h1>
+                <p className="text-xs truncate max-w-[140px] text-muted-foreground">{organization?.name || 'Your Company'}</p>
               </div>
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}
-              className={`lg:hidden p-1 ${isDark ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'}`}
+              className="lg:hidden p-1 text-muted-foreground hover:text-foreground"
             >
               <X className="w-5 h-5" />
             </button>
@@ -185,22 +185,20 @@ function Layout({ children }) {
                   item.to === '/my-assignments' ? 'assignments-link' :
                   undefined
                 }
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
+                className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   isActive(item.to)
-                    ? 'bg-primary-600 text-white'
-                    : isDark
-                      ? 'text-gray-400 hover:text-white hover:bg-gray-700'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                    ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                    : 'text-sidebar-foreground hover:bg-sidebar-accent'
                 }`}
               >
                 <item.icon className="w-5 h-5" />
-                <span className="text-sm font-medium">{item.label}</span>
+                <span>{item.label}</span>
               </Link>
             ))}
 
             {/* Settings section */}
-            <div className={`pt-4 mt-4 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
-              <p className="px-3 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <div className="pt-4 mt-4 border-t border-border">
+              <p className="px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Settings
               </p>
               {filteredSettingsItems.map((item) => (
@@ -208,16 +206,14 @@ function Layout({ children }) {
                   key={item.to}
                   to={item.to}
                   onClick={() => setSidebarOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
+                  className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     isActive(item.to)
-                      ? 'bg-primary-600 text-white'
-                      : isDark
-                        ? 'text-gray-400 hover:text-white hover:bg-gray-700'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                      ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                      : 'text-sidebar-foreground hover:bg-sidebar-accent'
                   }`}
                 >
                   <item.icon className="w-5 h-5" />
-                  <span className="text-sm font-medium">{item.label}</span>
+                  <span>{item.label}</span>
                 </Link>
               ))}
             </div>
@@ -225,15 +221,15 @@ function Layout({ children }) {
 
           {/* Role Switcher - Only visible to admins/owners */}
           {(actualRole === 'admin' || actualRole === 'super_admin') && (
-            <div className={`px-3 py-2 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
-              <p className="px-3 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1">
+            <div className="px-3 py-2 border-t border-border">
+              <p className="px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1">
                 <span>View As</span>
               </p>
               <div className="px-3">
                 <select
                   value={roleOverride || ''}
                   onChange={(e) => setRoleOverride(e.target.value || null)}
-                  className={`w-full px-3 py-1.5 ${isDark ? 'bg-gray-700 border-gray-600 text-gray-200' : 'bg-gray-100 border-gray-300 text-gray-800'} border rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500`}
+                  className="w-full px-3 py-1.5 bg-background border border-input text-foreground rounded-md text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 >
                   <option value="">Your view ({actualRole || 'trainee'})</option>
                   <option value="trainee">View as: Trainee</option>
@@ -241,7 +237,7 @@ function Layout({ children }) {
                   <option value="admin">View as: Admin</option>
                 </select>
                 {roleOverride && (
-                  <p className="text-xs text-gray-400 mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     Viewing as {roleOverride}
                   </p>
                 )}
@@ -250,7 +246,7 @@ function Layout({ children }) {
           )}
 
           {/* User section */}
-          <div className={`p-3 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+          <div className="p-3 border-t border-border">
             <div className="flex items-center gap-3 px-3 py-2">
               <img
                 src={user?.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile?.full_name || 'User')}&background=3b82f6&color=fff`}
@@ -258,19 +254,19 @@ function Layout({ children }) {
                 className="w-8 h-8 rounded-full"
               />
               <div className="flex-1 min-w-0">
-                <p className={`text-sm font-medium truncate ${isDark ? 'text-white' : 'text-gray-900'}`}>{profile?.full_name || 'User'}</p>
-                <p className={`text-xs capitalize ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{role || 'trainee'}</p>
+                <p className="text-sm font-medium truncate text-foreground">{profile?.full_name || 'User'}</p>
+                <p className="text-xs capitalize text-muted-foreground">{role || 'trainee'}</p>
               </div>
               <button
                 onClick={toggleTheme}
-                className={`p-1.5 rounded-lg transition-colors ${isDark ? 'text-gray-400 hover:text-white hover:bg-gray-700' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
-                title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+                className="p-1.5 rounded-md transition-colors text-muted-foreground hover:text-foreground hover:bg-accent"
+                title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
               >
-                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
               </button>
               <button
                 onClick={handleSignOut}
-                className={`p-1.5 rounded-lg transition-colors ${isDark ? 'text-gray-400 hover:text-white hover:bg-gray-700' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
+                className="p-1.5 rounded-md transition-colors text-muted-foreground hover:text-foreground hover:bg-accent"
                 title="Sign out"
               >
                 <LogOut className="w-4 h-4" />
@@ -286,24 +282,24 @@ function Layout({ children }) {
         <TrialStatusBanner onUpgradeClick={() => setShowUpgradeModal(true)} />
 
         {/* Top bar (mobile) */}
-        <header className={`lg:hidden flex items-center justify-between h-16 px-4 ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-b`}>
+        <header className="lg:hidden flex items-center justify-between h-16 px-4 bg-background border-b border-border">
           <button
             onClick={() => setSidebarOpen(true)}
-            className={`p-2 ${isDark ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'}`}
+            className="p-2 text-muted-foreground hover:text-foreground"
           >
             <Menu className="w-6 h-6" />
           </button>
           <Link to="/dashboard" className="flex items-center gap-2">
             <Phone className="w-5 h-5 text-primary-500" />
-            <span className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>CSR Training</span>
+            <span className="font-semibold text-foreground">CSR Training</span>
           </Link>
           <div className="relative flex items-center gap-2">
             <button
               onClick={toggleTheme}
-              className={`p-2 ${isDark ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'}`}
-              title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+              className="p-2 text-muted-foreground hover:text-foreground"
+              title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
             >
-              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
             <button
               onClick={() => setUserMenuOpen(!userMenuOpen)}
@@ -316,10 +312,10 @@ function Layout({ children }) {
               />
             </button>
             {userMenuOpen && (
-              <div className={`absolute right-0 top-full mt-2 w-48 ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border rounded-lg shadow-lg py-1 z-50`}>
+              <div className="absolute right-0 top-full mt-2 w-48 bg-card border border-border rounded-md shadow-lg py-1 z-50">
                 <button
                   onClick={handleSignOut}
-                  className={`flex items-center gap-2 w-full px-4 py-2 text-sm ${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100'}`}
+                  className="flex items-center gap-2 w-full px-4 py-2 text-sm text-foreground hover:bg-accent"
                 >
                   <LogOut className="w-4 h-4" />
                   Sign out

@@ -366,10 +366,10 @@ function Layout({ children }) {
         <main className="flex-1 overflow-auto">
           <motion.div
             key={location.pathname}
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15, ease: 'easeOut' }}
             className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
           >
             {children}

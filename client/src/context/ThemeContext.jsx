@@ -4,16 +4,9 @@ const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
-    // Check localStorage first
-    const stored = localStorage.getItem('theme');
+    const stored = localStorage.getItem('csr-theme');
     if (stored) return stored;
-
-    // Check system preference
-    if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-      return 'light';
-    }
-
-    return 'dark';
+    return 'light';
   });
 
   // Apply theme class to document
@@ -28,7 +21,7 @@ export function ThemeProvider({ children }) {
       root.classList.remove('dark');
     }
 
-    localStorage.setItem('theme', theme);
+    localStorage.setItem('csr-theme', theme);
   }, [theme]);
 
   // Listen for system preference changes
@@ -36,7 +29,7 @@ export function ThemeProvider({ children }) {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
     const handleChange = (e) => {
-      const stored = localStorage.getItem('theme');
+      const stored = localStorage.getItem('csr-theme');
       // Only auto-switch if user hasn't manually set a preference
       if (!stored) {
         setTheme(e.matches ? 'dark' : 'light');

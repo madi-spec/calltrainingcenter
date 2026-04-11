@@ -215,14 +215,14 @@ export default function ChallengeColleagueModal({ scenario, onClose, onChallenge
         <div className="p-4 border-t border-border flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 px-4 py-3 bg-muted hover:bg-muted text-foreground font-medium rounded-lg transition-colors"
+            className="flex-1 px-4 py-3 bg-muted hover:bg-muted text-foreground font-medium rounded-md transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleSendChallenge}
             disabled={!selectedColleague || sending}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 hover:bg-purple-700 disabled:bg-muted disabled:cursor-not-allowed text-foreground font-medium rounded-lg transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 hover:bg-purple-700 disabled:bg-muted disabled:cursor-not-allowed text-foreground font-medium rounded-md transition-colors"
           >
             {sending ? (
               <>

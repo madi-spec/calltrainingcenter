@@ -190,7 +190,7 @@ export default function StreakStatus({ compact = false }) {
               </div>
               <button
                 onClick={() => setShowRecoveryModal(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-foreground font-medium rounded-lg transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-foreground font-medium rounded-md transition-colors"
               >
                 <RefreshCw className="w-4 h-4" />
                 Recover

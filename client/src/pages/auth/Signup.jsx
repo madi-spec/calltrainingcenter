@@ -270,7 +270,7 @@ export default function Signup() {
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
+                  className="w-full py-3 px-4 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-colors"
                 >
                   Continue
                 </button>
@@ -352,14 +352,14 @@ export default function Signup() {
                   <button
                     type="button"
                     onClick={() => setStep(1)}
-                    className="flex-1 py-3 px-4 bg-muted hover:bg-muted text-secondary-foreground font-medium rounded-lg transition-colors"
+                    className="flex-1 py-3 px-4 bg-muted hover:bg-muted text-secondary-foreground font-medium rounded-md transition-colors"
                   >
                     Back
                   </button>
                   <button
                     type="submit"
                     disabled={loading || !formData.organizationName || !formData.phone || !formData.website}
-                    className="flex-1 py-3 px-4 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-foreground font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 py-3 px-4 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-foreground font-medium rounded-md transition-colors flex items-center justify-center gap-2"
                   >
                     {loading ? (
                       <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>

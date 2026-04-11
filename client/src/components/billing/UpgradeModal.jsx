@@ -125,7 +125,7 @@ function UpgradeModal({ isOpen, onClose }) {
               </button>
               <button
                 onClick={onClose}
-                className="w-full py-3 px-4 bg-card hover:bg-muted text-secondary-foreground font-medium rounded-lg transition-colors"
+                className="w-full py-3 px-4 bg-card hover:bg-muted text-secondary-foreground font-medium rounded-md transition-colors"
               >
                 Maybe Later
               </button>

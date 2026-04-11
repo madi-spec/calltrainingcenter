@@ -443,7 +443,7 @@ export default function SetupWizard() {
 
                 <button
                   onClick={() => setShowWelcomeModal(false)}
-                  className="w-full px-6 py-3 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                  className="w-full px-6 py-3 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-colors flex items-center justify-center gap-2"
                 >
                   Let's Get Started
                   <ChevronRight className="w-4 h-4" />
@@ -592,7 +592,7 @@ export default function SetupWizard() {
                   <button
                     onClick={completeSetup}
                     disabled={saving}
-                    className="flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 text-foreground font-medium rounded-lg transition-colors disabled:opacity-50"
+                    className="flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 text-foreground font-medium rounded-md transition-colors disabled:opacity-50"
                   >
                     {saving ? (
                       <>

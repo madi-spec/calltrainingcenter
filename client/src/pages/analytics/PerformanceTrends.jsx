@@ -131,7 +131,7 @@ export default function PerformanceTrends() {
           </p>
           <a
             href="/scenarios"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-colors"
           >
             Start Training
           </a>

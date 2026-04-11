@@ -65,7 +65,7 @@ export default function StudioSessions() {
         </div>
         <button
           onClick={createSession}
-          className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 rounded-lg transition-colors"
         >
           <Plus className="w-4 h-4" />
           New Session

@@ -171,7 +171,7 @@ export default function SessionHistory() {
                   {(session.recording_url || session.recording_id) && (
                     <Link
                       to={`/playback/${session.id}`}
-                      className="flex items-center gap-1 px-3 py-1.5 bg-primary-600 hover:bg-primary-700 text-foreground rounded-lg font-medium text-sm transition-colors"
+                      className="flex items-center gap-1 px-3 py-1.5 bg-foreground text-background hover:opacity-90 rounded-lg font-medium text-sm transition-colors"
                     >
                       <Play className="w-4 h-4" />
                       Watch Replay

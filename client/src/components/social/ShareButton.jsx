@@ -56,7 +56,7 @@ export default function ShareButton({
 
   const variantClasses = {
     default: 'bg-muted hover:bg-muted text-secondary-foreground',
-    primary: 'bg-primary-600 hover:bg-primary-700 text-foreground',
+    primary: 'bg-foreground text-background hover:opacity-90',
     ghost: 'hover:bg-muted text-muted-foreground'
   };
 
@@ -129,7 +129,7 @@ export default function ShareButton({
             <div className="p-2 border-t border-border">
               <button
                 onClick={handleShare}
-                className="w-full py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
+                className="w-full py-2 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-colors"
               >
                 Share Now
               </button>

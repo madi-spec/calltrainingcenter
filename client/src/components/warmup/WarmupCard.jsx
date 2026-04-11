@@ -147,7 +147,7 @@ export default function WarmupCard({
           className={`
             w-full py-3 rounded-lg font-medium transition-colors
             ${localSelected !== null
-              ? 'bg-blue-600 hover:bg-blue-700 text-foreground'
+              ? 'bg-foreground text-background hover:opacity-90'
               : 'bg-muted text-muted-foreground cursor-not-allowed'}
           `}
         >

@@ -94,14 +94,14 @@ export default function ManagerDashboard() {
         <div className="flex gap-3">
           <Link
             to="/assignments"
-            className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-colors"
           >
             <UserPlus className="w-4 h-4" />
             Assign Training
           </Link>
           <Link
             to="/settings/team"
-            className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-accent text-foreground font-medium rounded-lg transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-accent text-foreground font-medium rounded-md transition-colors"
           >
             <Settings className="w-4 h-4" />
             Team Settings

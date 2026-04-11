@@ -358,7 +358,7 @@ export default function CourseBuilder() {
             <button
               type="button"
               onClick={addModule}
-              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 rounded-lg transition-colors"
             >
               <Plus className="w-4 h-4" />
               Add Module
@@ -585,7 +585,7 @@ export default function CourseBuilder() {
           <button
             type="submit"
             disabled={isSubmitting || success}
-            className="flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-muted disabled:cursor-not-allowed text-foreground font-medium rounded-lg transition-colors"
+            className="flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-muted disabled:cursor-not-allowed text-foreground font-medium rounded-md transition-colors"
           >
             {isSubmitting ? (
               <>

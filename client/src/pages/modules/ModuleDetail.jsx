@@ -175,7 +175,7 @@ export default function ModuleDetail() {
                 <button
                   onClick={handleStartModule}
                   disabled={starting}
-                  className="flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-foreground font-semibold rounded-lg transition-colors disabled:opacity-50"
+                  className="flex items-center gap-2 px-6 py-3 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-colors disabled:opacity-50"
                 >
                   {starting ? (
                     <>
@@ -194,7 +194,7 @@ export default function ModuleDetail() {
               {hasScenarios && nextScenario && (
                 <button
                   onClick={() => handleStartScenario(nextScenario)}
-                  className="flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-foreground font-semibold rounded-lg transition-colors"
+                  className="flex items-center gap-2 px-6 py-3 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-colors"
                 >
                   <Play className="w-5 h-5" />
                   {completedCount === 0 ? 'Start Practice' : 'Continue Practice'}
@@ -205,7 +205,7 @@ export default function ModuleDetail() {
                 <button
                   onClick={handleResetModule}
                   disabled={resetting}
-                  className="flex items-center gap-2 px-4 py-3 bg-muted hover:bg-muted text-foreground font-medium rounded-lg transition-colors disabled:opacity-50"
+                  className="flex items-center gap-2 px-4 py-3 bg-muted hover:bg-muted text-foreground font-medium rounded-md transition-colors disabled:opacity-50"
                 >
                   {resetting ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
@@ -365,7 +365,7 @@ function ScenarioCard({ scenario, index, onStart }) {
         {isPending && (
           <button
             onClick={onStart}
-            className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-colors"
           >
             <Play className="w-4 h-4" />
             Practice

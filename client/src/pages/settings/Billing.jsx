@@ -249,7 +249,7 @@ export default function Billing() {
         <button
           onClick={handleManageBilling}
           disabled={portalLoading}
-          className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted text-secondary-foreground font-medium rounded-lg transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted text-secondary-foreground font-medium rounded-md transition-colors"
         >
           <CreditCard className="w-5 h-5" />
           {portalLoading ? 'Loading...' : 'Manage Billing'}
@@ -307,7 +307,7 @@ export default function Billing() {
               <button
                 type="submit"
                 disabled={promoLoading || !promoCode.trim()}
-                className="px-5 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-muted disabled:text-muted-foreground text-foreground font-medium rounded-lg transition-colors flex items-center gap-2"
+                className="px-5 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-muted disabled:text-muted-foreground text-foreground font-medium rounded-md transition-colors flex items-center gap-2"
               >
                 {promoLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -507,7 +507,7 @@ export default function Billing() {
               ) : (
                 <button
                   onClick={() => handleUpgrade(planId)}
-                  className={`w-full py-3 font-medium rounded-lg transition-colors ${
+                  className={`w-full py-3 font-medium rounded-md transition-colors ${
                     plan.featured
                       ? 'bg-gradient-to-r from-pink-500 to-orange-500 text-foreground hover:opacity-90'
                       : 'bg-muted text-foreground hover:bg-muted border border-border'
@@ -554,7 +554,7 @@ export default function Billing() {
               </div>
               <button
                 onClick={() => handlePurchaseHours(block.hours)}
-                className="w-full mt-4 py-2 bg-muted hover:bg-muted text-foreground font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                className="w-full mt-4 py-2 bg-muted hover:bg-muted text-foreground font-medium rounded-md transition-colors flex items-center justify-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 Purchase

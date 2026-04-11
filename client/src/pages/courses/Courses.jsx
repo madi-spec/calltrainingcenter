@@ -94,7 +94,7 @@ export default function Courses() {
           {canCreate && (
             <Link
               to="/courses/create"
-              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground rounded-lg text-sm font-medium transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 rounded-lg text-sm font-medium transition-colors"
             >
               <Plus className="w-4 h-4" />
               Create Course

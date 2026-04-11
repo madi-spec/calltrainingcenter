@@ -175,7 +175,7 @@ export default function MyCertificates() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleDownload(cert.id, cert.verification_code)}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground rounded-lg font-medium transition-colors"
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 rounded-lg font-medium transition-colors"
                     >
                       <Download className="w-4 h-4" />
                       Download

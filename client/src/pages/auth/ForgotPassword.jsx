@@ -81,7 +81,7 @@ export default function ForgotPassword() {
               </p>
               <Link
                 to="/auth/login"
-                className="inline-flex items-center justify-center gap-2 py-3 px-6 bg-muted hover:bg-muted text-secondary-foreground font-medium rounded-lg transition-colors"
+                className="inline-flex items-center justify-center gap-2 py-3 px-6 bg-muted hover:bg-muted text-secondary-foreground font-medium rounded-md transition-colors"
               >
                 <ArrowLeft className="w-5 h-5" />
                 Back to login
@@ -127,7 +127,7 @@ export default function ForgotPassword() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-foreground font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-foreground font-medium rounded-md transition-colors flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>

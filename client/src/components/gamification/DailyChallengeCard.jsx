@@ -107,7 +107,7 @@ export default function DailyChallengeCard({ challenge, onProgressUpdate }) {
               <button
                 onClick={handleClaim}
                 disabled={claiming}
-                className="flex items-center gap-1 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-foreground text-sm font-medium rounded-lg transition-colors"
+                className="flex items-center gap-1 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-foreground text-sm font-medium rounded-md transition-colors"
               >
                 {claiming ? (
                   <Loader2 className="w-4 h-4 animate-spin" />

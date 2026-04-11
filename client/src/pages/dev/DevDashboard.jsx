@@ -128,7 +128,7 @@ export default function DevDashboard() {
           </button>
           <button
             onClick={fetchStats}
-            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm font-medium transition-colors"
+            className="px-3 py-1.5 bg-foreground text-background hover:opacity-90 rounded text-sm font-medium transition-colors"
           >
             Refresh
           </button>
@@ -382,7 +382,7 @@ function AudioPlayer({ url, session, onClose }) {
       <audio ref={audioRef} src={url} preload="metadata" />
       <div className="flex items-center gap-3">
         {/* Play/Pause */}
-        <button onClick={togglePlay} className="w-9 h-9 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center flex-shrink-0">
+        <button onClick={togglePlay} className="w-9 h-9 rounded-full bg-foreground text-background hover:opacity-90 flex items-center justify-center flex-shrink-0">
           {playing ? (
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
           ) : (

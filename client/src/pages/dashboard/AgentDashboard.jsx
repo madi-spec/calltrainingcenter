@@ -199,10 +199,10 @@ export default function AgentDashboard() {
           <div className="flex-shrink-0">
             <Link
               to="/courses"
-              className={`flex items-center justify-center gap-3 px-8 py-4 font-semibold rounded-lg transition-all shadow-lg ${
+              className={`flex items-center justify-center gap-3 px-8 py-4 font-medium rounded-md transition-all shadow-lg ${
                 metRequirement
                   ? 'bg-green-600 hover:bg-green-700 text-white shadow-green-500/20'
-                  : 'bg-primary-600 hover:bg-primary-700 text-white shadow-primary-500/30 animate-pulse hover:animate-none'
+                  : 'bg-foreground text-background hover:opacity-90 shadow-primary-500/30 animate-pulse hover:animate-none'
               }`}
             >
               <Play className="w-5 h-5" />

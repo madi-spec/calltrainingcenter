@@ -184,7 +184,7 @@ export default function Recommendations() {
                 </p>
                 <Link
                   to="/scenarios"
-                  className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-foreground text-sm font-medium rounded-lg transition-colors"
+                  className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-foreground text-background hover:opacity-90 text-sm font-medium rounded-md transition-colors"
                 >
                   Start Training
                   <ChevronRight className="w-4 h-4" />
@@ -261,7 +261,7 @@ export default function Recommendations() {
                           {rec.scenario && (
                             <Link
                               to={`/scenario/${rec.scenario.id}`}
-                              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-foreground text-sm font-medium rounded-lg transition-colors"
+                              className="flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 text-sm font-medium rounded-md transition-colors"
                             >
                               <Play className="w-4 h-4" />
                               Practice
@@ -271,7 +271,7 @@ export default function Recommendations() {
                           {rec.recommendation_type === 'warmup' && (
                             <Link
                               to="/scenarios"
-                              className="flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-foreground text-sm font-medium rounded-lg transition-colors"
+                              className="flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-foreground text-sm font-medium rounded-md transition-colors"
                             >
                               <Brain className="w-4 h-4" />
                               Warm Up
@@ -294,7 +294,7 @@ export default function Recommendations() {
                 </p>
                 <Link
                   to="/scenarios"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-foreground font-medium rounded-lg transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-colors"
                 >
                   Browse Scenarios
                   <ChevronRight className="w-5 h-5" />

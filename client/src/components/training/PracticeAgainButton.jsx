@@ -82,7 +82,7 @@ export default function PracticeAgainButton({
   };
 
   const variantClasses = {
-    primary: 'bg-primary-600 hover:bg-primary-700 text-foreground',
+    primary: 'bg-foreground text-background hover:opacity-90',
     secondary: 'bg-muted hover:bg-muted text-foreground',
     success: 'bg-green-600 hover:bg-green-700 text-foreground'
   };
@@ -93,7 +93,7 @@ export default function PracticeAgainButton({
         onClick={() => handlePracticeAgain('repeat')}
         disabled={loading}
         className={`
-          flex items-center gap-2 font-medium rounded-lg transition-colors
+          flex items-center gap-2 font-medium rounded-md transition-colors
           ${sizeClasses[size]}
           ${variantClasses[variant]}
           disabled:opacity-50 disabled:cursor-not-allowed

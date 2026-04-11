@@ -167,13 +167,13 @@ export default function WelcomeModal({
                 <>
                   <button
                     onClick={handleSecondaryAction}
-                    className="px-6 py-3 bg-muted hover:bg-muted text-foreground font-medium rounded-lg transition-colors"
+                    className="px-6 py-3 bg-muted hover:bg-muted text-foreground font-medium rounded-md transition-colors"
                   >
                     {step.secondaryAction.label}
                   </button>
                   <button
                     onClick={handlePrimaryAction}
-                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-foreground font-medium rounded-lg transition-colors"
+                    className="px-6 py-3 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-colors"
                   >
                     {step.primaryAction.label}
                   </button>
@@ -182,13 +182,13 @@ export default function WelcomeModal({
                 <>
                   <button
                     onClick={onSkip}
-                    className="px-6 py-3 text-muted-foreground hover:text-foreground font-medium rounded-lg transition-colors"
+                    className="px-6 py-3 text-muted-foreground hover:text-foreground font-medium rounded-md transition-colors"
                   >
                     Skip Tutorial
                   </button>
                   <button
                     onClick={onNext}
-                    className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-foreground font-medium rounded-lg transition-colors"
+                    className="px-8 py-3 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-colors"
                   >
                     Get Started
                   </button>

@@ -114,7 +114,7 @@ export default function Branches() {
         </div>
         <button
           onClick={() => handleOpenModal()}
-          className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-colors"
         >
           <Plus className="w-5 h-5" />
           Add Branch
@@ -208,7 +208,7 @@ export default function Branches() {
             </p>
             <button
               onClick={() => handleOpenModal()}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-colors"
             >
               <Plus className="w-4 h-4" />
               Add First Branch
@@ -319,7 +319,7 @@ export default function Branches() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-foreground font-medium rounded-lg transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-foreground font-medium rounded-md transition-colors"
                 >
                   <Save className="w-4 h-4" />
                   {saving ? 'Saving...' : 'Save Branch'}

@@ -829,7 +829,7 @@ Respond with JSON in this exact format:
               <button
                 onClick={() => setWizardStep(prev => prev + 1)}
                 disabled={!canProceed()}
-                className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-muted disabled:text-muted-foreground text-foreground font-medium rounded-lg transition-colors"
+                className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-muted disabled:text-muted-foreground text-foreground font-medium rounded-md transition-colors"
               >
                 Next
                 <ArrowRight className="w-4 h-4" />
@@ -838,7 +838,7 @@ Respond with JSON in this exact format:
               <button
                 onClick={handleFinishWizard}
                 disabled={!canProceed() || savingPrompts}
-                className="flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 disabled:bg-muted disabled:text-muted-foreground text-foreground font-medium rounded-lg transition-colors"
+                className="flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 disabled:bg-muted disabled:text-muted-foreground text-foreground font-medium rounded-md transition-colors"
               >
                 {savingPrompts ? (
                   <>
@@ -889,7 +889,7 @@ Respond with JSON in this exact format:
             <button
               onClick={handleSaveWeights}
               disabled={savingWeights || totalWeight !== 100}
-              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-muted text-foreground font-medium rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-muted text-foreground font-medium rounded-md transition-colors"
             >
               {savingWeights ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               Save
@@ -984,7 +984,7 @@ Respond with JSON in this exact format:
             )}
             <button
               onClick={() => { setActiveWizard('agent'); setWizardStep(0); }}
-              className="flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-foreground font-medium rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-foreground font-medium rounded-md transition-colors"
             >
               <Sparkles className="w-4 h-4" />
               {hasCustomPrompts.agent ? 'Reconfigure' : 'Configure'}
@@ -1050,7 +1050,7 @@ Respond with JSON in this exact format:
             )}
             <button
               onClick={() => { setActiveWizard('coaching'); setWizardStep(0); }}
-              className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-foreground font-medium rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-foreground font-medium rounded-md transition-colors"
             >
               <Sparkles className="w-4 h-4" />
               {hasCustomPrompts.coaching ? 'Reconfigure' : 'Configure'}
@@ -1328,7 +1328,7 @@ Respond with JSON in this exact format:
                   <button
                     onClick={handleSaveCriteria}
                     disabled={savingCriteria}
-                    className="flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 disabled:bg-muted text-foreground font-medium rounded-lg transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 disabled:bg-muted text-foreground font-medium rounded-md transition-colors"
                   >
                     {savingCriteria ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -1421,7 +1421,7 @@ Respond with JSON in this exact format:
                     <div className="mt-4 flex justify-end">
                       <button
                         onClick={handleSaveVoice}
-                        className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-foreground font-medium rounded-lg transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-foreground font-medium rounded-md transition-colors"
                       >
                         <Save className="w-4 h-4" />
                         Save Voice Preference

@@ -126,14 +126,14 @@ export default function StreakRecoveryModal({ recoveryData, tokensAvailable, onC
           <div className="flex gap-3 pt-2">
             <button
               onClick={onClose}
-              className="flex-1 px-4 py-3 bg-muted hover:bg-muted text-foreground font-medium rounded-lg transition-colors"
+              className="flex-1 px-4 py-3 bg-muted hover:bg-muted text-foreground font-medium rounded-md transition-colors"
             >
               Cancel
             </button>
             <button
               onClick={handleRecover}
               disabled={recovering || tokensAvailable < 1}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-green-600 hover:bg-green-700 disabled:bg-muted disabled:cursor-not-allowed text-foreground font-medium rounded-lg transition-colors"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-green-600 hover:bg-green-700 disabled:bg-muted disabled:cursor-not-allowed text-foreground font-medium rounded-md transition-colors"
             >
               {recovering ? (
                 <>

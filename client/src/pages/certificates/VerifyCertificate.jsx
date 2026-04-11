@@ -112,7 +112,7 @@ export default function VerifyCertificate() {
                   />
                   <button
                     type="submit"
-                    className="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-foreground rounded-lg font-medium transition-colors flex items-center gap-2"
+                    className="px-6 py-3 bg-foreground text-background hover:opacity-90 rounded-lg font-medium transition-colors flex items-center gap-2"
                   >
                     <Search className="w-5 h-5" />
                     Verify
@@ -307,7 +307,7 @@ export default function VerifyCertificate() {
                   setCertificate(null);
                   navigate('/verify-certificate');
                 }}
-                className="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-foreground rounded-lg font-medium transition-colors"
+                className="px-6 py-3 bg-foreground text-background hover:opacity-90 rounded-lg font-medium transition-colors"
               >
                 Verify Another
               </button>

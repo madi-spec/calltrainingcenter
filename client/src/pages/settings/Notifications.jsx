@@ -161,7 +161,7 @@ export default function Notifications() {
             <button
               onClick={handleReset}
               disabled={!hasChanges}
-              className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted disabled:opacity-50 text-secondary-foreground font-medium rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted disabled:opacity-50 text-secondary-foreground font-medium rounded-md transition-colors"
             >
               <RotateCcw className="w-5 h-5" />
               Reset
@@ -169,7 +169,7 @@ export default function Notifications() {
             <button
               onClick={handleSave}
               disabled={loading || !hasChanges}
-              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-foreground font-medium rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-foreground font-medium rounded-md transition-colors"
             >
               <Save className="w-5 h-5" />
               {loading ? 'Saving...' : 'Save Changes'}

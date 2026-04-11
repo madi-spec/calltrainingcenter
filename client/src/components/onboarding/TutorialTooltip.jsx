@@ -196,7 +196,7 @@ export default function TutorialTooltip({
 
           <button
             onClick={onNext}
-            className="flex items-center gap-1 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-foreground text-sm font-medium rounded-lg transition-colors"
+            className="flex items-center gap-1 px-4 py-1.5 bg-foreground text-background hover:opacity-90 text-sm font-medium rounded-md transition-colors"
           >
             Next
             <ChevronRight className="w-4 h-4" />

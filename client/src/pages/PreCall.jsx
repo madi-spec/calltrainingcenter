@@ -519,7 +519,7 @@ function PreCall() {
               {/* CTA */}
               <Link
                 to="/settings/billing"
-                className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 text-foreground font-semibold rounded-lg transition-all"
+                className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 text-foreground font-medium rounded-md transition-all"
               >
                 View Plans & Upgrade
                 <ArrowRight className="w-5 h-5" />

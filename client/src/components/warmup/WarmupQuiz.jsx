@@ -171,7 +171,7 @@ export default function WarmupQuiz({
         </p>
         <button
           onClick={onSkip}
-          className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-foreground font-medium rounded-lg transition-colors"
+          className="px-6 py-3 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-colors"
         >
           Continue to Training
         </button>
@@ -247,7 +247,7 @@ export default function WarmupQuiz({
 
         <button
           onClick={handleStartTraining}
-          className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-foreground font-medium rounded-lg transition-colors"
+          className="inline-flex items-center gap-2 px-8 py-4 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-colors"
         >
           Start Training
           <ChevronRight className="w-5 h-5" />
@@ -319,7 +319,7 @@ export default function WarmupQuiz({
         >
           <button
             onClick={handleNext}
-            className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-foreground font-medium rounded-lg transition-colors"
+            className="flex items-center gap-2 px-6 py-3 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-colors"
           >
             {currentIndex < exercises.length - 1 ? 'Next Question' : 'Complete Warm-up'}
             <ChevronRight className="w-5 h-5" />

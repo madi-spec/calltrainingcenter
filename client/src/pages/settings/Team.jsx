@@ -193,7 +193,7 @@ export default function Team() {
         {canInvite && (
           <button
             onClick={() => setShowInviteModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-colors"
           >
             <UserPlus className="w-5 h-5" />
             Invite Member
@@ -444,7 +444,7 @@ export default function Team() {
                 <button
                   type="submit"
                   disabled={inviting}
-                  className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-foreground font-medium rounded-lg transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-foreground font-medium rounded-md transition-colors"
                 >
                   <UserPlus className="w-4 h-4" />
                   {inviting ? 'Sending...' : 'Send Invitation'}

@@ -223,7 +223,7 @@ export default function Assignments() {
             setDueDate(getDefaultDueDate());
             setShowCreateModal(true);
           }}
-          className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-colors"
         >
           <Plus className="w-5 h-5" />
           Create Assignment
@@ -553,7 +553,7 @@ export default function Assignments() {
                   <button
                     onClick={handleCreateAssignment}
                     disabled={creating}
-                    className="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-foreground rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    className="px-6 py-2 bg-foreground text-background hover:opacity-90 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   >
                     {creating ? (
                       <>

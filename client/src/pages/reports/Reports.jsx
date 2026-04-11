@@ -90,7 +90,7 @@ export default function Reports() {
         </div>
         <button
           onClick={handleExport}
-          className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted text-secondary-foreground font-medium rounded-lg transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted text-secondary-foreground font-medium rounded-md transition-colors"
         >
           <Download className="w-5 h-5" />
           Export CSV

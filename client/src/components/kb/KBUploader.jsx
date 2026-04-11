@@ -157,7 +157,7 @@ export default function KBUploader({ authFetch, onUploadComplete, onError }) {
       <button
         onClick={handleUpload}
         disabled={files.length === 0 || uploading}
-        className="w-full px-4 py-3 bg-primary-600 text-foreground rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 font-medium"
+        className="w-full px-4 py-3 bg-foreground text-background hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-opacity flex items-center justify-center gap-2 font-medium"
       >
         {uploading ? (
           <>

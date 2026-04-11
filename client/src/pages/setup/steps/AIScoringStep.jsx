@@ -238,7 +238,7 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
             type="button"
             onClick={addRequiredPhrase}
             disabled={!newRequired.phrase.trim()}
-            className="px-3 py-2 bg-green-600 hover:bg-green-700 disabled:bg-muted text-foreground rounded-lg"
+            className="px-3 py-2 bg-foreground text-background hover:opacity-90 disabled:bg-muted disabled:text-muted-foreground rounded-md"
           >
             <Plus className="w-4 h-4" />
           </button>
@@ -302,7 +302,7 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
             type="button"
             onClick={addProhibitedPhrase}
             disabled={!newProhibited.phrase.trim()}
-            className="px-3 py-2 bg-red-600 hover:bg-red-700 disabled:bg-muted text-foreground rounded-lg"
+            className="px-3 py-2 bg-destructive text-destructive-foreground hover:opacity-90 disabled:bg-muted disabled:text-muted-foreground rounded-md"
           >
             <Plus className="w-4 h-4" />
           </button>

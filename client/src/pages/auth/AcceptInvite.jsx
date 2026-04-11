@@ -440,7 +440,7 @@ export default function AcceptInvite() {
             <button
               type="submit"
               disabled={submitting || isSignedIn}
-              className="w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-foreground font-medium rounded-md transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 px-4 bg-foreground text-background hover:opacity-90 disabled:opacity-50 font-medium rounded-md transition-opacity flex items-center justify-center gap-2"
             >
               {submitting ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>

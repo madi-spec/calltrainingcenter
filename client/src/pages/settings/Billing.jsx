@@ -307,7 +307,7 @@ export default function Billing() {
               <button
                 type="submit"
                 disabled={promoLoading || !promoCode.trim()}
-                className="px-5 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-muted disabled:text-muted-foreground text-foreground font-medium rounded-md transition-colors flex items-center gap-2"
+                className="px-5 py-2 bg-foreground text-background hover:opacity-90 disabled:bg-muted disabled:text-muted-foreground font-medium rounded-md transition-opacity flex items-center gap-2"
               >
                 {promoLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />

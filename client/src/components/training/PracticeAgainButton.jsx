@@ -84,7 +84,7 @@ export default function PracticeAgainButton({
   const variantClasses = {
     primary: 'bg-foreground text-background hover:opacity-90',
     secondary: 'bg-muted hover:bg-muted text-foreground',
-    success: 'bg-green-600 hover:bg-green-700 text-foreground'
+    success: 'bg-foreground text-background hover:opacity-90'
   };
 
   if (!showOptions) {

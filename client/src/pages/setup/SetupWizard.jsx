@@ -592,7 +592,7 @@ export default function SetupWizard() {
                   <button
                     onClick={completeSetup}
                     disabled={saving}
-                    className="flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 text-foreground font-medium rounded-md transition-colors disabled:opacity-50"
+                    className="flex items-center gap-2 px-6 py-2 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-opacity disabled:opacity-50"
                   >
                     {saving ? (
                       <>

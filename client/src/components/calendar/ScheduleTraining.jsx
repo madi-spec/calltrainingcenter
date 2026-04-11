@@ -189,7 +189,7 @@ function ScheduleTraining({ scenario, assignment, onScheduled, onClose }) {
               <button
                 type="submit"
                 disabled={submitting}
-                className="flex-1 px-4 py-2 text-foreground bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-2 bg-foreground text-background hover:opacity-90 rounded-md transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {submitting ? (
                   <>

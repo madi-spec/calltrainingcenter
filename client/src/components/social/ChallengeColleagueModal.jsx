@@ -186,7 +186,7 @@ export default function ChallengeColleagueModal({ scenario, onClose, onChallenge
                     className={`
                       flex-1 py-2 rounded-lg transition-colors
                       ${wagerPoints === amount
-                        ? 'bg-primary-600 text-foreground'
+                        ? 'bg-foreground text-background'
                         : 'bg-muted text-secondary-foreground hover:bg-muted'}
                     `}
                   >
@@ -222,7 +222,7 @@ export default function ChallengeColleagueModal({ scenario, onClose, onChallenge
           <button
             onClick={handleSendChallenge}
             disabled={!selectedColleague || sending}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 hover:bg-purple-700 disabled:bg-muted disabled:cursor-not-allowed text-foreground font-medium rounded-md transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-foreground text-background hover:opacity-90 disabled:bg-muted disabled:cursor-not-allowed disabled:text-muted-foreground font-medium rounded-md transition-opacity"
           >
             {sending ? (
               <>

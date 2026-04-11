@@ -13,7 +13,7 @@ function SkipLinks() {
             <li key={link.id}>
               <a
                 href={`#${link.id}`}
-                className="block px-4 py-2 bg-primary-600 text-white font-medium rounded-lg
+                className="block px-4 py-2 bg-foreground text-background font-medium rounded-md
                            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:ring-offset-2
                            transform -translate-y-full focus:translate-y-0 transition-transform"
                 onClick={(e) => {

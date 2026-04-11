@@ -143,7 +143,7 @@ function ImprovementPlanModal({ isOpen, onClose, gap, onSubmit }) {
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 text-foreground bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors"
+              className="flex-1 px-4 py-2 bg-foreground text-background hover:opacity-90 rounded-md transition-opacity"
             >
               Create Plan
             </button>
@@ -273,7 +273,7 @@ function SkillGapHeatmap() {
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-foreground rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 rounded-md transition-opacity disabled:opacity-50"
         >
           <svg
             className={`w-5 h-5 ${refreshing ? 'animate-spin' : ''}`}

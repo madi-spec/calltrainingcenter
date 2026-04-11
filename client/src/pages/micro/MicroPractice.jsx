@@ -180,7 +180,7 @@ export default function MicroPractice() {
             </div>
             <button
               onClick={() => handleStart(dailyChallenge.micro_scenario.id)}
-              className="flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-foreground font-medium rounded-md transition-colors"
+              className="flex items-center gap-2 px-6 py-3 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-opacity"
             >
               Start
               <ChevronRight className="w-5 h-5" />

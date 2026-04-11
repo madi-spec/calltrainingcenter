@@ -299,7 +299,7 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
             type="button"
             onClick={handleScrapeWebsite}
             disabled={scraping || !formData.website}
-            className="flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 border border-purple-500 rounded-lg text-foreground font-medium transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-6 py-3 bg-foreground text-background hover:opacity-90 border border-border rounded-md font-medium transition-opacity disabled:opacity-50"
           >
             {scraping ? (
               <>

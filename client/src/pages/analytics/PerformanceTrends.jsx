@@ -107,7 +107,7 @@ export default function PerformanceTrends() {
                 onClick={() => setTimeframe(option.value)}
                 className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                   timeframe === option.value
-                    ? 'bg-primary-600 text-foreground'
+                    ? 'bg-foreground text-background'
                     : 'text-muted-foreground hover:text-secondary-foreground'
                 }`}
               >

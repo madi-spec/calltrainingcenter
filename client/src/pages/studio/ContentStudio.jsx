@@ -284,7 +284,7 @@ export default function ContentStudio() {
           {activeVersion && versionData?.version?.status === 'draft' && (
             <button
               onClick={handlePublish}
-              className="px-3 py-1 text-xs bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
+              className="px-3 py-1 text-xs bg-foreground text-background hover:opacity-90 rounded-md transition-opacity"
             >
               Publish
             </button>

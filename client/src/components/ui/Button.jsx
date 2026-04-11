@@ -6,7 +6,7 @@ const variants = {
   primary: 'bg-foreground text-background hover:opacity-90 transition-opacity',
   secondary: 'bg-secondary text-secondary-foreground border border-border hover:bg-accent transition-colors',
   danger: 'bg-destructive text-destructive-foreground hover:opacity-90 transition-opacity',
-  success: 'bg-green-600 hover:bg-green-700 text-white transition-colors',
+  success: 'bg-foreground text-background hover:opacity-90 transition-opacity',
   ghost: 'bg-transparent hover:bg-accent text-secondary-foreground hover:text-foreground transition-colors',
   outline: 'bg-transparent border border-border hover:bg-accent text-secondary-foreground hover:text-foreground transition-colors'
 };

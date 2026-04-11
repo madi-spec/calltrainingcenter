@@ -133,7 +133,7 @@ export default function PendingChallenges({ maxDisplay = 3, onUpdate }) {
                   <button
                     onClick={() => handleAcceptAndStart(challenge)}
                     disabled={responding === challenge.id}
-                    className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-foreground font-medium rounded-md transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-opacity"
                   >
                     {responding === challenge.id ? (
                       <Loader2 className="w-4 h-4 animate-spin" />

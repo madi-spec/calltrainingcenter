@@ -244,7 +244,7 @@ export default function SessionPlayer({
           {/* Play/Pause */}
           <button
             onClick={togglePlayPause}
-            className="p-3 bg-primary-600 hover:bg-primary-700 rounded-full transition-colors"
+            className="p-3 bg-foreground text-background hover:opacity-90 rounded-full transition-opacity"
             aria-label={isPlaying ? 'Pause' : 'Play'}
           >
             {isPlaying ? (

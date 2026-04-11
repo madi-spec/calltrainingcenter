@@ -105,7 +105,7 @@ export default function Reports() {
             onClick={() => setReportType('personal')}
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               reportType === 'personal'
-                ? 'bg-primary-600 text-foreground'
+                ? 'bg-foreground text-background'
                 : 'text-muted-foreground hover:text-secondary-foreground'
             }`}
           >
@@ -116,7 +116,7 @@ export default function Reports() {
               onClick={() => setReportType('team')}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 reportType === 'team'
-                  ? 'bg-primary-600 text-foreground'
+                  ? 'bg-foreground text-background'
                   : 'text-muted-foreground hover:text-secondary-foreground'
               }`}
             >
@@ -128,7 +128,7 @@ export default function Reports() {
               onClick={() => setReportType('organization')}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 reportType === 'organization'
-                  ? 'bg-primary-600 text-foreground'
+                  ? 'bg-foreground text-background'
                   : 'text-muted-foreground hover:text-secondary-foreground'
               }`}
             >

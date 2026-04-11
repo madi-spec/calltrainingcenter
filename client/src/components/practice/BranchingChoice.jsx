@@ -200,7 +200,7 @@ function BranchingChoice({ node, onChoiceSelected, isVisible }) {
             <Button
               onClick={handleConfirm}
               disabled={!selectedChoice || isConfirming}
-              className="bg-blue-600 hover:bg-blue-700"
+              className="bg-foreground text-background hover:opacity-90"
             >
               {isConfirming ? (
                 <>

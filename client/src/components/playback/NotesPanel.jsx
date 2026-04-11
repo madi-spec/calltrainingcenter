@@ -171,7 +171,7 @@ export default function NotesPanel({
             setNoteType('personal');
           }}
           disabled={showAddForm}
-          className="flex items-center gap-2 px-3 py-2 bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed text-foreground rounded-lg transition-colors text-sm font-medium"
+          className="flex items-center gap-2 px-3 py-2 bg-foreground text-background hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-opacity text-sm font-medium"
         >
           <Plus className="w-4 h-4" />
           Add Note
@@ -242,7 +242,7 @@ export default function NotesPanel({
                   <button
                     onClick={handleAddNote}
                     disabled={!noteText.trim() || saving}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed text-foreground rounded-lg transition-colors text-sm font-medium"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-foreground text-background hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-opacity text-sm font-medium"
                   >
                     <Save className="w-3.5 h-3.5" />
                     {saving ? 'Saving...' : 'Save Note'}
@@ -312,7 +312,7 @@ export default function NotesPanel({
                       <button
                         onClick={() => handleUpdateNote(note.id)}
                         disabled={!noteText.trim() || saving}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-primary-600 hover:bg-primary-700 disabled:opacity-50 text-foreground rounded-lg transition-colors text-sm"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-foreground text-background hover:opacity-90 disabled:opacity-50 rounded-md transition-opacity text-sm"
                       >
                         <Save className="w-3.5 h-3.5" />
                         {saving ? 'Saving...' : 'Save'}

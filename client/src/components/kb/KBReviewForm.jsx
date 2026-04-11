@@ -106,7 +106,7 @@ export default function KBReviewForm({ parsedData, onSave, onGenerate }) {
         </button>
         <button
           onClick={handleGenerate}
-          className="flex-1 px-4 py-3 bg-primary-600 text-foreground rounded-lg hover:bg-primary-700 transition-colors flex items-center justify-center gap-2 font-medium"
+          className="flex-1 px-4 py-3 bg-foreground text-background hover:opacity-90 rounded-md transition-opacity flex items-center justify-center gap-2 font-medium"
         >
           <Sparkles className="w-5 h-5" />
           Generate Training Content
@@ -131,7 +131,7 @@ export default function KBReviewForm({ parsedData, onSave, onGenerate }) {
               </button>
               <button
                 onClick={confirmGenerate}
-                className="flex-1 px-4 py-2 bg-red-600 text-foreground rounded-lg hover:bg-red-700 transition-colors"
+                className="flex-1 px-4 py-2 bg-destructive text-destructive-foreground hover:opacity-90 rounded-md transition-opacity"
               >
                 Replace & Generate
               </button>

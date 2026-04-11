@@ -225,7 +225,7 @@ export default function HelpAgent() {
                 <button
                   type="submit"
                   disabled={loading || !input.trim()}
-                  className="p-2.5 bg-purple-600 hover:bg-purple-700 disabled:bg-muted disabled:text-muted-foreground text-foreground rounded-lg transition-colors"
+                  className="p-2.5 bg-foreground text-background hover:opacity-90 disabled:bg-muted disabled:text-muted-foreground rounded-md transition-opacity"
                 >
                   <Send className="w-5 h-5" />
                 </button>

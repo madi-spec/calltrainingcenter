@@ -155,7 +155,7 @@ export default function Profile() {
           <button
             onClick={handleSave}
             disabled={loading || !hasChanges}
-            className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-foreground font-medium rounded-md transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 disabled:opacity-50 font-medium rounded-md transition-opacity"
           >
             <Save className="w-5 h-5" />
             {loading ? 'Saving...' : 'Save Changes'}
@@ -237,7 +237,7 @@ export default function Profile() {
               <button
                 onClick={() => handleNotificationChange(pref.key, !formData.notification_preferences[pref.key])}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  formData.notification_preferences[pref.key] ? 'bg-primary-600' : 'bg-muted'
+                  formData.notification_preferences[pref.key] ? 'bg-foreground' : 'bg-muted'
                 }`}
               >
                 <span
@@ -259,7 +259,7 @@ export default function Profile() {
             <button
               onClick={() => handleNotificationChange('in_app_all', !formData.notification_preferences.in_app_all)}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                formData.notification_preferences.in_app_all ? 'bg-primary-600' : 'bg-muted'
+                formData.notification_preferences.in_app_all ? 'bg-foreground' : 'bg-muted'
               }`}
             >
               <span
@@ -321,7 +321,7 @@ export default function Profile() {
           <button
             onClick={handleRestartTutorial}
             disabled={restartingTutorial || tutorialActive}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-green-600/50 disabled:cursor-not-allowed text-foreground font-medium rounded-md transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed font-medium rounded-md transition-opacity"
           >
             <PlayCircle className="w-5 h-5" />
             {restartingTutorial ? 'Starting...' : tutorialActive ? 'In Progress' : 'Start Tutorial'}

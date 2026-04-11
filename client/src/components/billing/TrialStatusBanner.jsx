@@ -79,7 +79,7 @@ function TrialStatusBanner({ onUpgradeClick }) {
       text: isDark ? 'text-red-200' : 'text-red-800',
       subText: isDark ? 'text-red-300' : 'text-red-600',
       icon: 'text-red-400',
-      button: 'bg-red-600 hover:bg-red-500 text-foreground'
+      button: 'bg-destructive text-destructive-foreground hover:opacity-90'
     },
     amber: {
       bg: isDark ? 'bg-amber-900/50 border-amber-700' : 'bg-amber-50 border-amber-200',
@@ -93,7 +93,7 @@ function TrialStatusBanner({ onUpgradeClick }) {
       text: isDark ? 'text-primary-200' : 'text-primary-800',
       subText: isDark ? 'text-primary-300' : 'text-primary-600',
       icon: 'text-primary-400',
-      button: 'bg-primary-600 hover:bg-primary-500 text-foreground'
+      button: 'bg-foreground text-background hover:opacity-90'
     }
   };
 

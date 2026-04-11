@@ -135,7 +135,7 @@ export default function Notifications() {
     <button
       onClick={() => onChange(!enabled)}
       className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-        enabled ? 'bg-primary-600' : 'bg-muted'
+        enabled ? 'bg-foreground' : 'bg-muted'
       }`}
     >
       <span
@@ -169,7 +169,7 @@ export default function Notifications() {
             <button
               onClick={handleSave}
               disabled={loading || !hasChanges}
-              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-foreground font-medium rounded-md transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 disabled:opacity-50 font-medium rounded-md transition-opacity"
             >
               <Save className="w-5 h-5" />
               {loading ? 'Saving...' : 'Save Changes'}

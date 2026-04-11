@@ -79,7 +79,7 @@ function ComparativeAnalysis() {
           <p className="text-red-600 dark:text-red-300 mb-4">{error}</p>
           <button
             onClick={() => navigate(-1)}
-            className="px-4 py-2 bg-red-600 text-foreground rounded-lg hover:bg-red-700 transition-colors"
+            className="px-4 py-2 bg-foreground text-background hover:opacity-90 rounded-md transition-opacity"
           >
             Go Back
           </button>
@@ -103,7 +103,7 @@ function ComparativeAnalysis() {
           </p>
           <Link
             to={`/scenario/${scenarioId}`}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-foreground rounded-lg hover:bg-primary-700 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 rounded-md transition-opacity"
           >
             Start Scenario
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -143,7 +143,7 @@ function ComparativeAnalysis() {
 
           <Link
             to={`/scenario/${scenarioId}`}
-            className="px-4 py-2 bg-primary-600 text-foreground rounded-lg hover:bg-primary-700 transition-colors"
+            className="px-4 py-2 bg-foreground text-background hover:opacity-90 rounded-md transition-opacity"
           >
             Practice Again
           </Link>

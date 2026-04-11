@@ -102,7 +102,7 @@ export default function MyAssignments() {
             onClick={() => setFilter(tab.value)}
             className={`px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap ${
               filter === tab.value
-                ? 'bg-primary-600 text-foreground'
+                ? 'bg-foreground text-background'
                 : 'bg-card text-muted-foreground hover:bg-muted'
             }`}
           >

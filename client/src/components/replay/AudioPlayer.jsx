@@ -179,7 +179,7 @@ function AudioPlayer({ src, duration, onTimeUpdate, onBookmark, bookmarks = [] }
           <button
             onClick={togglePlay}
             disabled={isLoading}
-            className="p-3 bg-primary-600 text-foreground rounded-full hover:bg-primary-700 transition-colors disabled:opacity-50"
+            className="p-3 bg-foreground text-background rounded-full hover:opacity-90 transition-opacity disabled:opacity-50"
           >
             {isLoading ? (
               <svg className="w-6 h-6 animate-spin" fill="none" viewBox="0 0 24 24">

@@ -201,7 +201,7 @@ export default function AgentDashboard() {
               to="/courses"
               className={`flex items-center justify-center gap-3 px-8 py-4 font-medium rounded-md transition-all shadow-lg ${
                 metRequirement
-                  ? 'bg-green-600 hover:bg-green-700 text-white shadow-green-500/20'
+                  ? 'bg-foreground text-background hover:opacity-90 shadow-foreground/20'
                   : 'bg-foreground text-background hover:opacity-90 shadow-primary-500/30 animate-pulse hover:animate-none'
               }`}
             >
@@ -483,7 +483,7 @@ export default function AgentDashboard() {
       <div className="md:hidden fixed bottom-6 left-4 right-4">
         <Link
           to="/courses"
-          className="flex items-center justify-center gap-2 w-full py-4 bg-primary-600 text-white font-semibold rounded-lg shadow-lg shadow-primary-500/30"
+          className="flex items-center justify-center gap-2 w-full py-4 bg-foreground text-background font-semibold rounded-md shadow-lg hover:opacity-90 transition-opacity"
         >
           <Play className="w-5 h-5" />
           Start Training

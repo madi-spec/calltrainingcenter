@@ -146,7 +146,7 @@ export default function StreakStatus({ compact = false }) {
                 className={`
                   flex items-center gap-1 px-3 py-1.5 rounded-lg
                   ${streak.atRisk
-                    ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
+                    ? 'bg-foreground text-background hover:opacity-90 cursor-pointer'
                     : 'bg-blue-500/20 cursor-default'}
                   transition-colors
                 `}
@@ -190,7 +190,7 @@ export default function StreakStatus({ compact = false }) {
               </div>
               <button
                 onClick={() => setShowRecoveryModal(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-foreground font-medium rounded-md transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-destructive text-destructive-foreground hover:opacity-90 font-medium rounded-md transition-opacity"
               >
                 <RefreshCw className="w-4 h-4" />
                 Recover

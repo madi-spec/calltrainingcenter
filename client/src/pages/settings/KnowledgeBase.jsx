@@ -161,7 +161,7 @@ export default function KnowledgeBase() {
             <div className="flex gap-3 justify-center">
               <Link
                 to="/courses"
-                className="px-4 py-2 bg-primary-600 text-foreground rounded-lg hover:bg-primary-700 transition-colors"
+                className="px-4 py-2 bg-foreground text-background hover:opacity-90 rounded-md transition-opacity"
               >
                 View Courses
               </Link>

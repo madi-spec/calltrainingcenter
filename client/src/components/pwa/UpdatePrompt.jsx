@@ -14,7 +14,7 @@ function UpdatePrompt() {
         exit={{ opacity: 0, y: -50 }}
         className="fixed top-4 left-4 right-4 md:left-1/2 md:-translate-x-1/2 md:w-96 z-50"
       >
-        <div className="bg-blue-600 text-white rounded-lg shadow-xl p-4">
+        <div className="bg-foreground text-background rounded-md shadow-xl p-4">
           <div className="flex items-center gap-4">
             {/* Icon */}
             <div className="flex-shrink-0">

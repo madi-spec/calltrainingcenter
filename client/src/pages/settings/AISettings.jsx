@@ -829,7 +829,7 @@ Respond with JSON in this exact format:
               <button
                 onClick={() => setWizardStep(prev => prev + 1)}
                 disabled={!canProceed()}
-                className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-muted disabled:text-muted-foreground text-foreground font-medium rounded-md transition-colors"
+                className="flex items-center gap-2 px-6 py-2 bg-foreground text-background hover:opacity-90 disabled:bg-muted disabled:text-muted-foreground font-medium rounded-md transition-opacity"
               >
                 Next
                 <ArrowRight className="w-4 h-4" />
@@ -838,7 +838,7 @@ Respond with JSON in this exact format:
               <button
                 onClick={handleFinishWizard}
                 disabled={!canProceed() || savingPrompts}
-                className="flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 disabled:bg-muted disabled:text-muted-foreground text-foreground font-medium rounded-md transition-colors"
+                className="flex items-center gap-2 px-6 py-2 bg-foreground text-background hover:opacity-90 disabled:bg-muted disabled:text-muted-foreground font-medium rounded-md transition-opacity"
               >
                 {savingPrompts ? (
                   <>
@@ -889,7 +889,7 @@ Respond with JSON in this exact format:
             <button
               onClick={handleSaveWeights}
               disabled={savingWeights || totalWeight !== 100}
-              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-muted text-foreground font-medium rounded-md transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 disabled:bg-muted disabled:text-muted-foreground font-medium rounded-md transition-opacity"
             >
               {savingWeights ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               Save
@@ -1050,7 +1050,7 @@ Respond with JSON in this exact format:
             )}
             <button
               onClick={() => { setActiveWizard('coaching'); setWizardStep(0); }}
-              className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-foreground font-medium rounded-md transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-opacity"
             >
               <Sparkles className="w-4 h-4" />
               {hasCustomPrompts.coaching ? 'Reconfigure' : 'Configure'}
@@ -1181,7 +1181,7 @@ Respond with JSON in this exact format:
                     <button
                       onClick={addRequiredPhrase}
                       disabled={!newRequired.phrase.trim()}
-                      className="px-3 py-2 bg-green-600 hover:bg-green-700 disabled:bg-muted text-foreground rounded-lg"
+                      className="px-3 py-2 bg-foreground text-background hover:opacity-90 disabled:bg-muted disabled:text-muted-foreground rounded-md"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -1244,7 +1244,7 @@ Respond with JSON in this exact format:
                     <button
                       onClick={addProhibitedPhrase}
                       disabled={!newProhibited.phrase.trim()}
-                      className="px-3 py-2 bg-red-600 hover:bg-red-700 disabled:bg-muted text-foreground rounded-lg"
+                      className="px-3 py-2 bg-destructive text-destructive-foreground hover:opacity-90 disabled:bg-muted disabled:text-muted-foreground rounded-md"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -1316,7 +1316,7 @@ Respond with JSON in this exact format:
                     <button
                       onClick={addCustomCriterion}
                       disabled={!newCustom.criterion.trim()}
-                      className="px-3 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-muted text-foreground rounded-lg"
+                      className="px-3 py-2 bg-foreground text-background hover:opacity-90 disabled:bg-muted disabled:text-muted-foreground rounded-md"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -1421,7 +1421,7 @@ Respond with JSON in this exact format:
                     <div className="mt-4 flex justify-end">
                       <button
                         onClick={handleSaveVoice}
-                        className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-foreground font-medium rounded-md transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 font-medium rounded-md transition-opacity"
                       >
                         <Save className="w-4 h-4" />
                         Save Voice Preference

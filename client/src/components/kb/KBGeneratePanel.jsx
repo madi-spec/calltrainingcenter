@@ -131,7 +131,7 @@ export default function KBGeneratePanel({ authFetch, uploadId, onComplete, onErr
             // Re-trigger
             window.location.reload();
           }}
-          className="px-4 py-2 bg-primary-600 text-foreground rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2"
+          className="px-4 py-2 bg-foreground text-background hover:opacity-90 rounded-md transition-opacity flex items-center gap-2"
         >
           <Sparkles className="w-4 h-4" /> Retry Generation
         </button>

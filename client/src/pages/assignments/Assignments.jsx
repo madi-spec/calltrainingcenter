@@ -443,7 +443,7 @@ export default function Assignments() {
                       onClick={() => setAssignmentType('scenario')}
                       className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-colors ${
                         assignmentType === 'scenario'
-                          ? 'bg-primary-600 text-foreground'
+                          ? 'bg-foreground text-background'
                           : 'bg-muted text-secondary-foreground hover:bg-muted'
                       }`}
                     >
@@ -453,7 +453,7 @@ export default function Assignments() {
                       onClick={() => setAssignmentType('course')}
                       className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-colors ${
                         assignmentType === 'course'
-                          ? 'bg-primary-600 text-foreground'
+                          ? 'bg-foreground text-background'
                           : 'bg-muted text-secondary-foreground hover:bg-muted'
                       }`}
                     >

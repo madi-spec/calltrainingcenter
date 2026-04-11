@@ -98,7 +98,7 @@ export default function Leaderboard() {
               onClick={() => setTimeframe(tf)}
               className={`px-6 py-2 rounded-lg font-medium transition-colors ${
                 timeframe === tf
-                  ? 'bg-primary-600 text-foreground'
+                  ? 'bg-foreground text-background'
                   : 'text-muted-foreground hover:text-secondary-foreground'
               }`}
             >

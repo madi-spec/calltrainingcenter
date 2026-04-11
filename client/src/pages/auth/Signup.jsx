@@ -359,7 +359,7 @@ export default function Signup() {
                   <button
                     type="submit"
                     disabled={loading || !formData.organizationName || !formData.phone || !formData.website}
-                    className="flex-1 py-3 px-4 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-foreground font-medium rounded-md transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 py-3 px-4 bg-foreground text-background hover:opacity-90 disabled:opacity-50 font-medium rounded-md transition-opacity flex items-center justify-center gap-2"
                   >
                     {loading ? (
                       <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>

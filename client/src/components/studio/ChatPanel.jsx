@@ -112,7 +112,7 @@ export default function ChatPanel({ messages, loading, onSendMessage, onUploadFi
           <button
             onClick={handleSend}
             disabled={!input.trim() || loading}
-            className="p-2 bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
+            className="p-2 bg-foreground text-background hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-opacity"
           >
             <Send className="w-4 h-4" />
           </button>

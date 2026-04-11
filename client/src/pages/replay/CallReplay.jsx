@@ -95,7 +95,7 @@ function CallReplay() {
           <p className="text-red-300 mb-4">{error}</p>
           <button
             onClick={() => navigate(-1)}
-            className="px-4 py-2 bg-red-600 text-foreground rounded-lg hover:bg-red-700 transition-colors"
+            className="px-4 py-2 bg-foreground text-background hover:opacity-90 rounded-md transition-opacity"
           >
             Go Back
           </button>
@@ -237,7 +237,7 @@ function CallReplay() {
           >
             <Link
               to={`/results/${sessionId}`}
-              className="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-primary-600 text-foreground rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium"
+              className="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-foreground text-background hover:opacity-90 rounded-md transition-opacity text-sm font-medium"
             >
               <BarChart2 className="w-4 h-4" />
               View Full Results

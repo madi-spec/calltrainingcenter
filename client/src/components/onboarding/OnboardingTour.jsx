@@ -72,7 +72,7 @@ const OnboardingTour = ({ run, onComplete }) => {
       disableBeacon: true,
     },
     {
-      target: '.bg-primary-600.animate-pulse, .bg-primary-600:not(.animate-pulse)',
+      target: '.bg-foreground.animate-pulse, .bg-foreground:not(.animate-pulse)',
       content: (
         <div>
           <h3 className="text-lg font-bold text-foreground mb-2">

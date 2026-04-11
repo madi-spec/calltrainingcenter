@@ -94,7 +94,7 @@ export default function DevDashboard() {
       <div className="max-w-4xl mx-auto p-6">
         <div className="bg-red-900/30 border border-red-700 rounded-lg p-4">
           <p className="text-red-400">Error loading dashboard: {error}</p>
-          <button onClick={fetchStats} className="mt-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-sm">
+          <button onClick={fetchStats} className="mt-2 px-4 py-2 bg-foreground text-background hover:opacity-90 rounded-md text-sm">
             Retry
           </button>
         </div>
@@ -120,7 +120,7 @@ export default function DevDashboard() {
             onClick={() => setAutoRefresh(!autoRefresh)}
             className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
               autoRefresh
-                ? 'bg-green-600 hover:bg-green-700 text-white'
+                ? 'bg-foreground text-background hover:opacity-90'
                 : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
             }`}
           >
@@ -218,7 +218,7 @@ export default function DevDashboard() {
                         disabled={playerLoading === s.retell_call_id}
                         className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
                           activePlayer?.callId === s.retell_call_id
-                            ? 'bg-blue-600 text-white'
+                            ? 'bg-foreground text-background'
                             : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
                         }`}
                         title="Play recording"

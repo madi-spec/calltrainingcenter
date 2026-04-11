@@ -219,7 +219,7 @@ export default function ObjectionsStep({ data, allStepData, onComplete, authFetc
                                 <div className="flex gap-2">
                                   <button
                                     onClick={() => saveEdit(template.id)}
-                                    className="flex items-center gap-1 px-3 py-1 bg-primary-600 text-foreground text-sm rounded transition-colors hover:bg-primary-700"
+                                    className="flex items-center gap-1 px-3 py-1 bg-foreground text-background text-sm rounded hover:opacity-90 transition-opacity"
                                   >
                                     <Check className="w-3 h-3" />
                                     Save
@@ -337,7 +337,7 @@ export default function ObjectionsStep({ data, allStepData, onComplete, authFetc
                 <button
                   onClick={addCustomObjection}
                   disabled={!newObjection.text || !newObjection.response}
-                  className="flex items-center gap-1 px-3 py-1 bg-primary-600 text-foreground text-sm rounded transition-colors hover:bg-primary-700 disabled:opacity-50"
+                  className="flex items-center gap-1 px-3 py-1 bg-foreground text-background text-sm rounded hover:opacity-90 transition-opacity disabled:opacity-50"
                 >
                   <Plus className="w-3 h-3" />
                   Add

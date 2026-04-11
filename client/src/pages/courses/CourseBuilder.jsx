@@ -585,7 +585,7 @@ export default function CourseBuilder() {
           <button
             type="submit"
             disabled={isSubmitting || success}
-            className="flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-muted disabled:cursor-not-allowed text-foreground font-medium rounded-md transition-colors"
+            className="flex items-center gap-2 px-6 py-3 bg-foreground text-background hover:opacity-90 disabled:bg-muted disabled:cursor-not-allowed disabled:text-muted-foreground font-medium rounded-md transition-opacity"
           >
             {isSubmitting ? (
               <>

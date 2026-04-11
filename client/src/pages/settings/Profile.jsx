@@ -181,18 +181,18 @@ export default function Profile() {
 
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-secondary-foreground mb-2">
+            <label className="block text-sm font-medium text-foreground mb-1.5">
               Full Name
             </label>
             <input
               type="text"
               value={formData.full_name}
               onChange={(e) => handleChange('full_name', e.target.value)}
-              className="w-full px-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-4 py-2 bg-muted border border-border rounded-lg text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-secondary-foreground mb-2">
+            <label className="block text-sm font-medium text-foreground mb-1.5">
               Email
             </label>
             <div className="flex items-center gap-2">

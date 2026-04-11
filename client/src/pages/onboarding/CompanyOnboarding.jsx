@@ -118,7 +118,7 @@ export default function CompanyOnboarding() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Company Name */}
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-secondary-foreground mb-2">
+              <label htmlFor="name" className="block text-sm font-medium text-foreground mb-1.5">
                 Company Name <span className="text-red-400">*</span>
               </label>
               <div className="relative">
@@ -129,7 +129,7 @@ export default function CompanyOnboarding() {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-transparent"
                   placeholder="Acme Pest Control"
                   autoFocus
                 />
@@ -138,7 +138,7 @@ export default function CompanyOnboarding() {
 
             {/* Phone Number */}
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-secondary-foreground mb-2">
+              <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-1.5">
                 Company Phone <span className="text-red-400">*</span>
               </label>
               <div className="relative">
@@ -149,7 +149,7 @@ export default function CompanyOnboarding() {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-transparent"
                   placeholder="(555) 123-4567"
                 />
               </div>
@@ -157,7 +157,7 @@ export default function CompanyOnboarding() {
 
             {/* Website */}
             <div>
-              <label htmlFor="website" className="block text-sm font-medium text-secondary-foreground mb-2">
+              <label htmlFor="website" className="block text-sm font-medium text-foreground mb-1.5">
                 Company Website <span className="text-red-400">*</span>
               </label>
               <div className="relative">
@@ -168,7 +168,7 @@ export default function CompanyOnboarding() {
                   name="website"
                   value={formData.website}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-transparent"
                   placeholder="yourcompany.com"
                 />
               </div>

@@ -209,7 +209,7 @@ export default function Team() {
           placeholder="Search by name or email..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-10 pr-4 py-2 bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
+          className="w-full pl-10 pr-4 py-2 bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>
 
@@ -323,7 +323,7 @@ export default function Team() {
                         <select
                           value={user.role}
                           onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                          className="px-3 py-1 bg-muted border border-border rounded-lg text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                          className="px-3 py-1 bg-muted border border-border rounded-lg text-foreground text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                         >
                           {ROLES.map((role) => (
                             <option key={role.id} value={role.id}>
@@ -397,7 +397,7 @@ export default function Team() {
 
             <form onSubmit={handleInvite} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                <label className="block text-sm font-medium text-foreground mb-1.5">
                   Email Address
                 </label>
                 <div className="relative">
@@ -406,7 +406,7 @@ export default function Team() {
                     type="email"
                     value={inviteData.email}
                     onChange={(e) => setInviteData((prev) => ({ ...prev, email: e.target.value }))}
-                    className="w-full pl-10 pr-4 py-2 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full pl-10 pr-4 py-2 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     placeholder="colleague@company.com"
                     required
                   />
@@ -414,7 +414,7 @@ export default function Team() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                <label className="block text-sm font-medium text-foreground mb-1.5">
                   Role
                 </label>
                 <div className="relative">
@@ -422,7 +422,7 @@ export default function Team() {
                   <select
                     value={inviteData.role}
                     onChange={(e) => setInviteData((prev) => ({ ...prev, role: e.target.value }))}
-                    className="w-full pl-10 pr-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full pl-10 pr-4 py-2 bg-muted border border-border rounded-lg text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     {ROLES.filter((r) => r.id !== 'super_admin').map((role) => (
                       <option key={role.id} value={role.id}>

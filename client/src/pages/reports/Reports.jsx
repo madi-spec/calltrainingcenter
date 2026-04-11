@@ -143,7 +143,7 @@ export default function Reports() {
           <select
             value={dateRange}
             onChange={(e) => setDateRange(e.target.value)}
-            className="px-4 py-2 bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="px-4 py-2 bg-background border border-input rounded-md text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <option value="week">Last 7 Days</option>
             <option value="month">Last 30 Days</option>

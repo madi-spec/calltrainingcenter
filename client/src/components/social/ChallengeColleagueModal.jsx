@@ -113,7 +113,7 @@ export default function ChallengeColleagueModal({ scenario, onClose, onChallenge
               placeholder="Search colleagues..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full pl-10 pr-4 py-2 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
           </div>
         </div>
@@ -162,7 +162,7 @@ export default function ChallengeColleagueModal({ scenario, onClose, onChallenge
         {selectedColleague && (
           <div className="p-4 border-t border-border space-y-4">
             <div>
-              <label className="block text-sm font-medium text-secondary-foreground mb-1">
+              <label className="block text-sm font-medium text-foreground mb-1.5">
                 Message (optional)
               </label>
               <input
@@ -170,12 +170,12 @@ export default function ChallengeColleagueModal({ scenario, onClose, onChallenge
                 value={message}
                 onChange={e => setMessage(e.target.value)}
                 placeholder="Let's see who's better at this!"
-                className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-secondary-foreground mb-1">
+              <label className="block text-sm font-medium text-foreground mb-1.5">
                 Wager Points (optional)
               </label>
               <div className="flex items-center gap-2">

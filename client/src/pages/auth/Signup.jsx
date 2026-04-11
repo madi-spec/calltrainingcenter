@@ -168,7 +168,7 @@ export default function Signup() {
               >
                 {/* Full Name */}
                 <div>
-                  <label htmlFor="fullName" className="block text-sm font-medium text-secondary-foreground mb-2">
+                  <label htmlFor="fullName" className="block text-sm font-medium text-foreground mb-1.5">
                     Full Name
                   </label>
                   <div className="relative">
@@ -179,7 +179,7 @@ export default function Signup() {
                       name="fullName"
                       value={formData.fullName}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-transparent"
                       placeholder="John Smith"
                       required
                     />
@@ -188,7 +188,7 @@ export default function Signup() {
 
                 {/* Email */}
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-secondary-foreground mb-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1.5">
                     Email Address
                   </label>
                   <div className="relative">
@@ -199,7 +199,7 @@ export default function Signup() {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-transparent"
                       placeholder="you@company.com"
                       required
                     />
@@ -208,7 +208,7 @@ export default function Signup() {
 
                 {/* Password */}
                 <div>
-                  <label htmlFor="password" className="block text-sm font-medium text-secondary-foreground mb-2">
+                  <label htmlFor="password" className="block text-sm font-medium text-foreground mb-1.5">
                     Password
                   </label>
                   <div className="relative">
@@ -219,7 +219,7 @@ export default function Signup() {
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-12 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full pl-10 pr-12 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-transparent"
                       placeholder="Create a strong password"
                       required
                     />
@@ -249,7 +249,7 @@ export default function Signup() {
 
                 {/* Confirm Password */}
                 <div>
-                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-secondary-foreground mb-2">
+                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-foreground mb-1.5">
                     Confirm Password
                   </label>
                   <div className="relative">
@@ -260,7 +260,7 @@ export default function Signup() {
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-transparent"
                       placeholder="Confirm your password"
                       required
                     />
@@ -286,7 +286,7 @@ export default function Signup() {
               >
                 {/* Organization Name */}
                 <div>
-                  <label htmlFor="organizationName" className="block text-sm font-medium text-secondary-foreground mb-2">
+                  <label htmlFor="organizationName" className="block text-sm font-medium text-foreground mb-1.5">
                     Company Name <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
@@ -297,7 +297,7 @@ export default function Signup() {
                       name="organizationName"
                       value={formData.organizationName}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-transparent"
                       placeholder="Acme Pest Control"
                       required
                     />
@@ -306,7 +306,7 @@ export default function Signup() {
 
                 {/* Phone Number */}
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-secondary-foreground mb-2">
+                  <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-1.5">
                     Company Phone <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
@@ -317,7 +317,7 @@ export default function Signup() {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-transparent"
                       placeholder="(555) 123-4567"
                       required
                     />
@@ -326,7 +326,7 @@ export default function Signup() {
 
                 {/* Website */}
                 <div>
-                  <label htmlFor="website" className="block text-sm font-medium text-secondary-foreground mb-2">
+                  <label htmlFor="website" className="block text-sm font-medium text-foreground mb-1.5">
                     Company Website <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
@@ -337,7 +337,7 @@ export default function Signup() {
                       name="website"
                       value={formData.website}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-transparent"
                       placeholder="yourcompany.com"
                       required
                     />

@@ -239,7 +239,7 @@ export default function Assignments() {
             placeholder="Search by user or scenario..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="w-full pl-10 pr-4 py-2 bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           />
         </div>
         <div className="flex items-center gap-2">
@@ -247,7 +247,7 @@ export default function Assignments() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2 bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="px-4 py-2 bg-background border border-input rounded-md text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <option value="all">All Status</option>
             <option value="pending">Pending</option>
@@ -435,7 +435,7 @@ export default function Assignments() {
 
                 {/* Assignment Type Toggle */}
                 <div>
-                  <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-1.5">
                     Assignment Type
                   </label>
                   <div className="flex gap-2">
@@ -465,14 +465,14 @@ export default function Assignments() {
                 {/* Select Scenario or Course */}
                 {assignmentType === 'scenario' ? (
                   <div>
-                    <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-1.5">
                       <BookOpen className="w-4 h-4 inline mr-2" />
                       Select Scenario
                     </label>
                     <select
                       value={selectedScenario}
                       onChange={(e) => setSelectedScenario(e.target.value)}
-                      className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-4 py-2 bg-background border border-input rounded-md text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
                       <option value="">Choose a scenario...</option>
                       {scenarios.map(scenario => (
@@ -484,14 +484,14 @@ export default function Assignments() {
                   </div>
                 ) : (
                   <div>
-                    <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-1.5">
                       <BookOpen className="w-4 h-4 inline mr-2" />
                       Select Course
                     </label>
                     <select
                       value={selectedCourse}
                       onChange={(e) => setSelectedCourse(e.target.value)}
-                      className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-4 py-2 bg-background border border-input rounded-md text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
                       <option value="">Choose a course...</option>
                       {courses.map(course => (
@@ -505,7 +505,7 @@ export default function Assignments() {
 
                 {/* Due Date */}
                 <div>
-                  <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-1.5">
                     <Calendar className="w-4 h-4 inline mr-2" />
                     Due Date
                   </label>
@@ -514,13 +514,13 @@ export default function Assignments() {
                     value={dueDate}
                     onChange={(e) => setDueDate(e.target.value)}
                     min={new Date().toISOString().split('T')[0]}
-                    className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2 bg-background border border-input rounded-md text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   />
                 </div>
 
                 {/* Notes (optional) */}
                 <div>
-                  <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-1.5">
                     Notes (optional)
                   </label>
                   <textarea
@@ -528,7 +528,7 @@ export default function Assignments() {
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="Add any notes for this assignment..."
                     rows={2}
-                    className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+                    className="w-full px-4 py-2 bg-background border border-input rounded-md text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-none"
                   />
                 </div>
 

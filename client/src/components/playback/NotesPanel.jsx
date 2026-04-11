@@ -216,7 +216,7 @@ export default function NotesPanel({
                   value={noteText}
                   onChange={(e) => setNoteText(e.target.value)}
                   placeholder="Write your note here..."
-                  className="w-full px-3 py-2 bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm resize-none"
+                  className="w-full px-3 py-2 bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring text-sm resize-none"
                   rows={3}
                   autoFocus
                 />
@@ -298,7 +298,7 @@ export default function NotesPanel({
                     <textarea
                       value={noteText}
                       onChange={(e) => setNoteText(e.target.value)}
-                      className="w-full px-3 py-2 bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm resize-none"
+                      className="w-full px-3 py-2 bg-background border border-input rounded-md text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring text-sm resize-none"
                       rows={3}
                     />
 

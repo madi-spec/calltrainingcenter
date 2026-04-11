@@ -10,7 +10,7 @@ const Input = forwardRef(({
   return (
     <div className="w-full">
       {label && (
-        <label className="block text-sm font-medium text-secondary-foreground mb-1.5">
+        <label className="block text-sm font-medium text-foreground mb-1.5">
           {label}
         </label>
       )}
@@ -23,21 +23,21 @@ const Input = forwardRef(({
         <input
           ref={ref}
           className={`
-            w-full bg-card border border-border rounded-lg
-            px-4 py-2.5
+            w-full bg-background border border-input rounded-md
+            px-3 py-2 text-sm
             text-foreground placeholder:text-muted-foreground
-            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-            transition-all duration-200
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background
+            transition-colors
             disabled:opacity-50 disabled:cursor-not-allowed
             ${Icon ? 'pl-10' : ''}
-            ${error ? 'border-red-500 focus:ring-red-500' : ''}
+            ${error ? 'border-destructive focus-visible:ring-destructive' : ''}
             ${className}
           `}
           {...props}
         />
       </div>
       {error && (
-        <p className="mt-1.5 text-sm text-red-400">{error}</p>
+        <p className="mt-1.5 text-sm text-destructive">{error}</p>
       )}
     </div>
   );
@@ -49,27 +49,27 @@ export function Textarea({ label, error, className = '', rows = 4, ...props }) {
   return (
     <div className="w-full">
       {label && (
-        <label className="block text-sm font-medium text-secondary-foreground mb-1.5">
+        <label className="block text-sm font-medium text-foreground mb-1.5">
           {label}
         </label>
       )}
       <textarea
         rows={rows}
         className={`
-          w-full bg-card border border-border rounded-lg
-          px-4 py-2.5
+          w-full bg-background border border-input rounded-md
+          px-3 py-2 text-sm
           text-foreground placeholder:text-muted-foreground
-          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-          transition-all duration-200
+          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background
+          transition-colors
           disabled:opacity-50 disabled:cursor-not-allowed
           resize-none
-          ${error ? 'border-red-500 focus:ring-red-500' : ''}
+          ${error ? 'border-destructive focus-visible:ring-destructive' : ''}
           ${className}
         `}
         {...props}
       />
       {error && (
-        <p className="mt-1.5 text-sm text-red-400">{error}</p>
+        <p className="mt-1.5 text-sm text-destructive">{error}</p>
       )}
     </div>
   );
@@ -79,19 +79,19 @@ export function Select({ label, error, options = [], className = '', ...props })
   return (
     <div className="w-full">
       {label && (
-        <label className="block text-sm font-medium text-secondary-foreground mb-1.5">
+        <label className="block text-sm font-medium text-foreground mb-1.5">
           {label}
         </label>
       )}
       <select
         className={`
-          w-full bg-card border border-border rounded-lg
-          px-4 py-2.5
+          w-full bg-background border border-input rounded-md
+          px-3 py-2 text-sm
           text-foreground
-          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-          transition-all duration-200
+          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background
+          transition-colors
           disabled:opacity-50 disabled:cursor-not-allowed
-          ${error ? 'border-red-500 focus:ring-red-500' : ''}
+          ${error ? 'border-destructive focus-visible:ring-destructive' : ''}
           ${className}
         `}
         {...props}
@@ -103,7 +103,7 @@ export function Select({ label, error, options = [], className = '', ...props })
         ))}
       </select>
       {error && (
-        <p className="mt-1.5 text-sm text-red-400">{error}</p>
+        <p className="mt-1.5 text-sm text-destructive">{error}</p>
       )}
     </div>
   );

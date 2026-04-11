@@ -205,7 +205,7 @@ export default function MicroPractice() {
         <select
           value={selectedSkill || ''}
           onChange={(e) => setSelectedSkill(e.target.value || null)}
-          className="px-4 py-2 bg-card border border-border rounded-lg text-foreground text-sm"
+          className="px-4 py-2 bg-background border border-input rounded-md text-foreground text-sm"
         >
           <option value="">All Skills</option>
           {skills.map((skill) => (

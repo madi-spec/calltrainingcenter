@@ -67,7 +67,7 @@ export default function VoiceSelector({
   return (
     <div className={`relative ${className}`} ref={dropdownRef}>
       {label && (
-        <label className="block text-sm font-medium text-secondary-foreground mb-2">
+        <label className="block text-sm font-medium text-foreground mb-1.5">
           {label}
         </label>
       )}

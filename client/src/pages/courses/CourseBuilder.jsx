@@ -233,7 +233,7 @@ export default function CourseBuilder() {
           <div className="grid gap-6">
             {/* Course Name */}
             <div>
-              <label className="block text-sm font-medium text-secondary-foreground mb-2">
+              <label className="block text-sm font-medium text-foreground mb-1.5">
                 Course Name *
               </label>
               <input
@@ -247,7 +247,7 @@ export default function CourseBuilder() {
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-medium text-secondary-foreground mb-2">
+              <label className="block text-sm font-medium text-foreground mb-1.5">
                 Description *
               </label>
               <textarea
@@ -263,7 +263,7 @@ export default function CourseBuilder() {
             <div className="grid md:grid-cols-2 gap-6">
               {/* Category */}
               <div>
-                <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                <label className="block text-sm font-medium text-foreground mb-1.5">
                   Category
                 </label>
                 <select
@@ -279,7 +279,7 @@ export default function CourseBuilder() {
 
               {/* Course Icon */}
               <div>
-                <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                <label className="block text-sm font-medium text-foreground mb-1.5">
                   Course Icon
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -304,7 +304,7 @@ export default function CourseBuilder() {
             {/* Badge Settings */}
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                <label className="block text-sm font-medium text-foreground mb-1.5">
                   Completion Badge Name
                 </label>
                 <input
@@ -317,7 +317,7 @@ export default function CourseBuilder() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                <label className="block text-sm font-medium text-foreground mb-1.5">
                   Badge Icon
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -441,7 +441,7 @@ export default function CourseBuilder() {
                       <div className="grid gap-4 pt-4">
                         {/* Module Name */}
                         <div>
-                          <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                          <label className="block text-sm font-medium text-foreground mb-1.5">
                             Module Name *
                           </label>
                           <input
@@ -455,7 +455,7 @@ export default function CourseBuilder() {
 
                         {/* Module Description */}
                         <div>
-                          <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                          <label className="block text-sm font-medium text-foreground mb-1.5">
                             Description
                           </label>
                           <textarea
@@ -471,7 +471,7 @@ export default function CourseBuilder() {
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                           {/* Difficulty */}
                           <div>
-                            <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                            <label className="block text-sm font-medium text-foreground mb-1.5">
                               Difficulty
                             </label>
                             <select
@@ -487,7 +487,7 @@ export default function CourseBuilder() {
 
                           {/* Scenario Count */}
                           <div>
-                            <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                            <label className="block text-sm font-medium text-foreground mb-1.5">
                               Scenarios
                             </label>
                             <input
@@ -502,7 +502,7 @@ export default function CourseBuilder() {
 
                           {/* Pass Threshold */}
                           <div>
-                            <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                            <label className="block text-sm font-medium text-foreground mb-1.5">
                               Pass Score %
                             </label>
                             <input
@@ -517,7 +517,7 @@ export default function CourseBuilder() {
 
                           {/* Required Completions */}
                           <div>
-                            <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                            <label className="block text-sm font-medium text-foreground mb-1.5">
                               Required Passes
                             </label>
                             <input

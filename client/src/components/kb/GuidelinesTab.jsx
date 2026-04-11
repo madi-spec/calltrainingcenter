@@ -50,7 +50,7 @@ export default function GuidelinesTab({ guidelines, onChange }) {
       {/* Show grouped */}
       {grouped.map(group => (
         <div key={group.value}>
-          <h3 className="text-sm font-medium text-secondary-foreground mb-2">{group.label}</h3>
+          <h3 className="text-sm font-medium text-foreground mb-1.5">{group.label}</h3>
           <div className="space-y-2">
             {group.items.map(g => (
               <GuidelineItem
@@ -70,7 +70,7 @@ export default function GuidelinesTab({ guidelines, onChange }) {
       {/* Ungrouped */}
       {ungrouped.length > 0 && (
         <div>
-          <h3 className="text-sm font-medium text-secondary-foreground mb-2">Other</h3>
+          <h3 className="text-sm font-medium text-foreground mb-1.5">Other</h3>
           <div className="space-y-2">
             {ungrouped.map(g => (
               <GuidelineItem

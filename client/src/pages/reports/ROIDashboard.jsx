@@ -28,11 +28,11 @@ function StatCard({ label, value, change, icon, color = 'primary' }) {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg p-5 border border-gray-200 dark:border-gray-700 shadow-sm">
+    <div className="bg-card border border-border rounded-lg p-6">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{label}</p>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{value}</p>
+          <p className="text-sm text-muted-foreground">{label}</p>
+          <p className="text-2xl font-bold text-foreground mt-1">{value}</p>
           {change !== undefined && (
             <p className={`text-sm mt-1 ${change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
               {formatPercent(change)} from last period
@@ -75,26 +75,26 @@ function ROICalculationForm({ config, onCalculate, calculating }) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-foreground mb-1">
             Period Start
           </label>
           <input
             type="date"
             value={formData.periodStart}
             onChange={(e) => setFormData({ ...formData, periodStart: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
             required
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-foreground mb-1">
             Period End
           </label>
           <input
             type="date"
             value={formData.periodEnd}
             onChange={(e) => setFormData({ ...formData, periodEnd: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
             required
           />
         </div>
@@ -102,7 +102,7 @@ function ROICalculationForm({ config, onCalculate, calculating }) {
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-foreground mb-1">
             CSAT Improvement (%)
           </label>
           <input
@@ -111,11 +111,11 @@ function ROICalculationForm({ config, onCalculate, calculating }) {
             value={formData.csatImprovement}
             onChange={(e) => setFormData({ ...formData, csatImprovement: e.target.value })}
             placeholder="e.g., 2.5"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-foreground mb-1">
             FCR Improvement (%)
           </label>
           <input
@@ -124,14 +124,14 @@ function ROICalculationForm({ config, onCalculate, calculating }) {
             value={formData.fcrImprovement}
             onChange={(e) => setFormData({ ...formData, fcrImprovement: e.target.value })}
             placeholder="e.g., 5.0"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-foreground mb-1">
             AHT Reduction (seconds)
           </label>
           <input
@@ -139,11 +139,11 @@ function ROICalculationForm({ config, onCalculate, calculating }) {
             value={formData.ahtReductionSeconds}
             onChange={(e) => setFormData({ ...formData, ahtReductionSeconds: e.target.value })}
             placeholder="e.g., 30"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-foreground mb-1">
             Quality Score Improvement (pts)
           </label>
           <input
@@ -152,13 +152,13 @@ function ROICalculationForm({ config, onCalculate, calculating }) {
             value={formData.qualityScoreImprovement}
             onChange={(e) => setFormData({ ...formData, qualityScoreImprovement: e.target.value })}
             placeholder="e.g., 5"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label className="block text-sm font-medium text-foreground mb-1">
           Platform Cost ($)
         </label>
         <input
@@ -167,12 +167,12 @@ function ROICalculationForm({ config, onCalculate, calculating }) {
           value={formData.platformCost}
           onChange={(e) => setFormData({ ...formData, platformCost: e.target.value })}
           placeholder="Monthly platform cost"
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          className="w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label className="block text-sm font-medium text-foreground mb-1">
           Notes (Optional)
         </label>
         <textarea
@@ -180,7 +180,7 @@ function ROICalculationForm({ config, onCalculate, calculating }) {
           value={formData.notes}
           onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
           placeholder="Add notes about this calculation..."
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none"
+          className="w-full px-3 py-2 border border-input rounded-md bg-background text-foreground resize-none"
         />
       </div>
 
@@ -213,7 +213,7 @@ function ROICalculationForm({ config, onCalculate, calculating }) {
 function CalculationHistory({ calculations }) {
   if (!calculations || calculations.length === 0) {
     return (
-      <div className="py-6 text-center text-gray-500 dark:text-gray-400">
+      <div className="py-6 text-center text-muted-foreground">
         No ROI calculations yet. Create your first calculation above.
       </div>
     );
@@ -224,14 +224,14 @@ function CalculationHistory({ calculations }) {
       {calculations.map((calc) => (
         <div
           key={calc.id}
-          className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
+          className="p-4 bg-muted/50 rounded-lg"
         >
           <div className="flex items-start justify-between mb-2">
             <div>
-              <p className="font-medium text-gray-900 dark:text-white">
+              <p className="font-medium text-foreground">
                 {new Date(calc.period_start).toLocaleDateString()} - {new Date(calc.period_end).toLocaleDateString()}
               </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-muted-foreground">
                 {calc.training_sessions} sessions | {calc.training_hours}h training
               </p>
             </div>
@@ -246,19 +246,19 @@ function CalculationHistory({ calculations }) {
 
           <div className="grid grid-cols-3 gap-4 text-sm">
             <div>
-              <p className="text-gray-500 dark:text-gray-400">Investment</p>
-              <p className="font-medium text-gray-900 dark:text-white">
+              <p className="text-muted-foreground">Investment</p>
+              <p className="font-medium text-foreground">
                 {formatCurrency(calc.total_investment)}
               </p>
             </div>
             <div>
-              <p className="text-gray-500 dark:text-gray-400">Cost Savings</p>
+              <p className="text-muted-foreground">Cost Savings</p>
               <p className="font-medium text-green-600 dark:text-green-400">
                 {formatCurrency(calc.estimated_cost_savings)}
               </p>
             </div>
             <div>
-              <p className="text-gray-500 dark:text-gray-400">Revenue Gain</p>
+              <p className="text-muted-foreground">Revenue Gain</p>
               <p className="font-medium text-blue-600 dark:text-blue-400">
                 {formatCurrency(calc.estimated_revenue_gain)}
               </p>
@@ -266,7 +266,7 @@ function CalculationHistory({ calculations }) {
           </div>
 
           {calc.calculation_notes && (
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 italic">
+            <p className="mt-2 text-sm text-muted-foreground italic">
               {calc.calculation_notes}
             </p>
           )}
@@ -346,10 +346,10 @@ function ROIDashboard() {
     return (
       <div className="p-6 max-w-7xl mx-auto">
         <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
+          <div className="h-8 bg-muted rounded w-1/3"></div>
           <div className="grid grid-cols-4 gap-4">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-32 bg-gray-200 dark:bg-gray-700 rounded"></div>
+              <div key={i} className="h-32 bg-muted rounded"></div>
             ))}
           </div>
         </div>
@@ -361,10 +361,10 @@ function ROIDashboard() {
     <div className="p-6 max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-2xl font-bold text-foreground">
           ROI Dashboard
         </h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-1">
+        <p className="text-muted-foreground mt-1">
           Track training investment returns and business impact
         </p>
       </div>
@@ -417,12 +417,12 @@ function ROIDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Calculator */}
         <div className="lg:col-span-1">
-          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-              <h2 className="font-semibold text-gray-900 dark:text-white">
+          <div className="bg-card border border-border rounded-lg">
+            <div className="p-4 border-b border-border">
+              <h2 className="font-semibold text-foreground">
                 ROI Calculator
               </h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-muted-foreground">
                 Calculate ROI for a period
               </p>
             </div>
@@ -438,12 +438,12 @@ function ROIDashboard() {
 
         {/* History */}
         <div className="lg:col-span-2">
-          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-              <h2 className="font-semibold text-gray-900 dark:text-white">
+          <div className="bg-card border border-border rounded-lg">
+            <div className="p-4 border-b border-border">
+              <h2 className="font-semibold text-foreground">
                 Calculation History
               </h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-muted-foreground">
                 Previous ROI calculations
               </p>
             </div>

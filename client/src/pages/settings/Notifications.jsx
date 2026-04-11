@@ -327,7 +327,7 @@ export default function Notifications() {
                 <select
                   value={settings.reminder_days_before}
                   onChange={(e) => handleSettingChange('reminder_days_before', parseInt(e.target.value))}
-                  className="w-full md:w-48 px-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full md:w-48 px-4 py-2 bg-muted border border-border rounded-lg text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <option value={1}>1 day before</option>
                   <option value={2}>2 days before</option>
@@ -357,7 +357,7 @@ export default function Notifications() {
                         type="time"
                         value={settings.quiet_hours_start}
                         onChange={(e) => handleSettingChange('quiet_hours_start', e.target.value)}
-                        className="px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        className="px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       />
                     </div>
                     <div>
@@ -366,7 +366,7 @@ export default function Notifications() {
                         type="time"
                         value={settings.quiet_hours_end}
                         onChange={(e) => handleSettingChange('quiet_hours_end', e.target.value)}
-                        className="px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        className="px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       />
                     </div>
                   </div>

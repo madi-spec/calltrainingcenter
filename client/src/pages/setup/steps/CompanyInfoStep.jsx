@@ -291,7 +291,7 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
               name="website"
               value={formData.website}
               onChange={handleChange}
-              className="w-full pl-10 pr-4 py-3 bg-card border border-border rounded-lg text-foreground focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-lg"
+              className="w-full pl-10 pr-4 py-3 bg-background border border-input rounded-md text-foreground focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-lg"
               placeholder="yourcompany.com"
             />
           </div>
@@ -368,7 +368,7 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
 
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-secondary-foreground mb-2">
+            <label className="block text-sm font-medium text-foreground mb-1.5">
               Company Name *
             </label>
             <input
@@ -383,7 +383,7 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-secondary-foreground mb-2">
+            <label className="block text-sm font-medium text-foreground mb-1.5">
               Phone Number
             </label>
             <div className="relative">
@@ -400,7 +400,7 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-secondary-foreground mb-2">
+            <label className="block text-sm font-medium text-foreground mb-1.5">
               Address
             </label>
             <div className="relative">
@@ -431,7 +431,7 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
         <div className="grid md:grid-cols-2 gap-6">
           {/* Logo */}
           <div>
-            <label className="block text-sm font-medium text-secondary-foreground mb-2">
+            <label className="block text-sm font-medium text-foreground mb-1.5">
               Company Logo URL
             </label>
             <div className="flex gap-3">
@@ -461,7 +461,7 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
 
           {/* Tagline */}
           <div>
-            <label className="block text-sm font-medium text-secondary-foreground mb-2">
+            <label className="block text-sm font-medium text-foreground mb-1.5">
               Tagline / Slogan
             </label>
             <input

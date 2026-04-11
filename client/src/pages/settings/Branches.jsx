@@ -239,53 +239,53 @@ export default function Branches() {
 
             <form onSubmit={handleSave} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                <label className="block text-sm font-medium text-foreground mb-1.5">
                   Branch Name *
                 </label>
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-                  className="w-full px-4 py-2 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-2 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   placeholder="Downtown Office"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                <label className="block text-sm font-medium text-foreground mb-1.5">
                   Address
                 </label>
                 <input
                   type="text"
                   value={formData.address}
                   onChange={(e) => setFormData((prev) => ({ ...prev, address: e.target.value }))}
-                  className="w-full px-4 py-2 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-2 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   placeholder="123 Main St, City, ST 12345"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                <label className="block text-sm font-medium text-foreground mb-1.5">
                   Phone
                 </label>
                 <input
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData((prev) => ({ ...prev, phone: e.target.value }))}
-                  className="w-full px-4 py-2 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-2 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   placeholder="(555) 123-4567"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                <label className="block text-sm font-medium text-foreground mb-1.5">
                   Timezone
                 </label>
                 <select
                   value={formData.timezone}
                   onChange={(e) => setFormData((prev) => ({ ...prev, timezone: e.target.value }))}
-                  className="w-full px-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-2 bg-muted border border-border rounded-lg text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   {TIMEZONES.map((tz) => (
                     <option key={tz} value={tz}>

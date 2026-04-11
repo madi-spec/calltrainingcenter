@@ -104,7 +104,7 @@ export default function ForgotPassword() {
               {/* Form */}
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-secondary-foreground mb-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1.5">
                     Email Address
                   </label>
                   <div className="relative">
@@ -117,7 +117,7 @@ export default function ForgotPassword() {
                         setEmail(e.target.value);
                         setError('');
                       }}
-                      className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-transparent"
                       placeholder="you@company.com"
                       required
                     />

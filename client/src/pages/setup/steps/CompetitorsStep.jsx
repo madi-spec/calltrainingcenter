@@ -177,7 +177,7 @@ export default function CompetitorsStep({ data, allStepData, onComplete, authFet
               <div className="p-4 pt-0 space-y-4 border-t border-border">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-1.5">
                       Competitor Name
                     </label>
                     <input
@@ -190,7 +190,7 @@ export default function CompetitorsStep({ data, allStepData, onComplete, authFet
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-1.5">
                       Typical Pricing
                     </label>
                     <input
@@ -205,7 +205,7 @@ export default function CompetitorsStep({ data, allStepData, onComplete, authFet
 
                 {/* Known Weaknesses */}
                 <div>
-                  <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-1.5">
                     Known Weaknesses
                   </label>
                   <div className="space-y-2">
@@ -238,7 +238,7 @@ export default function CompetitorsStep({ data, allStepData, onComplete, authFet
 
                 {/* Our Advantages */}
                 <div>
-                  <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-1.5">
                     Our Advantages Over Them
                   </label>
                   <div className="space-y-2">

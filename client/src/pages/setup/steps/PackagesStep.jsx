@@ -396,7 +396,7 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
                 <div className="p-4 pt-0 space-y-4 border-t border-border">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-1.5">
                         Package Name
                       </label>
                       <input
@@ -409,7 +409,7 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-1.5">
                         Service Frequency
                       </label>
                       <select
@@ -426,7 +426,7 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-1.5">
                         Initial Price
                       </label>
                       <div className="relative">
@@ -441,7 +441,7 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-1.5">
                         Recurring Price
                       </label>
                       <div className="relative">
@@ -457,7 +457,7 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-1.5">
                       Description
                     </label>
                     <textarea
@@ -471,7 +471,7 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
 
                   {/* Selling Points */}
                   <div>
-                    <label className="block text-sm font-medium text-secondary-foreground mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-1.5">
                       Selling Points
                     </label>
                     <div className="space-y-2">

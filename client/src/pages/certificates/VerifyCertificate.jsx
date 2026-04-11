@@ -98,7 +98,7 @@ export default function VerifyCertificate() {
           >
             <form onSubmit={handleSearch} className="space-y-4">
               <div>
-                <label htmlFor="code" className="block text-sm font-medium text-secondary-foreground mb-2">
+                <label htmlFor="code" className="block text-sm font-medium text-foreground mb-1.5">
                   Enter Verification Code
                 </label>
                 <div className="flex gap-3">
@@ -108,7 +108,7 @@ export default function VerifyCertificate() {
                     value={searchCode}
                     onChange={(e) => setSearchCode(e.target.value)}
                     placeholder="XXXX-XXXX-XXXX"
-                    className="flex-1 px-4 py-3 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 font-mono"
+                    className="flex-1 px-4 py-3 bg-background border border-input rounded-md text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring font-mono"
                   />
                   <button
                     type="submit"

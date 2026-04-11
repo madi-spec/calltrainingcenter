@@ -344,7 +344,7 @@ export default function AcceptInvite() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Full Name */}
             <div>
-              <label htmlFor="fullName" className="block text-sm font-medium text-secondary-foreground mb-2">
+              <label htmlFor="fullName" className="block text-sm font-medium text-foreground mb-1.5">
                 Full Name
               </label>
               <div className="relative">
@@ -355,7 +355,7 @@ export default function AcceptInvite() {
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-transparent"
                   placeholder="John Smith"
                   required
                 />
@@ -364,7 +364,7 @@ export default function AcceptInvite() {
 
             {/* Email (Read-only) */}
             <div>
-              <label className="block text-sm font-medium text-secondary-foreground mb-2">
+              <label className="block text-sm font-medium text-foreground mb-1.5">
                 Email Address
               </label>
               <div className="py-3 px-4 bg-muted/50 border border-border rounded-lg text-muted-foreground">
@@ -374,7 +374,7 @@ export default function AcceptInvite() {
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-secondary-foreground mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-foreground mb-1.5">
                 Create Password
               </label>
               <div className="relative">
@@ -385,7 +385,7 @@ export default function AcceptInvite() {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-12 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-10 pr-12 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-transparent"
                   placeholder="Create a strong password"
                   required
                 />
@@ -415,7 +415,7 @@ export default function AcceptInvite() {
 
             {/* Confirm Password */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-secondary-foreground mb-2">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-foreground mb-1.5">
                 Confirm Password
               </label>
               <div className="relative">
@@ -426,7 +426,7 @@ export default function AcceptInvite() {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-transparent"
                   placeholder="Confirm your password"
                   required
                 />

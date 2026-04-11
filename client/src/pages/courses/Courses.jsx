@@ -82,7 +82,7 @@ export default function Courses() {
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className="px-3 py-2 bg-card border border-border rounded-lg text-foreground text-sm focus:ring-2 focus:ring-primary-500"
+              className="px-3 py-2 bg-background border border-input rounded-md text-foreground text-sm focus:ring-2 focus:ring-primary-500"
             >
               <option value="all">All Courses</option>
               <option value="in_progress">In Progress</option>

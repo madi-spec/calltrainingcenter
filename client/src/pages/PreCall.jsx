@@ -262,15 +262,15 @@ function PreCall() {
             <Card.Content>
               <div className="space-y-4">
                 <div>
-                  <h4 className="text-sm font-medium text-secondary-foreground mb-1">Personality</h4>
+                  <h4 className="text-sm font-medium text-foreground mb-1.5">Personality</h4>
                   <p className="text-sm text-muted-foreground">{scenario.personality}</p>
                 </div>
                 <div>
-                  <h4 className="text-sm font-medium text-secondary-foreground mb-1">Emotional State</h4>
+                  <h4 className="text-sm font-medium text-foreground mb-1.5">Emotional State</h4>
                   <p className="text-sm text-muted-foreground">{scenario.emotionalState}</p>
                 </div>
                 <div>
-                  <h4 className="text-sm font-medium text-secondary-foreground mb-1">Background</h4>
+                  <h4 className="text-sm font-medium text-foreground mb-1.5">Background</h4>
                   <p className="text-sm text-muted-foreground">{scenario.customerBackground}</p>
                 </div>
               </div>
@@ -297,7 +297,7 @@ function PreCall() {
               <p className="text-secondary-foreground mb-4">{scenario.situation}</p>
               {scenario.keyPointsToMention && (
                 <div>
-                  <h4 className="text-sm font-medium text-secondary-foreground mb-2">Key Points Customer Will Mention:</h4>
+                  <h4 className="text-sm font-medium text-foreground mb-1.5">Key Points Customer Will Mention:</h4>
                   <ul className="space-y-1">
                     {scenario.keyPointsToMention.map((point, i) => (
                       <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
@@ -331,7 +331,7 @@ function PreCall() {
               <p className="text-secondary-foreground mb-4">{scenario.csrObjective}</p>
               {scenario.scoringFocus && (
                 <div>
-                  <h4 className="text-sm font-medium text-secondary-foreground mb-2">You'll Be Scored On:</h4>
+                  <h4 className="text-sm font-medium text-foreground mb-1.5">You'll Be Scored On:</h4>
                   <div className="flex flex-wrap gap-2">
                     {scenario.scoringFocus.map((focus, i) => (
                       <span

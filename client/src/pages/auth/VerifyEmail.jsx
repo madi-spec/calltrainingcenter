@@ -26,7 +26,7 @@ export default function VerifyEmail() {
 
           <div className="space-y-4">
             <div className="p-4 bg-muted/50 rounded-lg text-left">
-              <h3 className="text-sm font-medium text-secondary-foreground mb-2">Next steps:</h3>
+              <h3 className="text-sm font-medium text-foreground mb-1.5">Next steps:</h3>
               <ol className="text-sm text-muted-foreground space-y-2">
                 <li className="flex items-start gap-2">
                   <span className="flex-shrink-0 w-5 h-5 bg-primary-500/20 rounded-full flex items-center justify-center text-xs text-primary-400">1</span>

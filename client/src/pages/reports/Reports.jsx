@@ -13,6 +13,7 @@ import {
   Star
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { formatNumber } from '../../utils/format';
 
 export default function Reports() {
   const { authFetch, role, hasPermission } = useAuth();
@@ -173,8 +174,8 @@ export default function Reports() {
             )}
           </div>
           <p className="text-muted-foreground text-sm">Total Sessions</p>
-          <p className="text-2xl font-bold text-foreground mt-1">
-            {stats?.total_sessions || 0}
+          <p className="text-2xl font-bold text-foreground tabular-nums mt-1">
+            {formatNumber(stats?.total_sessions || 0)}
           </p>
         </motion.div>
 
@@ -198,7 +199,7 @@ export default function Reports() {
             )}
           </div>
           <p className="text-muted-foreground text-sm">Average Score</p>
-          <p className="text-2xl font-bold text-foreground mt-1">
+          <p className="text-2xl font-bold text-foreground tabular-nums mt-1">
             {stats?.average_score || 0}%
           </p>
         </motion.div>
@@ -215,7 +216,7 @@ export default function Reports() {
             </div>
           </div>
           <p className="text-muted-foreground text-sm">Training Time</p>
-          <p className="text-2xl font-bold text-foreground mt-1">
+          <p className="text-2xl font-bold text-foreground tabular-nums mt-1">
             {stats?.total_hours?.toFixed(1) || 0}h
           </p>
         </motion.div>
@@ -232,8 +233,8 @@ export default function Reports() {
             </div>
           </div>
           <p className="text-muted-foreground text-sm">Points Earned</p>
-          <p className="text-2xl font-bold text-foreground mt-1">
-            {stats?.points_earned?.toLocaleString() || 0}
+          <p className="text-2xl font-bold text-foreground tabular-nums mt-1">
+            {formatNumber(stats?.points_earned || 0)}
           </p>
         </motion.div>
       </div>

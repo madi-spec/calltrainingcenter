@@ -23,6 +23,7 @@ import {
   Activity
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { formatNumber } from '../../utils/format';
 
 export default function PerformanceTrends() {
   const { authFetch } = useAuth();
@@ -150,8 +151,8 @@ export default function PerformanceTrends() {
                 </div>
               </div>
               <p className="text-muted-foreground text-sm">Total Sessions</p>
-              <p className="text-3xl font-bold text-foreground mt-1">
-                {data.totalSessions}
+              <p className="text-3xl font-bold text-foreground tabular-nums mt-1">
+                {formatNumber(data.totalSessions)}
               </p>
             </motion.div>
 
@@ -172,7 +173,7 @@ export default function PerformanceTrends() {
                 </span>
               </div>
               <p className="text-muted-foreground text-sm">Your Average Score</p>
-              <p className="text-3xl font-bold text-foreground mt-1">
+              <p className="text-3xl font-bold text-foreground tabular-nums mt-1">
                 {data.userAverage}%
               </p>
             </motion.div>
@@ -197,7 +198,7 @@ export default function PerformanceTrends() {
                 )}
               </div>
               <p className="text-muted-foreground text-sm">Team Average</p>
-              <p className="text-3xl font-bold text-foreground mt-1">
+              <p className="text-3xl font-bold text-foreground tabular-nums mt-1">
                 {data.teamAverage ? `${data.teamAverage}%` : 'N/A'}
               </p>
             </motion.div>

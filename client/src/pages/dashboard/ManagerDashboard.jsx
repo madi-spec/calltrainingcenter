@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import EmptyState from '../../components/ui/EmptyState';
+import { formatNumber } from '../../utils/format';
 import {
   Users,
   TrendingUp,
@@ -122,8 +123,8 @@ export default function ManagerDashboard() {
             </div>
             <span className="text-muted-foreground text-sm">Team Members</span>
           </div>
-          <p className="text-2xl font-bold text-foreground">
-            {compliance?.totalMembers || teamStats?.active_users || 0}
+          <p className="text-2xl font-bold text-foreground tabular-nums">
+            {formatNumber(compliance?.totalMembers || teamStats?.active_users || 0)}
           </p>
         </motion.div>
 
@@ -139,10 +140,10 @@ export default function ManagerDashboard() {
             </div>
             <span className="text-muted-foreground text-sm">Today's Compliance</span>
           </div>
-          <p className="text-2xl font-bold text-foreground">
-            {compliance?.todayCompleteCount || 0}
+          <p className="text-2xl font-bold text-foreground tabular-nums">
+            {formatNumber(compliance?.todayCompleteCount || 0)}
             <span className="text-lg text-muted-foreground">
-              /{compliance?.totalMembers || 0}
+              /{formatNumber(compliance?.totalMembers || 0)}
             </span>
           </p>
         </motion.div>
@@ -159,7 +160,7 @@ export default function ManagerDashboard() {
             </div>
             <span className="text-muted-foreground text-sm">Week Compliance</span>
           </div>
-          <p className="text-2xl font-bold text-foreground">
+          <p className="text-2xl font-bold text-foreground tabular-nums">
             {compliance?.overallComplianceRate || 0}%
           </p>
         </motion.div>
@@ -176,7 +177,7 @@ export default function ManagerDashboard() {
             </div>
             <span className="text-muted-foreground text-sm">Avg Team Score</span>
           </div>
-          <p className="text-2xl font-bold text-foreground">
+          <p className="text-2xl font-bold text-foreground tabular-nums">
             {teamStats?.average_score || 0}%
           </p>
         </motion.div>

@@ -116,7 +116,7 @@ export default function Courses() {
               <BookOpen className="w-5 h-5 text-blue-500" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-foreground">{courses.length}</p>
+              <p className="text-2xl font-bold text-foreground tabular-nums">{courses.length}</p>
               <p className="text-sm text-muted-foreground">Total Courses</p>
             </div>
           </div>
@@ -133,7 +133,7 @@ export default function Courses() {
               <Clock className="w-5 h-5 text-yellow-500" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-foreground">
+              <p className="text-2xl font-bold text-foreground tabular-nums">
                 {courses.filter(c => c.progress?.status === 'in_progress').length}
               </p>
               <p className="text-sm text-muted-foreground">In Progress</p>
@@ -152,7 +152,7 @@ export default function Courses() {
               <Trophy className="w-5 h-5 text-green-500" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-foreground">
+              <p className="text-2xl font-bold text-foreground tabular-nums">
                 {courses.filter(c => c.progress?.status === 'completed').length}
               </p>
               <p className="text-sm text-muted-foreground">Completed</p>

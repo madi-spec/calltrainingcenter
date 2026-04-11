@@ -26,6 +26,7 @@ import PendingChallenges from '../../components/social/PendingChallenges';
 import OnboardingTour from '../../components/onboarding/OnboardingTour';
 import { useOnboarding } from '../../hooks/useOnboarding';
 import EmptyState from '../../components/ui/EmptyState';
+import { formatNumber } from '../../utils/format';
 
 export default function AgentDashboard() {
   const { profile, authFetch } = useAuth();
@@ -264,7 +265,7 @@ export default function AgentDashboard() {
             </div>
             <span className="text-muted-foreground text-sm">Total Sessions</span>
           </div>
-          <p className="text-2xl font-bold text-foreground">{stats?.total_sessions || 0}</p>
+          <p className="text-2xl font-bold text-foreground tabular-nums">{formatNumber(stats?.total_sessions || 0)}</p>
         </motion.div>
 
         <motion.div
@@ -279,7 +280,7 @@ export default function AgentDashboard() {
             </div>
             <span className="text-muted-foreground text-sm">Avg Score</span>
           </div>
-          <p className="text-2xl font-bold text-foreground">{stats?.average_score || 0}%</p>
+          <p className="text-2xl font-bold text-foreground tabular-nums">{stats?.average_score || 0}%</p>
         </motion.div>
 
         <motion.div
@@ -294,7 +295,7 @@ export default function AgentDashboard() {
             </div>
             <span className="text-muted-foreground text-sm">Best Streak</span>
           </div>
-          <p className="text-2xl font-bold text-foreground">{stats?.longest_streak || 0} days</p>
+          <p className="text-2xl font-bold text-foreground tabular-nums">{stats?.longest_streak || 0} days</p>
         </motion.div>
 
         <motion.div
@@ -309,7 +310,7 @@ export default function AgentDashboard() {
             </div>
             <span className="text-muted-foreground text-sm">Badges</span>
           </div>
-          <p className="text-2xl font-bold text-foreground">{badges.length}</p>
+          <p className="text-2xl font-bold text-foreground tabular-nums">{badges.length}</p>
         </motion.div>
       </div>
 

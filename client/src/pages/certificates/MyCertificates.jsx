@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Download, Award, Calendar, Trophy, ExternalLink, Share2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import EmptyState from '../../components/ui/EmptyState';
 
 export default function MyCertificates() {
   const navigate = useNavigate();
@@ -98,25 +99,15 @@ export default function MyCertificates() {
         )}
 
         {certificates.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-20"
-          >
-            <Trophy className="w-20 h-20 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-muted-foreground mb-2">
-              No certificates yet
-            </h3>
-            <p className="text-muted-foreground mb-6">
-              Complete courses to earn certificates
-            </p>
-            <button
-              onClick={() => navigate('/courses')}
-              className="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-foreground rounded-lg font-medium transition-colors"
-            >
-              Browse Courses
-            </button>
-          </motion.div>
+          <div className="bg-card rounded-lg border border-border">
+            <EmptyState
+              icon={Trophy}
+              title="No certificates yet"
+              description="Complete courses to earn certificates"
+              action={() => navigate('/courses')}
+              actionLabel="Browse Courses"
+            />
+          </div>
         ) : (
           <div className="grid md:grid-cols-2 gap-6">
             {certificates.map((cert, index) => (

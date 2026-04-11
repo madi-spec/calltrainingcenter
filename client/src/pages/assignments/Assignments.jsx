@@ -16,6 +16,7 @@ import {
   BookOpen
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import EmptyState from '../../components/ui/EmptyState';
 
 export default function Assignments() {
   const { authFetch } = useAuth();
@@ -333,18 +334,17 @@ export default function Assignments() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="py-12 text-center text-muted-foreground">
-                    <Users className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                    <p>No assignments found</p>
-                    <button
-                      onClick={() => {
+                  <td colSpan={6}>
+                    <EmptyState
+                      icon={Users}
+                      title="No assignments found"
+                      description="Create assignments to track your team's training progress"
+                      action={() => {
                         setDueDate(getDefaultDueDate());
                         setShowCreateModal(true);
                       }}
-                      className="text-primary-400 hover:text-primary-300 mt-2"
-                    >
-                      Create your first assignment
-                    </button>
+                      actionLabel="Create your first assignment"
+                    />
                   </td>
                 </tr>
               )}
@@ -420,7 +420,12 @@ export default function Assignments() {
                       </label>
                     ))}
                     {users.length === 0 && (
-                      <p className="text-sm text-muted-foreground text-center py-4">No team members found</p>
+                      <EmptyState
+                        icon={Users}
+                        title="No team members found"
+                        description="Invite team members in Settings to assign training"
+                        className="py-4"
+                      />
                     )}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">

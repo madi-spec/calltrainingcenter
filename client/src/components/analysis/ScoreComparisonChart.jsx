@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { BarChart3 } from 'lucide-react';
+import EmptyState from '../ui/EmptyState';
 
 function ScoreComparisonChart({
   attempts = [],
@@ -33,10 +35,12 @@ function ScoreComparisonChart({
 
   if (!attempts || attempts.length === 0) {
     return (
-      <div className="bg-white dark:bg-card rounded-lg border border-border dark:border-border p-6">
-        <div className="text-center text-muted-foreground dark:text-muted-foreground py-8">
-          No data available for comparison.
-        </div>
+      <div className="bg-card rounded-lg border border-border">
+        <EmptyState
+          icon={BarChart3}
+          title="No data available"
+          description="Complete training sessions to see score comparisons"
+        />
       </div>
     );
   }

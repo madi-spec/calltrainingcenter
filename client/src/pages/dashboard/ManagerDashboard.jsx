@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import EmptyState from '../../components/ui/EmptyState';
 import {
   Users,
   TrendingUp,
@@ -294,8 +295,12 @@ export default function ManagerDashboard() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={10} className="py-8 text-center text-muted-foreground">
-                    No team members found
+                  <td colSpan={10}>
+                    <EmptyState
+                      icon={Users}
+                      title="No team members yet"
+                      description="Add team members to start tracking training compliance"
+                    />
                   </td>
                 </tr>
               )}

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Search, Filter, Phone, Heart, ChevronRight, Plus } from 'lucide-react';
 import { useOrganization } from '../context/OrganizationContext';
 import { useAuth } from '../context/AuthContext';
+import EmptyState from '../components/ui/EmptyState';
 import Input from '../components/ui/Input';
 import ScenarioGrid from '../components/scenarios/ScenarioGrid';
 
@@ -191,19 +192,11 @@ function Home() {
 
       {/* Empty State */}
       {!loading && filteredScenarios.length === 0 && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center py-16"
-        >
-          <Filter className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-muted-foreground mb-2">
-            No scenarios found
-          </h3>
-          <p className="text-muted-foreground">
-            Try adjusting your search or filter criteria
-          </p>
-        </motion.div>
+        <EmptyState
+          icon={Filter}
+          title="No scenarios found"
+          description="Try adjusting your search or filter criteria"
+        />
       )}
     </div>
   );

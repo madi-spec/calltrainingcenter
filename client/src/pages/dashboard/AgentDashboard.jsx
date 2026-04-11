@@ -25,6 +25,7 @@ import StreakStatus from '../../components/gamification/StreakStatus';
 import PendingChallenges from '../../components/social/PendingChallenges';
 import OnboardingTour from '../../components/onboarding/OnboardingTour';
 import { useOnboarding } from '../../hooks/useOnboarding';
+import EmptyState from '../../components/ui/EmptyState';
 
 export default function AgentDashboard() {
   const { profile, authFetch } = useAuth();
@@ -368,16 +369,13 @@ export default function AgentDashboard() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8">
-              <BookOpen className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-              <p className="text-muted-foreground mb-2">No courses started yet</p>
-              <Link
-                to="/courses"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-lg transition-colors"
-              >
-                Browse Courses
-              </Link>
-            </div>
+            <EmptyState
+              icon={BookOpen}
+              title="No courses started yet"
+              description="Browse available courses to begin your training"
+              action={() => window.location.href = '/courses'}
+              actionLabel="Browse Courses"
+            />
           )}
         </motion.div>
 

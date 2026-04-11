@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
+import EmptyState from '../../components/ui/EmptyState';
 
 const ROLES = [
   { id: 'trainee', name: 'Trainee', description: 'Can complete training and view own progress' },
@@ -362,9 +363,12 @@ export default function Team() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="py-12 text-center text-muted-foreground">
-                    <Users className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                    <p>No team members found</p>
+                  <td colSpan={6}>
+                    <EmptyState
+                      icon={Users}
+                      title="No team members found"
+                      description="Invite team members to get started with training"
+                    />
                   </td>
                 </tr>
               )}

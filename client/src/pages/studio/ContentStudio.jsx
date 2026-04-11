@@ -5,7 +5,8 @@ import { useStudioChat } from '../../hooks/useStudioChat';
 import ChatPanel from '../../components/studio/ChatPanel';
 import PreviewPanel from '../../components/studio/PreviewPanel';
 import TopicBar from '../../components/studio/TopicBar';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Play, BookOpen } from 'lucide-react';
+import EmptyState from '../../components/ui/EmptyState';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
@@ -423,7 +424,7 @@ function ScriptsView({ scripts }) {
 }
 
 function ScenariosView({ scenarios }) {
-  if (!scenarios.length) return <div className="text-muted-foreground text-sm">No scenarios generated yet</div>;
+  if (!scenarios.length) return <EmptyState icon={Play} title="No scenarios generated yet" description="Scenarios will appear here once AI generates them from your content" />;
 
   return (
     <div className="space-y-3">
@@ -449,7 +450,7 @@ function ScenariosView({ scenarios }) {
 }
 
 function CoursesView({ courses }) {
-  if (!courses.length) return <div className="text-muted-foreground text-sm">No courses generated yet</div>;
+  if (!courses.length) return <EmptyState icon={BookOpen} title="No courses generated yet" description="Courses will appear here once AI generates them from your content" />;
 
   return (
     <div className="space-y-4">

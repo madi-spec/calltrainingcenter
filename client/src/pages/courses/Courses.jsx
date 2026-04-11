@@ -13,6 +13,7 @@ import {
   Plus
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import EmptyState from '../../components/ui/EmptyState';
 
 export default function Courses() {
   const { authFetch, role } = useAuth();
@@ -186,10 +187,11 @@ export default function Courses() {
       })}
 
       {filteredCourses.length === 0 && (
-        <div className="text-center py-12">
-          <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-          <p className="text-muted-foreground">No courses found matching your filter</p>
-        </div>
+        <EmptyState
+          icon={BookOpen}
+          title="No courses found"
+          description="No courses match your current filter. Try adjusting your criteria."
+        />
       )}
     </div>
   );

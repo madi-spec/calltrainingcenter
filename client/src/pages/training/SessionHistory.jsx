@@ -12,6 +12,7 @@ import {
   Play
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import EmptyState from '../../components/ui/EmptyState';
 
 export default function SessionHistory() {
   const { authFetch } = useAuth();
@@ -205,27 +206,19 @@ export default function SessionHistory() {
             </motion.div>
           ))
         ) : (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="bg-card rounded-xl p-12 border border-border text-center"
-          >
-            <TrendingUp className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-foreground mb-2">
-              No sessions found
-            </h3>
-            <p className="text-muted-foreground mb-6">
-              {searchQuery || dateFilter !== 'all'
-                ? 'Try adjusting your filters'
-                : 'Complete your first training session to see it here'}
-            </p>
-            <Link
-              to="/scenarios"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
-            >
-              Start Training
-            </Link>
-          </motion.div>
+          <div className="bg-card rounded-lg border border-border">
+            <EmptyState
+              icon={TrendingUp}
+              title="No sessions found"
+              description={
+                searchQuery || dateFilter !== 'all'
+                  ? 'Try adjusting your filters'
+                  : 'Complete your first training session to see it here'
+              }
+              action={() => window.location.href = '/scenarios'}
+              actionLabel="Start Training"
+            />
+          </div>
         )}
       </div>
     </div>

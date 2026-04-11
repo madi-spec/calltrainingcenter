@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Plus, MessageSquare, CheckCircle, Clock } from 'lucide-react';
+import EmptyState from '../../components/ui/EmptyState';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
@@ -76,16 +77,14 @@ export default function StudioSessions() {
           <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary-500" />
         </div>
       ) : sessions.length === 0 ? (
-        <div className="text-center py-16 bg-card/50 rounded-xl border border-border">
-          <MessageSquare className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-foreground mb-2">No sessions yet</h3>
-          <p className="text-muted-foreground mb-6">Upload your training documents and let AI build your program</p>
-          <button
-            onClick={createSession}
-            className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
-          >
-            Start Your First Session
-          </button>
+        <div className="bg-card rounded-lg border border-border">
+          <EmptyState
+            icon={MessageSquare}
+            title="No sessions yet"
+            description="Upload your training documents and let AI build your program"
+            action={createSession}
+            actionLabel="Start Your First Session"
+          />
         </div>
       ) : (
         <div className="space-y-3">

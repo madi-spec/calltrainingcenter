@@ -8,9 +8,11 @@ import {
   AlertCircle,
   Play,
   ChevronRight,
+  ClipboardList,
   Target
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import EmptyState from '../../components/ui/EmptyState';
 
 export default function MyAssignments() {
   const { authFetch } = useAuth();
@@ -205,30 +207,21 @@ export default function MyAssignments() {
             </motion.div>
           ))
         ) : (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="bg-card rounded-xl p-12 border border-border text-center"
-          >
-            <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-foreground mb-2">
-              {filter === 'completed' ? 'No completed assignments' : 'All caught up!'}
-            </h3>
-            <p className="text-muted-foreground mb-6">
-              {filter === 'pending'
-                ? "You don't have any pending assignments."
-                : filter === 'overdue'
-                ? "You don't have any overdue assignments."
-                : 'No assignments to show.'}
-            </p>
-            <Link
-              to="/scenarios"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
-            >
-              <Play className="w-4 h-4" />
-              Practice on your own
-            </Link>
-          </motion.div>
+          <div className="bg-card rounded-lg border border-border">
+            <EmptyState
+              icon={ClipboardList}
+              title={filter === 'completed' ? 'No completed assignments' : 'All caught up!'}
+              description={
+                filter === 'pending'
+                  ? "You don't have any pending assignments."
+                  : filter === 'overdue'
+                  ? "You don't have any overdue assignments."
+                  : 'No assignments to show.'
+              }
+              action={() => window.location.href = '/scenarios'}
+              actionLabel="Practice on your own"
+            />
+          </div>
         )}
       </div>
     </div>

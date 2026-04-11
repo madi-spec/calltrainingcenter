@@ -96,12 +96,15 @@ function Layout({ children }) {
     navigate('/auth/login');
   };
 
-  // Navigation items with role-based visibility
-  const navItems = [
+  // Navigation items grouped by section with role-based visibility
+  const trainingItems = [
     { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
     { to: '/scenarios', icon: Play, label: 'Practice', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
     { to: '/courses', icon: BookOpen, label: 'Courses', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
     { to: '/certificates', icon: Award, label: 'Certificates', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
+  ];
+
+  const managementItems = [
     { to: '/my-assignments', icon: ClipboardList, label: 'My Assignments', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
     { to: '/assignments', icon: ClipboardList, label: 'Assign Training', roles: ['manager', 'admin', 'super_admin'] },
     { to: '/reports', icon: BarChart3, label: 'Reports', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
@@ -115,7 +118,8 @@ function Layout({ children }) {
     { to: '/settings', icon: Settings, label: 'Settings', roles: ['trainee', 'manager', 'admin', 'super_admin'] },
   ];
 
-  const filteredNavItems = navItems.filter(item => item.roles.includes(role || 'trainee'));
+  const filteredTrainingItems = trainingItems.filter(item => item.roles.includes(role || 'trainee'));
+  const filteredManagementItems = managementItems.filter(item => item.roles.includes(role || 'trainee'));
   const filteredSettingsItems = settingsItems.filter(item => item.roles.includes(role || 'trainee'));
 
   const isActive = (path) => {
@@ -147,8 +151,8 @@ function Layout({ children }) {
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="flex items-center justify-between h-16 px-4 border-b border-sidebar-border">
-            <Link to="/dashboard" className="flex items-center gap-3">
+          <div className="flex items-center justify-between h-14 px-4 border-b border-sidebar-border">
+            <Link to="/dashboard" className="flex items-center gap-2">
               {organization?.logo_url ? (
                 <img
                   src={organization.logo_url}
@@ -156,14 +160,11 @@ function Layout({ children }) {
                   className="h-8 w-auto object-contain"
                 />
               ) : (
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
-                  <Phone className="w-4 h-4 text-white" />
+                <div className="w-7 h-7 rounded-md bg-gradient-to-br from-orange-500 to-pink-500 flex items-center justify-center">
+                  <Phone className="w-3.5 h-3.5 text-white" />
                 </div>
               )}
-              <div>
-                <h1 className="text-sm font-semibold text-foreground">CSR Training</h1>
-                <p className="text-xs truncate max-w-[140px] text-muted-foreground">{organization?.name || 'Your Company'}</p>
-              </div>
+              <span className="text-base font-semibold text-foreground tracking-tight">SellEveryCall</span>
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}
@@ -174,8 +175,12 @@ function Layout({ children }) {
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-            {filteredNavItems.map((item) => (
+          <nav className="flex-1 overflow-y-auto">
+            {/* Training section */}
+            <div className="px-4 pt-6 pb-2">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Training</span>
+            </div>
+            {filteredTrainingItems.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
@@ -185,10 +190,10 @@ function Layout({ children }) {
                   item.to === '/my-assignments' ? 'assignments-link' :
                   undefined
                 }
-                className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`flex items-center gap-3 px-4 py-2 text-sm transition-colors ${
                   isActive(item.to)
-                    ? 'bg-sidebar-accent text-sidebar-accent-foreground'
-                    : 'text-sidebar-foreground hover:bg-sidebar-accent'
+                    ? 'border-l-2 border-primary-500 bg-accent text-foreground font-medium'
+                    : 'border-l-2 border-transparent text-muted-foreground hover:bg-accent hover:text-foreground'
                 }`}
               >
                 <item.icon className="w-4 h-4" />
@@ -196,27 +201,57 @@ function Layout({ children }) {
               </Link>
             ))}
 
+            {/* Management section */}
+            {filteredManagementItems.length > 0 && (
+              <>
+                <div className="px-4 pt-6 pb-2">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Management</span>
+                </div>
+                {filteredManagementItems.map((item) => (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    onClick={() => setSidebarOpen(false)}
+                    data-tutorial={
+                      item.to === '/my-assignments' ? 'assignments-link' :
+                      undefined
+                    }
+                    className={`flex items-center gap-3 px-4 py-2 text-sm transition-colors ${
+                      isActive(item.to)
+                        ? 'border-l-2 border-primary-500 bg-accent text-foreground font-medium'
+                        : 'border-l-2 border-transparent text-muted-foreground hover:bg-accent hover:text-foreground'
+                    }`}
+                  >
+                    <item.icon className="w-4 h-4" />
+                    <span>{item.label}</span>
+                  </Link>
+                ))}
+              </>
+            )}
+
             {/* Settings section */}
-            <div className="pt-4 mt-4 border-t border-border">
-              <p className="px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Settings
-              </p>
-              {filteredSettingsItems.map((item) => (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  onClick={() => setSidebarOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    isActive(item.to)
-                      ? 'bg-sidebar-accent text-sidebar-accent-foreground'
-                      : 'text-sidebar-foreground hover:bg-sidebar-accent'
-                  }`}
-                >
-                  <item.icon className="w-4 h-4" />
-                  <span>{item.label}</span>
-                </Link>
-              ))}
-            </div>
+            {filteredSettingsItems.length > 0 && (
+              <>
+                <div className="px-4 pt-6 pb-2">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Settings</span>
+                </div>
+                {filteredSettingsItems.map((item) => (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    onClick={() => setSidebarOpen(false)}
+                    className={`flex items-center gap-3 px-4 py-2 text-sm transition-colors ${
+                      isActive(item.to)
+                        ? 'border-l-2 border-primary-500 bg-accent text-foreground font-medium'
+                        : 'border-l-2 border-transparent text-muted-foreground hover:bg-accent hover:text-foreground'
+                    }`}
+                  >
+                    <item.icon className="w-4 h-4" />
+                    <span>{item.label}</span>
+                  </Link>
+                ))}
+              </>
+            )}
           </nav>
 
           {/* Role Switcher - Only visible to admins/owners */}
@@ -290,8 +325,10 @@ function Layout({ children }) {
             <Menu className="w-6 h-6" />
           </button>
           <Link to="/dashboard" className="flex items-center gap-2">
-            <Phone className="w-4 h-4 text-primary-500" />
-            <span className="font-semibold text-foreground">CSR Training</span>
+            <div className="w-6 h-6 rounded bg-gradient-to-br from-orange-500 to-pink-500 flex items-center justify-center">
+              <Phone className="w-3 h-3 text-white" />
+            </div>
+            <span className="font-semibold text-foreground tracking-tight">SellEveryCall</span>
           </Link>
           <div className="relative flex items-center gap-2">
             <button

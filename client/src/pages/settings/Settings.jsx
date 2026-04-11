@@ -91,7 +91,7 @@ export default function Settings() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Settings</h1>
+        <h1 className="text-2xl font-semibold text-foreground tracking-tight">Settings</h1>
         <p className="text-muted-foreground mt-1">
           Manage your account and organization settings
         </p>

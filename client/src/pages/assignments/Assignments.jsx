@@ -213,7 +213,7 @@ export default function Assignments() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Assignments</h1>
+          <h1 className="text-2xl font-semibold text-foreground tracking-tight">Assignments</h1>
           <p className="text-muted-foreground mt-1">
             Manage training assignments for your team
           </p>

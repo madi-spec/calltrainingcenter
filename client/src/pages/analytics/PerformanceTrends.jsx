@@ -82,7 +82,7 @@ export default function PerformanceTrends() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+          <h1 className="text-2xl font-semibold text-foreground tracking-tight flex items-center gap-2">
             <Activity className="w-5 h-5 text-primary-500" />
             Performance Trends & Insights
           </h1>
@@ -211,7 +211,7 @@ export default function PerformanceTrends() {
               transition={{ delay: 0.3 }}
               className="bg-card rounded-xl p-6 border border-border"
             >
-              <h2 className="text-lg font-semibold text-foreground mb-6">Score Trends Over Time</h2>
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-6">Score Trends Over Time</h2>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={data.scoresTrend}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
@@ -252,7 +252,7 @@ export default function PerformanceTrends() {
               transition={{ delay: 0.4 }}
               className="bg-card rounded-xl p-6 border border-border"
             >
-              <h2 className="text-lg font-semibold text-foreground mb-6">Performance by Category</h2>
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-6">Performance by Category</h2>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={data.categoryPerformance}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
@@ -292,7 +292,7 @@ export default function PerformanceTrends() {
                 <div className="p-2 bg-green-500/10 rounded-lg">
                   <TrendingUp className="w-5 h-5 text-green-500" />
                 </div>
-                <h2 className="text-lg font-semibold text-foreground">Getting Better At</h2>
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Getting Better At</h2>
               </div>
               {data.improvingCategories && data.improvingCategories.length > 0 ? (
                 <div className="space-y-3">
@@ -333,7 +333,7 @@ export default function PerformanceTrends() {
                 <div className="p-2 bg-yellow-500/10 rounded-lg">
                   <AlertCircle className="w-5 h-5 text-yellow-500" />
                 </div>
-                <h2 className="text-lg font-semibold text-foreground">Needs Work</h2>
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Needs Work</h2>
               </div>
               {data.needsWorkCategories && data.needsWorkCategories.length > 0 ? (
                 <div className="space-y-3">

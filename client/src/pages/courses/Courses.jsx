@@ -67,7 +67,7 @@ export default function Courses() {
         className="flex flex-col md:flex-row md:items-center md:justify-between gap-4"
       >
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+          <h1 className="text-2xl font-semibold text-foreground tracking-tight">
             Training Courses
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -173,7 +173,7 @@ export default function Courses() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25 + catIndex * 0.05 }}
           >
-            <h2 className="text-lg font-semibold text-foreground mb-4 capitalize">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">
               {category} Training
             </h2>
 

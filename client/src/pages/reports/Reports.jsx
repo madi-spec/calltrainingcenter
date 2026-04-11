@@ -82,7 +82,7 @@ export default function Reports() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Reports & Analytics</h1>
+          <h1 className="text-2xl font-semibold text-foreground tracking-tight">Reports & Analytics</h1>
           <p className="text-muted-foreground mt-1">
             Track performance and identify areas for improvement
           </p>
@@ -245,7 +245,7 @@ export default function Reports() {
         transition={{ delay: 0.4 }}
         className="bg-card rounded-xl p-6 border border-border"
       >
-        <h2 className="text-lg font-semibold text-foreground mb-6">Performance by Category</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-6">Performance by Category</h2>
         <div className="space-y-4">
           {[
             { name: 'Empathy & Rapport', key: 'empathyRapport', color: 'bg-blue-500' },
@@ -281,7 +281,7 @@ export default function Reports() {
           transition={{ delay: 0.5 }}
           className="bg-card rounded-xl p-6 border border-border"
         >
-          <h2 className="text-lg font-semibold text-foreground mb-6">Team Performance</h2>
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-6">Team Performance</h2>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>

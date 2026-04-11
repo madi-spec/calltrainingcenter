@@ -83,7 +83,7 @@ export default function MyAssignments() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-foreground">My Assignments</h1>
+        <h1 className="text-2xl font-semibold text-foreground tracking-tight">My Assignments</h1>
         <p className="text-muted-foreground mt-1">
           Complete your assigned training scenarios
         </p>

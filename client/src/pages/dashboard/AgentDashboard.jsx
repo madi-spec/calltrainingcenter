@@ -111,7 +111,7 @@ export default function AgentDashboard() {
       >
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white">
+            <h1 className="text-2xl font-semibold text-white tracking-tight">
               Welcome back, {profile?.full_name?.split(' ')[0] || 'there'}!
             </h1>
             <div className="flex flex-wrap items-center gap-4 mt-3">
@@ -156,7 +156,7 @@ export default function AgentDashboard() {
                 </div>
               )}
               <div>
-                <h2 className="text-xl font-bold text-foreground">Today's Practice</h2>
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Today's Practice</h2>
                 <p className="text-muted-foreground">
                   {metRequirement
                     ? 'Great job! You completed your daily practice.'
@@ -323,8 +323,8 @@ export default function AgentDashboard() {
           className="bg-card rounded-xl p-6 border border-border"
         >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-primary-400" />
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+              <BookOpen className="w-4 h-4" />
               My Courses
             </h2>
             <Link
@@ -388,8 +388,8 @@ export default function AgentDashboard() {
           className="bg-card rounded-xl p-6 border border-border"
         >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
-              <Award className="w-5 h-5 text-yellow-400" />
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+              <Award className="w-4 h-4" />
               My Badges
             </h2>
             <Link
@@ -436,8 +436,8 @@ export default function AgentDashboard() {
           className="bg-card rounded-xl p-6 border border-border"
         >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
-              <Clock className="w-5 h-5 text-muted-foreground" />
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+              <Clock className="w-4 h-4" />
               Recent Sessions
             </h2>
             <Link

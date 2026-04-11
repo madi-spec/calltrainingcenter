@@ -83,7 +83,7 @@ export default function ManagerDashboard() {
         className="flex flex-col md:flex-row md:items-center md:justify-between gap-4"
       >
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+          <h1 className="text-2xl font-semibold text-foreground tracking-tight">
             Manager Dashboard
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -192,7 +192,7 @@ export default function ManagerDashboard() {
         <div className="p-6 border-b border-border">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-foreground">
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Practice Compliance Grid
               </h2>
               <p className="text-sm text-muted-foreground mt-1">
@@ -333,7 +333,7 @@ export default function ManagerDashboard() {
           className="bg-card rounded-xl p-6 border border-border"
         >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-foreground">All Teams</h2>
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">All Teams</h2>
             <Link
               to="/reports"
               className="text-sm text-primary-400 hover:text-primary-300 flex items-center gap-1"
@@ -383,7 +383,7 @@ export default function ManagerDashboard() {
         className="bg-card rounded-xl p-6 border border-border"
       >
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-semibold text-foreground">Recent Team Sessions</h2>
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Recent Team Sessions</h2>
           <Link
             to="/reports"
             className="text-sm text-primary-400 hover:text-primary-300 flex items-center gap-1"

@@ -82,10 +82,10 @@ export default function ManagerDashboard() {
         className="flex flex-col md:flex-row md:items-center md:justify-between gap-4"
       >
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-100">
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">
             Manager Dashboard
           </h1>
-          <p className="text-gray-400 mt-1">
+          <p className="text-muted-foreground mt-1">
             Monitor your team's training progress and compliance
           </p>
         </div>
@@ -99,7 +99,7 @@ export default function ManagerDashboard() {
           </Link>
           <Link
             to="/settings/team"
-            className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-accent text-foreground font-medium rounded-lg transition-colors"
           >
             <Settings className="w-4 h-4" />
             Team Settings
@@ -113,15 +113,15 @@ export default function ManagerDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+          className="bg-card rounded-xl p-6 border border-border"
         >
           <div className="flex items-center gap-3 mb-3">
             <div className="p-2 bg-blue-500/10 rounded-lg">
               <Users className="w-5 h-5 text-blue-500" />
             </div>
-            <span className="text-gray-400 text-sm">Team Members</span>
+            <span className="text-muted-foreground text-sm">Team Members</span>
           </div>
-          <p className="text-2xl font-bold text-gray-100">
+          <p className="text-2xl font-bold text-foreground">
             {compliance?.totalMembers || teamStats?.active_users || 0}
           </p>
         </motion.div>
@@ -130,17 +130,17 @@ export default function ManagerDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+          className="bg-card rounded-xl p-6 border border-border"
         >
           <div className="flex items-center gap-3 mb-3">
             <div className="p-2 bg-green-500/10 rounded-lg">
               <CheckCircle2 className="w-5 h-5 text-green-500" />
             </div>
-            <span className="text-gray-400 text-sm">Today's Compliance</span>
+            <span className="text-muted-foreground text-sm">Today's Compliance</span>
           </div>
-          <p className="text-2xl font-bold text-gray-100">
+          <p className="text-2xl font-bold text-foreground">
             {compliance?.todayCompleteCount || 0}
-            <span className="text-lg text-gray-400">
+            <span className="text-lg text-muted-foreground">
               /{compliance?.totalMembers || 0}
             </span>
           </p>
@@ -150,15 +150,15 @@ export default function ManagerDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+          className="bg-card rounded-xl p-6 border border-border"
         >
           <div className="flex items-center gap-3 mb-3">
             <div className="p-2 bg-yellow-500/10 rounded-lg">
               <Target className="w-5 h-5 text-yellow-500" />
             </div>
-            <span className="text-gray-400 text-sm">Week Compliance</span>
+            <span className="text-muted-foreground text-sm">Week Compliance</span>
           </div>
-          <p className="text-2xl font-bold text-gray-100">
+          <p className="text-2xl font-bold text-foreground">
             {compliance?.overallComplianceRate || 0}%
           </p>
         </motion.div>
@@ -167,15 +167,15 @@ export default function ManagerDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
-          className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+          className="bg-card rounded-xl p-6 border border-border"
         >
           <div className="flex items-center gap-3 mb-3">
             <div className="p-2 bg-purple-500/10 rounded-lg">
               <BarChart3 className="w-5 h-5 text-purple-500" />
             </div>
-            <span className="text-gray-400 text-sm">Avg Team Score</span>
+            <span className="text-muted-foreground text-sm">Avg Team Score</span>
           </div>
-          <p className="text-2xl font-bold text-gray-100">
+          <p className="text-2xl font-bold text-foreground">
             {teamStats?.average_score || 0}%
           </p>
         </motion.div>
@@ -186,15 +186,15 @@ export default function ManagerDashboard() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden"
+        className="bg-card rounded-xl border border-border overflow-hidden"
       >
-        <div className="p-6 border-b border-gray-700">
+        <div className="p-6 border-b border-border">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-gray-100">
+              <h2 className="text-lg font-semibold text-foreground">
                 Practice Compliance Grid
               </h2>
-              <p className="text-sm text-gray-400 mt-1">
+              <p className="text-sm text-muted-foreground mt-1">
                 Week of {compliance?.weekStart || 'N/A'} - {compliance?.daysElapsed || 0} days elapsed
               </p>
             </div>
@@ -202,7 +202,7 @@ export default function ManagerDashboard() {
               <select
                 value={selectedTeam || ''}
                 onChange={(e) => setSelectedTeam(e.target.value)}
-                className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="px-3 py-2 bg-input border border-border rounded-lg text-foreground text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               >
                 {compliance?.teams?.map(team => (
                   <option key={team.id} value={team.id}>
@@ -216,39 +216,39 @@ export default function ManagerDashboard() {
 
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-700/50">
+            <thead className="bg-muted/50">
               <tr>
-                <th className="text-left py-3 px-4 text-gray-300 font-medium text-sm">
+                <th className="text-left py-3 px-4 text-secondary-foreground font-medium text-sm">
                   Team Member
                 </th>
-                <th className="text-center py-3 px-3 text-gray-300 font-medium text-sm">
+                <th className="text-center py-3 px-3 text-secondary-foreground font-medium text-sm">
                   Streak
                 </th>
                 {dayNames.slice(0, compliance?.daysElapsed || 7).map((day, i) => (
-                  <th key={day} className="text-center py-3 px-2 text-gray-300 font-medium text-sm">
+                  <th key={day} className="text-center py-3 px-2 text-secondary-foreground font-medium text-sm">
                     {day}
                   </th>
                 ))}
-                <th className="text-center py-3 px-4 text-gray-300 font-medium text-sm">
+                <th className="text-center py-3 px-4 text-secondary-foreground font-medium text-sm">
                   Rate
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-700">
+            <tbody className="divide-y divide-border">
               {selectedTeamData?.members?.length > 0 ? (
                 selectedTeamData.members.map((member) => (
-                  <tr key={member.id} className="hover:bg-gray-700/30 transition-colors">
+                  <tr key={member.id} className="hover:bg-accent/30 transition-colors">
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center text-white font-medium text-sm">
                           {member.name?.charAt(0) || '?'}
                         </div>
-                        <span className="text-gray-200 font-medium">{member.name}</span>
+                        <span className="text-foreground font-medium">{member.name}</span>
                       </div>
                     </td>
                     <td className="py-3 px-3 text-center">
                       <span className={`inline-flex items-center gap-1 ${
-                        member.streak > 0 ? 'text-orange-400' : 'text-gray-500'
+                        member.streak > 0 ? 'text-orange-400' : 'text-muted-foreground'
                       }`}>
                         <Flame className="w-4 h-4" />
                         {member.streak}
@@ -294,7 +294,7 @@ export default function ManagerDashboard() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={10} className="py-8 text-center text-gray-400">
+                  <td colSpan={10} className="py-8 text-center text-muted-foreground">
                     No team members found
                   </td>
                 </tr>
@@ -304,13 +304,13 @@ export default function ManagerDashboard() {
         </div>
 
         {selectedTeamData && (
-          <div className="p-4 bg-gray-700/30 border-t border-gray-700">
+          <div className="p-4 bg-muted/30 border-t border-border">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-400">
-                Team compliance: <span className="text-gray-200 font-medium">{selectedTeamData.complianceRate}%</span>
+              <span className="text-muted-foreground">
+                Team compliance: <span className="text-foreground font-medium">{selectedTeamData.complianceRate}%</span>
               </span>
-              <span className="text-gray-400">
-                Today: <span className="text-gray-200 font-medium">
+              <span className="text-muted-foreground">
+                Today: <span className="text-foreground font-medium">
                   {selectedTeamData.todayCompleteCount}/{selectedTeamData.memberCount} complete
                 </span>
               </span>
@@ -325,10 +325,10 @@ export default function ManagerDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35 }}
-          className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+          className="bg-card rounded-xl p-6 border border-border"
         >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-gray-100">All Teams</h2>
+            <h2 className="text-lg font-semibold text-foreground">All Teams</h2>
             <Link
               to="/reports"
               className="text-sm text-primary-400 hover:text-primary-300 flex items-center gap-1"
@@ -344,12 +344,12 @@ export default function ManagerDashboard() {
                 className={`p-4 rounded-lg border transition-colors cursor-pointer ${
                   selectedTeam === team.id
                     ? 'bg-primary-500/10 border-primary-500'
-                    : 'bg-gray-700/50 border-gray-600 hover:border-gray-500'
+                    : 'bg-muted/50 border-border hover:border-border'
                 }`}
                 onClick={() => setSelectedTeam(team.id)}
               >
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-medium text-gray-200">{team.name}</h3>
+                  <h3 className="font-medium text-foreground">{team.name}</h3>
                   <span className={`px-2 py-0.5 rounded text-xs font-medium ${
                     team.complianceRate >= 80
                       ? 'bg-green-500/20 text-green-400'
@@ -360,7 +360,7 @@ export default function ManagerDashboard() {
                     {team.complianceRate}%
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-sm text-gray-400">
+                <div className="flex items-center justify-between text-sm text-muted-foreground">
                   <span>{team.memberCount} members</span>
                   <span>{team.todayCompleteCount} done today</span>
                 </div>
@@ -375,10 +375,10 @@ export default function ManagerDashboard() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+        className="bg-card rounded-xl p-6 border border-border"
       >
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-semibold text-gray-100">Recent Team Sessions</h2>
+          <h2 className="text-lg font-semibold text-foreground">Recent Team Sessions</h2>
           <Link
             to="/reports"
             className="text-sm text-primary-400 hover:text-primary-300 flex items-center gap-1"
@@ -393,7 +393,7 @@ export default function ManagerDashboard() {
               <Link
                 key={session.id}
                 to={`/results/${session.id}`}
-                className="flex items-center justify-between p-4 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors cursor-pointer"
+                className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-accent transition-colors cursor-pointer"
               >
                 <div className="flex items-center gap-4">
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg ${
@@ -406,20 +406,20 @@ export default function ManagerDashboard() {
                     {session.overall_score || '-'}
                   </div>
                   <div>
-                    <p className="font-medium text-gray-200">{session.user_name}</p>
-                    <p className="text-sm text-gray-400">{session.scenario_name}</p>
+                    <p className="font-medium text-foreground">{session.user_name}</p>
+                    <p className="text-sm text-muted-foreground">{session.scenario_name}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="text-right">
-                    <p className="text-sm text-gray-300">
+                    <p className="text-sm text-secondary-foreground">
                       {new Date(session.created_at).toLocaleDateString()}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-muted-foreground">
                       {Math.round((session.duration_seconds || 0) / 60)} min
                     </p>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-gray-500" />
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
                 </div>
               </Link>
             ))}
@@ -427,7 +427,7 @@ export default function ManagerDashboard() {
         ) : (
           <div className="text-center py-8">
             <Clock className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-            <p className="text-gray-400">No recent team sessions</p>
+            <p className="text-muted-foreground">No recent team sessions</p>
           </div>
         )}
       </motion.div>
@@ -441,29 +441,29 @@ export default function ManagerDashboard() {
       >
         <Link
           to="/assignments"
-          className="p-6 bg-gray-800 rounded-xl border border-gray-700 hover:border-primary-500 transition-colors group"
+          className="p-6 bg-card rounded-xl border border-border hover:border-primary-500 transition-colors group"
         >
           <UserPlus className="w-8 h-8 text-primary-400 mb-3 group-hover:scale-110 transition-transform" />
-          <h3 className="font-semibold text-gray-200 mb-1">Assign Training</h3>
-          <p className="text-sm text-gray-400">Create new training assignments for your team</p>
+          <h3 className="font-semibold text-foreground mb-1">Assign Training</h3>
+          <p className="text-sm text-muted-foreground">Create new training assignments for your team</p>
         </Link>
 
         <Link
           to="/reports"
-          className="p-6 bg-gray-800 rounded-xl border border-gray-700 hover:border-primary-500 transition-colors group"
+          className="p-6 bg-card rounded-xl border border-border hover:border-primary-500 transition-colors group"
         >
           <BarChart3 className="w-8 h-8 text-blue-400 mb-3 group-hover:scale-110 transition-transform" />
-          <h3 className="font-semibold text-gray-200 mb-1">View Reports</h3>
-          <p className="text-sm text-gray-400">Analyze team performance and trends</p>
+          <h3 className="font-semibold text-foreground mb-1">View Reports</h3>
+          <p className="text-sm text-muted-foreground">Analyze team performance and trends</p>
         </Link>
 
         <Link
           to="/settings/team"
-          className="p-6 bg-gray-800 rounded-xl border border-gray-700 hover:border-primary-500 transition-colors group"
+          className="p-6 bg-card rounded-xl border border-border hover:border-primary-500 transition-colors group"
         >
-          <Settings className="w-8 h-8 text-gray-400 mb-3 group-hover:scale-110 transition-transform" />
-          <h3 className="font-semibold text-gray-200 mb-1">Manage Team</h3>
-          <p className="text-sm text-gray-400">Add or remove team members</p>
+          <Settings className="w-8 h-8 text-muted-foreground mb-3 group-hover:scale-110 transition-transform" />
+          <h3 className="font-semibold text-foreground mb-1">Manage Team</h3>
+          <p className="text-sm text-muted-foreground">Add or remove team members</p>
         </Link>
       </motion.div>
     </div>

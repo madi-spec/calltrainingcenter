@@ -42,17 +42,17 @@ export default function ChatPanel({ messages, loading, onSendMessage, onUploadFi
 
   return (
     <div
-      className="flex flex-col h-full bg-gray-900 border-b border-gray-700"
+      className="flex flex-col h-full bg-background border-b border-border"
       onDragOver={e => e.preventDefault()}
       onDrop={handleDrop}
     >
       {/* Header */}
-      <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-700">
+      <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-sm">
           🧠
         </div>
         <div>
-          <div className="text-sm font-semibold text-white">Training Designer AI</div>
+          <div className="text-sm font-semibold text-foreground">Training Designer AI</div>
           <div className="text-xs text-green-400">Online</div>
         </div>
       </div>
@@ -60,11 +60,11 @@ export default function ChatPanel({ messages, loading, onSendMessage, onUploadFi
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {messages.length === 0 && !loading && (
-          <div className="text-center py-12 text-gray-500">
-            <p className="text-sm font-medium text-gray-400">Welcome to Content Studio</p>
+          <div className="text-center py-12 text-muted-foreground">
+            <p className="text-sm font-medium text-muted-foreground">Welcome to Content Studio</p>
             <p className="text-xs mt-2">Upload documents using the 📎 button below</p>
             <p className="text-xs mt-1">or type a message to start the conversation</p>
-            <p className="text-xs mt-3 text-gray-600">Try: "What do you know about my company?" or upload a PDF, DOCX, or spreadsheet</p>
+            <p className="text-xs mt-3 text-muted-foreground">Try: "What do you know about my company?" or upload a PDF, DOCX, or spreadsheet</p>
           </div>
         )}
         {messages.map((msg, i) => (
@@ -72,8 +72,8 @@ export default function ChatPanel({ messages, loading, onSendMessage, onUploadFi
         ))}
         {loading && (
           <div className="flex justify-start">
-            <div className="bg-gray-800 rounded-xl px-4 py-3 rounded-tl-none">
-              <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />
+            <div className="bg-card rounded-xl px-4 py-3 rounded-tl-none">
+              <Loader2 className="w-4 h-4 text-muted-foreground animate-spin" />
             </div>
           </div>
         )}
@@ -81,7 +81,7 @@ export default function ChatPanel({ messages, loading, onSendMessage, onUploadFi
       </div>
 
       {/* Input */}
-      <div className="p-3 border-t border-gray-700">
+      <div className="p-3 border-t border-border">
         <div className="flex items-end gap-2">
           <div className="flex-1 relative">
             <textarea
@@ -90,7 +90,7 @@ export default function ChatPanel({ messages, loading, onSendMessage, onUploadFi
               onKeyDown={handleKeyDown}
               placeholder="Type a message..."
               rows={1}
-              className="w-full bg-gray-800 text-white rounded-lg px-3 py-2 pr-20 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-primary-500 placeholder-gray-500"
+              className="w-full bg-input text-foreground rounded-lg px-3 py-2 pr-20 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-primary-500 placeholder:text-muted-foreground"
               style={{ minHeight: '38px', maxHeight: '120px' }}
             />
           </div>
@@ -104,7 +104,7 @@ export default function ChatPanel({ messages, loading, onSendMessage, onUploadFi
           />
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="p-2 text-gray-400 hover:text-white rounded-lg hover:bg-gray-800 transition-colors"
+            className="p-2 text-muted-foreground hover:text-foreground rounded-lg hover:bg-accent transition-colors"
             title="Upload files"
           >
             <Paperclip className="w-4 h-4" />

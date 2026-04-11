@@ -269,13 +269,13 @@ export default function ContentStudio() {
   return (
     <div className="h-[calc(100vh-64px)] flex flex-col">
       {/* Top bar */}
-      <div className="flex items-center gap-3 px-4 py-2 bg-gray-900 border-b border-gray-700">
-        <button onClick={() => navigate('/studio')} className="text-gray-400 hover:text-white">
+      <div className="flex items-center gap-3 px-4 py-2 bg-background border-b border-border">
+        <button onClick={() => navigate('/studio')} className="text-muted-foreground hover:text-foreground">
           <ArrowLeft className="w-4 h-4" />
         </button>
-        <span className="text-sm text-white font-medium">Content Studio</span>
+        <span className="text-sm text-foreground font-medium">Content Studio</span>
         {knowledgeStats && (
-          <span className="text-xs text-gray-400 ml-2">
+          <span className="text-xs text-muted-foreground ml-2">
             {knowledgeStats.total} knowledge items
           </span>
         )}
@@ -331,7 +331,7 @@ export default function ContentStudio() {
 // ============================================================
 
 function KnowledgeGraphView({ stats, items }) {
-  if (!stats) return <div className="text-gray-500 text-sm">Upload documents to build your knowledge graph</div>;
+  if (!stats) return <div className="text-muted-foreground text-sm">Upload documents to build your knowledge graph</div>;
 
   const domainLabels = {
     products: { label: 'Products & Services', color: 'bg-blue-500' },
@@ -348,13 +348,13 @@ function KnowledgeGraphView({ stats, items }) {
         {Object.entries(stats.byDomain || stats.domains || {}).map(([domain, data]) => {
           const config = domainLabels[domain] || { label: domain, color: 'bg-gray-500' };
           return (
-            <div key={domain} className="bg-gray-800 rounded-lg p-3">
+            <div key={domain} className="bg-card rounded-lg p-3">
               <div className="flex items-center gap-2 mb-2">
                 <div className={`w-2 h-2 rounded-full ${config.color}`} />
-                <span className="text-xs text-gray-300 font-medium">{config.label}</span>
+                <span className="text-xs text-secondary-foreground font-medium">{config.label}</span>
               </div>
-              <div className="text-2xl font-bold text-white">{data.count}</div>
-              <div className="text-xs text-gray-500">{data.verified} verified</div>
+              <div className="text-2xl font-bold text-foreground">{data.count}</div>
+              <div className="text-xs text-muted-foreground">{data.verified} verified</div>
             </div>
           );
         })}
@@ -371,13 +371,13 @@ function KnowledgeGraphView({ stats, items }) {
 
       <div className="space-y-2">
         {(items || []).slice(0, 20).map(item => (
-          <div key={item.id} className="bg-gray-800/50 rounded-lg p-3 text-xs">
+          <div key={item.id} className="bg-card/50 rounded-lg p-3 text-xs">
             <div className="flex items-center justify-between mb-1">
-              <span className="text-white font-medium">{item.title}</span>
-              <span className="text-gray-500">{item.domain}/{item.item_type}</span>
+              <span className="text-foreground font-medium">{item.title}</span>
+              <span className="text-muted-foreground">{item.domain}/{item.item_type}</span>
             </div>
             {item.document?.filename && (
-              <span className="text-gray-500">📄 {item.document.filename}</span>
+              <span className="text-muted-foreground">📄 {item.document.filename}</span>
             )}
           </div>
         ))}
@@ -387,7 +387,7 @@ function KnowledgeGraphView({ stats, items }) {
 }
 
 function ScriptsView({ scripts }) {
-  if (!scripts.length) return <div className="text-gray-500 text-sm">No scripts generated yet</div>;
+  if (!scripts.length) return <div className="text-muted-foreground text-sm">No scripts generated yet</div>;
 
   const typeLabels = { talk_track: 'Talk Track', reference_card: 'Reference Card', role_play: 'Role-Play' };
   const typeColors = { talk_track: 'border-orange-500', reference_card: 'border-blue-500', role_play: 'border-purple-500' };
@@ -395,11 +395,11 @@ function ScriptsView({ scripts }) {
   return (
     <div className="space-y-3">
       {scripts.map(script => (
-        <div key={script.id} className={`bg-gray-800 rounded-lg p-4 border-l-[3px] ${typeColors[script.script_type] || 'border-gray-500'}`}>
+        <div key={script.id} className={`bg-card rounded-lg p-4 border-l-[3px] ${typeColors[script.script_type] || 'border-border'}`}>
           <div className="flex items-center justify-between mb-2">
             <div>
-              <div className="text-sm font-medium text-white">{script.title}</div>
-              <div className="text-xs text-gray-400">
+              <div className="text-sm font-medium text-foreground">{script.title}</div>
+              <div className="text-xs text-muted-foreground">
                 {typeLabels[script.script_type]} · {script.difficulty} · {script.category}
               </div>
             </div>
@@ -413,7 +413,7 @@ function ScriptsView({ scripts }) {
               </span>
             )}
           </div>
-          <pre className="text-xs text-gray-300 bg-gray-900 rounded p-3 overflow-x-auto whitespace-pre-wrap max-h-48">
+          <pre className="text-xs text-secondary-foreground bg-background rounded p-3 overflow-x-auto whitespace-pre-wrap max-h-48">
             {typeof script.content === 'string' ? script.content : JSON.stringify(script.content, null, 2)}
           </pre>
         </div>
@@ -423,22 +423,22 @@ function ScriptsView({ scripts }) {
 }
 
 function ScenariosView({ scenarios }) {
-  if (!scenarios.length) return <div className="text-gray-500 text-sm">No scenarios generated yet</div>;
+  if (!scenarios.length) return <div className="text-muted-foreground text-sm">No scenarios generated yet</div>;
 
   return (
     <div className="space-y-3">
       {scenarios.map(scenario => (
-        <div key={scenario.id} className="bg-gray-800 rounded-lg p-4">
-          <div className="text-sm font-medium text-white mb-1">{scenario.name}</div>
-          <div className="text-xs text-gray-400 mb-2">
+        <div key={scenario.id} className="bg-card rounded-lg p-4">
+          <div className="text-sm font-medium text-foreground mb-1">{scenario.name}</div>
+          <div className="text-xs text-muted-foreground mb-2">
             {scenario.difficulty} · {scenario.module?.name}
           </div>
-          <div className="text-xs text-gray-300 mb-3">{scenario.base_situation}</div>
+          <div className="text-xs text-secondary-foreground mb-3">{scenario.base_situation}</div>
           {scenario.scoring_rubric && (
-            <div className="bg-gray-900 rounded p-2">
-              <div className="text-xs text-gray-500 mb-1">Scoring Rubric</div>
+            <div className="bg-background rounded p-2">
+              <div className="text-xs text-muted-foreground mb-1">Scoring Rubric</div>
               {(Array.isArray(scenario.scoring_rubric) ? scenario.scoring_rubric : []).map((r, i) => (
-                <div key={i} className="text-xs text-gray-400">• {r.behavior} ({r.weight}pts)</div>
+                <div key={i} className="text-xs text-muted-foreground">• {r.behavior} ({r.weight}pts)</div>
               ))}
             </div>
           )}
@@ -449,19 +449,19 @@ function ScenariosView({ scenarios }) {
 }
 
 function CoursesView({ courses }) {
-  if (!courses.length) return <div className="text-gray-500 text-sm">No courses generated yet</div>;
+  if (!courses.length) return <div className="text-muted-foreground text-sm">No courses generated yet</div>;
 
   return (
     <div className="space-y-4">
       {courses.map(course => (
-        <div key={course.id} className="bg-gray-800 rounded-lg p-4">
-          <div className="text-sm font-medium text-white mb-1">{course.name}</div>
-          <div className="text-xs text-gray-400 mb-3">{course.description}</div>
+        <div key={course.id} className="bg-card rounded-lg p-4">
+          <div className="text-sm font-medium text-foreground mb-1">{course.name}</div>
+          <div className="text-xs text-muted-foreground mb-3">{course.description}</div>
           <div className="space-y-2">
             {(course.modules || []).map(mod => (
-              <div key={mod.id} className="bg-gray-900 rounded p-3">
+              <div key={mod.id} className="bg-background rounded p-3">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-medium text-white">{mod.name}</span>
+                  <span className="text-xs font-medium text-foreground">{mod.name}</span>
                   <span className={`text-xs px-1.5 py-0.5 rounded ${
                     mod.difficulty === 'easy' ? 'bg-green-500/10 text-green-400' :
                     mod.difficulty === 'medium' ? 'bg-yellow-500/10 text-yellow-400' :
@@ -470,9 +470,9 @@ function CoursesView({ courses }) {
                     {mod.difficulty}
                   </span>
                 </div>
-                <div className="text-xs text-gray-400">{mod.description}</div>
+                <div className="text-xs text-muted-foreground">{mod.description}</div>
                 {mod.learning_objectives && (
-                  <div className="mt-2 text-xs text-gray-500">
+                  <div className="mt-2 text-xs text-muted-foreground">
                     {(Array.isArray(mod.learning_objectives) ? mod.learning_objectives : []).map((obj, i) => (
                       <div key={i}>• {obj}</div>
                     ))}

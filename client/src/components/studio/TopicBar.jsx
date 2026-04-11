@@ -20,20 +20,20 @@ const STATUS_COLORS = {
 
 export default function TopicBar({ topics, activeTopic, onSelectTopic, onAddTopic, onGenerate, onPublish, onMarkReady }) {
   return (
-    <div className="flex items-center gap-2 px-4 py-2 bg-gray-900/50 border-b border-gray-700 overflow-x-auto">
+    <div className="flex items-center gap-2 px-4 py-2 bg-background/50 border-b border-border overflow-x-auto">
       {/* General thread */}
       <button
         onClick={() => onSelectTopic(null)}
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
           activeTopic === null
             ? 'bg-primary-600/20 text-primary-400 ring-1 ring-primary-500/30'
-            : 'text-gray-400 hover:text-gray-300 hover:bg-gray-800'
+            : 'text-muted-foreground hover:text-secondary-foreground hover:bg-accent'
         }`}
       >
         📊 General
       </button>
 
-      <div className="w-px h-5 bg-gray-700" />
+      <div className="w-px h-5 bg-border" />
 
       {/* Topic threads */}
       {topics.map(topic => {
@@ -48,7 +48,7 @@ export default function TopicBar({ topics, activeTopic, onSelectTopic, onAddTopi
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
                 isActive
                   ? 'bg-primary-600/20 text-primary-400 ring-1 ring-primary-500/30'
-                  : 'text-gray-400 hover:text-gray-300 hover:bg-gray-800'
+                  : 'text-muted-foreground hover:text-secondary-foreground hover:bg-accent'
               }`}
             >
               <span>{topic.icon || '📝'}</span>
@@ -94,7 +94,7 @@ export default function TopicBar({ topics, activeTopic, onSelectTopic, onAddTopi
       {/* Add topic button */}
       <button
         onClick={onAddTopic}
-        className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs text-gray-500 hover:text-gray-300 hover:bg-gray-800 transition-colors whitespace-nowrap"
+        className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs text-muted-foreground hover:text-secondary-foreground hover:bg-accent transition-colors whitespace-nowrap"
       >
         <Plus className="w-3 h-3" />
         Add Topic

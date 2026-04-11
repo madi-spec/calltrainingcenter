@@ -91,8 +91,8 @@ export default function Settings() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-100">Settings</h1>
-        <p className="text-gray-400 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Settings</h1>
+        <p className="text-muted-foreground mt-1">
           Manage your account and organization settings
         </p>
       </div>
@@ -101,7 +101,7 @@ export default function Settings() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+        className="bg-card rounded-xl p-6 border border-border"
       >
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 bg-primary-500/10 rounded-full flex items-center justify-center">
@@ -110,8 +110,8 @@ export default function Settings() {
             </span>
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-gray-100">{profile?.full_name}</h2>
-            <p className="text-gray-400">{profile?.email}</p>
+            <h2 className="text-xl font-semibold text-foreground">{profile?.full_name}</h2>
+            <p className="text-muted-foreground">{profile?.email}</p>
             <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 bg-primary-500/10 text-primary-400 text-sm rounded-full capitalize">
               <Shield className="w-3 h-3" />
               {profile?.role}
@@ -131,7 +131,7 @@ export default function Settings() {
           >
             <Link
               to={section.href}
-              className="block bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-gray-600 transition-colors group"
+              className="block bg-card rounded-xl p-6 border border-border hover:border-border transition-colors group"
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-4">
@@ -139,15 +139,15 @@ export default function Settings() {
                     <section.icon className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-100 group-hover:text-primary-400 transition-colors">
+                    <h3 className="text-lg font-semibold text-foreground group-hover:text-primary-400 transition-colors">
                       {section.title}
                     </h3>
-                    <p className="text-gray-400 text-sm mt-1">
+                    <p className="text-muted-foreground text-sm mt-1">
                       {section.description}
                     </p>
                   </div>
                 </div>
-                <ChevronRight className="w-5 h-5 text-gray-500 group-hover:text-primary-400 transition-colors" />
+                <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary-400 transition-colors" />
               </div>
             </Link>
           </motion.div>

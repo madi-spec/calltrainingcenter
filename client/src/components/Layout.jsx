@@ -29,7 +29,6 @@ import useKeyboardShortcuts from '../hooks/useKeyboardShortcuts';
 import KeyboardShortcutsModal from './help/KeyboardShortcutsModal';
 import TrialStatusBanner from './billing/TrialStatusBanner';
 import UpgradeModal from './billing/UpgradeModal';
-import HelpAgent from './HelpAgent';
 import Breadcrumbs from './ui/Breadcrumbs';
 
 function Layout({ children }) {
@@ -393,8 +392,6 @@ function Layout({ children }) {
         onClose={() => setShowUpgradeModal(false)}
       />
 
-      {/* Help Agent Chat */}
-      <HelpAgent />
     </div>
   );
 }

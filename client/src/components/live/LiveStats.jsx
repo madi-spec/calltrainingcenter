@@ -13,7 +13,7 @@ function StatCard({ label, value, icon, color = 'primary', subtext, pulse = fals
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 shadow-sm"
+      className="bg-white dark:bg-card rounded-lg p-4 border border-border dark:border-border shadow-sm"
     >
       <div className="flex items-center gap-3">
         <div className={`relative w-10 h-10 rounded-lg ${colorClasses[color]} flex items-center justify-center`}>
@@ -25,10 +25,10 @@ function StatCard({ label, value, icon, color = 'primary', subtext, pulse = fals
           )}
         </div>
         <div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{label}</p>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
+          <p className="text-sm text-muted-foreground dark:text-muted-foreground">{label}</p>
+          <p className="text-2xl font-bold text-foreground dark:text-foreground">{value}</p>
           {subtext && (
-            <p className="text-xs text-gray-400 dark:text-gray-500">{subtext}</p>
+            <p className="text-xs text-muted-foreground dark:text-muted-foreground">{subtext}</p>
           )}
         </div>
       </div>
@@ -41,12 +41,12 @@ function LiveStats({ stats, loading = false }) {
     return (
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="animate-pulse bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div key={i} className="animate-pulse bg-white dark:bg-card rounded-lg p-4 border border-border dark:border-border">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+              <div className="w-10 h-10 bg-muted dark:bg-muted rounded-lg"></div>
               <div className="space-y-2">
-                <div className="h-3 w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                <div className="h-6 w-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                <div className="h-3 w-16 bg-muted dark:bg-muted rounded"></div>
+                <div className="h-6 w-12 bg-muted dark:bg-muted rounded"></div>
               </div>
             </div>
           </div>

@@ -75,7 +75,7 @@ export default function VoicePreviewPlayer({
 
   if (!sampleUrl) {
     return compact ? null : (
-      <div className="flex items-center gap-2 text-gray-500 text-sm">
+      <div className="flex items-center gap-2 text-muted-foreground text-sm">
         <Volume2 className="w-4 h-4" />
         <span>No preview available</span>
       </div>
@@ -89,8 +89,8 @@ export default function VoicePreviewPlayer({
         disabled={isLoading}
         className={`p-2 rounded-full transition-colors ${
           isPlaying
-            ? 'bg-blue-500 text-white'
-            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+            ? 'bg-blue-500 text-foreground'
+            : 'bg-muted text-secondary-foreground hover:bg-muted'
         }`}
         title={`Preview ${voiceName}`}
       >
@@ -120,8 +120,8 @@ export default function VoicePreviewPlayer({
         disabled={isLoading}
         className={`p-2.5 rounded-full transition-colors ${
           isPlaying
-            ? 'bg-blue-500 text-white'
-            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+            ? 'bg-blue-500 text-foreground'
+            : 'bg-muted text-secondary-foreground hover:bg-muted'
         }`}
         title={isPlaying ? 'Pause' : 'Play preview'}
       >
@@ -136,10 +136,10 @@ export default function VoicePreviewPlayer({
 
       <div className="flex-1">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-sm text-gray-300">{voiceName}</span>
+          <span className="text-sm text-secondary-foreground">{voiceName}</span>
           {error && <span className="text-xs text-red-400">{error}</span>}
         </div>
-        <div className="h-1.5 bg-gray-700 rounded-full overflow-hidden">
+        <div className="h-1.5 bg-muted rounded-full overflow-hidden">
           <div
             className="h-full bg-blue-500 transition-all duration-100"
             style={{ width: `${progress}%` }}

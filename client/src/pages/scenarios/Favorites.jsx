@@ -103,24 +103,24 @@ export default function Favorites() {
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
         <div>
-          <h1 className="text-2xl font-bold text-gray-100 flex items-center gap-3">
+          <h1 className="text-2xl font-bold text-foreground flex items-center gap-3">
             <Heart className="w-7 h-7 text-red-400" />
             Favorites & Bookmarks
           </h1>
-          <p className="text-gray-400 mt-1">
+          <p className="text-muted-foreground mt-1">
             Quick access to your saved scenarios
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="pl-9 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 w-48"
+              className="pl-9 pr-4 py-2 bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 w-48"
             />
           </div>
 
@@ -130,7 +130,7 @@ export default function Favorites() {
               flex items-center gap-2 px-4 py-2 rounded-lg transition-colors
               ${showFavoritesOnly
                 ? 'bg-red-500/20 text-red-400 border border-red-500/30'
-                : 'bg-gray-800 text-gray-400 border border-gray-700 hover:bg-gray-700'}
+                : 'bg-card text-muted-foreground border border-border hover:bg-muted'}
             `}
           >
             <Star className="w-4 h-4" fill={showFavoritesOnly ? 'currentColor' : 'none'} />
@@ -146,8 +146,8 @@ export default function Favorites() {
           animate={{ opacity: 1, x: 0 }}
           className="lg:col-span-1"
         >
-          <div className="bg-gray-800 rounded-xl border border-gray-700 p-4 sticky top-4">
-            <h2 className="font-semibold text-gray-200 mb-4 flex items-center gap-2">
+          <div className="bg-card rounded-xl border border-border p-4 sticky top-4">
+            <h2 className="font-semibold text-foreground mb-4 flex items-center gap-2">
               <Folder className="w-4 h-4" />
               Folders
             </h2>
@@ -159,7 +159,7 @@ export default function Favorites() {
                   w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors
                   ${activeFolder === null
                     ? 'bg-primary-500/20 text-primary-400'
-                    : 'hover:bg-gray-700 text-gray-300'}
+                    : 'hover:bg-muted text-secondary-foreground'}
                 `}
               >
                 <span>All Bookmarks</span>
@@ -174,7 +174,7 @@ export default function Favorites() {
                     w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors
                     ${activeFolder === folder.name
                       ? 'bg-primary-500/20 text-primary-400'
-                      : 'hover:bg-gray-700 text-gray-300'}
+                      : 'hover:bg-muted text-secondary-foreground'}
                   `}
                 >
                   <span className="flex items-center gap-2">
@@ -196,12 +196,12 @@ export default function Favorites() {
           className="lg:col-span-3"
         >
           {filteredBookmarks.length === 0 ? (
-            <div className="bg-gray-800 rounded-xl border border-gray-700 p-12 text-center">
-              <Heart className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-200 mb-2">
+            <div className="bg-card rounded-xl border border-border p-12 text-center">
+              <Heart className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">
                 {bookmarks.length === 0 ? 'No bookmarks yet' : 'No matching bookmarks'}
               </h3>
-              <p className="text-gray-400 mb-6">
+              <p className="text-muted-foreground mb-6">
                 {bookmarks.length === 0
                   ? 'Start bookmarking scenarios you want to practice again!'
                   : 'Try adjusting your filters or search'}
@@ -209,7 +209,7 @@ export default function Favorites() {
               {bookmarks.length === 0 && (
                 <Link
                   to="/scenarios"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-xl transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-xl transition-colors"
                 >
                   Browse Scenarios
                   <ChevronRight className="w-4 h-4" />
@@ -224,12 +224,12 @@ export default function Favorites() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="bg-gray-800 rounded-xl border border-gray-700 p-5 hover:border-gray-600 transition-colors"
+                  className="bg-card rounded-xl border border-border p-5 hover:border-border transition-colors"
                 >
                   <div className="flex items-start gap-4">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-lg font-semibold text-gray-100">
+                        <h3 className="text-lg font-semibold text-foreground">
                           {bookmark.scenario?.name}
                         </h3>
                         <span className={`
@@ -242,17 +242,17 @@ export default function Favorites() {
                         `}>
                           {bookmark.scenario?.difficulty}
                         </span>
-                        <span className="px-2 py-0.5 text-xs bg-gray-700 text-gray-400 rounded-full">
+                        <span className="px-2 py-0.5 text-xs bg-muted text-muted-foreground rounded-full">
                           {bookmark.scenario?.category}
                         </span>
                       </div>
 
-                      <p className="text-gray-400 text-sm mb-3 line-clamp-2">
+                      <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
                         {bookmark.scenario?.situation}
                       </p>
 
                       {/* Stats */}
-                      <div className="flex items-center gap-4 text-sm text-gray-500">
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         {bookmark.practice_count > 0 && (
                           <span className="flex items-center gap-1">
                             <TrendingUp className="w-4 h-4" />
@@ -274,7 +274,7 @@ export default function Favorites() {
                       </div>
 
                       {bookmark.notes && (
-                        <p className="mt-2 text-sm text-gray-500 italic">
+                        <p className="mt-2 text-sm text-muted-foreground italic">
                           "{bookmark.notes}"
                         </p>
                       )}
@@ -299,7 +299,7 @@ export default function Favorites() {
                       />
                       <Link
                         to={`/scenario/${bookmark.scenario_id}`}
-                        className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
                       >
                         <Play className="w-4 h-4" />
                         Practice

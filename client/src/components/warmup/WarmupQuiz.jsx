@@ -156,7 +156,7 @@ export default function WarmupQuiz({
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px]">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
-        <p className="text-gray-400">Preparing your warm-up...</p>
+        <p className="text-muted-foreground">Preparing your warm-up...</p>
       </div>
     );
   }
@@ -164,14 +164,14 @@ export default function WarmupQuiz({
   if (exercises.length === 0) {
     return (
       <div className="text-center py-12">
-        <Brain className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-        <h3 className="text-xl font-semibold text-gray-200 mb-2">No Warm-up Available</h3>
-        <p className="text-gray-400 mb-6">
+        <Brain className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+        <h3 className="text-xl font-semibold text-foreground mb-2">No Warm-up Available</h3>
+        <p className="text-muted-foreground mb-6">
           No warm-up exercises found for this scenario.
         </p>
         <button
           onClick={onSkip}
-          className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors"
+          className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-foreground font-medium rounded-xl transition-colors"
         >
           Continue to Training
         </button>
@@ -193,38 +193,38 @@ export default function WarmupQuiz({
           transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
           className="mx-auto w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-green-500/25"
         >
-          <Sparkles className="w-10 h-10 text-white" />
+          <Sparkles className="w-10 h-10 text-foreground" />
         </motion.div>
 
-        <h2 className="text-2xl font-bold text-white mb-2">Warm-up Complete!</h2>
-        <p className="text-gray-400 mb-8">
+        <h2 className="text-2xl font-bold text-foreground mb-2">Warm-up Complete!</h2>
+        <p className="text-muted-foreground mb-8">
           You're ready for {scenarioName || 'your training session'}
         </p>
 
         {/* Results */}
         <div className="grid grid-cols-3 gap-4 max-w-md mx-auto mb-8">
-          <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
+          <div className="bg-card rounded-xl p-4 border border-border">
             <div className="flex items-center justify-center gap-2 mb-1">
               <Target className="w-5 h-5 text-blue-400" />
             </div>
-            <p className="text-2xl font-bold text-white">{results.accuracy}%</p>
-            <p className="text-xs text-gray-400">Accuracy</p>
+            <p className="text-2xl font-bold text-foreground">{results.accuracy}%</p>
+            <p className="text-xs text-muted-foreground">Accuracy</p>
           </div>
 
-          <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
+          <div className="bg-card rounded-xl p-4 border border-border">
             <div className="flex items-center justify-center gap-2 mb-1">
               <CheckCircle className="w-5 h-5 text-green-400" />
             </div>
-            <p className="text-2xl font-bold text-white">{results.correct}/{results.total}</p>
-            <p className="text-xs text-gray-400">Correct</p>
+            <p className="text-2xl font-bold text-foreground">{results.correct}/{results.total}</p>
+            <p className="text-xs text-muted-foreground">Correct</p>
           </div>
 
-          <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
+          <div className="bg-card rounded-xl p-4 border border-border">
             <div className="flex items-center justify-center gap-2 mb-1">
               <Trophy className="w-5 h-5 text-yellow-400" />
             </div>
-            <p className="text-2xl font-bold text-white">+{results.pointsEarned}</p>
-            <p className="text-xs text-gray-400">Points</p>
+            <p className="text-2xl font-bold text-foreground">+{results.pointsEarned}</p>
+            <p className="text-xs text-muted-foreground">Points</p>
           </div>
         </div>
 
@@ -247,7 +247,7 @@ export default function WarmupQuiz({
 
         <button
           onClick={handleStartTraining}
-          className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors"
+          className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-foreground font-medium rounded-xl transition-colors"
         >
           Start Training
           <ChevronRight className="w-5 h-5" />
@@ -266,8 +266,8 @@ export default function WarmupQuiz({
             <Brain className="w-6 h-6 text-purple-400" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-gray-100">Pre-Call Warm-up</h2>
-            <p className="text-sm text-gray-400">
+            <h2 className="text-lg font-semibold text-foreground">Pre-Call Warm-up</h2>
+            <p className="text-sm text-muted-foreground">
               Question {currentIndex + 1} of {exercises.length}
             </p>
           </div>
@@ -275,14 +275,14 @@ export default function WarmupQuiz({
 
         <button
           onClick={onSkip}
-          className="text-sm text-gray-400 hover:text-gray-200 transition-colors"
+          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           Skip warm-up
         </button>
       </div>
 
       {/* Progress bar */}
-      <div className="h-2 bg-gray-700 rounded-full mb-6 overflow-hidden">
+      <div className="h-2 bg-muted rounded-full mb-6 overflow-hidden">
         <motion.div
           className="h-full bg-purple-500"
           initial={{ width: 0 }}
@@ -319,7 +319,7 @@ export default function WarmupQuiz({
         >
           <button
             onClick={handleNext}
-            className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors"
+            className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-foreground font-medium rounded-xl transition-colors"
           >
             {currentIndex < exercises.length - 1 ? 'Next Question' : 'Complete Warm-up'}
             <ChevronRight className="w-5 h-5" />
@@ -335,7 +335,7 @@ export default function WarmupQuiz({
             <div
               key={index}
               className={`w-3 h-3 rounded-full ${
-                !answer ? (index === currentIndex ? 'bg-blue-500' : 'bg-gray-600') :
+                !answer ? (index === currentIndex ? 'bg-blue-500' : 'bg-muted') :
                 answer.isCorrect ? 'bg-green-500' : 'bg-red-500'
               }`}
             />

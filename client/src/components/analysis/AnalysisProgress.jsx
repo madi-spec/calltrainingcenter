@@ -60,19 +60,19 @@ function AnalysisProgress({ status, queuePosition, error, onRetry }) {
           {config.icon}
         </div>
         <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <h3 className="text-lg font-semibold text-foreground dark:text-foreground">
             {config.title}
           </h3>
-          <p className="text-gray-600 dark:text-gray-300 mt-1">
+          <p className="text-muted-foreground dark:text-secondary-foreground mt-1">
             {config.description}
           </p>
 
           {status === 'processing' && (
             <div className="mt-4">
-              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground">
                 <span>This typically takes 10-30 seconds</span>
               </div>
-              <div className="mt-2 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+              <div className="mt-2 h-2 bg-muted dark:bg-muted rounded-full overflow-hidden">
                 <motion.div
                   className="h-full bg-blue-500"
                   initial={{ width: '0%' }}
@@ -86,7 +86,7 @@ function AnalysisProgress({ status, queuePosition, error, onRetry }) {
           {status === 'failed' && onRetry && (
             <button
               onClick={onRetry}
-              className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+              className="mt-4 px-4 py-2 bg-red-600 text-foreground rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />

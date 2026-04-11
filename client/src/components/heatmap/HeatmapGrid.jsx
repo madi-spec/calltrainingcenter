@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 
 function getScoreColor(score, target = 70) {
-  if (score === null || score === undefined) return 'bg-gray-100 dark:bg-gray-700';
+  if (score === null || score === undefined) return 'bg-muted dark:bg-muted';
 
   const gap = target - score;
 
@@ -14,12 +14,12 @@ function getScoreColor(score, target = 70) {
 }
 
 function getScoreTextColor(score, target = 70) {
-  if (score === null || score === undefined) return 'text-gray-400 dark:text-gray-500';
+  if (score === null || score === undefined) return 'text-muted-foreground dark:text-muted-foreground';
 
   const gap = target - score;
 
-  if (gap >= 20) return 'text-white';
-  return 'text-gray-900 dark:text-gray-100';
+  if (gap >= 20) return 'text-foreground';
+  return 'text-foreground dark:text-foreground';
 }
 
 function formatCategoryName(category) {
@@ -73,15 +73,15 @@ function HeatmapGrid({ users, categories, averages, onUserClick, onCategoryClick
   if (users.length === 0) {
     return (
       <div className="py-12 text-center">
-        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-          <svg className="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted dark:bg-muted flex items-center justify-center">
+          <svg className="w-8 h-8 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
           </svg>
         </div>
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+        <h3 className="text-lg font-medium text-foreground dark:text-foreground mb-2">
           No Skill Data Available
         </h3>
-        <p className="text-gray-500 dark:text-gray-400">
+        <p className="text-muted-foreground dark:text-muted-foreground">
           Skill data will appear here once team members complete training sessions.
         </p>
       </div>
@@ -92,9 +92,9 @@ function HeatmapGrid({ users, categories, averages, onUserClick, onCategoryClick
     <div className="overflow-x-auto">
       <table className="w-full min-w-[600px]">
         <thead>
-          <tr className="border-b border-gray-200 dark:border-gray-700">
+          <tr className="border-b border-border dark:border-border">
             <th
-              className="py-3 px-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 cursor-pointer hover:text-gray-700 dark:hover:text-gray-200"
+              className="py-3 px-4 text-left text-sm font-medium text-muted-foreground dark:text-muted-foreground cursor-pointer hover:text-muted-foreground dark:hover:text-foreground"
               onClick={() => handleSort('name')}
             >
               <div className="flex items-center gap-1">
@@ -109,7 +109,7 @@ function HeatmapGrid({ users, categories, averages, onUserClick, onCategoryClick
             {categories.map(category => (
               <th
                 key={category}
-                className="py-3 px-2 text-center text-sm font-medium text-gray-500 dark:text-gray-400 cursor-pointer hover:text-gray-700 dark:hover:text-gray-200"
+                className="py-3 px-2 text-center text-sm font-medium text-muted-foreground dark:text-muted-foreground cursor-pointer hover:text-muted-foreground dark:hover:text-foreground"
                 onClick={() => handleSort(category)}
               >
                 <div className="flex flex-col items-center">
@@ -126,11 +126,11 @@ function HeatmapGrid({ users, categories, averages, onUserClick, onCategoryClick
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+        <tbody className="divide-y divide-gray-100 dark:divide-border">
           {/* Averages row */}
-          <tr className="bg-gray-50 dark:bg-gray-800/50">
+          <tr className="bg-muted dark:bg-card/50">
             <td className="py-3 px-4">
-              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+              <span className="text-sm font-medium text-muted-foreground dark:text-secondary-foreground">
                 Team Average
               </span>
             </td>
@@ -154,7 +154,7 @@ function HeatmapGrid({ users, categories, averages, onUserClick, onCategoryClick
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.02 }}
-              className="hover:bg-gray-50 dark:hover:bg-gray-800/30"
+              className="hover:bg-accent dark:hover:bg-card/30"
             >
               <td className="py-3 px-4">
                 <button
@@ -174,7 +174,7 @@ function HeatmapGrid({ users, categories, averages, onUserClick, onCategoryClick
                       </span>
                     </div>
                   )}
-                  <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  <span className="text-sm font-medium text-foreground dark:text-foreground">
                     {user.userName}
                   </span>
                 </button>

@@ -54,7 +54,7 @@ export default function MyAssignments() {
       case 'overdue':
         return <AlertCircle className="w-5 h-5 text-red-400" />;
       default:
-        return <Calendar className="w-5 h-5 text-gray-400" />;
+        return <Calendar className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
@@ -66,7 +66,7 @@ export default function MyAssignments() {
 
     if (daysUntilDue < 0) return 'text-red-400';
     if (daysUntilDue <= 2) return 'text-yellow-400';
-    return 'text-gray-400';
+    return 'text-muted-foreground';
   };
 
   if (loading) {
@@ -81,8 +81,8 @@ export default function MyAssignments() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-100">My Assignments</h1>
-        <p className="text-gray-400 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">My Assignments</h1>
+        <p className="text-muted-foreground mt-1">
           Complete your assigned training scenarios
         </p>
       </div>
@@ -100,13 +100,13 @@ export default function MyAssignments() {
             onClick={() => setFilter(tab.value)}
             className={`px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap ${
               filter === tab.value
-                ? 'bg-primary-600 text-white'
-                : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                ? 'bg-primary-600 text-foreground'
+                : 'bg-card text-muted-foreground hover:bg-muted'
             }`}
           >
             {tab.label}
             {tab.value === 'overdue' && assignments.filter((a) => a.status === 'overdue').length > 0 && (
-              <span className="ml-2 px-2 py-0.5 text-xs bg-red-500 text-white rounded-full">
+              <span className="ml-2 px-2 py-0.5 text-xs bg-red-500 text-foreground rounded-full">
                 {assignments.filter((a) => a.status === 'overdue').length}
               </span>
             )}
@@ -123,10 +123,10 @@ export default function MyAssignments() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className={`bg-gray-800 rounded-xl p-6 border ${
+              className={`bg-card rounded-xl p-6 border ${
                 assignment.status === 'overdue'
                   ? 'border-red-500/30'
-                  : 'border-gray-700'
+                  : 'border-border'
               }`}
             >
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -141,10 +141,10 @@ export default function MyAssignments() {
                     {getStatusIcon(assignment.status)}
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-100">
+                    <h3 className="text-lg font-semibold text-foreground">
                       {assignment.scenario_name || assignment.suite_name}
                     </h3>
-                    <p className="text-gray-400 text-sm mt-1">
+                    <p className="text-muted-foreground text-sm mt-1">
                       {assignment.suite_name ? 'Training Suite' : 'Single Scenario'}
                     </p>
                     <div className="flex items-center gap-4 mt-3">
@@ -153,7 +153,7 @@ export default function MyAssignments() {
                         Due {new Date(assignment.due_date).toLocaleDateString()}
                       </span>
                       {assignment.progress && (
-                        <span className="text-sm text-gray-400">
+                        <span className="text-sm text-muted-foreground">
                           <Target className="w-4 h-4 inline mr-1" />
                           {assignment.progress.completed}/{assignment.progress.total} completed
                         </span>
@@ -166,7 +166,7 @@ export default function MyAssignments() {
                   {assignment.status !== 'completed' && (
                     <Link
                       to={`/scenario/${assignment.scenario_id}`}
-                      className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
                     >
                       <Play className="w-4 h-4" />
                       {assignment.status === 'in_progress' ? 'Continue' : 'Start'}
@@ -185,14 +185,14 @@ export default function MyAssignments() {
 
               {/* Progress Bar */}
               {assignment.progress && assignment.status !== 'completed' && (
-                <div className="mt-4 pt-4 border-t border-gray-700">
+                <div className="mt-4 pt-4 border-t border-border">
                   <div className="flex justify-between text-sm mb-2">
-                    <span className="text-gray-400">Progress</span>
-                    <span className="text-gray-300">
+                    <span className="text-muted-foreground">Progress</span>
+                    <span className="text-secondary-foreground">
                       {Math.round((assignment.progress.completed / assignment.progress.total) * 100)}%
                     </span>
                   </div>
-                  <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+                  <div className="h-2 bg-muted rounded-full overflow-hidden">
                     <div
                       className="h-full bg-primary-500 transition-all duration-500"
                       style={{
@@ -208,13 +208,13 @@ export default function MyAssignments() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="bg-gray-800 rounded-xl p-12 border border-gray-700 text-center"
+            className="bg-card rounded-xl p-12 border border-border text-center"
           >
             <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-100 mb-2">
+            <h3 className="text-xl font-semibold text-foreground mb-2">
               {filter === 'completed' ? 'No completed assignments' : 'All caught up!'}
             </h3>
-            <p className="text-gray-400 mb-6">
+            <p className="text-muted-foreground mb-6">
               {filter === 'pending'
                 ? "You don't have any pending assignments."
                 : filter === 'overdue'
@@ -223,7 +223,7 @@ export default function MyAssignments() {
             </p>
             <Link
               to="/scenarios"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
             >
               <Play className="w-4 h-4" />
               Practice on your own

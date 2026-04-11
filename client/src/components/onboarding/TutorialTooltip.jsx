@@ -122,13 +122,13 @@ export default function TutorialTooltip({
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      className="fixed z-[10001] bg-gray-800 rounded-xl border border-blue-500/50 shadow-xl shadow-blue-500/10"
+      className="fixed z-[10001] bg-card rounded-xl border border-blue-500/50 shadow-xl shadow-blue-500/10"
       style={style}
     >
       {/* Arrow - only show when we have a target */}
       {!showFallback && (
         <div
-          className="absolute w-4 h-4 bg-gray-800"
+          className="absolute w-4 h-4 bg-card"
           style={getArrowStyle()}
         />
       )}
@@ -137,12 +137,12 @@ export default function TutorialTooltip({
       <div className="p-4">
         {/* Header */}
         <div className="flex items-start justify-between mb-3">
-          <h3 className="text-lg font-semibold text-white pr-2">
+          <h3 className="text-lg font-semibold text-foreground pr-2">
             {step.title}
           </h3>
           <button
             onClick={onSkip}
-            className="text-gray-400 hover:text-gray-200 transition-colors p-1"
+            className="text-muted-foreground hover:text-foreground transition-colors p-1"
             title="Skip tutorial"
           >
             <X className="w-4 h-4" />
@@ -150,7 +150,7 @@ export default function TutorialTooltip({
         </div>
 
         {/* Description */}
-        <p className="text-gray-300 text-sm mb-4">
+        <p className="text-secondary-foreground text-sm mb-4">
           {step.description}
         </p>
 
@@ -164,11 +164,11 @@ export default function TutorialTooltip({
         {/* Progress bar */}
         {progress && (
           <div className="mb-4">
-            <div className="flex justify-between text-xs text-gray-400 mb-1">
+            <div className="flex justify-between text-xs text-muted-foreground mb-1">
               <span>Step {progress.current} of {progress.total}</span>
               <span>{progress.percentage}%</span>
             </div>
-            <div className="h-1 bg-gray-700 rounded-full overflow-hidden">
+            <div className="h-1 bg-muted rounded-full overflow-hidden">
               <motion.div
                 className="h-full bg-blue-500"
                 initial={{ width: 0 }}
@@ -186,8 +186,8 @@ export default function TutorialTooltip({
             disabled={!canGoBack}
             className={`flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg transition-colors ${
               canGoBack
-                ? 'text-gray-300 hover:bg-gray-700'
-                : 'text-gray-600 cursor-not-allowed'
+                ? 'text-secondary-foreground hover:bg-muted'
+                : 'text-muted-foreground cursor-not-allowed'
             }`}
           >
             <ChevronLeft className="w-4 h-4" />
@@ -196,7 +196,7 @@ export default function TutorialTooltip({
 
           <button
             onClick={onNext}
-            className="flex items-center gap-1 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+            className="flex items-center gap-1 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-foreground text-sm font-medium rounded-lg transition-colors"
           >
             Next
             <ChevronRight className="w-4 h-4" />

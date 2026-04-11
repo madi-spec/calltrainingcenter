@@ -68,12 +68,12 @@ export default function KnowledgeBase() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Link to="/settings" className="text-gray-400 hover:text-gray-200">
+        <Link to="/settings" className="text-muted-foreground hover:text-foreground">
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-100">Knowledge Base</h1>
-          <p className="text-gray-400 mt-1">
+          <h1 className="text-2xl font-bold text-foreground">Knowledge Base</h1>
+          <p className="text-muted-foreground mt-1">
             Upload training documents to auto-generate courses, packages, and scenarios
           </p>
         </div>
@@ -89,11 +89,11 @@ export default function KnowledgeBase() {
 
           return (
             <div key={step} className="flex items-center gap-2">
-              {i > 0 && <div className={`w-8 h-px ${isDone ? 'bg-green-500' : 'bg-gray-700'}`} />}
+              {i > 0 && <div className={`w-8 h-px ${isDone ? 'bg-green-500' : 'bg-muted'}`} />}
               <div className={`px-3 py-1 rounded-full text-xs font-medium ${
                 isActive ? 'bg-primary-500/20 text-primary-400 ring-1 ring-primary-500/30' :
                 isDone ? 'bg-green-500/20 text-green-400' :
-                'bg-gray-800 text-gray-500'
+                'bg-card text-muted-foreground'
               }`}>
                 {isDone && !isActive ? '✓ ' : ''}{step}
               </div>
@@ -150,24 +150,24 @@ export default function KnowledgeBase() {
         )}
 
         {state === STATES.COMPLETE && (
-          <div className="bg-gray-800 rounded-xl p-8 border border-gray-700 text-center space-y-4">
+          <div className="bg-card rounded-xl p-8 border border-border text-center space-y-4">
             <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto">
               <Database className="w-8 h-8 text-green-400" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-100">Generation Complete</h2>
-            <p className="text-gray-400 max-w-md mx-auto">
+            <h2 className="text-xl font-semibold text-foreground">Generation Complete</h2>
+            <p className="text-muted-foreground max-w-md mx-auto">
               Your training content has been generated. Visit Courses to see the new content, or upload more documents.
             </p>
             <div className="flex gap-3 justify-center">
               <Link
                 to="/courses"
-                className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                className="px-4 py-2 bg-primary-600 text-foreground rounded-lg hover:bg-primary-700 transition-colors"
               >
                 View Courses
               </Link>
               <button
                 onClick={handleReset}
-                className="px-4 py-2 bg-gray-700 text-gray-200 rounded-lg hover:bg-gray-600 transition-colors"
+                className="px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted transition-colors"
               >
                 Upload More
               </button>

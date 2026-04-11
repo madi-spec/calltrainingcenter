@@ -116,18 +116,18 @@ export default function AICoachingStyleStep({ data, onComplete, authFetch, organ
           <div className="p-2 bg-purple-500/20 rounded-lg">
             <MessageSquare className="w-6 h-6 text-purple-400" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-100">Coaching & Feedback Style</h3>
+          <h3 className="text-lg font-semibold text-foreground">Coaching & Feedback Style</h3>
         </div>
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-muted-foreground">
           Customize how AI provides feedback and coaching after practice calls. These settings shape the tone and depth of performance reviews.
         </p>
       </div>
 
       {/* Single Select Options */}
       {Object.entries(COACHING_OPTIONS).map(([key, config]) => (
-        <div key={key} className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-          <h4 className="text-md font-semibold text-gray-100 mb-2">{config.title}</h4>
-          <p className="text-sm text-gray-400 mb-4">{config.description}</p>
+        <div key={key} className="bg-card rounded-xl p-6 border border-border">
+          <h4 className="text-md font-semibold text-foreground mb-2">{config.title}</h4>
+          <p className="text-sm text-muted-foreground mb-4">{config.description}</p>
 
           <div className="space-y-3">
             {config.options.map((option) => (
@@ -139,15 +139,15 @@ export default function AICoachingStyleStep({ data, onComplete, authFetch, organ
                 whileTap={{ scale: 0.99 }}
                 className={`w-full p-4 rounded-lg border text-left transition-colors ${
                   formData[key] === option.value
-                    ? 'bg-primary-500/20 border-primary-500 text-gray-100'
-                    : 'bg-gray-750 border-gray-600 text-gray-300 hover:bg-gray-700'
+                    ? 'bg-primary-500/20 border-primary-500 text-foreground'
+                    : 'bg-muted border-border text-secondary-foreground hover:bg-muted'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="font-medium">{option.label}</span>
                     {option.description && (
-                      <p className="text-sm text-gray-400 mt-1">{option.description}</p>
+                      <p className="text-sm text-muted-foreground mt-1">{option.description}</p>
                     )}
                   </div>
                   {formData[key] === option.value && (
@@ -161,9 +161,9 @@ export default function AICoachingStyleStep({ data, onComplete, authFetch, organ
       ))}
 
       {/* Priority Skills */}
-      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-        <h4 className="text-md font-semibold text-gray-100 mb-2">Priority Skills</h4>
-        <p className="text-sm text-gray-400 mb-4">
+      <div className="bg-card rounded-xl p-6 border border-border">
+        <h4 className="text-md font-semibold text-foreground mb-2">Priority Skills</h4>
+        <p className="text-sm text-muted-foreground mb-4">
           Which skills are most important to evaluate? Select all that apply.
         </p>
 
@@ -175,18 +175,18 @@ export default function AICoachingStyleStep({ data, onComplete, authFetch, organ
               onClick={() => toggleSkill(skill.value)}
               className={`p-3 rounded-lg border text-left transition-colors ${
                 formData.prioritySkills.includes(skill.value)
-                  ? 'bg-purple-500/20 border-purple-500/50 text-gray-100'
-                  : 'bg-gray-750 border-gray-600 text-gray-300 hover:bg-gray-700'
+                  ? 'bg-purple-500/20 border-purple-500/50 text-foreground'
+                  : 'bg-muted border-border text-secondary-foreground hover:bg-muted'
               }`}
             >
               <div className="flex items-center gap-2">
                 <div className={`w-4 h-4 rounded border flex items-center justify-center ${
                   formData.prioritySkills.includes(skill.value)
                     ? 'bg-purple-500 border-purple-500'
-                    : 'border-gray-500'
+                    : 'border-border'
                 }`}>
                   {formData.prioritySkills.includes(skill.value) && (
-                    <Check className="w-3 h-3 text-white" />
+                    <Check className="w-3 h-3 text-foreground" />
                   )}
                 </div>
                 <span className="text-sm">{skill.label}</span>
@@ -211,7 +211,7 @@ export default function AICoachingStyleStep({ data, onComplete, authFetch, organ
         <button
           type="submit"
           disabled={saving}
-          className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors disabled:opacity-50"
         >
           {saving ? (
             <>

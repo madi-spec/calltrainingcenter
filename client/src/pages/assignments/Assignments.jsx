@@ -185,7 +185,7 @@ export default function Assignments() {
         );
       default:
         return (
-          <span className="flex items-center gap-1 px-2 py-1 text-xs font-medium bg-gray-500/10 text-gray-400 rounded-full">
+          <span className="flex items-center gap-1 px-2 py-1 text-xs font-medium bg-muted/10 text-muted-foreground rounded-full">
             <Calendar className="w-3 h-3" /> Pending
           </span>
         );
@@ -212,8 +212,8 @@ export default function Assignments() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-100">Assignments</h1>
-          <p className="text-gray-400 mt-1">
+          <h1 className="text-2xl font-bold text-foreground">Assignments</h1>
+          <p className="text-muted-foreground mt-1">
             Manage training assignments for your team
           </p>
         </div>
@@ -222,7 +222,7 @@ export default function Assignments() {
             setDueDate(getDefaultDueDate());
             setShowCreateModal(true);
           }}
-          className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
         >
           <Plus className="w-5 h-5" />
           Create Assignment
@@ -232,21 +232,21 @@ export default function Assignments() {
       {/* Filters */}
       <div className="flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search by user or scenario..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="w-full pl-10 pr-4 py-2 bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
         </div>
         <div className="flex items-center gap-2">
-          <Filter className="w-5 h-5 text-gray-500" />
+          <Filter className="w-5 h-5 text-muted-foreground" />
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="px-4 py-2 bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
           >
             <option value="all">All Status</option>
             <option value="pending">Pending</option>
@@ -260,13 +260,13 @@ export default function Assignments() {
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: 'Total', value: assignments.length, color: 'text-gray-400' },
+          { label: 'Total', value: assignments.length, color: 'text-muted-foreground' },
           { label: 'Pending', value: assignments.filter((a) => a.status === 'pending').length, color: 'text-yellow-400' },
           { label: 'Completed', value: assignments.filter((a) => a.status === 'completed').length, color: 'text-green-400' },
           { label: 'Overdue', value: assignments.filter((a) => a.status === 'overdue').length, color: 'text-red-400' }
         ].map((stat, i) => (
-          <div key={i} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-            <p className="text-gray-400 text-sm">{stat.label}</p>
+          <div key={i} className="bg-card rounded-lg p-4 border border-border">
+            <p className="text-muted-foreground text-sm">{stat.label}</p>
             <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
           </div>
         ))}
@@ -276,24 +276,24 @@ export default function Assignments() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden"
+        className="bg-card rounded-xl border border-border overflow-hidden"
       >
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-gray-700">
-                <th className="text-left py-4 px-6 text-sm font-medium text-gray-400">User</th>
-                <th className="text-left py-4 px-6 text-sm font-medium text-gray-400">Scenario/Course</th>
-                <th className="text-left py-4 px-6 text-sm font-medium text-gray-400">Due Date</th>
-                <th className="text-left py-4 px-6 text-sm font-medium text-gray-400">Status</th>
-                <th className="text-left py-4 px-6 text-sm font-medium text-gray-400">Progress</th>
+              <tr className="border-b border-border">
+                <th className="text-left py-4 px-6 text-sm font-medium text-muted-foreground">User</th>
+                <th className="text-left py-4 px-6 text-sm font-medium text-muted-foreground">Scenario/Course</th>
+                <th className="text-left py-4 px-6 text-sm font-medium text-muted-foreground">Due Date</th>
+                <th className="text-left py-4 px-6 text-sm font-medium text-muted-foreground">Status</th>
+                <th className="text-left py-4 px-6 text-sm font-medium text-muted-foreground">Progress</th>
                 <th className="py-4 px-6"></th>
               </tr>
             </thead>
             <tbody>
               {filteredAssignments.length > 0 ? (
                 filteredAssignments.map((assignment) => (
-                  <tr key={assignment.id} className="border-b border-gray-700/50 hover:bg-gray-700/30">
+                  <tr key={assignment.id} className="border-b border-border/50 hover:bg-muted/30">
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 bg-primary-500/10 rounded-full flex items-center justify-center">
@@ -301,31 +301,31 @@ export default function Assignments() {
                             {assignment.user_name?.charAt(0).toUpperCase()}
                           </span>
                         </div>
-                        <span className="text-gray-200">{assignment.user_name}</span>
+                        <span className="text-foreground">{assignment.user_name}</span>
                       </div>
                     </td>
-                    <td className="py-4 px-6 text-gray-300">
+                    <td className="py-4 px-6 text-secondary-foreground">
                       {assignment.scenario_name || assignment.course_name || assignment.suite_name}
                     </td>
-                    <td className="py-4 px-6 text-gray-400">
+                    <td className="py-4 px-6 text-muted-foreground">
                       {new Date(assignment.due_date).toLocaleDateString()}
                     </td>
                     <td className="py-4 px-6">{getStatusBadge(assignment.status)}</td>
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-2">
-                        <div className="w-20 h-2 bg-gray-700 rounded-full overflow-hidden">
+                        <div className="w-20 h-2 bg-muted rounded-full overflow-hidden">
                           <div
                             className="h-full bg-primary-500"
                             style={{ width: `${((assignment.progress?.completed || 0) / (assignment.progress?.total || 1)) * 100}%` }}
                           />
                         </div>
-                        <span className="text-sm text-gray-400">
+                        <span className="text-sm text-muted-foreground">
                           {assignment.progress?.completed || 0}/{assignment.progress?.total || 1}
                         </span>
                       </div>
                     </td>
                     <td className="py-4 px-6">
-                      <button className="p-2 hover:bg-gray-700 rounded-lg text-gray-400">
+                      <button className="p-2 hover:bg-muted rounded-lg text-muted-foreground">
                         <MoreVertical className="w-5 h-5" />
                       </button>
                     </td>
@@ -333,7 +333,7 @@ export default function Assignments() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="py-12 text-center text-gray-400">
+                  <td colSpan={6} className="py-12 text-center text-muted-foreground">
                     <Users className="w-12 h-12 mx-auto mb-4 opacity-50" />
                     <p>No assignments found</p>
                     <button
@@ -359,16 +359,16 @@ export default function Assignments() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-gray-800 rounded-xl p-6 max-w-2xl w-full border border-gray-700 my-8"
+            className="bg-card rounded-xl p-6 max-w-2xl w-full border border-border my-8"
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-100">Create Assignment</h2>
+              <h2 className="text-xl font-bold text-foreground">Create Assignment</h2>
               <button
                 onClick={() => {
                   setShowCreateModal(false);
                   resetForm();
                 }}
-                className="p-2 hover:bg-gray-700 rounded-lg text-gray-400"
+                className="p-2 hover:bg-muted rounded-lg text-muted-foreground"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -383,7 +383,7 @@ export default function Assignments() {
                 {/* Select Users */}
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <label className="block text-sm font-medium text-gray-300">
+                    <label className="block text-sm font-medium text-secondary-foreground">
                       <User className="w-4 h-4 inline mr-2" />
                       Select Team Members
                     </label>
@@ -394,19 +394,19 @@ export default function Assignments() {
                       {selectedUsers.length === users.length ? 'Deselect All' : 'Select All'}
                     </button>
                   </div>
-                  <div className="max-h-40 overflow-y-auto bg-gray-900 rounded-lg border border-gray-700 p-2 space-y-1">
+                  <div className="max-h-40 overflow-y-auto bg-background rounded-lg border border-border p-2 space-y-1">
                     {users.map(user => (
                       <label
                         key={user.id}
                         className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
-                          selectedUsers.includes(user.id) ? 'bg-primary-500/20' : 'hover:bg-gray-800'
+                          selectedUsers.includes(user.id) ? 'bg-primary-500/20' : 'hover:bg-card'
                         }`}
                       >
                         <input
                           type="checkbox"
                           checked={selectedUsers.includes(user.id)}
                           onChange={() => toggleUserSelection(user.id)}
-                          className="w-4 h-4 rounded border-gray-600 text-primary-500 focus:ring-primary-500"
+                          className="w-4 h-4 rounded border-border text-primary-500 focus:ring-primary-500"
                         />
                         <div className="w-8 h-8 bg-primary-500/10 rounded-full flex items-center justify-center">
                           <span className="text-primary-400 text-xs font-medium">
@@ -414,23 +414,23 @@ export default function Assignments() {
                           </span>
                         </div>
                         <div>
-                          <p className="text-sm text-gray-200">{user.full_name}</p>
-                          <p className="text-xs text-gray-500">{user.email}</p>
+                          <p className="text-sm text-foreground">{user.full_name}</p>
+                          <p className="text-xs text-muted-foreground">{user.email}</p>
                         </div>
                       </label>
                     ))}
                     {users.length === 0 && (
-                      <p className="text-sm text-gray-500 text-center py-4">No team members found</p>
+                      <p className="text-sm text-muted-foreground text-center py-4">No team members found</p>
                     )}
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     {selectedUsers.length} user(s) selected
                   </p>
                 </div>
 
                 {/* Assignment Type Toggle */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-secondary-foreground mb-2">
                     Assignment Type
                   </label>
                   <div className="flex gap-2">
@@ -438,8 +438,8 @@ export default function Assignments() {
                       onClick={() => setAssignmentType('scenario')}
                       className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-colors ${
                         assignmentType === 'scenario'
-                          ? 'bg-primary-600 text-white'
-                          : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                          ? 'bg-primary-600 text-foreground'
+                          : 'bg-muted text-secondary-foreground hover:bg-muted'
                       }`}
                     >
                       Single Scenario
@@ -448,8 +448,8 @@ export default function Assignments() {
                       onClick={() => setAssignmentType('course')}
                       className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-colors ${
                         assignmentType === 'course'
-                          ? 'bg-primary-600 text-white'
-                          : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                          ? 'bg-primary-600 text-foreground'
+                          : 'bg-muted text-secondary-foreground hover:bg-muted'
                       }`}
                     >
                       Full Course
@@ -460,14 +460,14 @@ export default function Assignments() {
                 {/* Select Scenario or Course */}
                 {assignmentType === 'scenario' ? (
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-secondary-foreground mb-2">
                       <BookOpen className="w-4 h-4 inline mr-2" />
                       Select Scenario
                     </label>
                     <select
                       value={selectedScenario}
                       onChange={(e) => setSelectedScenario(e.target.value)}
-                      className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
                     >
                       <option value="">Choose a scenario...</option>
                       {scenarios.map(scenario => (
@@ -479,14 +479,14 @@ export default function Assignments() {
                   </div>
                 ) : (
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-secondary-foreground mb-2">
                       <BookOpen className="w-4 h-4 inline mr-2" />
                       Select Course
                     </label>
                     <select
                       value={selectedCourse}
                       onChange={(e) => setSelectedCourse(e.target.value)}
-                      className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
                     >
                       <option value="">Choose a course...</option>
                       {courses.map(course => (
@@ -500,7 +500,7 @@ export default function Assignments() {
 
                 {/* Due Date */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-secondary-foreground mb-2">
                     <Calendar className="w-4 h-4 inline mr-2" />
                     Due Date
                   </label>
@@ -509,13 +509,13 @@ export default function Assignments() {
                     value={dueDate}
                     onChange={(e) => setDueDate(e.target.value)}
                     min={new Date().toISOString().split('T')[0]}
-                    className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
                   />
                 </div>
 
                 {/* Notes (optional) */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-secondary-foreground mb-2">
                     Notes (optional)
                   </label>
                   <textarea
@@ -523,7 +523,7 @@ export default function Assignments() {
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="Add any notes for this assignment..."
                     rows={2}
-                    className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+                    className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
                   />
                 </div>
 
@@ -535,20 +535,20 @@ export default function Assignments() {
                 )}
 
                 {/* Actions */}
-                <div className="flex justify-end gap-3 pt-4 border-t border-gray-700">
+                <div className="flex justify-end gap-3 pt-4 border-t border-border">
                   <button
                     onClick={() => {
                       setShowCreateModal(false);
                       resetForm();
                     }}
-                    className="px-4 py-2 text-gray-400 hover:text-gray-300"
+                    className="px-4 py-2 text-muted-foreground hover:text-secondary-foreground"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleCreateAssignment}
                     disabled={creating}
-                    className="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    className="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-foreground rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   >
                     {creating ? (
                       <>

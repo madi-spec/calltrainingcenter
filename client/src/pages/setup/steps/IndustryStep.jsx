@@ -67,10 +67,10 @@ export default function IndustryStep({ data, onComplete }) {
   return (
     <div className="space-y-6">
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-gray-100 mb-2">
+        <h2 className="text-2xl font-bold text-foreground mb-2">
           What industry are you in?
         </h2>
-        <p className="text-gray-400">
+        <p className="text-muted-foreground">
           This helps us customize the training experience for your team
         </p>
       </div>
@@ -90,7 +90,7 @@ export default function IndustryStep({ data, onComplete }) {
               className={`relative p-6 rounded-xl border-2 transition-all text-left ${
                 isSelected
                   ? `${colors.border} ${colors.bg} ring-2 ${colors.ring}`
-                  : `border-gray-700 bg-gray-800/50 ${colors.hover}`
+                  : `border-border bg-card/50 ${colors.hover}`
               }`}
             >
               {isSelected && (
@@ -103,20 +103,20 @@ export default function IndustryStep({ data, onComplete }) {
                 <Icon className={`w-6 h-6 ${colors.text}`} />
               </div>
 
-              <h3 className="text-lg font-semibold text-gray-100 mb-2">
+              <h3 className="text-lg font-semibold text-foreground mb-2">
                 {option.label}
               </h3>
 
-              <p className="text-sm text-gray-400 mb-4">
+              <p className="text-sm text-muted-foreground mb-4">
                 {option.description}
               </p>
 
               <div className="space-y-1">
-                <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Examples:
                 </p>
                 {option.examples.map((example, i) => (
-                  <p key={i} className="text-xs text-gray-400">
+                  <p key={i} className="text-xs text-muted-foreground">
                     • {example}
                   </p>
                 ))}
@@ -130,13 +130,13 @@ export default function IndustryStep({ data, onComplete }) {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gray-800/50 border border-gray-700 rounded-lg p-4"
+          className="bg-card/50 border border-border rounded-lg p-4"
         >
-          <p className="text-sm text-gray-300">
-            <span className="font-medium text-gray-100">Selected:</span>{' '}
+          <p className="text-sm text-secondary-foreground">
+            <span className="font-medium text-foreground">Selected:</span>{' '}
             {INDUSTRY_OPTIONS.find(o => o.id === selectedIndustry)?.label}
           </p>
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             We'll customize terminology, scenarios, and training content to match your industry.
           </p>
         </motion.div>

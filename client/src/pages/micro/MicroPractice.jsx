@@ -77,7 +77,7 @@ export default function MicroPractice() {
       case 'easy': return 'text-green-400 bg-green-500/20';
       case 'medium': return 'text-yellow-400 bg-yellow-500/20';
       case 'hard': return 'text-red-400 bg-red-500/20';
-      default: return 'text-gray-400 bg-gray-500/20';
+      default: return 'text-muted-foreground bg-muted/20';
     }
   };
 
@@ -98,10 +98,10 @@ export default function MicroPractice() {
         className="text-center"
       >
         <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-2xl mb-4 shadow-lg shadow-yellow-500/25">
-          <Zap className="w-8 h-8 text-white" />
+          <Zap className="w-8 h-8 text-foreground" />
         </div>
-        <h1 className="text-3xl font-bold text-white mb-2">Quick Drills</h1>
-        <p className="text-gray-400 max-w-xl mx-auto">
+        <h1 className="text-3xl font-bold text-foreground mb-2">Quick Drills</h1>
+        <p className="text-muted-foreground max-w-xl mx-auto">
           2-minute focused practice sessions to sharpen specific skills.
           Quick feedback, instant results.
         </p>
@@ -115,29 +115,29 @@ export default function MicroPractice() {
           transition={{ delay: 0.1 }}
           className="grid grid-cols-2 md:grid-cols-4 gap-4"
         >
-          <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
-            <div className="flex items-center gap-2 text-gray-400 mb-1">
+          <div className="bg-card rounded-xl p-4 border border-border">
+            <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Target className="w-4 h-4" />
               <span className="text-sm">Drills Completed</span>
             </div>
-            <p className="text-2xl font-bold text-white">{stats.total_sessions}</p>
+            <p className="text-2xl font-bold text-foreground">{stats.total_sessions}</p>
           </div>
-          <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
-            <div className="flex items-center gap-2 text-gray-400 mb-1">
+          <div className="bg-card rounded-xl p-4 border border-border">
+            <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Trophy className="w-4 h-4" />
               <span className="text-sm">Pass Rate</span>
             </div>
             <p className="text-2xl font-bold text-green-400">{stats.pass_rate}%</p>
           </div>
-          <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
-            <div className="flex items-center gap-2 text-gray-400 mb-1">
+          <div className="bg-card rounded-xl p-4 border border-border">
+            <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Star className="w-4 h-4" />
               <span className="text-sm">Avg Score</span>
             </div>
             <p className="text-2xl font-bold text-yellow-400">{stats.avg_score}</p>
           </div>
-          <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
-            <div className="flex items-center gap-2 text-gray-400 mb-1">
+          <div className="bg-card rounded-xl p-4 border border-border">
+            <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Clock className="w-4 h-4" />
               <span className="text-sm">Total Time</span>
             </div>
@@ -170,17 +170,17 @@ export default function MicroPractice() {
                     +{dailyChallenge.bonus_points} bonus points
                   </span>
                 </div>
-                <h3 className="text-xl font-semibold text-white">
+                <h3 className="text-xl font-semibold text-foreground">
                   {dailyChallenge.micro_scenario.name}
                 </h3>
-                <p className="text-sm text-gray-400 mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                   {dailyChallenge.micro_scenario.description}
                 </p>
               </div>
             </div>
             <button
               onClick={() => handleStart(dailyChallenge.micro_scenario.id)}
-              className="flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl transition-colors"
+              className="flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-foreground font-medium rounded-xl transition-colors"
             >
               Start
               <ChevronRight className="w-5 h-5" />
@@ -196,7 +196,7 @@ export default function MicroPractice() {
         transition={{ delay: 0.3 }}
         className="flex flex-wrap items-center gap-4"
       >
-        <div className="flex items-center gap-2 text-gray-400">
+        <div className="flex items-center gap-2 text-muted-foreground">
           <Filter className="w-4 h-4" />
           <span className="text-sm">Filter:</span>
         </div>
@@ -205,7 +205,7 @@ export default function MicroPractice() {
         <select
           value={selectedSkill || ''}
           onChange={(e) => setSelectedSkill(e.target.value || null)}
-          className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-200 text-sm"
+          className="px-4 py-2 bg-card border border-border rounded-lg text-foreground text-sm"
         >
           <option value="">All Skills</option>
           {skills.map((skill) => (
@@ -224,7 +224,7 @@ export default function MicroPractice() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors capitalize ${
                 selectedDifficulty === diff
                   ? getDifficultyColor(diff)
-                  : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                  : 'bg-card text-muted-foreground hover:bg-muted'
               }`}
             >
               {diff}
@@ -246,34 +246,34 @@ export default function MicroPractice() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 + index * 0.05 }}
-            className="bg-gray-800 rounded-xl border border-gray-700 p-5 hover:border-gray-600 transition-colors"
+            className="bg-card rounded-xl border border-border p-5 hover:border-border transition-colors"
           >
             <div className="flex items-start justify-between mb-3">
               <span className={`px-2 py-1 text-xs font-medium rounded-full ${getDifficultyColor(scenario.difficulty)}`}>
                 {scenario.difficulty}
               </span>
-              <div className="flex items-center gap-1 text-gray-500 text-sm">
+              <div className="flex items-center gap-1 text-muted-foreground text-sm">
                 <Clock className="w-4 h-4" />
                 <span>{Math.round((scenario.time_limit_seconds || 120) / 60)}m</span>
               </div>
             </div>
 
-            <h3 className="text-lg font-semibold text-white mb-2">
+            <h3 className="text-lg font-semibold text-foreground mb-2">
               {scenario.name}
             </h3>
 
-            <p className="text-sm text-gray-400 mb-3 line-clamp-2">
+            <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
               {scenario.description || scenario.context}
             </p>
 
             <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-500 bg-gray-750 px-2 py-1 rounded capitalize">
+              <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded capitalize">
                 {scenario.target_skill?.replace(/_/g, ' ')}
               </span>
 
               <button
                 onClick={() => handleStart(scenario.id)}
-                className="flex items-center gap-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+                className="flex items-center gap-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-foreground text-sm font-medium rounded-lg transition-colors"
               >
                 <Zap className="w-4 h-4" />
                 Start
@@ -281,11 +281,11 @@ export default function MicroPractice() {
             </div>
 
             {scenario.avg_score && (
-              <div className="mt-3 pt-3 border-t border-gray-700 flex items-center justify-between text-sm">
-                <span className="text-gray-500">Avg Score:</span>
+              <div className="mt-3 pt-3 border-t border-border flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">Avg Score:</span>
                 <span className={`font-medium ${
                   scenario.avg_score >= 80 ? 'text-green-400' :
-                  scenario.avg_score >= 60 ? 'text-yellow-400' : 'text-gray-400'
+                  scenario.avg_score >= 60 ? 'text-yellow-400' : 'text-muted-foreground'
                 }`}>
                   {scenario.avg_score}%
                 </span>
@@ -297,11 +297,11 @@ export default function MicroPractice() {
 
       {scenarios.length === 0 && (
         <div className="text-center py-12">
-          <Zap className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-200 mb-2">
+          <Zap className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+          <h3 className="text-xl font-semibold text-foreground mb-2">
             No drills found
           </h3>
-          <p className="text-gray-400">
+          <p className="text-muted-foreground">
             Try adjusting your filters or check back later.
           </p>
         </div>

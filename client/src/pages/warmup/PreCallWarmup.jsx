@@ -61,7 +61,7 @@ export default function PreCallWarmup() {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         onClick={handleBack}
-        className="flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition-colors"
+        className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to scenario
@@ -74,11 +74,11 @@ export default function PreCallWarmup() {
         className="text-center mb-8"
       >
         <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl mb-6 shadow-lg shadow-purple-500/25">
-          <Brain className="w-8 h-8 text-white" />
+          <Brain className="w-8 h-8 text-foreground" />
         </div>
-        <h1 className="text-3xl font-bold text-white mb-2">Pre-Call Warm-up</h1>
+        <h1 className="text-3xl font-bold text-foreground mb-2">Pre-Call Warm-up</h1>
         {scenario && (
-          <p className="text-gray-400">
+          <p className="text-muted-foreground">
             Prepare for: {scenario.name}
           </p>
         )}

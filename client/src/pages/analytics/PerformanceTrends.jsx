@@ -69,7 +69,7 @@ export default function PerformanceTrends() {
         <div className="text-red-400 text-center">
           <AlertCircle className="w-12 h-12 mx-auto mb-4" />
           <p>Error loading performance trends</p>
-          <p className="text-sm text-gray-400 mt-2">{error}</p>
+          <p className="text-sm text-muted-foreground mt-2">{error}</p>
         </div>
       </div>
     );
@@ -82,19 +82,19 @@ export default function PerformanceTrends() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-100 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
             <Activity className="w-7 h-7 text-primary-500" />
             Performance Trends & Insights
           </h1>
-          <p className="text-gray-400 mt-1">
+          <p className="text-muted-foreground mt-1">
             Track your progress and identify areas for improvement
           </p>
         </div>
 
         {/* Time Period Filter */}
         <div className="flex items-center gap-2">
-          <Calendar className="w-5 h-5 text-gray-500" />
-          <div className="flex bg-gray-800 rounded-lg p-1">
+          <Calendar className="w-5 h-5 text-muted-foreground" />
+          <div className="flex bg-card rounded-lg p-1">
             {[
               { value: '7d', label: '7 Days' },
               { value: '30d', label: '30 Days' },
@@ -106,8 +106,8 @@ export default function PerformanceTrends() {
                 onClick={() => setTimeframe(option.value)}
                 className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                   timeframe === option.value
-                    ? 'bg-primary-600 text-white'
-                    : 'text-gray-400 hover:text-gray-300'
+                    ? 'bg-primary-600 text-foreground'
+                    : 'text-muted-foreground hover:text-secondary-foreground'
                 }`}
               >
                 {option.label}
@@ -121,16 +121,16 @@ export default function PerformanceTrends() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gray-800 rounded-xl p-12 border border-gray-700 text-center"
+          className="bg-card rounded-xl p-12 border border-border text-center"
         >
-          <Target className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-100 mb-2">No Data Yet</h2>
-          <p className="text-gray-400 mb-6">
+          <Target className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-foreground mb-2">No Data Yet</h2>
+          <p className="text-muted-foreground mb-6">
             Complete some training sessions to see your performance trends and insights.
           </p>
           <a
             href="/scenarios"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
           >
             Start Training
           </a>
@@ -142,15 +142,15 @@ export default function PerformanceTrends() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+              className="bg-card rounded-xl p-6 border border-border"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="p-2 bg-blue-500/10 rounded-lg">
                   <Target className="w-5 h-5 text-blue-500" />
                 </div>
               </div>
-              <p className="text-gray-400 text-sm">Total Sessions</p>
-              <p className="text-3xl font-bold text-gray-100 mt-1">
+              <p className="text-muted-foreground text-sm">Total Sessions</p>
+              <p className="text-3xl font-bold text-foreground mt-1">
                 {data.totalSessions}
               </p>
             </motion.div>
@@ -159,7 +159,7 @@ export default function PerformanceTrends() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+              className="bg-card rounded-xl p-6 border border-border"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="p-2 bg-green-500/10 rounded-lg">
@@ -171,8 +171,8 @@ export default function PerformanceTrends() {
                   {data.userAverage >= 80 ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
                 </span>
               </div>
-              <p className="text-gray-400 text-sm">Your Average Score</p>
-              <p className="text-3xl font-bold text-gray-100 mt-1">
+              <p className="text-muted-foreground text-sm">Your Average Score</p>
+              <p className="text-3xl font-bold text-foreground mt-1">
                 {data.userAverage}%
               </p>
             </motion.div>
@@ -181,7 +181,7 @@ export default function PerformanceTrends() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+              className="bg-card rounded-xl p-6 border border-border"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="p-2 bg-purple-500/10 rounded-lg">
@@ -189,15 +189,15 @@ export default function PerformanceTrends() {
                 </div>
                 {data.teamAverage && (
                   <span className={`text-sm flex items-center gap-1 ${
-                    data.userAverage > data.teamAverage ? 'text-green-400' : 'text-gray-400'
+                    data.userAverage > data.teamAverage ? 'text-green-400' : 'text-muted-foreground'
                   }`}>
                     {data.userAverage > data.teamAverage ? '+' : ''}
                     {data.userAverage - data.teamAverage}%
                   </span>
                 )}
               </div>
-              <p className="text-gray-400 text-sm">Team Average</p>
-              <p className="text-3xl font-bold text-gray-100 mt-1">
+              <p className="text-muted-foreground text-sm">Team Average</p>
+              <p className="text-3xl font-bold text-foreground mt-1">
                 {data.teamAverage ? `${data.teamAverage}%` : 'N/A'}
               </p>
             </motion.div>
@@ -209,9 +209,9 @@ export default function PerformanceTrends() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+              className="bg-card rounded-xl p-6 border border-border"
             >
-              <h2 className="text-lg font-semibold text-gray-100 mb-6">Score Trends Over Time</h2>
+              <h2 className="text-lg font-semibold text-foreground mb-6">Score Trends Over Time</h2>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={data.scoresTrend}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
@@ -250,9 +250,9 @@ export default function PerformanceTrends() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+              className="bg-card rounded-xl p-6 border border-border"
             >
-              <h2 className="text-lg font-semibold text-gray-100 mb-6">Performance by Category</h2>
+              <h2 className="text-lg font-semibold text-foreground mb-6">Performance by Category</h2>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={data.categoryPerformance}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
@@ -286,29 +286,29 @@ export default function PerformanceTrends() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+              className="bg-card rounded-xl p-6 border border-border"
             >
               <div className="flex items-center gap-2 mb-4">
                 <div className="p-2 bg-green-500/10 rounded-lg">
                   <TrendingUp className="w-5 h-5 text-green-500" />
                 </div>
-                <h2 className="text-lg font-semibold text-gray-100">Getting Better At</h2>
+                <h2 className="text-lg font-semibold text-foreground">Getting Better At</h2>
               </div>
               {data.improvingCategories && data.improvingCategories.length > 0 ? (
                 <div className="space-y-3">
                   {data.improvingCategories.map((category) => (
                     <div
                       key={category.key}
-                      className="bg-gray-700/50 rounded-lg p-4 border border-gray-600"
+                      className="bg-muted/50 rounded-lg p-4 border border-border"
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <span className="font-medium text-gray-200">{category.category}</span>
+                        <span className="font-medium text-foreground">{category.category}</span>
                         <span className="text-green-400 flex items-center gap-1 text-sm font-semibold">
                           <TrendingUp className="w-4 h-4" />
                           +{category.change}%
                         </span>
                       </div>
-                      <div className="flex items-center justify-between text-sm text-gray-400">
+                      <div className="flex items-center justify-between text-sm text-muted-foreground">
                         <span>{category.previousAverage}% → {category.currentAverage}%</span>
                         <span className="text-green-400">+{category.percentChange}% improvement</span>
                       </div>
@@ -316,7 +316,7 @@ export default function PerformanceTrends() {
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-400 text-sm">
+                <p className="text-muted-foreground text-sm">
                   Keep practicing to see your improvements!
                 </p>
               )}
@@ -327,23 +327,23 @@ export default function PerformanceTrends() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+              className="bg-card rounded-xl p-6 border border-border"
             >
               <div className="flex items-center gap-2 mb-4">
                 <div className="p-2 bg-yellow-500/10 rounded-lg">
                   <AlertCircle className="w-5 h-5 text-yellow-500" />
                 </div>
-                <h2 className="text-lg font-semibold text-gray-100">Needs Work</h2>
+                <h2 className="text-lg font-semibold text-foreground">Needs Work</h2>
               </div>
               {data.needsWorkCategories && data.needsWorkCategories.length > 0 ? (
                 <div className="space-y-3">
                   {data.needsWorkCategories.map((category) => (
                     <div
                       key={category.key}
-                      className="bg-gray-700/50 rounded-lg p-4 border border-gray-600"
+                      className="bg-muted/50 rounded-lg p-4 border border-border"
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <span className="font-medium text-gray-200">{category.category}</span>
+                        <span className="font-medium text-foreground">{category.category}</span>
                         <span className={`flex items-center gap-1 text-sm font-semibold ${
                           category.change < 0 ? 'text-red-400' : 'text-yellow-400'
                         }`}>
@@ -351,7 +351,7 @@ export default function PerformanceTrends() {
                           {category.currentAverage}%
                         </span>
                       </div>
-                      <div className="text-sm text-gray-400">
+                      <div className="text-sm text-muted-foreground">
                         {category.change < 0 ? (
                           <span className="text-red-400">{category.change}% decline</span>
                         ) : (
@@ -362,7 +362,7 @@ export default function PerformanceTrends() {
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-400 text-sm">
+                <p className="text-muted-foreground text-sm">
                   Great job! All categories are performing well.
                 </p>
               )}

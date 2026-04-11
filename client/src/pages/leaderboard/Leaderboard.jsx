@@ -47,11 +47,11 @@ export default function Leaderboard() {
       case 1:
         return <Crown className="w-6 h-6 text-yellow-400" />;
       case 2:
-        return <Medal className="w-6 h-6 text-gray-300" />;
+        return <Medal className="w-6 h-6 text-secondary-foreground" />;
       case 3:
         return <Medal className="w-6 h-6 text-amber-600" />;
       default:
-        return <span className="text-lg font-bold text-gray-500">#{rank}</span>;
+        return <span className="text-lg font-bold text-muted-foreground">#{rank}</span>;
     }
   };
 
@@ -60,11 +60,11 @@ export default function Leaderboard() {
       case 1:
         return 'bg-gradient-to-r from-yellow-500/20 to-yellow-600/10 border-yellow-500/30';
       case 2:
-        return 'bg-gradient-to-r from-gray-400/20 to-gray-500/10 border-gray-400/30';
+        return 'bg-gradient-to-r from-muted/20 to-muted/10 border-border/30';
       case 3:
         return 'bg-gradient-to-r from-amber-600/20 to-amber-700/10 border-amber-600/30';
       default:
-        return 'bg-gray-800 border-gray-700';
+        return 'bg-card border-border';
     }
   };
 
@@ -83,23 +83,23 @@ export default function Leaderboard() {
         <div className="inline-flex items-center justify-center w-16 h-16 bg-yellow-500/10 rounded-full mb-4">
           <Trophy className="w-8 h-8 text-yellow-500" />
         </div>
-        <h1 className="text-2xl font-bold text-gray-100">Leaderboard</h1>
-        <p className="text-gray-400 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Leaderboard</h1>
+        <p className="text-muted-foreground mt-1">
           See how you rank against your teammates
         </p>
       </div>
 
       {/* Timeframe Selector */}
       <div className="flex justify-center">
-        <div className="flex bg-gray-800 rounded-lg p-1">
+        <div className="flex bg-card rounded-lg p-1">
           {['weekly', 'monthly', 'allTime'].map((tf) => (
             <button
               key={tf}
               onClick={() => setTimeframe(tf)}
               className={`px-6 py-2 rounded-lg font-medium transition-colors ${
                 timeframe === tf
-                  ? 'bg-primary-600 text-white'
-                  : 'text-gray-400 hover:text-gray-300'
+                  ? 'bg-primary-600 text-foreground'
+                  : 'text-muted-foreground hover:text-secondary-foreground'
               }`}
             >
               {tf === 'weekly' ? 'This Week' : tf === 'monthly' ? 'This Month' : 'All Time'}
@@ -121,13 +121,13 @@ export default function Leaderboard() {
                 <span className="text-2xl font-bold text-primary-400">#{userRank.rank}</span>
               </div>
               <div>
-                <p className="text-gray-300">Your Current Rank</p>
+                <p className="text-secondary-foreground">Your Current Rank</p>
                 <div className="flex items-center gap-4 mt-1">
-                  <span className="text-sm text-gray-400 flex items-center gap-1">
+                  <span className="text-sm text-muted-foreground flex items-center gap-1">
                     <Star className="w-4 h-4 text-yellow-400" />
                     {userRank.points?.toLocaleString()} pts
                   </span>
-                  <span className="text-sm text-gray-400 flex items-center gap-1">
+                  <span className="text-sm text-muted-foreground flex items-center gap-1">
                     <Target className="w-4 h-4 text-blue-400" />
                     {userRank.sessions} sessions
                   </span>
@@ -178,20 +178,20 @@ export default function Leaderboard() {
                         rank <= 3 ? 'bg-white/10' : 'bg-primary-500/10'
                       }`}>
                         <span className={`font-medium ${
-                          rank <= 3 ? 'text-white' : 'text-primary-400'
+                          rank <= 3 ? 'text-foreground' : 'text-primary-400'
                         }`}>
                           {user.name?.charAt(0).toUpperCase()}
                         </span>
                       </div>
                       <div>
                         <p className={`font-medium ${
-                          isCurrentUser ? 'text-primary-400' : 'text-gray-200'
+                          isCurrentUser ? 'text-primary-400' : 'text-foreground'
                         }`}>
                           {user.name}
-                          {isCurrentUser && <span className="text-xs ml-2 text-gray-400">(You)</span>}
+                          {isCurrentUser && <span className="text-xs ml-2 text-muted-foreground">(You)</span>}
                         </p>
                         <div className="flex items-center gap-3 mt-0.5">
-                          <span className="text-sm text-gray-400">
+                          <span className="text-sm text-muted-foreground">
                             Level {user.level || 1}
                           </span>
                           {user.streak > 0 && (
@@ -208,19 +208,19 @@ export default function Leaderboard() {
                   {/* Stats */}
                   <div className="flex items-center gap-6">
                     <div className="text-right hidden sm:block">
-                      <p className="text-sm text-gray-400">Sessions</p>
-                      <p className="font-semibold text-gray-200">{user.sessions}</p>
+                      <p className="text-sm text-muted-foreground">Sessions</p>
+                      <p className="font-semibold text-foreground">{user.sessions}</p>
                     </div>
                     <div className="text-right hidden sm:block">
-                      <p className="text-sm text-gray-400">Avg Score</p>
+                      <p className="text-sm text-muted-foreground">Avg Score</p>
                       <p className={`font-semibold ${
-                        user.avg_score >= 80 ? 'text-green-400' : user.avg_score >= 60 ? 'text-yellow-400' : 'text-gray-400'
+                        user.avg_score >= 80 ? 'text-green-400' : user.avg_score >= 60 ? 'text-yellow-400' : 'text-muted-foreground'
                       }`}>
                         {user.avg_score}%
                       </p>
                     </div>
                     <div className="text-right min-w-[80px]">
-                      <p className="text-sm text-gray-400">Points</p>
+                      <p className="text-sm text-muted-foreground">Points</p>
                       <p className="font-bold text-yellow-400">{user.points?.toLocaleString()}</p>
                     </div>
                     {!isCurrentUser && (
@@ -245,13 +245,13 @@ export default function Leaderboard() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="bg-gray-800 rounded-xl p-12 border border-gray-700 text-center"
+            className="bg-card rounded-xl p-12 border border-border text-center"
           >
-            <Trophy className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-100 mb-2">
+            <Trophy className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-foreground mb-2">
               No rankings yet
             </h3>
-            <p className="text-gray-400">
+            <p className="text-muted-foreground">
               Complete training sessions to appear on the leaderboard
             </p>
           </motion.div>

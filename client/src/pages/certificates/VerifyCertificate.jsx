@@ -60,17 +60,17 @@ export default function VerifyCertificate() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary-500 mx-auto mb-4"></div>
-          <p className="text-gray-400">Verifying certificate...</p>
+          <p className="text-muted-foreground">Verifying certificate...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 py-12 px-4">
+    <div className="min-h-screen bg-background py-12 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <motion.div
@@ -80,11 +80,11 @@ export default function VerifyCertificate() {
         >
           <div className="flex items-center justify-center gap-3 mb-4">
             <Award className="w-12 h-12 text-primary-500" />
-            <h1 className="text-4xl font-bold text-white">
+            <h1 className="text-4xl font-bold text-foreground">
               Certificate Verification
             </h1>
           </div>
-          <p className="text-gray-400 text-lg">
+          <p className="text-muted-foreground text-lg">
             Verify the authenticity of training certificates
           </p>
         </motion.div>
@@ -94,11 +94,11 @@ export default function VerifyCertificate() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-gray-800 rounded-xl p-8 border border-gray-700 mb-8"
+            className="bg-card rounded-xl p-8 border border-border mb-8"
           >
             <form onSubmit={handleSearch} className="space-y-4">
               <div>
-                <label htmlFor="code" className="block text-sm font-medium text-gray-300 mb-2">
+                <label htmlFor="code" className="block text-sm font-medium text-secondary-foreground mb-2">
                   Enter Verification Code
                 </label>
                 <div className="flex gap-3">
@@ -108,18 +108,18 @@ export default function VerifyCertificate() {
                     value={searchCode}
                     onChange={(e) => setSearchCode(e.target.value)}
                     placeholder="XXXX-XXXX-XXXX"
-                    className="flex-1 px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 font-mono"
+                    className="flex-1 px-4 py-3 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 font-mono"
                   />
                   <button
                     type="submit"
-                    className="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+                    className="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-foreground rounded-lg font-medium transition-colors flex items-center gap-2"
                   >
                     <Search className="w-5 h-5" />
                     Verify
                   </button>
                 </div>
               </div>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 Enter the verification code found on the certificate to check its authenticity.
               </p>
             </form>
@@ -131,21 +131,21 @@ export default function VerifyCertificate() {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-gray-800 rounded-xl p-8 border border-red-500/50"
+            className="bg-card rounded-xl p-8 border border-red-500/50"
           >
             <div className="text-center">
               <XCircle className="w-20 h-20 text-red-500 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-white mb-2">
+              <h2 className="text-2xl font-bold text-foreground mb-2">
                 Certificate Not Found
               </h2>
-              <p className="text-gray-400 mb-6">{error}</p>
+              <p className="text-muted-foreground mb-6">{error}</p>
               <button
                 onClick={() => {
                   setSearchCode('');
                   setError(null);
                   navigate('/verify-certificate');
                 }}
-                className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors"
+                className="px-6 py-3 bg-muted hover:bg-muted text-foreground rounded-lg font-medium transition-colors"
               >
                 Try Another Code
               </button>
@@ -164,7 +164,7 @@ export default function VerifyCertificate() {
               <div className="flex items-center gap-4">
                 <CheckCircle className="w-12 h-12 text-green-500 flex-shrink-0" />
                 <div>
-                  <h2 className="text-2xl font-bold text-white mb-1">
+                  <h2 className="text-2xl font-bold text-foreground mb-1">
                     Certificate Verified
                   </h2>
                   <p className="text-green-400">
@@ -175,7 +175,7 @@ export default function VerifyCertificate() {
             </div>
 
             {/* Certificate Details Card */}
-            <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
+            <div className="bg-card rounded-xl border border-border overflow-hidden">
               {/* Header with gradient */}
               <div className="bg-gradient-to-r from-primary-600 to-primary-800 p-8">
                 <div className="flex items-center gap-4">
@@ -183,11 +183,11 @@ export default function VerifyCertificate() {
                     {certificate.course?.icon ? (
                       <span className="text-3xl">{certificate.course.icon}</span>
                     ) : (
-                      <Award className="w-8 h-8 text-white" />
+                      <Award className="w-8 h-8 text-foreground" />
                     )}
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-white mb-1">
+                    <h3 className="text-2xl font-bold text-foreground mb-1">
                       {certificate.course?.name || 'Course Certificate'}
                     </h3>
                     {certificate.course?.badge_name && (
@@ -206,24 +206,24 @@ export default function VerifyCertificate() {
               <div className="p-8 grid md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
-                    <div className="flex items-center gap-2 text-gray-400 mb-2">
+                    <div className="flex items-center gap-2 text-muted-foreground mb-2">
                       <User className="w-4 h-4" />
                       <span className="text-sm font-medium">Recipient</span>
                     </div>
-                    <p className="text-white font-semibold text-lg">
+                    <p className="text-foreground font-semibold text-lg">
                       {certificate.user?.first_name} {certificate.user?.last_name}
                     </p>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-muted-foreground text-sm">
                       {certificate.user?.email}
                     </p>
                   </div>
 
                   <div>
-                    <div className="flex items-center gap-2 text-gray-400 mb-2">
+                    <div className="flex items-center gap-2 text-muted-foreground mb-2">
                       <BookOpen className="w-4 h-4" />
                       <span className="text-sm font-medium">Course</span>
                     </div>
-                    <p className="text-white font-semibold">
+                    <p className="text-foreground font-semibold">
                       {certificate.course?.name}
                     </p>
                     {certificate.course?.category && (
@@ -236,11 +236,11 @@ export default function VerifyCertificate() {
 
                 <div className="space-y-4">
                   <div>
-                    <div className="flex items-center gap-2 text-gray-400 mb-2">
+                    <div className="flex items-center gap-2 text-muted-foreground mb-2">
                       <Calendar className="w-4 h-4" />
                       <span className="text-sm font-medium">Issue Date</span>
                     </div>
-                    <p className="text-white font-semibold">
+                    <p className="text-foreground font-semibold">
                       {new Date(certificate.issued_at).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
@@ -251,7 +251,7 @@ export default function VerifyCertificate() {
 
                   {certificate.score > 0 && (
                     <div>
-                      <div className="flex items-center gap-2 text-gray-400 mb-2">
+                      <div className="flex items-center gap-2 text-muted-foreground mb-2">
                         <Trophy className="w-4 h-4" />
                         <span className="text-sm font-medium">Overall Score</span>
                       </div>
@@ -259,7 +259,7 @@ export default function VerifyCertificate() {
                         <div className="text-3xl font-bold text-primary-400">
                           {certificate.score}%
                         </div>
-                        <div className="flex-1 bg-gray-700 rounded-full h-2">
+                        <div className="flex-1 bg-muted rounded-full h-2">
                           <div
                             className="bg-primary-500 h-2 rounded-full transition-all"
                             style={{ width: `${certificate.score}%` }}
@@ -273,8 +273,8 @@ export default function VerifyCertificate() {
 
               {/* Verification Code */}
               <div className="px-8 pb-8">
-                <div className="bg-gray-900 rounded-lg p-4 border border-gray-700">
-                  <p className="text-xs text-gray-500 mb-1">Verification Code</p>
+                <div className="bg-background rounded-lg p-4 border border-border">
+                  <p className="text-xs text-muted-foreground mb-1">Verification Code</p>
                   <p className="font-mono text-lg text-primary-400 font-bold">
                     {certificate.verification_code}
                   </p>
@@ -283,8 +283,8 @@ export default function VerifyCertificate() {
             </div>
 
             {/* Footer Info */}
-            <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700/50">
-              <p className="text-sm text-gray-400 text-center">
+            <div className="bg-card/50 rounded-xl p-6 border border-border/50">
+              <p className="text-sm text-muted-foreground text-center">
                 This certificate was verified on {new Date().toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
@@ -297,7 +297,7 @@ export default function VerifyCertificate() {
             <div className="flex justify-center gap-4">
               <button
                 onClick={() => window.print()}
-                className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors"
+                className="px-6 py-3 bg-muted hover:bg-muted text-foreground rounded-lg font-medium transition-colors"
               >
                 Print Verification
               </button>
@@ -307,7 +307,7 @@ export default function VerifyCertificate() {
                   setCertificate(null);
                   navigate('/verify-certificate');
                 }}
-                className="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors"
+                className="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-foreground rounded-lg font-medium transition-colors"
               >
                 Verify Another
               </button>

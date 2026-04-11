@@ -76,7 +76,7 @@ export default function TeamSetupStep({ data, allStepData, onComplete, authFetch
           <Users className="w-5 h-5 text-primary-400 mt-0.5" />
           <div>
             <h4 className="font-medium text-primary-300 mb-1">Build Your Team</h4>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-muted-foreground">
               Invite your team members to start training. You can always add more people later
               from the Team Settings page.
             </p>
@@ -85,21 +85,21 @@ export default function TeamSetupStep({ data, allStepData, onComplete, authFetch
       </div>
 
       {/* Invite Form */}
-      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-        <h3 className="text-lg font-semibold text-gray-100 mb-4">Invite Team Members</h3>
+      <div className="bg-card rounded-xl p-6 border border-border">
+        <h3 className="text-lg font-semibold text-foreground mb-4">Invite Team Members</h3>
 
         <div className="space-y-4">
           {invites.map((invite, index) => (
             <div key={index} className="flex gap-3">
               <div className="flex-1">
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <input
                     type="email"
                     value={invite.email}
                     onChange={(e) => updateInvite(index, 'email', e.target.value)}
                     disabled={sentInvites.includes(invite.email)}
-                    className={`w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-primary-500 ${
+                    className={`w-full pl-10 pr-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary-500 ${
                       sentInvites.includes(invite.email) ? 'opacity-50' : ''
                     }`}
                     placeholder="email@example.com"
@@ -114,7 +114,7 @@ export default function TeamSetupStep({ data, allStepData, onComplete, authFetch
                 value={invite.role}
                 onChange={(e) => updateInvite(index, 'role', e.target.value)}
                 disabled={sentInvites.includes(invite.email)}
-                className="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-primary-500"
+                className="px-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary-500"
               >
                 {roles.map(role => (
                   <option key={role.value} value={role.value}>
@@ -126,7 +126,7 @@ export default function TeamSetupStep({ data, allStepData, onComplete, authFetch
               <button
                 onClick={() => removeInvite(index)}
                 disabled={invites.length === 1 || sentInvites.includes(invite.email)}
-                className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-50"
+                className="p-2 text-muted-foreground hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-50"
               >
                 <Trash2 className="w-5 h-5" />
               </button>
@@ -143,13 +143,13 @@ export default function TeamSetupStep({ data, allStepData, onComplete, authFetch
         </div>
 
         {/* Role Descriptions */}
-        <div className="mt-6 pt-6 border-t border-gray-700">
-          <h4 className="text-sm font-medium text-gray-300 mb-3">Role Permissions</h4>
+        <div className="mt-6 pt-6 border-t border-border">
+          <h4 className="text-sm font-medium text-secondary-foreground mb-3">Role Permissions</h4>
           <div className="grid md:grid-cols-3 gap-4">
             {roles.map(role => (
-              <div key={role.value} className="p-3 bg-gray-700/50 rounded-lg">
-                <h5 className="font-medium text-gray-200 mb-1">{role.label}</h5>
-                <p className="text-xs text-gray-400">{role.description}</p>
+              <div key={role.value} className="p-3 bg-muted/50 rounded-lg">
+                <h5 className="font-medium text-foreground mb-1">{role.label}</h5>
+                <p className="text-xs text-muted-foreground">{role.description}</p>
               </div>
             ))}
           </div>
@@ -173,7 +173,7 @@ export default function TeamSetupStep({ data, allStepData, onComplete, authFetch
         <button
           onClick={handleSkip}
           disabled={sending}
-          className="text-gray-400 hover:text-gray-300 transition-colors"
+          className="text-muted-foreground hover:text-secondary-foreground transition-colors"
         >
           Skip for now
         </button>
@@ -181,7 +181,7 @@ export default function TeamSetupStep({ data, allStepData, onComplete, authFetch
         <button
           onClick={handleSendInvites}
           disabled={sending || invites.every(inv => !inv.email || sentInvites.includes(inv.email))}
-          className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors disabled:opacity-50"
         >
           {sending ? (
             <>

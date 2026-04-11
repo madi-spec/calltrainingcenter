@@ -77,12 +77,12 @@ function Home() {
         className="text-center mb-12"
       >
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 mb-6 shadow-lg shadow-blue-500/25">
-          <Phone className="w-8 h-8 text-white" />
+          <Phone className="w-8 h-8 text-foreground" />
         </div>
-        <h1 className="text-4xl font-bold text-white mb-4">
+        <h1 className="text-4xl font-bold text-foreground mb-4">
           CSR Training Simulator
         </h1>
-        <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           Practice handling real customer scenarios with AI-powered voice calls.
           Get instant coaching feedback to improve your skills.
         </p>
@@ -136,14 +136,14 @@ function Home() {
           >
             Hard
           </FilterButton>
-          <div className="w-px bg-gray-700 mx-1 hidden sm:block" />
+          <div className="w-px bg-muted mx-1 hidden sm:block" />
           <button
             onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
             className={`
               flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200
               ${showFavoritesOnly
                 ? 'bg-red-500/20 text-red-400 border border-red-500/30'
-                : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'}
+                : 'bg-card text-muted-foreground hover:bg-muted hover:text-foreground'}
             `}
           >
             <Heart className="w-4 h-4" fill={showFavoritesOnly ? 'currentColor' : 'none'} />
@@ -161,7 +161,7 @@ function Home() {
           {canCreate && (
             <Link
               to="/builder"
-              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm font-medium transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground rounded-lg text-sm font-medium transition-colors"
             >
               <Plus className="w-4 h-4" />
               Create Scenario
@@ -178,10 +178,10 @@ function Home() {
               key={i}
               className="glass-card p-6 animate-pulse"
             >
-              <div className="h-6 bg-gray-700 rounded w-3/4 mb-4" />
-              <div className="h-4 bg-gray-700 rounded w-1/2 mb-2" />
-              <div className="h-20 bg-gray-700 rounded mb-4" />
-              <div className="h-10 bg-gray-700 rounded" />
+              <div className="h-6 bg-muted rounded w-3/4 mb-4" />
+              <div className="h-4 bg-muted rounded w-1/2 mb-2" />
+              <div className="h-20 bg-muted rounded mb-4" />
+              <div className="h-10 bg-muted rounded" />
             </div>
           ))}
         </div>
@@ -196,11 +196,11 @@ function Home() {
           animate={{ opacity: 1 }}
           className="text-center py-16"
         >
-          <Filter className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-400 mb-2">
+          <Filter className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-muted-foreground mb-2">
             No scenarios found
           </h3>
-          <p className="text-gray-500">
+          <p className="text-muted-foreground">
             Try adjusting your search or filter criteria
           </p>
         </motion.div>
@@ -211,10 +211,10 @@ function Home() {
 
 function FilterButton({ children, active, onClick, color = 'blue' }) {
   const colors = {
-    blue: 'bg-blue-600 text-white',
-    green: 'bg-green-600 text-white',
-    yellow: 'bg-yellow-600 text-white',
-    red: 'bg-red-600 text-white'
+    blue: 'bg-blue-600 text-foreground',
+    green: 'bg-green-600 text-foreground',
+    yellow: 'bg-yellow-600 text-foreground',
+    red: 'bg-red-600 text-foreground'
   };
 
   return (
@@ -223,7 +223,7 @@ function FilterButton({ children, active, onClick, color = 'blue' }) {
       className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
         active
           ? colors[color]
-          : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
+          : 'bg-card text-muted-foreground hover:bg-muted hover:text-foreground'
       }`}
     >
       {children}

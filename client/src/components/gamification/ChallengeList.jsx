@@ -38,12 +38,12 @@ export default function ChallengeList({ maxDisplay = 3, showViewAll = true }) {
 
   if (loading) {
     return (
-      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+      <div className="bg-card rounded-xl p-6 border border-border">
         <div className="animate-pulse">
-          <div className="h-6 w-40 bg-gray-700 rounded mb-4" />
+          <div className="h-6 w-40 bg-muted rounded mb-4" />
           <div className="space-y-3">
             {[1, 2, 3].map(i => (
-              <div key={i} className="h-24 bg-gray-700 rounded-xl" />
+              <div key={i} className="h-24 bg-muted rounded-xl" />
             ))}
           </div>
         </div>
@@ -58,7 +58,7 @@ export default function ChallengeList({ maxDisplay = 3, showViewAll = true }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+      className="bg-card rounded-xl p-6 border border-border"
     >
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
@@ -66,14 +66,14 @@ export default function ChallengeList({ maxDisplay = 3, showViewAll = true }) {
             <Trophy className="w-5 h-5 text-yellow-400" />
           </div>
           <div>
-            <h2 className="font-semibold text-gray-100">Daily Challenges</h2>
-            <p className="text-xs text-gray-400">
+            <h2 className="font-semibold text-foreground">Daily Challenges</h2>
+            <p className="text-xs text-muted-foreground">
               {completedCount}/{challenges.length} completed
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <Calendar className="w-4 h-4" />
           <span>Resets at midnight</span>
         </div>
@@ -81,9 +81,9 @@ export default function ChallengeList({ maxDisplay = 3, showViewAll = true }) {
 
       {challenges.length === 0 ? (
         <div className="text-center py-8">
-          <Trophy className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-          <p className="text-gray-400 mb-1">No challenges available</p>
-          <p className="text-sm text-gray-500">
+          <Trophy className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+          <p className="text-muted-foreground mb-1">No challenges available</p>
+          <p className="text-sm text-muted-foreground">
             Check back tomorrow for new challenges!
           </p>
         </div>

@@ -104,18 +104,18 @@ export default function AICustomerBehaviorStep({ data, onComplete, authFetch, or
           <div className="p-2 bg-blue-500/20 rounded-lg">
             <Bot className="w-6 h-6 text-blue-400" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-100">AI Customer Behavior</h3>
+          <h3 className="text-lg font-semibold text-foreground">AI Customer Behavior</h3>
         </div>
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-muted-foreground">
           Configure how AI customers behave during training scenarios. These settings affect the difficulty and realism of practice calls.
         </p>
       </div>
 
       {/* Single Select Options */}
       {Object.entries(BEHAVIOR_OPTIONS).map(([key, config]) => (
-        <div key={key} className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-          <h4 className="text-md font-semibold text-gray-100 mb-2">{config.title}</h4>
-          <p className="text-sm text-gray-400 mb-4">{config.description}</p>
+        <div key={key} className="bg-card rounded-xl p-6 border border-border">
+          <h4 className="text-md font-semibold text-foreground mb-2">{config.title}</h4>
+          <p className="text-sm text-muted-foreground mb-4">{config.description}</p>
 
           <div className="space-y-3">
             {config.options.map((option) => (
@@ -127,15 +127,15 @@ export default function AICustomerBehaviorStep({ data, onComplete, authFetch, or
                 whileTap={{ scale: 0.99 }}
                 className={`w-full p-4 rounded-lg border text-left transition-colors ${
                   formData[key] === option.value
-                    ? 'bg-primary-500/20 border-primary-500 text-gray-100'
-                    : 'bg-gray-750 border-gray-600 text-gray-300 hover:bg-gray-700'
+                    ? 'bg-primary-500/20 border-primary-500 text-foreground'
+                    : 'bg-muted border-border text-secondary-foreground hover:bg-muted'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="font-medium">{option.label}</span>
                     {option.description && (
-                      <p className="text-sm text-gray-400 mt-1">{option.description}</p>
+                      <p className="text-sm text-muted-foreground mt-1">{option.description}</p>
                     )}
                   </div>
                   {formData[key] === option.value && (
@@ -149,9 +149,9 @@ export default function AICustomerBehaviorStep({ data, onComplete, authFetch, or
       ))}
 
       {/* Escalation Triggers */}
-      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-        <h4 className="text-md font-semibold text-gray-100 mb-2">Escalation Triggers</h4>
-        <p className="text-sm text-gray-400 mb-4">
+      <div className="bg-card rounded-xl p-6 border border-border">
+        <h4 className="text-md font-semibold text-foreground mb-2">Escalation Triggers</h4>
+        <p className="text-sm text-muted-foreground mb-4">
           What should cause customers to become more upset? Select all that apply.
         </p>
 
@@ -163,18 +163,18 @@ export default function AICustomerBehaviorStep({ data, onComplete, authFetch, or
               onClick={() => toggleArrayItem('escalationTriggers', option.value)}
               className={`p-3 rounded-lg border text-left transition-colors ${
                 formData.escalationTriggers.includes(option.value)
-                  ? 'bg-red-500/20 border-red-500/50 text-gray-100'
-                  : 'bg-gray-750 border-gray-600 text-gray-300 hover:bg-gray-700'
+                  ? 'bg-red-500/20 border-red-500/50 text-foreground'
+                  : 'bg-muted border-border text-secondary-foreground hover:bg-muted'
               }`}
             >
               <div className="flex items-center gap-2">
                 <div className={`w-4 h-4 rounded border flex items-center justify-center ${
                   formData.escalationTriggers.includes(option.value)
                     ? 'bg-red-500 border-red-500'
-                    : 'border-gray-500'
+                    : 'border-border'
                 }`}>
                   {formData.escalationTriggers.includes(option.value) && (
-                    <Check className="w-3 h-3 text-white" />
+                    <Check className="w-3 h-3 text-foreground" />
                   )}
                 </div>
                 <span className="text-sm">{option.label}</span>
@@ -185,9 +185,9 @@ export default function AICustomerBehaviorStep({ data, onComplete, authFetch, or
       </div>
 
       {/* De-escalation Triggers */}
-      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-        <h4 className="text-md font-semibold text-gray-100 mb-2">De-escalation Triggers</h4>
-        <p className="text-sm text-gray-400 mb-4">
+      <div className="bg-card rounded-xl p-6 border border-border">
+        <h4 className="text-md font-semibold text-foreground mb-2">De-escalation Triggers</h4>
+        <p className="text-sm text-muted-foreground mb-4">
           What should help calm frustrated customers? Select all that apply.
         </p>
 
@@ -199,18 +199,18 @@ export default function AICustomerBehaviorStep({ data, onComplete, authFetch, or
               onClick={() => toggleArrayItem('deescalationTriggers', option.value)}
               className={`p-3 rounded-lg border text-left transition-colors ${
                 formData.deescalationTriggers.includes(option.value)
-                  ? 'bg-green-500/20 border-green-500/50 text-gray-100'
-                  : 'bg-gray-750 border-gray-600 text-gray-300 hover:bg-gray-700'
+                  ? 'bg-green-500/20 border-green-500/50 text-foreground'
+                  : 'bg-muted border-border text-secondary-foreground hover:bg-muted'
               }`}
             >
               <div className="flex items-center gap-2">
                 <div className={`w-4 h-4 rounded border flex items-center justify-center ${
                   formData.deescalationTriggers.includes(option.value)
                     ? 'bg-green-500 border-green-500'
-                    : 'border-gray-500'
+                    : 'border-border'
                 }`}>
                   {formData.deescalationTriggers.includes(option.value) && (
-                    <Check className="w-3 h-3 text-white" />
+                    <Check className="w-3 h-3 text-foreground" />
                   )}
                 </div>
                 <span className="text-sm">{option.label}</span>
@@ -235,7 +235,7 @@ export default function AICustomerBehaviorStep({ data, onComplete, authFetch, or
         <button
           type="submit"
           disabled={saving}
-          className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors disabled:opacity-50"
         >
           {saving ? (
             <>

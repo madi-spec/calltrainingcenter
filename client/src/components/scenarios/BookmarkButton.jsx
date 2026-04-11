@@ -75,9 +75,9 @@ export default function BookmarkButton({
     return (
       <button
         disabled
-        className={`rounded-lg bg-gray-700/50 ${sizeClasses[size]}`}
+        className={`rounded-lg bg-muted/50 ${sizeClasses[size]}`}
       >
-        <Loader2 className={`${iconSizes[size]} text-gray-500 animate-spin`} />
+        <Loader2 className={`${iconSizes[size]} text-muted-foreground animate-spin`} />
       </button>
     );
   }
@@ -92,7 +92,7 @@ export default function BookmarkButton({
         ${sizeClasses[size]}
         ${isFavorite
           ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30'
-          : 'bg-gray-700/50 text-gray-400 hover:bg-gray-700 hover:text-gray-300'}
+          : 'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-secondary-foreground'}
       `}
       title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
     >

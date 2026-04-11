@@ -115,11 +115,11 @@ export default function Recommendations() {
         className="flex flex-col md:flex-row md:items-center md:justify-between gap-4"
       >
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-3">
+          <h1 className="text-2xl font-bold text-foreground flex items-center gap-3">
             <Target className="w-7 h-7 text-purple-400" />
             Personalized Recommendations
           </h1>
-          <p className="text-gray-400 mt-1">
+          <p className="text-muted-foreground mt-1">
             AI-powered suggestions based on your skill profile
           </p>
         </div>
@@ -127,7 +127,7 @@ export default function Recommendations() {
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-200 rounded-lg transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted text-foreground rounded-lg transition-colors disabled:opacity-50"
         >
           <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
           Refresh
@@ -142,8 +142,8 @@ export default function Recommendations() {
           transition={{ delay: 0.1 }}
           className="lg:col-span-1"
         >
-          <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
-            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <div className="bg-card rounded-xl border border-border p-6">
+            <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-purple-400" />
               Skill Profile
             </h2>
@@ -160,7 +160,7 @@ export default function Recommendations() {
                   {skillProfile.weakest_skills?.length > 0 && (
                     <div className="p-3 bg-red-500/10 rounded-lg border border-red-500/20">
                       <p className="text-xs text-red-400 font-medium mb-1">Focus Areas</p>
-                      <p className="text-sm text-gray-300">
+                      <p className="text-sm text-secondary-foreground">
                         {skillProfile.weakest_skills.map(s => s.replace(/_/g, ' ')).join(', ')}
                       </p>
                     </div>
@@ -169,7 +169,7 @@ export default function Recommendations() {
                   {skillProfile.strongest_skills?.length > 0 && (
                     <div className="p-3 bg-green-500/10 rounded-lg border border-green-500/20">
                       <p className="text-xs text-green-400 font-medium mb-1">Strengths</p>
-                      <p className="text-sm text-gray-300">
+                      <p className="text-sm text-secondary-foreground">
                         {skillProfile.strongest_skills.map(s => s.replace(/_/g, ' ')).join(', ')}
                       </p>
                     </div>
@@ -178,13 +178,13 @@ export default function Recommendations() {
               </div>
             ) : (
               <div className="text-center py-8">
-                <AlertTriangle className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-                <p className="text-gray-400 text-sm">
+                <AlertTriangle className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+                <p className="text-muted-foreground text-sm">
                   Complete more training sessions to build your skill profile
                 </p>
                 <Link
                   to="/scenarios"
-                  className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+                  className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-foreground text-sm font-medium rounded-lg transition-colors"
                 >
                   Start Training
                   <ChevronRight className="w-4 h-4" />
@@ -201,8 +201,8 @@ export default function Recommendations() {
           transition={{ delay: 0.2 }}
           className="lg:col-span-2"
         >
-          <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
-            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <div className="bg-card rounded-xl border border-border p-6">
+            <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
               <Lightbulb className="w-5 h-5 text-yellow-400" />
               Recommended Actions
             </h2>
@@ -219,7 +219,7 @@ export default function Recommendations() {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
-                      className="p-4 bg-gray-750 rounded-xl border border-gray-700 hover:border-gray-600 transition-colors"
+                      className="p-4 bg-muted rounded-xl border border-border hover:border-border transition-colors"
                     >
                       <div className="flex items-start gap-4">
                         <div className={`w-10 h-10 rounded-lg flex items-center justify-center bg-${color}-500/20`}>
@@ -232,19 +232,19 @@ export default function Recommendations() {
                               {rec.recommendation_type.replace(/_/g, ' ')}
                             </span>
                             {rec.target_skill && (
-                              <span className="px-2 py-0.5 text-xs bg-gray-700 text-gray-400 rounded-full capitalize">
+                              <span className="px-2 py-0.5 text-xs bg-muted text-muted-foreground rounded-full capitalize">
                                 {rec.target_skill.replace(/_/g, ' ')}
                               </span>
                             )}
                           </div>
 
                           {rec.scenario && (
-                            <h3 className="text-white font-medium mb-1">
+                            <h3 className="text-foreground font-medium mb-1">
                               {rec.scenario.name}
                             </h3>
                           )}
 
-                          <p className="text-sm text-gray-400">
+                          <p className="text-sm text-muted-foreground">
                             {rec.reason}
                           </p>
                         </div>
@@ -252,7 +252,7 @@ export default function Recommendations() {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => handleDismiss(rec.id)}
-                            className="p-2 text-gray-500 hover:text-gray-300 transition-colors"
+                            className="p-2 text-muted-foreground hover:text-secondary-foreground transition-colors"
                             title="Dismiss"
                           >
                             <X className="w-4 h-4" />
@@ -261,7 +261,7 @@ export default function Recommendations() {
                           {rec.scenario && (
                             <Link
                               to={`/scenario/${rec.scenario.id}`}
-                              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+                              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-foreground text-sm font-medium rounded-lg transition-colors"
                             >
                               <Play className="w-4 h-4" />
                               Practice
@@ -271,7 +271,7 @@ export default function Recommendations() {
                           {rec.recommendation_type === 'warmup' && (
                             <Link
                               to="/scenarios"
-                              className="flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium rounded-lg transition-colors"
+                              className="flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-foreground text-sm font-medium rounded-lg transition-colors"
                             >
                               <Brain className="w-4 h-4" />
                               Warm Up
@@ -285,16 +285,16 @@ export default function Recommendations() {
               </div>
             ) : (
               <div className="text-center py-12">
-                <Target className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-200 mb-2">
+                <Target className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-foreground mb-2">
                   No recommendations yet
                 </h3>
-                <p className="text-gray-400 mb-6">
+                <p className="text-muted-foreground mb-6">
                   Complete a few training sessions to get personalized recommendations
                 </p>
                 <Link
                   to="/scenarios"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-foreground font-medium rounded-xl transition-colors"
                 >
                   Browse Scenarios
                   <ChevronRight className="w-5 h-5" />

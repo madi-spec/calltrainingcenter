@@ -98,8 +98,8 @@ export default function ModuleDetail() {
   if (!module) {
     return (
       <div className="text-center py-12">
-        <Target className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-        <p className="text-gray-400">Module not found</p>
+        <Target className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+        <p className="text-muted-foreground">Module not found</p>
         <Link to="/courses" className="text-primary-400 hover:text-primary-300 mt-2 inline-block">
           Back to courses
         </Link>
@@ -123,7 +123,7 @@ export default function ModuleDetail() {
       {/* Back Button */}
       <Link
         to={`/courses/${module.course?.id || ''}`}
-        className="inline-flex items-center gap-2 text-gray-400 hover:text-gray-300 transition-colors"
+        className="inline-flex items-center gap-2 text-muted-foreground hover:text-secondary-foreground transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to {module.course?.name || 'course'}
@@ -133,39 +133,39 @@ export default function ModuleDetail() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gray-800 rounded-2xl p-6 md:p-8 border border-gray-700"
+        className="bg-card rounded-2xl p-6 md:p-8 border border-border"
       >
         <div className="flex flex-col md:flex-row md:items-start gap-6">
           <div className="flex-1">
             <span className="text-sm text-primary-400 font-medium">
               {module.course?.name}
             </span>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-100 mt-1">
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground mt-1">
               {module.name}
             </h1>
-            <p className="text-gray-400 mt-3">{module.description}</p>
+            <p className="text-muted-foreground mt-3">{module.description}</p>
 
             {/* Module Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-              <div className="bg-gray-700/50 rounded-lg p-3">
-                <p className="text-sm text-gray-400">Scenarios</p>
-                <p className="text-xl font-bold text-gray-100">
+              <div className="bg-muted/50 rounded-lg p-3">
+                <p className="text-sm text-muted-foreground">Scenarios</p>
+                <p className="text-xl font-bold text-foreground">
                   {completedCount}/{module.scenario_count || scenarios.length}
                 </p>
               </div>
-              <div className="bg-gray-700/50 rounded-lg p-3">
-                <p className="text-sm text-gray-400">Close Rate</p>
+              <div className="bg-muted/50 rounded-lg p-3">
+                <p className="text-sm text-muted-foreground">Close Rate</p>
                 <p className={`text-xl font-bold ${closeRate >= passThreshold ? 'text-green-400' : 'text-yellow-400'}`}>
                   {closeRate}%
                 </p>
               </div>
-              <div className="bg-gray-700/50 rounded-lg p-3">
-                <p className="text-sm text-gray-400">Pass Threshold</p>
-                <p className="text-xl font-bold text-gray-100">{passThreshold}%</p>
+              <div className="bg-muted/50 rounded-lg p-3">
+                <p className="text-sm text-muted-foreground">Pass Threshold</p>
+                <p className="text-xl font-bold text-foreground">{passThreshold}%</p>
               </div>
-              <div className="bg-gray-700/50 rounded-lg p-3">
-                <p className="text-sm text-gray-400">Attempts</p>
-                <p className="text-xl font-bold text-gray-100">{progress?.attempts || 0}</p>
+              <div className="bg-muted/50 rounded-lg p-3">
+                <p className="text-sm text-muted-foreground">Attempts</p>
+                <p className="text-xl font-bold text-foreground">{progress?.attempts || 0}</p>
               </div>
             </div>
 
@@ -175,7 +175,7 @@ export default function ModuleDetail() {
                 <button
                   onClick={handleStartModule}
                   disabled={starting}
-                  className="flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50"
+                  className="flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-foreground font-semibold rounded-lg transition-colors disabled:opacity-50"
                 >
                   {starting ? (
                     <>
@@ -194,7 +194,7 @@ export default function ModuleDetail() {
               {hasScenarios && nextScenario && (
                 <button
                   onClick={() => handleStartScenario(nextScenario)}
-                  className="flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition-colors"
+                  className="flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-foreground font-semibold rounded-lg transition-colors"
                 >
                   <Play className="w-5 h-5" />
                   {completedCount === 0 ? 'Start Practice' : 'Continue Practice'}
@@ -205,7 +205,7 @@ export default function ModuleDetail() {
                 <button
                   onClick={handleResetModule}
                   disabled={resetting}
-                  className="flex items-center gap-2 px-4 py-3 bg-gray-700 hover:bg-gray-600 text-gray-200 font-medium rounded-lg transition-colors disabled:opacity-50"
+                  className="flex items-center gap-2 px-4 py-3 bg-muted hover:bg-muted text-foreground font-medium rounded-lg transition-colors disabled:opacity-50"
                 >
                   {resetting ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
@@ -223,7 +223,7 @@ export default function ModuleDetail() {
             <div className="bg-green-500/10 rounded-xl p-6 text-center border border-green-500/20">
               <Trophy className="w-12 h-12 text-green-400 mx-auto mb-3" />
               <h3 className="text-lg font-semibold text-green-400">Module Complete!</h3>
-              <p className="text-sm text-gray-400 mt-1">
+              <p className="text-sm text-muted-foreground mt-1">
                 You achieved {closeRate}% close rate
               </p>
             </div>
@@ -238,7 +238,7 @@ export default function ModuleDetail() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <h2 className="text-lg font-semibold text-gray-100 mb-4">
+          <h2 className="text-lg font-semibold text-foreground mb-4">
             Practice Scenarios ({completedCount}/{scenarios.length} completed)
           </h2>
 
@@ -264,7 +264,7 @@ export default function ModuleDetail() {
           className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-6"
         >
           <h3 className="font-semibold text-blue-300 mb-3">Tips for Success</h3>
-          <ul className="space-y-2 text-sm text-gray-300">
+          <ul className="space-y-2 text-sm text-secondary-foreground">
             <li className="flex items-start gap-2">
               <CheckCircle2 className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
               Listen actively to the customer's concerns before offering solutions
@@ -296,7 +296,7 @@ function ScenarioCard({ scenario, index, onStart }) {
   const profile = scenario.profile || {};
 
   return (
-    <div className={`bg-gray-800 rounded-xl border border-gray-700 p-5 ${
+    <div className={`bg-card rounded-xl border border-border p-5 ${
       isCompleted ? 'opacity-75' : ''
     }`}>
       <div className="flex items-start gap-4">
@@ -305,7 +305,7 @@ function ScenarioCard({ scenario, index, onStart }) {
           isCompleted
             ? 'bg-green-500/20 text-green-400'
             : isSkipped
-            ? 'bg-gray-700 text-gray-500'
+            ? 'bg-muted text-muted-foreground'
             : 'bg-primary-500/20 text-primary-400'
         }`}>
           {isCompleted ? (
@@ -320,31 +320,31 @@ function ScenarioCard({ scenario, index, onStart }) {
         {/* Scenario Info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <User className="w-4 h-4 text-gray-500" />
-            <span className="font-medium text-gray-200">{profile.name || 'Customer'}</span>
+            <User className="w-4 h-4 text-muted-foreground" />
+            <span className="font-medium text-foreground">{profile.name || 'Customer'}</span>
             {profile.personality_traits?.length > 0 && (
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-muted-foreground">
                 ({profile.personality_traits.slice(0, 2).join(', ')})
               </span>
             )}
           </div>
 
-          <p className="text-sm text-gray-400 mb-3 line-clamp-2">
+          <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
             {scenario.situation_text || 'Practice scenario'}
           </p>
 
           {/* Opening Line Preview */}
           {scenario.opening_line && (
-            <div className="flex items-start gap-2 p-3 bg-gray-700/50 rounded-lg mb-3">
-              <MessageSquare className="w-4 h-4 text-gray-500 mt-0.5 flex-shrink-0" />
-              <p className="text-sm text-gray-300 italic">"{scenario.opening_line}"</p>
+            <div className="flex items-start gap-2 p-3 bg-muted/50 rounded-lg mb-3">
+              <MessageSquare className="w-4 h-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+              <p className="text-sm text-secondary-foreground italic">"{scenario.opening_line}"</p>
             </div>
           )}
 
           {/* Tags */}
           <div className="flex flex-wrap gap-2">
             {profile.communication_style && (
-              <span className="text-xs px-2 py-1 bg-gray-700 text-gray-300 rounded">
+              <span className="text-xs px-2 py-1 bg-muted text-secondary-foreground rounded">
                 {profile.communication_style}
               </span>
             )}
@@ -365,7 +365,7 @@ function ScenarioCard({ scenario, index, onStart }) {
         {isPending && (
           <button
             onClick={onStart}
-            className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
           >
             <Play className="w-4 h-4" />
             Practice
@@ -374,7 +374,7 @@ function ScenarioCard({ scenario, index, onStart }) {
 
         {isCompleted && (
           <div className="text-right">
-            <p className="text-xs text-gray-500">Completed</p>
+            <p className="text-xs text-muted-foreground">Completed</p>
           </div>
         )}
       </div>

@@ -180,7 +180,7 @@ export default function CourseBuilder() {
       <div className="mb-8">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-gray-400 hover:text-white mb-4 transition-colors"
+          className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-4 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Courses
@@ -191,8 +191,8 @@ export default function CourseBuilder() {
             <BookOpen className="w-6 h-6 text-primary-400" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white">Create New Course</h1>
-            <p className="text-gray-400">Build a custom training course for your team</p>
+            <h1 className="text-2xl font-bold text-foreground">Create New Course</h1>
+            <p className="text-muted-foreground">Build a custom training course for your team</p>
           </div>
         </div>
       </div>
@@ -226,14 +226,14 @@ export default function CourseBuilder() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gray-800 rounded-xl border border-gray-700 p-6"
+          className="bg-card rounded-xl border border-border p-6"
         >
-          <h2 className="text-lg font-semibold text-white mb-6">Course Details</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-6">Course Details</h2>
 
           <div className="grid gap-6">
             {/* Course Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-secondary-foreground mb-2">
                 Course Name *
               </label>
               <input
@@ -241,13 +241,13 @@ export default function CourseBuilder() {
                 value={course.name}
                 onChange={(e) => updateCourse('name', e.target.value)}
                 placeholder="e.g., Customer Objection Handling"
-                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-primary-500"
+                className="w-full px-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary-500"
               />
             </div>
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-secondary-foreground mb-2">
                 Description *
               </label>
               <textarea
@@ -255,7 +255,7 @@ export default function CourseBuilder() {
                 onChange={(e) => updateCourse('description', e.target.value)}
                 placeholder="Describe what trainees will learn in this course..."
                 rows={3}
-                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-primary-500 resize-none"
+                className="w-full px-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary-500 resize-none"
               />
             </div>
 
@@ -263,13 +263,13 @@ export default function CourseBuilder() {
             <div className="grid md:grid-cols-2 gap-6">
               {/* Category */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-secondary-foreground mb-2">
                   Category
                 </label>
                 <select
                   value={course.category}
                   onChange={(e) => updateCourse('category', e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary-500"
+                  className="w-full px-4 py-3 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:border-primary-500"
                 >
                   {CATEGORIES.map(cat => (
                     <option key={cat.value} value={cat.value}>{cat.label}</option>
@@ -279,7 +279,7 @@ export default function CourseBuilder() {
 
               {/* Course Icon */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-secondary-foreground mb-2">
                   Course Icon
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -291,7 +291,7 @@ export default function CourseBuilder() {
                       className={`w-10 h-10 rounded-lg text-xl flex items-center justify-center transition-all ${
                         course.icon === icon
                           ? 'bg-primary-500 ring-2 ring-primary-400'
-                          : 'bg-gray-700 hover:bg-gray-600'
+                          : 'bg-muted hover:bg-muted'
                       }`}
                     >
                       {icon}
@@ -304,7 +304,7 @@ export default function CourseBuilder() {
             {/* Badge Settings */}
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-secondary-foreground mb-2">
                   Completion Badge Name
                 </label>
                 <input
@@ -312,12 +312,12 @@ export default function CourseBuilder() {
                   value={course.badge_name}
                   onChange={(e) => updateCourse('badge_name', e.target.value)}
                   placeholder="e.g., Objection Master"
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-primary-500"
+                  className="w-full px-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-secondary-foreground mb-2">
                   Badge Icon
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -329,7 +329,7 @@ export default function CourseBuilder() {
                       className={`w-10 h-10 rounded-lg text-xl flex items-center justify-center transition-all ${
                         course.badge_icon === icon
                           ? 'bg-yellow-500 ring-2 ring-yellow-400'
-                          : 'bg-gray-700 hover:bg-gray-600'
+                          : 'bg-muted hover:bg-muted'
                       }`}
                     >
                       {icon}
@@ -346,19 +346,19 @@ export default function CourseBuilder() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-gray-800 rounded-xl border border-gray-700 p-6"
+          className="bg-card rounded-xl border border-border p-6"
         >
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-lg font-semibold text-white">Course Modules</h2>
-              <p className="text-sm text-gray-400 mt-1">
+              <h2 className="text-lg font-semibold text-foreground">Course Modules</h2>
+              <p className="text-sm text-muted-foreground mt-1">
                 Add modules to organize your course content
               </p>
             </div>
             <button
               type="button"
               onClick={addModule}
-              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground rounded-lg transition-colors"
             >
               <Plus className="w-4 h-4" />
               Add Module
@@ -366,9 +366,9 @@ export default function CourseBuilder() {
           </div>
 
           {modules.length === 0 ? (
-            <div className="text-center py-12 border-2 border-dashed border-gray-700 rounded-xl">
-              <BookOpen className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-              <p className="text-gray-400 mb-4">No modules yet</p>
+            <div className="text-center py-12 border-2 border-dashed border-border rounded-xl">
+              <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+              <p className="text-muted-foreground mb-4">No modules yet</p>
               <button
                 type="button"
                 onClick={addModule}
@@ -384,22 +384,22 @@ export default function CourseBuilder() {
                   key={module.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="bg-gray-700/50 rounded-xl border border-gray-600 overflow-hidden"
+                  className="bg-muted/50 rounded-xl border border-border overflow-hidden"
                 >
                   {/* Module Header */}
                   <div
-                    className="flex items-center gap-3 p-4 cursor-pointer hover:bg-gray-700/70 transition-colors"
+                    className="flex items-center gap-3 p-4 cursor-pointer hover:bg-muted/70 transition-colors"
                     onClick={() => toggleModule(module.id)}
                   >
-                    <GripVertical className="w-5 h-5 text-gray-500" />
-                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gray-600 text-sm font-medium text-white">
+                    <GripVertical className="w-5 h-5 text-muted-foreground" />
+                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-muted text-sm font-medium text-foreground">
                       {index + 1}
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-white">
+                      <p className="font-medium text-foreground">
                         {module.name || 'Untitled Module'}
                       </p>
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-muted-foreground">
                         {module.scenario_count} scenarios • {module.difficulty} difficulty
                       </p>
                     </div>
@@ -408,7 +408,7 @@ export default function CourseBuilder() {
                         type="button"
                         onClick={(e) => { e.stopPropagation(); moveModule(index, 'up'); }}
                         disabled={index === 0}
-                        className="p-1.5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed"
+                        className="p-1.5 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
                       >
                         <ChevronUp className="w-4 h-4" />
                       </button>
@@ -416,7 +416,7 @@ export default function CourseBuilder() {
                         type="button"
                         onClick={(e) => { e.stopPropagation(); moveModule(index, 'down'); }}
                         disabled={index === modules.length - 1}
-                        className="p-1.5 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed"
+                        className="p-1.5 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
                       >
                         <ChevronDown className="w-4 h-4" />
                       </button>
@@ -428,7 +428,7 @@ export default function CourseBuilder() {
                         <Trash2 className="w-4 h-4" />
                       </button>
                       <ChevronDown
-                        className={`w-5 h-5 text-gray-400 transition-transform ${
+                        className={`w-5 h-5 text-muted-foreground transition-transform ${
                           expandedModules[module.id] ? 'rotate-180' : ''
                         }`}
                       />
@@ -437,11 +437,11 @@ export default function CourseBuilder() {
 
                   {/* Module Details (Expanded) */}
                   {expandedModules[module.id] && (
-                    <div className="p-4 pt-0 border-t border-gray-600 mt-2">
+                    <div className="p-4 pt-0 border-t border-border mt-2">
                       <div className="grid gap-4 pt-4">
                         {/* Module Name */}
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">
+                          <label className="block text-sm font-medium text-secondary-foreground mb-2">
                             Module Name *
                           </label>
                           <input
@@ -449,13 +449,13 @@ export default function CourseBuilder() {
                             value={module.name}
                             onChange={(e) => updateModule(module.id, 'name', e.target.value)}
                             placeholder="e.g., Price Objections"
-                            className="w-full px-4 py-2 bg-gray-600 border border-gray-500 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-primary-500"
+                            className="w-full px-4 py-2 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary-500"
                           />
                         </div>
 
                         {/* Module Description */}
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">
+                          <label className="block text-sm font-medium text-secondary-foreground mb-2">
                             Description
                           </label>
                           <textarea
@@ -463,7 +463,7 @@ export default function CourseBuilder() {
                             onChange={(e) => updateModule(module.id, 'description', e.target.value)}
                             placeholder="What will trainees learn in this module?"
                             rows={2}
-                            className="w-full px-4 py-2 bg-gray-600 border border-gray-500 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-primary-500 resize-none"
+                            className="w-full px-4 py-2 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary-500 resize-none"
                           />
                         </div>
 
@@ -471,13 +471,13 @@ export default function CourseBuilder() {
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                           {/* Difficulty */}
                           <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                            <label className="block text-sm font-medium text-secondary-foreground mb-2">
                               Difficulty
                             </label>
                             <select
                               value={module.difficulty}
                               onChange={(e) => updateModule(module.id, 'difficulty', e.target.value)}
-                              className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded-lg text-white focus:outline-none focus:border-primary-500"
+                              className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:border-primary-500"
                             >
                               {DIFFICULTIES.map(d => (
                                 <option key={d.value} value={d.value}>{d.label}</option>
@@ -487,7 +487,7 @@ export default function CourseBuilder() {
 
                           {/* Scenario Count */}
                           <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                            <label className="block text-sm font-medium text-secondary-foreground mb-2">
                               Scenarios
                             </label>
                             <input
@@ -496,13 +496,13 @@ export default function CourseBuilder() {
                               max="50"
                               value={module.scenario_count}
                               onChange={(e) => updateModule(module.id, 'scenario_count', parseInt(e.target.value) || 1)}
-                              className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded-lg text-white focus:outline-none focus:border-primary-500"
+                              className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:border-primary-500"
                             />
                           </div>
 
                           {/* Pass Threshold */}
                           <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                            <label className="block text-sm font-medium text-secondary-foreground mb-2">
                               Pass Score %
                             </label>
                             <input
@@ -511,13 +511,13 @@ export default function CourseBuilder() {
                               max="100"
                               value={module.pass_threshold}
                               onChange={(e) => updateModule(module.id, 'pass_threshold', parseInt(e.target.value) || 70)}
-                              className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded-lg text-white focus:outline-none focus:border-primary-500"
+                              className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:border-primary-500"
                             />
                           </div>
 
                           {/* Required Completions */}
                           <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                            <label className="block text-sm font-medium text-secondary-foreground mb-2">
                               Required Passes
                             </label>
                             <input
@@ -526,7 +526,7 @@ export default function CourseBuilder() {
                               max="10"
                               value={module.required_completions}
                               onChange={(e) => updateModule(module.id, 'required_completions', parseInt(e.target.value) || 1)}
-                              className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded-lg text-white focus:outline-none focus:border-primary-500"
+                              className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:border-primary-500"
                             />
                           </div>
                         </div>
@@ -545,16 +545,16 @@ export default function CourseBuilder() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-gray-800 rounded-xl border border-gray-700 p-6"
+            className="bg-card rounded-xl border border-border p-6"
           >
-            <h2 className="text-lg font-semibold text-white mb-4">Preview</h2>
-            <div className="bg-gray-700/50 rounded-xl p-4">
+            <h2 className="text-lg font-semibold text-foreground mb-4">Preview</h2>
+            <div className="bg-muted/50 rounded-xl p-4">
               <div className="flex items-start gap-4">
                 <div className="text-4xl">{course.icon}</div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-white">{course.name}</h3>
-                  <p className="text-sm text-gray-400 mt-1">{course.description}</p>
-                  <div className="flex items-center gap-4 mt-3 text-sm text-gray-400">
+                  <h3 className="text-lg font-semibold text-foreground">{course.name}</h3>
+                  <p className="text-sm text-muted-foreground mt-1">{course.description}</p>
+                  <div className="flex items-center gap-4 mt-3 text-sm text-muted-foreground">
                     <span>{modules.length} module{modules.length !== 1 ? 's' : ''}</span>
                     <span>•</span>
                     <span>{modules.reduce((sum, m) => sum + m.scenario_count, 0)} scenarios</span>
@@ -578,14 +578,14 @@ export default function CourseBuilder() {
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="px-6 py-3 text-gray-400 hover:text-white transition-colors"
+            className="px-6 py-3 text-muted-foreground hover:text-foreground transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isSubmitting || success}
-            className="flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors"
+            className="flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-muted disabled:cursor-not-allowed text-foreground font-medium rounded-lg transition-colors"
           >
             {isSubmitting ? (
               <>

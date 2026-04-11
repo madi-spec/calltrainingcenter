@@ -15,10 +15,10 @@ export function ProtectedRoute({ children }) {
   // Wait for Clerk to load
   if (!isLoaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500 mx-auto"></div>
-          <p className="text-gray-400 mt-4">Loading...</p>
+          <p className="text-muted-foreground mt-4">Loading...</p>
         </div>
       </div>
     );
@@ -32,10 +32,10 @@ export function ProtectedRoute({ children }) {
   // Wait for profile to load (optional - remove if you want faster access)
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500 mx-auto"></div>
-          <p className="text-gray-400 mt-4">Setting up your account...</p>
+          <p className="text-muted-foreground mt-4">Setting up your account...</p>
         </div>
       </div>
     );
@@ -79,10 +79,10 @@ export function RoleProtectedRoute({ children, allowedRoles }) {
 
   if (!isLoaded || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500 mx-auto"></div>
-          <p className="text-gray-400 mt-4">Loading...</p>
+          <p className="text-muted-foreground mt-4">Loading...</p>
         </div>
       </div>
     );
@@ -97,11 +97,11 @@ export function RoleProtectedRoute({ children, allowedRoles }) {
 
   if (!effectiveRole || !allowedRoles.includes(effectiveRole)) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-100">Access Denied</h1>
-          <p className="text-gray-400 mt-2">You don't have permission to view this page.</p>
-          <p className="text-gray-500 mt-1 text-sm">Role: {effectiveRole || 'none'} | Required: {allowedRoles.join(', ')}</p>
+          <h1 className="text-2xl font-bold text-foreground">Access Denied</h1>
+          <p className="text-muted-foreground mt-2">You don't have permission to view this page.</p>
+          <p className="text-muted-foreground mt-1 text-sm">Role: {effectiveRole || 'none'} | Required: {allowedRoles.join(', ')}</p>
         </div>
       </div>
     );

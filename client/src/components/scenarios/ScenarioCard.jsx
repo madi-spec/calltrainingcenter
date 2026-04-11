@@ -45,7 +45,7 @@ function ScenarioCard({ scenario, canEdit, onDelete }) {
             {showActions && (
               <button
                 onClick={handleEdit}
-                className="p-1.5 text-gray-400 hover:text-primary-400 transition-colors rounded"
+                className="p-1.5 text-muted-foreground hover:text-primary-400 transition-colors rounded"
                 title="Edit scenario"
               >
                 <Pencil className="w-4 h-4" />
@@ -66,25 +66,25 @@ function ScenarioCard({ scenario, canEdit, onDelete }) {
       </Card.Header>
 
       <Card.Content className="flex-1">
-        <p className="text-sm text-gray-400 line-clamp-3 mb-4">
+        <p className="text-sm text-muted-foreground line-clamp-3 mb-4">
           {scenario.situation}
         </p>
 
         <div className="space-y-2">
           {scenario.customerName && (
-            <div className="flex items-center gap-2 text-sm text-gray-500">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <User className="w-4 h-4" />
               <span>{scenario.customerName}</span>
             </div>
           )}
           {scenario.estimatedDuration && (
-            <div className="flex items-center gap-2 text-sm text-gray-500">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Clock className="w-4 h-4" />
               <span>{scenario.estimatedDuration}</span>
             </div>
           )}
           {scenario.csrObjective && (
-            <div className="flex items-center gap-2 text-sm text-gray-500">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Target className="w-4 h-4" />
               <span className="line-clamp-1">{scenario.csrObjective}</span>
             </div>
@@ -104,21 +104,21 @@ function ScenarioCard({ scenario, canEdit, onDelete }) {
             </button>
             <button
               onClick={handleCancelDelete}
-              className="text-xs px-2 py-1 text-gray-400 hover:text-white transition-colors"
+              className="text-xs px-2 py-1 text-muted-foreground hover:text-foreground transition-colors"
             >
               Cancel
             </button>
           </div>
         ) : (
           <>
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-muted-foreground">
               {scenario.scoringFocus?.slice(0, 2).join(' • ')}
             </span>
             <div className="flex items-center gap-2">
               {showActions && (
                 <button
                   onClick={(e) => { e.stopPropagation(); setConfirming(true); }}
-                  className="p-1 text-gray-500 hover:text-red-400 transition-colors rounded"
+                  className="p-1 text-muted-foreground hover:text-red-400 transition-colors rounded"
                   title="Delete scenario"
                 >
                   <Trash2 className="w-3.5 h-3.5" />

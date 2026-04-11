@@ -19,12 +19,12 @@ function TranscriptEntry({ entry, isActive, onClick }) {
       className={`flex gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
         isActive
           ? 'bg-primary-50 dark:bg-primary-900/20 border-l-4 border-primary-500'
-          : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'
+          : 'hover:bg-accent dark:hover:bg-card/50'
       }`}
       onClick={onClick}
     >
       {/* Timestamp */}
-      <div className="flex-shrink-0 w-12 text-xs text-gray-400 dark:text-gray-500 pt-1">
+      <div className="flex-shrink-0 w-12 text-xs text-muted-foreground dark:text-muted-foreground pt-1">
         {formatTimestamp(entry.timestamp)}
       </div>
 
@@ -35,7 +35,7 @@ function TranscriptEntry({ entry, isActive, onClick }) {
             ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
             : isCustomer
             ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-            : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
+            : 'bg-muted text-muted-foreground dark:bg-muted dark:text-secondary-foreground'
         }`}>
           {isAgent ? 'A' : isCustomer ? 'C' : '?'}
         </div>
@@ -49,12 +49,12 @@ function TranscriptEntry({ entry, isActive, onClick }) {
               ? 'text-green-700 dark:text-green-400'
               : isCustomer
               ? 'text-blue-700 dark:text-blue-400'
-              : 'text-gray-700 dark:text-gray-300'
+              : 'text-muted-foreground dark:text-secondary-foreground'
           }`}>
             {entry.speaker || (isAgent ? 'Agent (You)' : isCustomer ? 'Customer' : 'Unknown')}
           </span>
         </div>
-        <p className={`text-sm ${isActive ? 'text-gray-900 dark:text-white' : 'text-gray-600 dark:text-gray-300'}`}>
+        <p className={`text-sm ${isActive ? 'text-foreground dark:text-foreground' : 'text-muted-foreground dark:text-secondary-foreground'}`}>
           {entry.text || entry.content}
         </p>
       </div>
@@ -94,9 +94,9 @@ function TranscriptSyncViewer({ transcript = [], currentTime = 0, onSeek }) {
 
   if (!transcript || transcript.length === 0) {
     return (
-      <div className="flex items-center justify-center h-64 text-gray-500 dark:text-gray-400">
+      <div className="flex items-center justify-center h-64 text-muted-foreground dark:text-muted-foreground">
         <div className="text-center">
-          <svg className="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-12 h-12 mx-auto mb-3 text-secondary-foreground dark:text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
           <p>No transcript available</p>
@@ -106,14 +106,14 @@ function TranscriptSyncViewer({ transcript = [], currentTime = 0, onSeek }) {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+    <div className="bg-white dark:bg-card rounded-lg border border-border dark:border-border">
       {/* Header */}
-      <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+      <div className="px-4 py-3 border-b border-border dark:border-border">
         <div className="flex items-center justify-between">
-          <h3 className="font-semibold text-gray-900 dark:text-white">
+          <h3 className="font-semibold text-foreground dark:text-foreground">
             Transcript
           </h3>
-          <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+          <div className="flex items-center gap-4 text-sm text-muted-foreground dark:text-muted-foreground">
             <div className="flex items-center gap-1">
               <div className="w-3 h-3 rounded-full bg-green-500"></div>
               <span>Agent</span>

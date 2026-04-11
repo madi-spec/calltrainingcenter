@@ -143,16 +143,16 @@ export default function ServiceLinesStep({ data, allStepData, onComplete, authFe
               {selectedCategories.length} service{selectedCategories.length !== 1 ? 's' : ''} auto-selected based on your website
             </span>
           </div>
-          <p className="text-sm text-gray-400 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Review and adjust the selections below as needed.
           </p>
         </div>
       )}
 
       {/* Instructions */}
-      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-        <h3 className="text-lg font-semibold text-gray-100 mb-2">Select Your Service Lines</h3>
-        <p className="text-gray-400">
+      <div className="bg-card rounded-xl p-6 border border-border">
+        <h3 className="text-lg font-semibold text-foreground mb-2">Select Your Service Lines</h3>
+        <p className="text-muted-foreground">
           Choose which types of pest control services your company offers.
           This helps customize training scenarios for your team.
         </p>
@@ -171,8 +171,8 @@ export default function ServiceLinesStep({ data, allStepData, onComplete, authFe
                 isSelected
                   ? isPrimary
                     ? 'bg-primary-500/10 border-primary-500'
-                    : 'bg-gray-800 border-green-500'
-                  : 'bg-gray-800 border-gray-700 hover:border-gray-600'
+                    : 'bg-card border-green-500'
+                  : 'bg-card border-border hover:border-border'
               }`}
               onClick={() => toggleCategory(category.id)}
             >
@@ -183,12 +183,12 @@ export default function ServiceLinesStep({ data, allStepData, onComplete, authFe
                     <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
                       isPrimary ? 'bg-primary-500' : 'bg-green-500'
                     }`}>
-                      <Check className="w-4 h-4 text-white" />
+                      <Check className="w-4 h-4 text-foreground" />
                     </div>
                   )}
                 </div>
-                <h4 className="font-medium text-gray-200 mb-1">{category.name}</h4>
-                <p className="text-sm text-gray-400">{category.description}</p>
+                <h4 className="font-medium text-foreground mb-1">{category.name}</h4>
+                <p className="text-sm text-muted-foreground">{category.description}</p>
 
                 {isSelected && (
                   <button
@@ -199,7 +199,7 @@ export default function ServiceLinesStep({ data, allStepData, onComplete, authFe
                     className={`mt-3 text-xs px-2 py-1 rounded transition-colors ${
                       isPrimary
                         ? 'bg-primary-500/20 text-primary-400'
-                        : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                        : 'bg-muted text-muted-foreground hover:bg-muted'
                     }`}
                   >
                     {isPrimary ? 'Primary Service' : 'Set as Primary'}
@@ -213,14 +213,14 @@ export default function ServiceLinesStep({ data, allStepData, onComplete, authFe
 
       {/* Selection Summary */}
       {selectedCategories.length > 0 && (
-        <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
+        <div className="bg-card rounded-xl p-4 border border-border">
           <div className="flex items-center justify-between">
             <div>
-              <span className="text-gray-300">
+              <span className="text-secondary-foreground">
                 {selectedCategories.length} service{selectedCategories.length !== 1 ? 's' : ''} selected
               </span>
               {primaryCategory && (
-                <span className="text-gray-500 ml-2">
+                <span className="text-muted-foreground ml-2">
                   (Primary: {categories.find(c => c.id === primaryCategory)?.name})
                 </span>
               )}
@@ -234,7 +234,7 @@ export default function ServiceLinesStep({ data, allStepData, onComplete, authFe
         <button
           onClick={handleSubmit}
           disabled={saving || selectedCategories.length === 0}
-          className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors disabled:opacity-50"
         >
           {saving ? (
             <>

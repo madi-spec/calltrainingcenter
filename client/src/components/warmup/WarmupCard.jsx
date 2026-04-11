@@ -31,7 +31,7 @@ export default function WarmupCard({
     if (!isAnswered) {
       return localSelected === index
         ? 'border-blue-500 bg-blue-500/10'
-        : 'border-gray-600 hover:border-gray-500 hover:bg-gray-750';
+        : 'border-border hover:border-border hover:bg-muted';
     }
 
     // After answering
@@ -44,7 +44,7 @@ export default function WarmupCard({
     if (wasSelected && !isCorrect) {
       return 'border-red-500 bg-red-500/10';
     }
-    return 'border-gray-700 bg-gray-800/50 opacity-60';
+    return 'border-border bg-card/50 opacity-60';
   };
 
   const getOptionIcon = (index) => {
@@ -66,7 +66,7 @@ export default function WarmupCard({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gray-800 rounded-xl border border-gray-700 p-6"
+      className="bg-card rounded-xl border border-border p-6"
     >
       {/* Header with type and timer */}
       <div className="flex items-center justify-between mb-4">
@@ -75,14 +75,14 @@ export default function WarmupCard({
           ${exercise.type === 'objection_response' ? 'bg-purple-500/20 text-purple-400' :
             exercise.type === 'product_knowledge' ? 'bg-blue-500/20 text-blue-400' :
             exercise.type === 'policy_check' ? 'bg-orange-500/20 text-orange-400' :
-            'bg-gray-500/20 text-gray-400'}
+            'bg-muted/20 text-muted-foreground'}
         `}>
           {exercise.type?.replace(/_/g, ' ')}
         </span>
 
         {showTimer && timeRemaining !== null && (
           <div className={`flex items-center gap-1.5 text-sm ${
-            timeRemaining <= 10 ? 'text-red-400' : 'text-gray-400'
+            timeRemaining <= 10 ? 'text-red-400' : 'text-muted-foreground'
           }`}>
             <Clock className="w-4 h-4" />
             <span>{timeRemaining}s</span>
@@ -101,7 +101,7 @@ export default function WarmupCard({
       </div>
 
       {/* Question */}
-      <h3 className="text-lg font-medium text-gray-100 mb-6">
+      <h3 className="text-lg font-medium text-foreground mb-6">
         {exercise.question}
       </h3>
 
@@ -122,14 +122,14 @@ export default function WarmupCard({
           >
             <span className={`
               w-7 h-7 flex items-center justify-center rounded-full text-sm font-medium flex-shrink-0
-              ${localSelected === index && !isAnswered ? 'bg-blue-500 text-white' :
-                isAnswered && index === correctIndex ? 'bg-green-500 text-white' :
-                isAnswered && index === selectedIndex ? 'bg-red-500 text-white' :
-                'bg-gray-700 text-gray-300'}
+              ${localSelected === index && !isAnswered ? 'bg-blue-500 text-foreground' :
+                isAnswered && index === correctIndex ? 'bg-green-500 text-foreground' :
+                isAnswered && index === selectedIndex ? 'bg-red-500 text-foreground' :
+                'bg-muted text-secondary-foreground'}
             `}>
               {String.fromCharCode(65 + index)}
             </span>
-            <span className={`flex-1 ${isAnswered && index !== correctIndex && index !== selectedIndex ? 'text-gray-500' : 'text-gray-200'}`}>
+            <span className={`flex-1 ${isAnswered && index !== correctIndex && index !== selectedIndex ? 'text-muted-foreground' : 'text-foreground'}`}>
               {option.text}
             </span>
             {getOptionIcon(index)}
@@ -147,8 +147,8 @@ export default function WarmupCard({
           className={`
             w-full py-3 rounded-lg font-medium transition-colors
             ${localSelected !== null
-              ? 'bg-blue-600 hover:bg-blue-700 text-white'
-              : 'bg-gray-700 text-gray-500 cursor-not-allowed'}
+              ? 'bg-blue-600 hover:bg-blue-700 text-foreground'
+              : 'bg-muted text-muted-foreground cursor-not-allowed'}
           `}
         >
           Submit Answer
@@ -169,7 +169,7 @@ export default function WarmupCard({
                 <Lightbulb className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="text-sm font-medium text-blue-400 mb-1">Explanation</p>
-                  <p className="text-sm text-gray-300">{explanation}</p>
+                  <p className="text-sm text-secondary-foreground">{explanation}</p>
                 </div>
               </div>
             </div>

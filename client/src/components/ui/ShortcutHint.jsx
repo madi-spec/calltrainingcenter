@@ -10,8 +10,8 @@ export default function ShortcutHint({ keys, className = '' }) {
     <span className={`inline-flex items-center gap-1 ${className}`}>
       {keyList.map((key, index) => (
         <span key={index} className="flex items-center">
-          {index > 0 && <span className="text-gray-600 mx-0.5">+</span>}
-          <kbd className="px-1.5 py-0.5 text-xs font-mono bg-gray-700 border border-gray-600 rounded text-gray-300 min-w-[1.5rem] text-center">
+          {index > 0 && <span className="text-muted-foreground mx-0.5">+</span>}
+          <kbd className="px-1.5 py-0.5 text-xs font-mono bg-muted border border-border rounded text-secondary-foreground min-w-[1.5rem] text-center">
             {formatKey(key)}
           </kbd>
         </span>

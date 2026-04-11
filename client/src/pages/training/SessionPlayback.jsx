@@ -115,7 +115,7 @@ export default function SessionPlayback() {
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-primary-500 animate-spin mx-auto mb-4" />
-          <p className="text-gray-400">Loading session...</p>
+          <p className="text-muted-foreground">Loading session...</p>
         </div>
       </div>
     );
@@ -124,17 +124,17 @@ export default function SessionPlayback() {
   if (error || !session) {
     return (
       <div className="max-w-2xl mx-auto mt-12">
-        <div className="bg-gray-800 rounded-xl p-8 border border-gray-700 text-center">
+        <div className="bg-card rounded-xl p-8 border border-border text-center">
           <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-100 mb-2">
+          <h2 className="text-xl font-semibold text-foreground mb-2">
             Unable to Load Session
           </h2>
-          <p className="text-gray-400 mb-6">
+          <p className="text-muted-foreground mb-6">
             {error || 'This session could not be found.'}
           </p>
           <Link
             to="/history"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground rounded-lg transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to History
@@ -151,15 +151,15 @@ export default function SessionPlayback() {
         <div className="flex items-center gap-4">
           <button
             onClick={() => navigate('/history')}
-            className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+            className="p-2 hover:bg-card rounded-lg transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-gray-400" />
+            <ArrowLeft className="w-5 h-5 text-muted-foreground" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-gray-100">
+            <h1 className="text-2xl font-bold text-foreground">
               {session.scenario_name || 'Training Session'}
             </h1>
-            <div className="flex items-center gap-4 mt-2 text-sm text-gray-400">
+            <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
               <span className="flex items-center gap-1">
                 <Calendar className="w-4 h-4" />
                 {formatDate(session.created_at)}
@@ -179,11 +179,11 @@ export default function SessionPlayback() {
         </div>
 
         <div className="flex items-center gap-2">
-          <button className="flex items-center gap-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors text-sm">
+          <button className="flex items-center gap-2 px-3 py-2 bg-card hover:bg-muted text-secondary-foreground rounded-lg transition-colors text-sm">
             <Share2 className="w-4 h-4" />
             Share
           </button>
-          <button className="flex items-center gap-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors text-sm">
+          <button className="flex items-center gap-2 px-3 py-2 bg-card hover:bg-muted text-secondary-foreground rounded-lg transition-colors text-sm">
             <Download className="w-4 h-4" />
             Export
           </button>
@@ -200,10 +200,10 @@ export default function SessionPlayback() {
           duration={recording?.duration_seconds || session.duration_seconds}
         />
       ) : (
-        <div className="bg-gray-800 rounded-xl p-8 border border-gray-700 text-center">
-          <Play className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-          <p className="text-gray-400 mb-2">No recording available</p>
-          <p className="text-sm text-gray-500">
+        <div className="bg-card rounded-xl p-8 border border-border text-center">
+          <Play className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+          <p className="text-muted-foreground mb-2">No recording available</p>
+          <p className="text-sm text-muted-foreground">
             This session was not recorded or the recording is not yet available.
           </p>
         </div>
@@ -241,9 +241,9 @@ export default function SessionPlayback() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+          className="bg-card rounded-xl p-6 border border-border"
         >
-          <h3 className="text-lg font-semibold text-gray-100 mb-4">
+          <h3 className="text-lg font-semibold text-foreground mb-4">
             Performance Breakdown
           </h3>
           <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -252,7 +252,7 @@ export default function SessionPlayback() {
                 <div className={`text-2xl font-bold mb-1 ${getScoreColor(score)}`}>
                   {score}
                 </div>
-                <div className="text-sm text-gray-400 capitalize">
+                <div className="text-sm text-muted-foreground capitalize">
                   {category.replace(/_/g, ' ')}
                 </div>
               </div>
@@ -270,7 +270,7 @@ export default function SessionPlayback() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+              className="bg-card rounded-xl p-6 border border-border"
             >
               <h3 className="text-lg font-semibold text-green-400 mb-4">
                 Strengths
@@ -278,10 +278,10 @@ export default function SessionPlayback() {
               <div className="space-y-3">
                 {session.strengths.map((strength, index) => (
                   <div key={index} className="text-sm">
-                    <p className="font-medium text-gray-200 mb-1">
+                    <p className="font-medium text-foreground mb-1">
                       {strength.title || strength.area}
                     </p>
-                    <p className="text-gray-400">
+                    <p className="text-muted-foreground">
                       {strength.description || strength.feedback}
                     </p>
                   </div>
@@ -296,7 +296,7 @@ export default function SessionPlayback() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+              className="bg-card rounded-xl p-6 border border-border"
             >
               <h3 className="text-lg font-semibold text-yellow-400 mb-4">
                 Areas to Improve
@@ -304,10 +304,10 @@ export default function SessionPlayback() {
               <div className="space-y-3">
                 {session.improvements.map((improvement, index) => (
                   <div key={index} className="text-sm">
-                    <p className="font-medium text-gray-200 mb-1">
+                    <p className="font-medium text-foreground mb-1">
                       {improvement.title || improvement.area}
                     </p>
-                    <p className="text-gray-400">
+                    <p className="text-muted-foreground">
                       {improvement.description || improvement.feedback}
                     </p>
                   </div>

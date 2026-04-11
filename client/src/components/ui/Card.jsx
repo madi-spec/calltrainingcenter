@@ -44,7 +44,7 @@ function CardHeader({ children, className = '' }) {
 
 function CardTitle({ children, className = '' }) {
   return (
-    <h3 className={`text-lg font-semibold text-white ${className}`}>
+    <h3 className={`text-lg font-semibold text-foreground ${className}`}>
       {children}
     </h3>
   );
@@ -52,7 +52,7 @@ function CardTitle({ children, className = '' }) {
 
 function CardDescription({ children, className = '' }) {
   return (
-    <p className={`text-sm text-gray-400 mt-1 ${className}`}>
+    <p className={`text-sm text-muted-foreground mt-1 ${className}`}>
       {children}
     </p>
   );
@@ -68,7 +68,7 @@ function CardContent({ children, className = '' }) {
 
 function CardFooter({ children, className = '' }) {
   return (
-    <div className={`mt-4 pt-4 border-t border-gray-700 ${className}`}>
+    <div className={`mt-4 pt-4 border-t border-border ${className}`}>
       {children}
     </div>
   );

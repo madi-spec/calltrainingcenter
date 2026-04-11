@@ -107,12 +107,12 @@ export default function HelpAgent() {
         onClick={() => setIsOpen(true)}
         className={`fixed bottom-6 right-6 z-50 p-4 rounded-full shadow-lg transition-all ${
           isOpen ? 'scale-0' : 'scale-100'
-        } bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white`}
+        } bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-foreground`}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
       >
         <MessageCircle className="w-6 h-6" />
-        <span className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-900 animate-pulse" />
+        <span className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background animate-pulse" />
       </motion.button>
 
       {/* Chat Panel */}
@@ -122,24 +122,24 @@ export default function HelpAgent() {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-6 right-6 z-50 w-96 h-[32rem] bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+            className="fixed bottom-6 right-6 z-50 w-96 h-[32rem] bg-background border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-3 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-1.5 bg-white/20 rounded-lg">
-                  <Sparkles className="w-5 h-5 text-white" />
+                  <Sparkles className="w-5 h-5 text-foreground" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white">Platform Assistant</h3>
-                  <p className="text-xs text-white/70">Powered by Claude</p>
+                  <h3 className="font-semibold text-foreground">Platform Assistant</h3>
+                  <p className="text-xs text-foreground/70">Powered by Claude</p>
                 </div>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
                 className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
               >
-                <X className="w-5 h-5 text-white" />
+                <X className="w-5 h-5 text-foreground" />
               </button>
             </div>
 
@@ -149,22 +149,22 @@ export default function HelpAgent() {
                 <div className="space-y-4">
                   <div className="text-center py-4">
                     <Bot className="w-12 h-12 text-purple-400 mx-auto mb-3" />
-                    <h4 className="font-medium text-gray-200">Hi! I'm your platform assistant.</h4>
-                    <p className="text-sm text-gray-400 mt-1">
+                    <h4 className="font-medium text-foreground">Hi! I'm your platform assistant.</h4>
+                    <p className="text-sm text-muted-foreground mt-1">
                       Ask me anything about using the platform, best practices, or getting set up.
                     </p>
                   </div>
 
                   <div className="space-y-2">
-                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Quick questions</p>
+                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Quick questions</p>
                     {QUICK_PROMPTS.map((item, i) => (
                       <button
                         key={i}
                         onClick={() => handleQuickPrompt(item.prompt)}
-                        className="w-full flex items-center gap-3 p-3 bg-gray-800 hover:bg-gray-750 border border-gray-700 rounded-lg transition-colors text-left group"
+                        className="w-full flex items-center gap-3 p-3 bg-card hover:bg-muted border border-border rounded-lg transition-colors text-left group"
                       >
                         <item.icon className="w-4 h-4 text-purple-400 group-hover:text-purple-300" />
-                        <span className="text-sm text-gray-300 group-hover:text-gray-200">{item.label}</span>
+                        <span className="text-sm text-secondary-foreground group-hover:text-foreground">{item.label}</span>
                       </button>
                     ))}
                   </div>
@@ -187,8 +187,8 @@ export default function HelpAgent() {
                     </div>
                     <div className={`max-w-[80%] px-4 py-2.5 rounded-2xl ${
                       msg.role === 'user'
-                        ? 'bg-primary-600 text-white rounded-br-md'
-                        : 'bg-gray-800 text-gray-200 rounded-bl-md'
+                        ? 'bg-primary-600 text-foreground rounded-br-md'
+                        : 'bg-card text-foreground rounded-bl-md'
                     }`}>
                       <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
                     </div>
@@ -201,7 +201,7 @@ export default function HelpAgent() {
                   <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center">
                     <Bot className="w-4 h-4 text-purple-400" />
                   </div>
-                  <div className="bg-gray-800 px-4 py-3 rounded-2xl rounded-bl-md">
+                  <div className="bg-card px-4 py-3 rounded-2xl rounded-bl-md">
                     <Loader2 className="w-5 h-5 text-purple-400 animate-spin" />
                   </div>
                 </div>
@@ -211,7 +211,7 @@ export default function HelpAgent() {
             </div>
 
             {/* Input */}
-            <form onSubmit={handleSubmit} className="p-4 border-t border-gray-700">
+            <form onSubmit={handleSubmit} className="p-4 border-t border-border">
               <div className="flex gap-2">
                 <input
                   ref={inputRef}
@@ -220,12 +220,12 @@ export default function HelpAgent() {
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask me anything..."
                   disabled={loading}
-                  className="flex-1 px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-gray-200 placeholder-gray-500 focus:outline-none focus:border-purple-500 disabled:opacity-50"
+                  className="flex-1 px-4 py-2.5 bg-card border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-purple-500 disabled:opacity-50"
                 />
                 <button
                   type="submit"
                   disabled={loading || !input.trim()}
-                  className="p-2.5 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-700 disabled:text-gray-500 text-white rounded-xl transition-colors"
+                  className="p-2.5 bg-purple-600 hover:bg-purple-700 disabled:bg-muted disabled:text-muted-foreground text-foreground rounded-xl transition-colors"
                 >
                   <Send className="w-5 h-5" />
                 </button>

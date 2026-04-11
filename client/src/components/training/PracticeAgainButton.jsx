@@ -82,9 +82,9 @@ export default function PracticeAgainButton({
   };
 
   const variantClasses = {
-    primary: 'bg-primary-600 hover:bg-primary-700 text-white',
-    secondary: 'bg-gray-700 hover:bg-gray-600 text-gray-200',
-    success: 'bg-green-600 hover:bg-green-700 text-white'
+    primary: 'bg-primary-600 hover:bg-primary-700 text-foreground',
+    secondary: 'bg-muted hover:bg-muted text-foreground',
+    success: 'bg-green-600 hover:bg-green-700 text-foreground'
   };
 
   if (!showOptions) {
@@ -153,17 +153,17 @@ export default function PracticeAgainButton({
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="absolute right-0 top-full mt-2 w-64 bg-gray-800 rounded-xl border border-gray-700 shadow-xl overflow-hidden z-50"
+              className="absolute right-0 top-full mt-2 w-64 bg-card rounded-xl border border-border shadow-xl overflow-hidden z-50"
             >
               <div className="p-2 space-y-1">
                 <button
                   onClick={() => handlePracticeAgain('repeat')}
-                  className="w-full flex items-start gap-3 p-3 hover:bg-gray-700 rounded-lg transition-colors text-left"
+                  className="w-full flex items-start gap-3 p-3 hover:bg-muted rounded-lg transition-colors text-left"
                 >
                   <TrendingUp className="w-5 h-5 text-primary-400 mt-0.5" />
                   <div>
-                    <p className="font-medium text-gray-200">Beat Your Score</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="font-medium text-foreground">Beat Your Score</p>
+                    <p className="text-xs text-muted-foreground">
                       Track improvement from your previous {resolvedScore}%
                     </p>
                   </div>
@@ -174,12 +174,12 @@ export default function PracticeAgainButton({
                     if (onNavigate) onNavigate();
                     navigate(`/scenario/${resolvedScenarioId}`);
                   }}
-                  className="w-full flex items-start gap-3 p-3 hover:bg-gray-700 rounded-lg transition-colors text-left"
+                  className="w-full flex items-start gap-3 p-3 hover:bg-muted rounded-lg transition-colors text-left"
                 >
                   <Play className="w-5 h-5 text-green-400 mt-0.5" />
                   <div>
-                    <p className="font-medium text-gray-200">Fresh Start</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="font-medium text-foreground">Fresh Start</p>
+                    <p className="text-xs text-muted-foreground">
                       Start a new session without tracking
                     </p>
                   </div>
@@ -190,12 +190,12 @@ export default function PracticeAgainButton({
                     if (onNavigate) onNavigate();
                     navigate(`/scenario/${resolvedScenarioId}?difficulty=harder`);
                   }}
-                  className="w-full flex items-start gap-3 p-3 hover:bg-gray-700 rounded-lg transition-colors text-left"
+                  className="w-full flex items-start gap-3 p-3 hover:bg-muted rounded-lg transition-colors text-left"
                 >
                   <Target className="w-5 h-5 text-orange-400 mt-0.5" />
                   <div>
-                    <p className="font-medium text-gray-200">Challenge Mode</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="font-medium text-foreground">Challenge Mode</p>
+                    <p className="text-xs text-muted-foreground">
                       Same scenario, higher difficulty
                     </p>
                   </div>
@@ -203,8 +203,8 @@ export default function PracticeAgainButton({
               </div>
 
               {session?.attempt_number && (
-                <div className="px-4 py-2 bg-gray-700/50 border-t border-gray-700">
-                  <p className="text-xs text-gray-500">
+                <div className="px-4 py-2 bg-muted/50 border-t border-border">
+                  <p className="text-xs text-muted-foreground">
                     This will be attempt #{(session.attempt_number || 0) + 1}
                   </p>
                 </div>

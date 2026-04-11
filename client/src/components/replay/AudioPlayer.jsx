@@ -118,7 +118,7 @@ function AudioPlayer({ src, duration, onTimeUpdate, onBookmark, bookmarks = [] }
   const progress = totalDuration > 0 ? (currentTime / totalDuration) * 100 : 0;
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+    <div className="bg-white dark:bg-card rounded-lg border border-border dark:border-border p-4">
       <audio ref={audioRef} src={src} preload="metadata" />
 
       {/* Progress bar with bookmarks */}
@@ -126,7 +126,7 @@ function AudioPlayer({ src, duration, onTimeUpdate, onBookmark, bookmarks = [] }
         <div
           ref={progressRef}
           onClick={handleSeek}
-          className="relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer group"
+          className="relative h-2 bg-muted dark:bg-muted rounded-full cursor-pointer group"
         >
           {/* Progress fill */}
           <div
@@ -155,7 +155,7 @@ function AudioPlayer({ src, duration, onTimeUpdate, onBookmark, bookmarks = [] }
         </div>
 
         {/* Time display */}
-        <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400 mt-1">
+        <div className="flex justify-between text-sm text-muted-foreground dark:text-muted-foreground mt-1">
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(totalDuration)}</span>
         </div>
@@ -167,7 +167,7 @@ function AudioPlayer({ src, duration, onTimeUpdate, onBookmark, bookmarks = [] }
           {/* Skip back */}
           <button
             onClick={() => skip(-10)}
-            className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+            className="p-2 text-muted-foreground dark:text-secondary-foreground hover:bg-muted dark:hover:bg-muted rounded-lg transition-colors"
             title="Skip back 10s"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -179,7 +179,7 @@ function AudioPlayer({ src, duration, onTimeUpdate, onBookmark, bookmarks = [] }
           <button
             onClick={togglePlay}
             disabled={isLoading}
-            className="p-3 bg-primary-600 text-white rounded-full hover:bg-primary-700 transition-colors disabled:opacity-50"
+            className="p-3 bg-primary-600 text-foreground rounded-full hover:bg-primary-700 transition-colors disabled:opacity-50"
           >
             {isLoading ? (
               <svg className="w-6 h-6 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -200,7 +200,7 @@ function AudioPlayer({ src, duration, onTimeUpdate, onBookmark, bookmarks = [] }
           {/* Skip forward */}
           <button
             onClick={() => skip(10)}
-            className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+            className="p-2 text-muted-foreground dark:text-secondary-foreground hover:bg-muted dark:hover:bg-muted rounded-lg transition-colors"
             title="Skip forward 10s"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -215,7 +215,7 @@ function AudioPlayer({ src, duration, onTimeUpdate, onBookmark, bookmarks = [] }
           {onBookmark && (
             <button
               onClick={() => onBookmark(currentTime)}
-              className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              className="p-2 text-muted-foreground dark:text-secondary-foreground hover:bg-muted dark:hover:bg-muted rounded-lg transition-colors"
               title="Add bookmark"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -228,7 +228,7 @@ function AudioPlayer({ src, duration, onTimeUpdate, onBookmark, bookmarks = [] }
           <select
             value={playbackRate}
             onChange={(e) => handlePlaybackRateChange(parseFloat(e.target.value))}
-            className="px-2 py-1 text-sm bg-gray-100 dark:bg-gray-700 rounded border-0 text-gray-700 dark:text-gray-300"
+            className="px-2 py-1 text-sm bg-muted dark:bg-muted rounded border-0 text-muted-foreground dark:text-secondary-foreground"
           >
             <option value={0.5}>0.5x</option>
             <option value={0.75}>0.75x</option>
@@ -242,7 +242,7 @@ function AudioPlayer({ src, duration, onTimeUpdate, onBookmark, bookmarks = [] }
           <div className="flex items-center gap-2">
             <button
               onClick={toggleMute}
-              className="p-1 text-gray-600 dark:text-gray-300"
+              className="p-1 text-muted-foreground dark:text-secondary-foreground"
             >
               {isMuted || volume === 0 ? (
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -262,7 +262,7 @@ function AudioPlayer({ src, duration, onTimeUpdate, onBookmark, bookmarks = [] }
               step="0.1"
               value={volume}
               onChange={handleVolumeChange}
-              className="w-20 h-1 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
+              className="w-20 h-1 bg-muted dark:bg-muted rounded-lg appearance-none cursor-pointer"
             />
           </div>
         </div>

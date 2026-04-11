@@ -241,15 +241,15 @@ export default function Billing() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-100">Billing & Subscription</h1>
-          <p className="text-gray-400 mt-1">
+          <h1 className="text-2xl font-bold text-foreground">Billing & Subscription</h1>
+          <p className="text-muted-foreground mt-1">
             Simple, transparent pricing. Platform access plus training hours.
           </p>
         </div>
         <button
           onClick={handleManageBilling}
           disabled={portalLoading}
-          className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 font-medium rounded-lg transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted text-secondary-foreground font-medium rounded-lg transition-colors"
         >
           <CreditCard className="w-5 h-5" />
           {portalLoading ? 'Loading...' : 'Manage Billing'}
@@ -292,8 +292,8 @@ export default function Billing() {
                 <Tag className="w-5 h-5 text-purple-400" />
               </div>
               <div>
-                <p className="text-gray-100 font-medium">Have a promo code?</p>
-                <p className="text-sm text-gray-400">Enter your code to unlock special access</p>
+                <p className="text-foreground font-medium">Have a promo code?</p>
+                <p className="text-sm text-muted-foreground">Enter your code to unlock special access</p>
               </div>
             </div>
             <form onSubmit={handleRedeemPromo} className="flex gap-2 flex-1 md:max-w-md">
@@ -302,12 +302,12 @@ export default function Billing() {
                 value={promoCode}
                 onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
                 placeholder="Enter promo code"
-                className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:border-purple-500 uppercase"
+                className="flex-1 px-4 py-2 bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-purple-500 uppercase"
               />
               <button
                 type="submit"
                 disabled={promoLoading || !promoCode.trim()}
-                className="px-5 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-700 disabled:text-gray-500 text-white font-medium rounded-lg transition-colors flex items-center gap-2"
+                className="px-5 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-muted disabled:text-muted-foreground text-foreground font-medium rounded-lg transition-colors flex items-center gap-2"
               >
                 {promoLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -339,10 +339,10 @@ export default function Billing() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+          className="bg-card rounded-xl p-6 border border-border"
         >
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-100">Current Plan</h2>
+            <h2 className="text-lg font-semibold text-foreground">Current Plan</h2>
             <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${
               subscriptionStatus === 'active' ? 'bg-green-500/10 text-green-400' :
               subscriptionStatus === 'trialing' ? 'bg-blue-500/10 text-blue-400' :
@@ -352,14 +352,14 @@ export default function Billing() {
             </span>
           </div>
           <div className="flex items-baseline gap-2 mb-2">
-            <span className="text-3xl font-bold text-gray-100">{currentPlan.tier}</span>
-            <span className="text-gray-400">- {currentPlan.name}</span>
+            <span className="text-3xl font-bold text-foreground">{currentPlan.tier}</span>
+            <span className="text-muted-foreground">- {currentPlan.name}</span>
           </div>
-          <p className="text-2xl font-bold text-gray-100">
-            ${currentPlan.monthlyPrice}<span className="text-sm text-gray-400 font-normal">/month</span>
+          <p className="text-2xl font-bold text-foreground">
+            ${currentPlan.monthlyPrice}<span className="text-sm text-muted-foreground font-normal">/month</span>
           </p>
           {organization?.current_period_end && (
-            <p className="text-sm text-gray-400 mt-4">
+            <p className="text-sm text-muted-foreground mt-4">
               Next billing: {new Date(organization.current_period_end).toLocaleDateString()}
             </p>
           )}
@@ -370,16 +370,16 @@ export default function Billing() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+          className="bg-card rounded-xl p-6 border border-border"
         >
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-100">Training Hours</h2>
-            <Clock className="w-5 h-5 text-gray-400" />
+            <h2 className="text-lg font-semibold text-foreground">Training Hours</h2>
+            <Clock className="w-5 h-5 text-muted-foreground" />
           </div>
 
           <div className="mb-4">
             <div className="flex justify-between text-sm mb-2">
-              <span className="text-gray-400">
+              <span className="text-muted-foreground">
                 {(trainingHoursUsed || 0).toFixed(1)} / {trainingHoursIncluded || 0} hours used
               </span>
               <span className={`font-medium ${
@@ -388,7 +388,7 @@ export default function Billing() {
                 {(trainingHoursIncluded - (trainingHoursUsed || 0)).toFixed(1)}h remaining
               </span>
             </div>
-            <div className="h-3 bg-gray-700 rounded-full overflow-hidden">
+            <div className="h-3 bg-muted rounded-full overflow-hidden">
               <div
                 className={`h-full transition-all duration-500 ${
                   usagePercentage > 90 ? 'bg-red-500' : usagePercentage > 70 ? 'bg-yellow-500' : 'bg-green-500'
@@ -417,14 +417,14 @@ export default function Billing() {
         className="flex items-center justify-center gap-4"
       >
         <span className={`text-sm font-medium cursor-pointer transition-colors ${
-          !isAnnual ? 'text-gray-100' : 'text-gray-500'
+          !isAnnual ? 'text-foreground' : 'text-muted-foreground'
         }`} onClick={() => setBillingCycle('monthly')}>
           Monthly
         </span>
         <button
           onClick={() => setBillingCycle(isAnnual ? 'monthly' : 'annual')}
           className={`relative w-12 h-6 rounded-full transition-colors ${
-            isAnnual ? 'bg-gradient-to-r from-pink-500 to-orange-500' : 'bg-gray-600'
+            isAnnual ? 'bg-gradient-to-r from-pink-500 to-orange-500' : 'bg-muted'
           }`}
         >
           <span className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform ${
@@ -432,7 +432,7 @@ export default function Billing() {
           }`} />
         </button>
         <span className={`text-sm font-medium cursor-pointer transition-colors ${
-          isAnnual ? 'text-gray-100' : 'text-gray-500'
+          isAnnual ? 'text-foreground' : 'text-muted-foreground'
         }`} onClick={() => setBillingCycle('annual')}>
           Annual
         </span>
@@ -457,30 +457,30 @@ export default function Billing() {
               key={planId}
               className={`relative rounded-2xl p-6 border-2 transition-all ${
                 plan.featured
-                  ? 'border-transparent bg-gradient-to-b from-gray-800 to-gray-800 shadow-lg'
+                  ? 'border-transparent bg-gradient-to-b from-card to-card shadow-lg'
                   : isCurrent
-                  ? 'border-primary-500 bg-gray-800'
-                  : 'border-gray-700 bg-gray-800 hover:border-gray-600'
+                  ? 'border-primary-500 bg-card'
+                  : 'border-border bg-card hover:border-border'
               }`}
               style={plan.featured ? {
                 background: 'linear-gradient(#1f2937, #1f2937) padding-box, linear-gradient(135deg, #ec4899, #f97316, #eab308) border-box'
               } : undefined}
             >
               {plan.featured && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-pink-500 to-orange-500 text-white text-xs font-semibold rounded-full">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-pink-500 to-orange-500 text-foreground text-xs font-semibold rounded-full">
                   Most Popular
                 </div>
               )}
 
               <div className="mb-4">
                 <p className="text-xs font-semibold text-purple-400 uppercase tracking-wider">{plan.tier}</p>
-                <h3 className="text-xl font-bold text-gray-100 mt-1">{plan.name}</h3>
-                <p className="text-sm text-gray-400 mt-1">{plan.description}</p>
+                <h3 className="text-xl font-bold text-foreground mt-1">{plan.name}</h3>
+                <p className="text-sm text-muted-foreground mt-1">{plan.description}</p>
               </div>
 
               <div className="mb-6">
-                <span className="text-4xl font-bold text-gray-100">${price}</span>
-                <span className="text-gray-400">/month</span>
+                <span className="text-4xl font-bold text-foreground">${price}</span>
+                <span className="text-muted-foreground">/month</span>
                 {isAnnual && (
                   <p className="text-sm text-green-400 mt-1">${plan.annualTotal.toLocaleString()} billed annually</p>
                 )}
@@ -490,7 +490,7 @@ export default function Billing() {
                 {plan.features.map((feature, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm">
                     <Check className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-300">
+                    <span className="text-secondary-foreground">
                       {isAnnual && feature.annual ? feature.annual : feature.text}
                     </span>
                   </li>
@@ -500,7 +500,7 @@ export default function Billing() {
               {isCurrent ? (
                 <button
                   disabled
-                  className="w-full py-3 bg-gray-700 text-gray-400 font-medium rounded-lg cursor-not-allowed"
+                  className="w-full py-3 bg-muted text-muted-foreground font-medium rounded-lg cursor-not-allowed"
                 >
                   Current Plan
                 </button>
@@ -509,8 +509,8 @@ export default function Billing() {
                   onClick={() => handleUpgrade(planId)}
                   className={`w-full py-3 font-medium rounded-lg transition-colors ${
                     plan.featured
-                      ? 'bg-gradient-to-r from-pink-500 to-orange-500 text-white hover:opacity-90'
-                      : 'bg-gray-700 text-gray-200 hover:bg-gray-600 border border-gray-600'
+                      ? 'bg-gradient-to-r from-pink-500 to-orange-500 text-foreground hover:opacity-90'
+                      : 'bg-muted text-foreground hover:bg-muted border border-border'
                   }`}
                 >
                   {planId === 'enterprise' ? 'Contact Sales' : 'Start Free Trial'}
@@ -526,35 +526,35 @@ export default function Billing() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.25 }}
-        className="bg-gray-800 rounded-2xl p-6 border border-gray-700"
+        className="bg-card rounded-2xl p-6 border border-border"
       >
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           <div>
-            <h2 className="text-xl font-semibold text-gray-100">Need more training hours?</h2>
-            <p className="text-gray-400 mt-1">Purchase hour blocks anytime. They never expire.</p>
+            <h2 className="text-xl font-semibold text-foreground">Need more training hours?</h2>
+            <p className="text-muted-foreground mt-1">Purchase hour blocks anytime. They never expire.</p>
           </div>
         </div>
 
         <div className="grid md:grid-cols-3 gap-4 mb-6">
           {HOUR_BLOCKS.map((block) => (
-            <div key={block.hours} className="bg-gray-750 border border-gray-700 rounded-xl p-5">
+            <div key={block.hours} className="bg-muted border border-border rounded-xl p-5">
               <div className="flex items-center justify-between mb-4">
-                <h4 className="text-lg font-semibold text-gray-100">{block.hours}-Hour Block</h4>
-                <span className="text-sm text-gray-400">
+                <h4 className="text-lg font-semibold text-foreground">{block.hours}-Hour Block</h4>
+                <span className="text-sm text-muted-foreground">
                   {block.calls}{block.discount && ` · ${block.discount}`}
                 </span>
               </div>
               <div className="space-y-2">
                 {Object.entries(PLANS).map(([planId, plan]) => (
                   <div key={planId} className="flex justify-between text-sm">
-                    <span className="text-gray-400">{plan.tier}</span>
-                    <span className="font-semibold text-gray-200">${plan.hourBlocks[block.hours]}</span>
+                    <span className="text-muted-foreground">{plan.tier}</span>
+                    <span className="font-semibold text-foreground">${plan.hourBlocks[block.hours]}</span>
                   </div>
                 ))}
               </div>
               <button
                 onClick={() => handlePurchaseHours(block.hours)}
-                className="w-full mt-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-200 font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                className="w-full mt-4 py-2 bg-muted hover:bg-muted text-foreground font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 Purchase
@@ -565,11 +565,11 @@ export default function Billing() {
 
         <div className="p-4 bg-gradient-to-r from-pink-500/10 to-orange-500/10 border border-pink-500/20 rounded-xl flex items-start gap-4">
           <div className="p-2 bg-gradient-to-r from-pink-500 to-orange-500 rounded-lg flex-shrink-0">
-            <Clock className="w-5 h-5 text-white" />
+            <Clock className="w-5 h-5 text-foreground" />
           </div>
           <div>
-            <h4 className="font-semibold text-gray-100">Annual plans: All hours upfront</h4>
-            <p className="text-sm text-gray-400 mt-1">
+            <h4 className="font-semibold text-foreground">Annual plans: All hours upfront</h4>
+            <p className="text-sm text-muted-foreground mt-1">
               Monthly plans reset each month. Annual plans give you all your hours immediately—perfect for heavy onboarding months or pre-season training pushes. Purchased hour blocks never expire on any plan.
             </p>
           </div>
@@ -581,36 +581,36 @@ export default function Billing() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+        className="bg-card rounded-xl p-6 border border-border"
       >
-        <h2 className="text-lg font-semibold text-gray-100 mb-6">Recent Invoices</h2>
+        <h2 className="text-lg font-semibold text-foreground mb-6">Recent Invoices</h2>
         {invoices.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-700">
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-400">Date</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-400">Invoice</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-400">Amount</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-400">Status</th>
+                <tr className="border-b border-border">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Date</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Invoice</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Amount</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Status</th>
                   <th className="py-3 px-4"></th>
                 </tr>
               </thead>
               <tbody>
                 {invoices.map((invoice) => (
-                  <tr key={invoice.id} className="border-b border-gray-700/50">
-                    <td className="py-3 px-4 text-gray-300">
+                  <tr key={invoice.id} className="border-b border-border/50">
+                    <td className="py-3 px-4 text-secondary-foreground">
                       {new Date(invoice.created_at).toLocaleDateString()}
                     </td>
-                    <td className="py-3 px-4 text-gray-300">{invoice.number}</td>
-                    <td className="py-3 px-4 text-gray-300">
+                    <td className="py-3 px-4 text-secondary-foreground">{invoice.number}</td>
+                    <td className="py-3 px-4 text-secondary-foreground">
                       ${(invoice.amount_paid / 100).toFixed(2)}
                     </td>
                     <td className="py-3 px-4">
                       <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${
                         invoice.status === 'paid' ? 'bg-green-500/10 text-green-400' :
                         invoice.status === 'open' ? 'bg-yellow-500/10 text-yellow-400' :
-                        'bg-gray-500/10 text-gray-400'
+                        'bg-muted/10 text-muted-foreground'
                       }`}>
                         {invoice.status}
                       </span>
@@ -635,9 +635,9 @@ export default function Billing() {
           </div>
         ) : (
           <div className="text-center py-8">
-            <CreditCard className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-            <p className="text-gray-400">No invoices yet</p>
-            <p className="text-sm text-gray-500 mt-1">Invoices will appear here after your first payment</p>
+            <CreditCard className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+            <p className="text-muted-foreground">No invoices yet</p>
+            <p className="text-sm text-muted-foreground mt-1">Invoices will appear here after your first payment</p>
           </div>
         )}
       </motion.div>

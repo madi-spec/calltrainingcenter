@@ -119,19 +119,19 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
           <div className="p-2 bg-orange-500/20 rounded-lg">
             <Sliders className="w-6 h-6 text-orange-400" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-100">Scoring Weights & Criteria</h3>
+          <h3 className="text-lg font-semibold text-foreground">Scoring Weights & Criteria</h3>
         </div>
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-muted-foreground">
           Customize how calls are scored and define specific behaviors to reward or penalize.
         </p>
       </div>
 
       {/* Scoring Weights */}
-      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+      <div className="bg-card rounded-xl p-6 border border-border">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h4 className="text-md font-semibold text-gray-100">Category Weights</h4>
-            <p className="text-sm text-gray-400">Adjust how much each category contributes to the overall score</p>
+            <h4 className="text-md font-semibold text-foreground">Category Weights</h4>
+            <p className="text-sm text-muted-foreground">Adjust how much each category contributes to the overall score</p>
           </div>
           <div className={`px-3 py-1 rounded-full text-sm font-medium ${
             isValidTotal ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
@@ -145,8 +145,8 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
             <div key={key} className="space-y-2">
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="text-sm font-medium text-gray-200">{config.label}</span>
-                  <p className="text-xs text-gray-500">{config.description}</p>
+                  <span className="text-sm font-medium text-foreground">{config.label}</span>
+                  <p className="text-xs text-muted-foreground">{config.description}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <input
@@ -155,12 +155,12 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
                     max="100"
                     value={weights[key]}
                     onChange={(e) => handleWeightChange(key, e.target.value)}
-                    className="w-16 px-2 py-1 bg-gray-700 border border-gray-600 rounded text-center text-gray-100 text-sm"
+                    className="w-16 px-2 py-1 bg-muted border border-border rounded text-center text-foreground text-sm"
                   />
-                  <span className="text-gray-400 text-sm">%</span>
+                  <span className="text-muted-foreground text-sm">%</span>
                 </div>
               </div>
-              <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+              <div className="h-2 bg-muted rounded-full overflow-hidden">
                 <motion.div
                   className={`h-full ${config.color}`}
                   initial={{ width: 0 }}
@@ -182,12 +182,12 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
       </div>
 
       {/* Required Phrases */}
-      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+      <div className="bg-card rounded-xl p-6 border border-border">
         <div className="flex items-center gap-2 mb-2">
           <CheckCircle className="w-5 h-5 text-green-400" />
-          <h4 className="text-md font-semibold text-gray-100">Required Behaviors</h4>
+          <h4 className="text-md font-semibold text-foreground">Required Behaviors</h4>
         </div>
-        <p className="text-sm text-gray-400 mb-4">
+        <p className="text-sm text-muted-foreground mb-4">
           CSRs will be rewarded when they include these phrases or behaviors
         </p>
 
@@ -200,7 +200,7 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
               </div>
               <span className={`text-xs px-2 py-0.5 rounded ${
                 item.impact === 'high' ? 'bg-green-500/20 text-green-400' :
-                item.impact === 'low' ? 'bg-gray-500/20 text-gray-400' :
+                item.impact === 'low' ? 'bg-muted/20 text-muted-foreground' :
                 'bg-yellow-500/20 text-yellow-400'
               }`}>
                 {item.impact}
@@ -208,7 +208,7 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
               <button
                 type="button"
                 onClick={() => removePhrase('requiredPhrases', index)}
-                className="p-1 text-gray-500 hover:text-red-400"
+                className="p-1 text-muted-foreground hover:text-red-400"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -223,12 +223,12 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
             placeholder="Phrase or behavior to reward..."
             value={newRequired.phrase}
             onChange={(e) => setNewRequired(prev => ({ ...prev, phrase: e.target.value }))}
-            className="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-100 placeholder-gray-500"
+            className="flex-1 px-3 py-2 bg-muted border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground"
           />
           <select
             value={newRequired.impact}
             onChange={(e) => setNewRequired(prev => ({ ...prev, impact: e.target.value }))}
-            className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-100"
+            className="px-3 py-2 bg-muted border border-border rounded-lg text-sm text-foreground"
           >
             <option value="low">Low</option>
             <option value="medium">Medium</option>
@@ -238,7 +238,7 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
             type="button"
             onClick={addRequiredPhrase}
             disabled={!newRequired.phrase.trim()}
-            className="px-3 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-700 text-white rounded-lg"
+            className="px-3 py-2 bg-green-600 hover:bg-green-700 disabled:bg-muted text-foreground rounded-lg"
           >
             <Plus className="w-4 h-4" />
           </button>
@@ -246,12 +246,12 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
       </div>
 
       {/* Prohibited Phrases */}
-      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+      <div className="bg-card rounded-xl p-6 border border-border">
         <div className="flex items-center gap-2 mb-2">
           <XCircle className="w-5 h-5 text-red-400" />
-          <h4 className="text-md font-semibold text-gray-100">Prohibited Behaviors</h4>
+          <h4 className="text-md font-semibold text-foreground">Prohibited Behaviors</h4>
         </div>
-        <p className="text-sm text-gray-400 mb-4">
+        <p className="text-sm text-muted-foreground mb-4">
           CSRs will be penalized when they use these phrases or behaviors
         </p>
 
@@ -264,7 +264,7 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
               </div>
               <span className={`text-xs px-2 py-0.5 rounded ${
                 item.impact === 'high' ? 'bg-red-500/20 text-red-400' :
-                item.impact === 'low' ? 'bg-gray-500/20 text-gray-400' :
+                item.impact === 'low' ? 'bg-muted/20 text-muted-foreground' :
                 'bg-yellow-500/20 text-yellow-400'
               }`}>
                 {item.impact}
@@ -272,7 +272,7 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
               <button
                 type="button"
                 onClick={() => removePhrase('prohibitedPhrases', index)}
-                className="p-1 text-gray-500 hover:text-red-400"
+                className="p-1 text-muted-foreground hover:text-red-400"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -287,12 +287,12 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
             placeholder="Phrase to penalize..."
             value={newProhibited.phrase}
             onChange={(e) => setNewProhibited(prev => ({ ...prev, phrase: e.target.value }))}
-            className="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-100 placeholder-gray-500"
+            className="flex-1 px-3 py-2 bg-muted border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground"
           />
           <select
             value={newProhibited.impact}
             onChange={(e) => setNewProhibited(prev => ({ ...prev, impact: e.target.value }))}
-            className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-gray-100"
+            className="px-3 py-2 bg-muted border border-border rounded-lg text-sm text-foreground"
           >
             <option value="low">Low</option>
             <option value="medium">Medium</option>
@@ -302,7 +302,7 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
             type="button"
             onClick={addProhibitedPhrase}
             disabled={!newProhibited.phrase.trim()}
-            className="px-3 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-700 text-white rounded-lg"
+            className="px-3 py-2 bg-red-600 hover:bg-red-700 disabled:bg-muted text-foreground rounded-lg"
           >
             <Plus className="w-4 h-4" />
           </button>
@@ -324,7 +324,7 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
         <button
           type="submit"
           disabled={saving || !isValidTotal}
-          className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors disabled:opacity-50"
         >
           {saving ? (
             <>

@@ -48,9 +48,9 @@ export default function StreakStatus({ compact = false }) {
 
   if (loading) {
     return (
-      <div className={`flex items-center gap-2 ${compact ? 'px-2 py-1' : 'px-3 py-2'} bg-gray-700/50 rounded-full`}>
+      <div className={`flex items-center gap-2 ${compact ? 'px-2 py-1' : 'px-3 py-2'} bg-muted/50 rounded-full`}>
         <Loader2 className="w-4 h-4 animate-spin text-orange-400" />
-        <span className="text-sm text-gray-400">Loading...</span>
+        <span className="text-sm text-muted-foreground">Loading...</span>
       </div>
     );
   }
@@ -71,10 +71,10 @@ export default function StreakStatus({ compact = false }) {
               : 'bg-orange-500/20'
             : recovery.available
               ? 'bg-red-500/20 border border-red-500/30'
-              : 'bg-gray-700/50'}
+              : 'bg-muted/50'}
         `}>
-          <Flame className={`w-4 h-4 ${streak.current > 0 ? 'text-orange-400' : 'text-gray-500'}`} />
-          <span className={`text-sm font-medium ${streak.current > 0 ? 'text-orange-400' : 'text-gray-500'}`}>
+          <Flame className={`w-4 h-4 ${streak.current > 0 ? 'text-orange-400' : 'text-muted-foreground'}`} />
+          <span className={`text-sm font-medium ${streak.current > 0 ? 'text-orange-400' : 'text-muted-foreground'}`}>
             {streak.current || 0}
           </span>
           {streak.atRisk && (
@@ -103,7 +103,7 @@ export default function StreakStatus({ compact = false }) {
             ? 'bg-orange-500/10 border-orange-500/30'
             : recovery.available
               ? 'bg-red-500/10 border-red-500/30'
-              : 'bg-gray-800 border-gray-700'}
+              : 'bg-card border-border'}
         `}
       >
         <div className="flex items-center justify-between">
@@ -112,17 +112,17 @@ export default function StreakStatus({ compact = false }) {
               p-2 rounded-xl
               ${streak.current > 0
                 ? 'bg-orange-500/20'
-                : 'bg-gray-700'}
+                : 'bg-muted'}
             `}>
-              <Flame className={`w-6 h-6 ${streak.current > 0 ? 'text-orange-400' : 'text-gray-500'}`} />
+              <Flame className={`w-6 h-6 ${streak.current > 0 ? 'text-orange-400' : 'text-muted-foreground'}`} />
             </div>
 
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-2xl font-bold text-gray-100">
+                <span className="text-2xl font-bold text-foreground">
                   {streak.current || 0}
                 </span>
-                <span className="text-sm text-gray-400">day streak</span>
+                <span className="text-sm text-muted-foreground">day streak</span>
                 {streak.atRisk && (
                   <span className="flex items-center gap-1 px-2 py-0.5 bg-orange-500/20 rounded-full text-xs text-orange-400">
                     <AlertTriangle className="w-3 h-3" />
@@ -131,7 +131,7 @@ export default function StreakStatus({ compact = false }) {
                 )}
               </div>
 
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-muted-foreground">
                 Best: {streak.longest || 0} days
               </p>
             </div>
@@ -153,11 +153,11 @@ export default function StreakStatus({ compact = false }) {
                 title={streak.atRisk ? 'Use freeze to protect your streak' : `${tokens.freezesAvailable} freeze${tokens.freezesAvailable !== 1 ? 's' : ''} available`}
               >
                 {usingFreeze ? (
-                  <Loader2 className="w-4 h-4 text-white animate-spin" />
+                  <Loader2 className="w-4 h-4 text-foreground animate-spin" />
                 ) : (
                   <Snowflake className="w-4 h-4 text-blue-400" />
                 )}
-                <span className="text-sm font-medium text-white">
+                <span className="text-sm font-medium text-foreground">
                   {tokens.freezesAvailable}
                 </span>
               </button>
@@ -177,20 +177,20 @@ export default function StreakStatus({ compact = false }) {
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
-            className="mt-4 pt-4 border-t border-gray-700"
+            className="mt-4 pt-4 border-t border-border"
           >
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-red-400">
                   Your {recovery.previousStreak}-day streak was broken
                 </p>
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-muted-foreground">
                   Recover it before the deadline expires
                 </p>
               </div>
               <button
                 onClick={() => setShowRecoveryModal(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-foreground font-medium rounded-lg transition-colors"
               >
                 <RefreshCw className="w-4 h-4" />
                 Recover

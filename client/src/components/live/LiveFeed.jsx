@@ -30,7 +30,7 @@ function CompletionItem({ completion }) {
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
-      className="flex items-center gap-3 py-3 border-b border-gray-100 dark:border-gray-700 last:border-0"
+      className="flex items-center gap-3 py-3 border-b border-border dark:border-border last:border-0"
     >
       {/* Completion icon */}
       <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
@@ -42,12 +42,12 @@ function CompletionItem({ completion }) {
       {/* Info */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="font-medium text-gray-900 dark:text-white truncate">
+          <span className="font-medium text-foreground dark:text-foreground truncate">
             {completion.user_name || 'Unknown'}
           </span>
-          <span className="text-gray-400 dark:text-gray-500">completed</span>
+          <span className="text-muted-foreground dark:text-muted-foreground">completed</span>
         </div>
-        <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+        <p className="text-sm text-muted-foreground dark:text-muted-foreground truncate">
           {completion.scenario_name || 'Training session'}
         </p>
       </div>
@@ -61,10 +61,10 @@ function CompletionItem({ completion }) {
 
       {/* Duration & time */}
       <div className="flex-shrink-0 text-right">
-        <div className="text-sm text-gray-600 dark:text-gray-300 font-mono">
+        <div className="text-sm text-muted-foreground dark:text-secondary-foreground font-mono">
           {formatDuration(completion.duration_seconds)}
         </div>
-        <div className="text-xs text-gray-400 dark:text-gray-500">
+        <div className="text-xs text-muted-foreground dark:text-muted-foreground">
           {formatTimeAgo(completion.completed_at)}
         </div>
       </div>
@@ -78,12 +78,12 @@ function LiveFeed({ completions = [], loading = false }) {
       <div className="space-y-3">
         {[...Array(5)].map((_, i) => (
           <div key={i} className="animate-pulse flex items-center gap-3 py-3">
-            <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+            <div className="w-8 h-8 bg-muted dark:bg-muted rounded-full"></div>
             <div className="flex-1 space-y-2">
-              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
-              <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+              <div className="h-4 bg-muted dark:bg-muted rounded w-1/3"></div>
+              <div className="h-3 bg-muted dark:bg-muted rounded w-1/2"></div>
             </div>
-            <div className="h-6 w-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="h-6 w-12 bg-muted dark:bg-muted rounded"></div>
           </div>
         ))}
       </div>
@@ -93,13 +93,13 @@ function LiveFeed({ completions = [], loading = false }) {
   if (completions.length === 0) {
     return (
       <div className="py-8 text-center">
-        <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-          <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-muted dark:bg-muted flex items-center justify-center">
+          <svg className="w-6 h-6 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <p className="text-gray-500 dark:text-gray-400">No recent completions</p>
-        <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+        <p className="text-muted-foreground dark:text-muted-foreground">No recent completions</p>
+        <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-1">
           Completions will appear here as they happen
         </p>
       </div>
@@ -107,7 +107,7 @@ function LiveFeed({ completions = [], loading = false }) {
   }
 
   return (
-    <div className="divide-y divide-gray-100 dark:divide-gray-700">
+    <div className="divide-y divide-gray-100 dark:divide-border">
       <AnimatePresence mode="popLayout">
         {completions.map((completion) => (
           <CompletionItem key={completion.id} completion={completion} />

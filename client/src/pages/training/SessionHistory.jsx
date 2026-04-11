@@ -83,8 +83,8 @@ export default function SessionHistory() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-100">Session History</h1>
-        <p className="text-gray-400 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Session History</h1>
+        <p className="text-muted-foreground mt-1">
           Review your past training sessions and coaching feedback
         </p>
       </div>
@@ -92,21 +92,21 @@ export default function SessionHistory() {
       {/* Filters */}
       <div className="flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search by scenario..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="w-full pl-10 pr-4 py-2 bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
         </div>
         <div className="flex items-center gap-2">
-          <Filter className="w-5 h-5 text-gray-500" />
+          <Filter className="w-5 h-5 text-muted-foreground" />
           <select
             value={dateFilter}
             onChange={(e) => setDateFilter(e.target.value)}
-            className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="px-4 py-2 bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
           >
             <option value="all">All Time</option>
             <option value="today">Today</option>
@@ -125,7 +125,7 @@ export default function SessionHistory() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
-              className="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-gray-600 transition-colors"
+              className="bg-card rounded-xl p-6 border border-border hover:border-border transition-colors"
             >
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div className="flex items-center gap-4">
@@ -133,15 +133,15 @@ export default function SessionHistory() {
                     {session.overall_score || '-'}
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-100">
+                    <h3 className="text-lg font-semibold text-foreground">
                       {session.scenario_name}
                     </h3>
                     <div className="flex items-center gap-4 mt-1">
-                      <span className="text-sm text-gray-400 flex items-center gap-1">
+                      <span className="text-sm text-muted-foreground flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
                         {new Date(session.created_at).toLocaleDateString()}
                       </span>
-                      <span className="text-sm text-gray-400 flex items-center gap-1">
+                      <span className="text-sm text-muted-foreground flex items-center gap-1">
                         <Clock className="w-4 h-4" />
                         {Math.round((session.duration_seconds || 0) / 60)} min
                       </span>
@@ -159,7 +159,7 @@ export default function SessionHistory() {
                       {Object.entries(session.category_scores).slice(0, 3).map(([key, value]) => (
                         <div
                           key={key}
-                          className="px-2 py-1 bg-gray-700 rounded text-xs text-gray-400"
+                          className="px-2 py-1 bg-muted rounded text-xs text-muted-foreground"
                           title={key}
                         >
                           {typeof value === 'object' ? value.score : value}%
@@ -170,7 +170,7 @@ export default function SessionHistory() {
                   {(session.recording_url || session.recording_id) && (
                     <Link
                       to={`/playback/${session.id}`}
-                      className="flex items-center gap-1 px-3 py-1.5 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium text-sm transition-colors"
+                      className="flex items-center gap-1 px-3 py-1.5 bg-primary-600 hover:bg-primary-700 text-foreground rounded-lg font-medium text-sm transition-colors"
                     >
                       <Play className="w-4 h-4" />
                       Watch Replay
@@ -187,16 +187,16 @@ export default function SessionHistory() {
 
               {/* Quick Stats */}
               {session.strengths && session.improvements && (
-                <div className="mt-4 pt-4 border-t border-gray-700 grid md:grid-cols-2 gap-4">
+                <div className="mt-4 pt-4 border-t border-border grid md:grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-green-400 font-medium mb-2">Top Strength</p>
-                    <p className="text-sm text-gray-300">
+                    <p className="text-sm text-secondary-foreground">
                       {session.strengths[0]?.title || 'N/A'}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-yellow-400 font-medium mb-2">Area to Improve</p>
-                    <p className="text-sm text-gray-300">
+                    <p className="text-sm text-secondary-foreground">
                       {session.improvements[0]?.title || 'N/A'}
                     </p>
                   </div>
@@ -208,20 +208,20 @@ export default function SessionHistory() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="bg-gray-800 rounded-xl p-12 border border-gray-700 text-center"
+            className="bg-card rounded-xl p-12 border border-border text-center"
           >
-            <TrendingUp className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-100 mb-2">
+            <TrendingUp className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-foreground mb-2">
               No sessions found
             </h3>
-            <p className="text-gray-400 mb-6">
+            <p className="text-muted-foreground mb-6">
               {searchQuery || dateFilter !== 'all'
                 ? 'Try adjusting your filters'
                 : 'Complete your first training session to see it here'}
             </p>
             <Link
               to="/scenarios"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
             >
               Start Training
             </Link>

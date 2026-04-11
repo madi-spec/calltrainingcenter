@@ -61,7 +61,7 @@ export default function StreakRecoveryModal({ recoveryData, tokensAvailable, onC
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
-        className="bg-gray-800 rounded-2xl w-full max-w-md p-6 border border-gray-700 shadow-xl"
+        className="bg-card rounded-2xl w-full max-w-md p-6 border border-border shadow-xl"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-start justify-between mb-6">
@@ -70,28 +70,28 @@ export default function StreakRecoveryModal({ recoveryData, tokensAvailable, onC
               <Flame className="w-6 h-6 text-red-400" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-100">Recover Your Streak</h2>
-              <p className="text-sm text-gray-400">Don't lose your progress!</p>
+              <h2 className="text-xl font-bold text-foreground">Recover Your Streak</h2>
+              <p className="text-sm text-muted-foreground">Don't lose your progress!</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+            className="p-2 hover:bg-muted rounded-lg transition-colors"
           >
-            <X className="w-5 h-5 text-gray-400" />
+            <X className="w-5 h-5 text-muted-foreground" />
           </button>
         </div>
 
         <div className="space-y-4">
           {/* Streak info */}
-          <div className="bg-gray-700/50 rounded-xl p-4 text-center">
-            <p className="text-sm text-gray-400 mb-1">Your broken streak</p>
+          <div className="bg-muted/50 rounded-xl p-4 text-center">
+            <p className="text-sm text-muted-foreground mb-1">Your broken streak</p>
             <div className="flex items-center justify-center gap-2">
               <Flame className="w-8 h-8 text-orange-400" />
               <span className="text-4xl font-bold text-orange-400">
                 {recoveryData?.previousStreak || 0}
               </span>
-              <span className="text-lg text-gray-400">days</span>
+              <span className="text-lg text-muted-foreground">days</span>
             </div>
           </div>
 
@@ -102,15 +102,15 @@ export default function StreakRecoveryModal({ recoveryData, tokensAvailable, onC
           </div>
 
           {/* Recovery tokens */}
-          <div className="bg-gray-700/50 rounded-xl p-4">
+          <div className="bg-muted/50 rounded-xl p-4">
             <div className="flex items-center justify-between">
-              <span className="text-gray-300">Recovery Tokens Available</span>
+              <span className="text-secondary-foreground">Recovery Tokens Available</span>
               <span className={`font-bold ${tokensAvailable > 0 ? 'text-green-400' : 'text-red-400'}`}>
                 {tokensAvailable}
               </span>
             </div>
             {tokensAvailable === 0 && (
-              <p className="text-xs text-gray-500 mt-2">
+              <p className="text-xs text-muted-foreground mt-2">
                 Earn recovery tokens by reaching streak milestones (30 days)
               </p>
             )}
@@ -126,14 +126,14 @@ export default function StreakRecoveryModal({ recoveryData, tokensAvailable, onC
           <div className="flex gap-3 pt-2">
             <button
               onClick={onClose}
-              className="flex-1 px-4 py-3 bg-gray-700 hover:bg-gray-600 text-gray-200 font-medium rounded-xl transition-colors"
+              className="flex-1 px-4 py-3 bg-muted hover:bg-muted text-foreground font-medium rounded-xl transition-colors"
             >
               Cancel
             </button>
             <button
               onClick={handleRecover}
               disabled={recovering || tokensAvailable < 1}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-colors"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-green-600 hover:bg-green-700 disabled:bg-muted disabled:cursor-not-allowed text-foreground font-medium rounded-xl transition-colors"
             >
               {recovering ? (
                 <>
@@ -150,7 +150,7 @@ export default function StreakRecoveryModal({ recoveryData, tokensAvailable, onC
           </div>
 
           {tokensAvailable > 0 && (
-            <p className="text-xs text-center text-gray-500">
+            <p className="text-xs text-center text-muted-foreground">
               Using 1 recovery token to restore your {recoveryData?.previousStreak}-day streak
             </p>
           )}

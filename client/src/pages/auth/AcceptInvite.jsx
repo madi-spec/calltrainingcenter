@@ -217,10 +217,10 @@ export default function AcceptInvite() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500 mx-auto mb-4"></div>
-          <p className="text-gray-400">Verifying invitation...</p>
+          <p className="text-muted-foreground">Verifying invitation...</p>
         </div>
       </div>
     );
@@ -228,21 +228,21 @@ export default function AcceptInvite() {
 
   if (error && !inviteData) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
+      <div className="min-h-screen flex items-center justify-center bg-background px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md text-center"
         >
-          <div className="bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-700">
+          <div className="bg-card rounded-2xl shadow-xl p-8 border border-border">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-red-500/10 rounded-full mb-4">
               <AlertCircle className="w-8 h-8 text-red-400" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-100 mb-2">Invalid Invitation</h1>
-            <p className="text-gray-400 mb-6">{error}</p>
+            <h1 className="text-2xl font-bold text-foreground mb-2">Invalid Invitation</h1>
+            <p className="text-muted-foreground mb-6">{error}</p>
             <Link
               to="/auth/login"
-              className="inline-flex items-center justify-center py-3 px-6 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors"
+              className="inline-flex items-center justify-center py-3 px-6 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
             >
               Go to Login
             </Link>
@@ -253,34 +253,34 @@ export default function AcceptInvite() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md"
       >
-        <div className="bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-700">
+        <div className="bg-card rounded-2xl shadow-xl p-8 border border-border">
           {/* Header */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-500/10 rounded-full mb-4">
               <UserPlus className="w-8 h-8 text-primary-500" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-100">Join Your Team</h1>
-            <p className="text-gray-400 mt-2">
+            <h1 className="text-2xl font-bold text-foreground">Join Your Team</h1>
+            <p className="text-muted-foreground mt-2">
               You've been invited to join{' '}
               <span className="text-primary-400 font-medium">{inviteData?.organization_name}</span>
             </p>
           </div>
 
           {/* Invite Info */}
-          <div className="mb-6 p-4 bg-gray-700/50 rounded-lg">
+          <div className="mb-6 p-4 bg-muted/50 rounded-lg">
             <div className="flex items-center gap-3">
               <div className="flex-shrink-0 w-10 h-10 bg-primary-500/10 rounded-full flex items-center justify-center">
                 <Building2 className="w-5 h-5 text-primary-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-400">You're joining as</p>
-                <p className="text-gray-200 font-medium capitalize">{inviteData?.role || 'Team Member'}</p>
+                <p className="text-sm text-muted-foreground">You're joining as</p>
+                <p className="text-foreground font-medium capitalize">{inviteData?.role || 'Team Member'}</p>
               </div>
             </div>
           </div>
@@ -302,7 +302,7 @@ export default function AcceptInvite() {
                 type="button"
                 onClick={handleSignOut}
                 disabled={signingOut}
-                className="w-full py-2 px-4 bg-amber-600 hover:bg-amber-700 disabled:bg-amber-600/50 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 text-sm"
+                className="w-full py-2 px-4 bg-amber-600 hover:bg-amber-700 disabled:bg-amber-600/50 text-foreground font-medium rounded-lg transition-colors flex items-center justify-center gap-2 text-sm"
               >
                 {signingOut ? (
                   <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
@@ -330,7 +330,7 @@ export default function AcceptInvite() {
                   {(error.includes('sign in') || error.includes('login page')) && (
                     <Link
                       to="/auth/login"
-                      className="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-lg transition-colors"
+                      className="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground text-sm font-medium rounded-lg transition-colors"
                     >
                       Go to Login Page
                     </Link>
@@ -344,18 +344,18 @@ export default function AcceptInvite() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Full Name */}
             <div>
-              <label htmlFor="fullName" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="fullName" className="block text-sm font-medium text-secondary-foreground mb-2">
                 Full Name
               </label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
                   type="text"
                   id="fullName"
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="John Smith"
                   required
                 />
@@ -364,35 +364,35 @@ export default function AcceptInvite() {
 
             {/* Email (Read-only) */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-secondary-foreground mb-2">
                 Email Address
               </label>
-              <div className="py-3 px-4 bg-gray-700/50 border border-gray-600 rounded-lg text-gray-400">
+              <div className="py-3 px-4 bg-muted/50 border border-border rounded-lg text-muted-foreground">
                 {inviteData?.email}
               </div>
             </div>
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-secondary-foreground mb-2">
                 Create Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   id="password"
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-12 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-10 pr-12 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="Create a strong password"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-secondary-foreground"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -403,7 +403,7 @@ export default function AcceptInvite() {
                   <div
                     key={i}
                     className={`flex items-center gap-2 text-sm ${
-                      req.test(formData.password) ? 'text-green-400' : 'text-gray-500'
+                      req.test(formData.password) ? 'text-green-400' : 'text-muted-foreground'
                     }`}
                   >
                     <Check className={`w-4 h-4 ${req.test(formData.password) ? 'opacity-100' : 'opacity-30'}`} />
@@ -415,18 +415,18 @@ export default function AcceptInvite() {
 
             {/* Confirm Password */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-secondary-foreground mb-2">
                 Confirm Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   id="confirmPassword"
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="Confirm your password"
                   required
                 />
@@ -440,7 +440,7 @@ export default function AcceptInvite() {
             <button
               type="submit"
               disabled={submitting || isSignedIn}
-              className="w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-foreground font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
             >
               {submitting ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>

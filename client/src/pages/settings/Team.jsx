@@ -167,7 +167,7 @@ export default function Team() {
       case 'manager':
         return 'bg-blue-500/10 text-blue-400';
       default:
-        return 'bg-gray-500/10 text-gray-400';
+        return 'bg-muted/10 text-muted-foreground';
     }
   };
 
@@ -184,15 +184,15 @@ export default function Team() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-100">Team Management</h1>
-          <p className="text-gray-400 mt-1">
+          <h1 className="text-2xl font-bold text-foreground">Team Management</h1>
+          <p className="text-muted-foreground mt-1">
             Invite and manage team members
           </p>
         </div>
         {canInvite && (
           <button
             onClick={() => setShowInviteModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
           >
             <UserPlus className="w-5 h-5" />
             Invite Member
@@ -202,13 +202,13 @@ export default function Team() {
 
       {/* Search */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
         <input
           type="text"
           placeholder="Search by name or email..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+          className="w-full pl-10 pr-4 py-2 bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
         />
       </div>
 
@@ -217,9 +217,9 @@ export default function Team() {
         {ROLES.map((role) => {
           const count = users.filter((u) => u.role === role.id).length;
           return (
-            <div key={role.id} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-              <p className="text-gray-400 text-sm capitalize">{role.name}s</p>
-              <p className="text-2xl font-bold text-gray-100 mt-1">{count}</p>
+            <div key={role.id} className="bg-card rounded-lg p-4 border border-border">
+              <p className="text-muted-foreground text-sm capitalize">{role.name}s</p>
+              <p className="text-2xl font-bold text-foreground mt-1">{count}</p>
             </div>
           );
         })}
@@ -230,30 +230,30 @@ export default function Team() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gray-800 rounded-lg border border-gray-700"
+          className="bg-card rounded-lg border border-border"
         >
-          <div className="p-6 border-b border-gray-700">
+          <div className="p-6 border-b border-border">
             <div className="flex items-center gap-2">
               <Clock className="w-5 h-5 text-yellow-400" />
-              <h2 className="text-lg font-semibold text-gray-100">
+              <h2 className="text-lg font-semibold text-foreground">
                 Pending Invitations ({invitations.length})
               </h2>
             </div>
           </div>
-          <div className="divide-y divide-gray-700">
+          <div className="divide-y divide-border">
             {invitations.map((invitation) => (
-              <div key={invitation.id} className="p-4 flex items-center justify-between hover:bg-gray-750">
+              <div key={invitation.id} className="p-4 flex items-center justify-between hover:bg-muted">
                 <div className="flex-1">
                   <div className="flex items-center gap-3">
-                    <Mail className="w-5 h-5 text-gray-500" />
+                    <Mail className="w-5 h-5 text-muted-foreground" />
                     <div>
-                      <p className="text-gray-100 font-medium">{invitation.email}</p>
+                      <p className="text-foreground font-medium">{invitation.email}</p>
                       <div className="flex items-center gap-2 mt-1">
                         <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${getRoleBadgeColor(invitation.role)}`}>
                           <Shield className="w-3 h-3" />
                           {invitation.role.replace('_', ' ')}
                         </span>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-muted-foreground">
                           Expires {new Date(invitation.expires_at).toLocaleDateString()}
                         </span>
                       </div>
@@ -286,24 +286,24 @@ export default function Team() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden"
+        className="bg-card rounded-xl border border-border overflow-hidden"
       >
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-gray-700">
-                <th className="text-left py-4 px-6 text-sm font-medium text-gray-400">Member</th>
-                <th className="text-left py-4 px-6 text-sm font-medium text-gray-400">Role</th>
-                <th className="text-left py-4 px-6 text-sm font-medium text-gray-400">Branch</th>
-                <th className="text-left py-4 px-6 text-sm font-medium text-gray-400">Status</th>
-                <th className="text-left py-4 px-6 text-sm font-medium text-gray-400">Sessions</th>
+              <tr className="border-b border-border">
+                <th className="text-left py-4 px-6 text-sm font-medium text-muted-foreground">Member</th>
+                <th className="text-left py-4 px-6 text-sm font-medium text-muted-foreground">Role</th>
+                <th className="text-left py-4 px-6 text-sm font-medium text-muted-foreground">Branch</th>
+                <th className="text-left py-4 px-6 text-sm font-medium text-muted-foreground">Status</th>
+                <th className="text-left py-4 px-6 text-sm font-medium text-muted-foreground">Sessions</th>
                 <th className="py-4 px-6"></th>
               </tr>
             </thead>
             <tbody>
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => (
-                  <tr key={user.id} className="border-b border-gray-700/50 hover:bg-gray-700/30">
+                  <tr key={user.id} className="border-b border-border/50 hover:bg-muted/30">
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-primary-500/10 rounded-full flex items-center justify-center">
@@ -312,8 +312,8 @@ export default function Team() {
                           </span>
                         </div>
                         <div>
-                          <p className="text-gray-200 font-medium">{user.full_name}</p>
-                          <p className="text-sm text-gray-400">{user.email}</p>
+                          <p className="text-foreground font-medium">{user.full_name}</p>
+                          <p className="text-sm text-muted-foreground">{user.email}</p>
                         </div>
                       </div>
                     </td>
@@ -322,7 +322,7 @@ export default function Team() {
                         <select
                           value={user.role}
                           onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                          className="px-3 py-1 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                          className="px-3 py-1 bg-muted border border-border rounded-lg text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
                         >
                           {ROLES.map((role) => (
                             <option key={role.id} value={role.id}>
@@ -336,24 +336,24 @@ export default function Team() {
                         </span>
                       )}
                     </td>
-                    <td className="py-4 px-6 text-gray-400">
+                    <td className="py-4 px-6 text-muted-foreground">
                       {user.branch?.name || 'No branch'}
                     </td>
                     <td className="py-4 px-6">
                       <span className={`px-2 py-1 text-xs font-medium rounded-full ${
                         user.status === 'active' ? 'bg-green-500/10 text-green-400' :
                         user.status === 'pending' ? 'bg-yellow-500/10 text-yellow-400' :
-                        'bg-gray-500/10 text-gray-400'
+                        'bg-muted/10 text-muted-foreground'
                       }`}>
                         {user.status}
                       </span>
                     </td>
-                    <td className="py-4 px-6 text-gray-300">
+                    <td className="py-4 px-6 text-secondary-foreground">
                       {user.total_sessions || 0}
                     </td>
                     <td className="py-4 px-6">
                       {user.id !== profile?.id && (
-                        <button className="p-2 hover:bg-gray-700 rounded-lg text-gray-400">
+                        <button className="p-2 hover:bg-muted rounded-lg text-muted-foreground">
                           <MoreVertical className="w-5 h-5" />
                         </button>
                       )}
@@ -362,7 +362,7 @@ export default function Team() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="py-12 text-center text-gray-400">
+                  <td colSpan={6} className="py-12 text-center text-muted-foreground">
                     <Users className="w-12 h-12 mx-auto mb-4 opacity-50" />
                     <p>No team members found</p>
                   </td>
@@ -379,13 +379,13 @@ export default function Team() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-gray-800 rounded-xl p-6 max-w-md w-full border border-gray-700"
+            className="bg-card rounded-xl p-6 max-w-md w-full border border-border"
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-100">Invite Team Member</h2>
+              <h2 className="text-xl font-bold text-foreground">Invite Team Member</h2>
               <button
                 onClick={() => setShowInviteModal(false)}
-                className="p-2 hover:bg-gray-700 rounded-lg text-gray-400"
+                className="p-2 hover:bg-muted rounded-lg text-muted-foreground"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -393,16 +393,16 @@ export default function Team() {
 
             <form onSubmit={handleInvite} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-secondary-foreground mb-2">
                   Email Address
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <input
                     type="email"
                     value={inviteData.email}
                     onChange={(e) => setInviteData((prev) => ({ ...prev, email: e.target.value }))}
-                    className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full pl-10 pr-4 py-2 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
                     placeholder="colleague@company.com"
                     required
                   />
@@ -410,15 +410,15 @@ export default function Team() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-secondary-foreground mb-2">
                   Role
                 </label>
                 <div className="relative">
-                  <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                  <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <select
                     value={inviteData.role}
                     onChange={(e) => setInviteData((prev) => ({ ...prev, role: e.target.value }))}
-                    className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full pl-10 pr-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
                   >
                     {ROLES.filter((r) => r.id !== 'super_admin').map((role) => (
                       <option key={role.id} value={role.id}>
@@ -433,14 +433,14 @@ export default function Team() {
                 <button
                   type="button"
                   onClick={() => setShowInviteModal(false)}
-                  className="px-4 py-2 text-gray-400 hover:text-gray-300"
+                  className="px-4 py-2 text-muted-foreground hover:text-secondary-foreground"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={inviting}
-                  className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-white font-medium rounded-lg transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-foreground font-medium rounded-lg transition-colors"
                 >
                   <UserPlus className="w-4 h-4" />
                   {inviting ? 'Sending...' : 'Send Invitation'}

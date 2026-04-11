@@ -113,7 +113,7 @@ export function StreakBadge({ streak, size = 'md' }) {
   const color = isLegendary ? 'text-red-400 border-red-500/30 bg-red-500/10' :
                 isOnFire ? 'text-orange-400 border-orange-500/30 bg-orange-500/10' :
                 isHot ? 'text-yellow-400 border-yellow-500/30 bg-yellow-500/10' :
-                'text-gray-400 border-gray-500/30 bg-gray-500/10';
+                'text-muted-foreground border-border/30 bg-muted/10';
 
   return (
     <div className={`
@@ -139,16 +139,16 @@ export function LevelProgress({ points, level, showTitle = true }) {
         <div className="flex items-center gap-2">
           <LevelBadge level={level} />
           {showTitle && (
-            <span className="text-sm text-gray-400">{title}</span>
+            <span className="text-sm text-muted-foreground">{title}</span>
           )}
         </div>
         {pointsToNext > 0 && (
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-muted-foreground">
             {pointsToNext.toLocaleString()} pts to level {level + 1}
           </span>
         )}
       </div>
-      <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+      <div className="h-2 bg-muted rounded-full overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
@@ -171,7 +171,7 @@ export function PointsEarned({ points, reason, animate = true }) {
       >
         <Zap className="w-4 h-4" />
         <span className="font-bold">+{points}</span>
-        {reason && <span className="text-sm text-gray-400">{reason}</span>}
+        {reason && <span className="text-sm text-muted-foreground">{reason}</span>}
       </motion.div>
     </AnimatePresence>
   );
@@ -179,9 +179,9 @@ export function PointsEarned({ points, reason, animate = true }) {
 
 export function StatsCard({ points, level, streak, sessionsThisWeek, avgScore }) {
   return (
-    <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700">
+    <div className="bg-card/50 rounded-xl p-6 border border-border">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-white">Your Stats</h3>
+        <h3 className="text-lg font-semibold text-foreground">Your Stats</h3>
         <PointsBadge points={points} size="md" />
       </div>
 
@@ -189,16 +189,16 @@ export function StatsCard({ points, level, streak, sessionsThisWeek, avgScore })
 
       <div className="grid grid-cols-3 gap-4 mt-6">
         <div className="text-center">
-          <div className="text-2xl font-bold text-white">{sessionsThisWeek}</div>
-          <div className="text-xs text-gray-500">Sessions This Week</div>
+          <div className="text-2xl font-bold text-foreground">{sessionsThisWeek}</div>
+          <div className="text-xs text-muted-foreground">Sessions This Week</div>
         </div>
         <div className="text-center">
-          <div className="text-2xl font-bold text-white">{avgScore}%</div>
-          <div className="text-xs text-gray-500">Avg Score</div>
+          <div className="text-2xl font-bold text-foreground">{avgScore}%</div>
+          <div className="text-xs text-muted-foreground">Avg Score</div>
         </div>
         <div className="text-center">
           <StreakBadge streak={streak} size="lg" />
-          <div className="text-xs text-gray-500 mt-1">Streak</div>
+          <div className="text-xs text-muted-foreground mt-1">Streak</div>
         </div>
       </div>
     </div>

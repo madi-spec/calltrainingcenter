@@ -11,10 +11,10 @@ const OnboardingTour = ({ run, onComplete }) => {
       target: 'body',
       content: (
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-3">
+          <h2 className="text-2xl font-bold text-foreground mb-3">
             Welcome to CSR Training! 👋
           </h2>
-          <p className="text-gray-700 text-base leading-relaxed">
+          <p className="text-muted-foreground text-base leading-relaxed">
             Let's take a quick tour to help you get started with your customer service training journey.
             This will only take a minute!
           </p>
@@ -27,10 +27,10 @@ const OnboardingTour = ({ run, onComplete }) => {
       target: '[data-tutorial="gamification"]',
       content: (
         <div>
-          <h3 className="text-lg font-bold text-gray-900 mb-2">
+          <h3 className="text-lg font-bold text-foreground mb-2">
             Gamification & Achievements 🏆
           </h3>
-          <p className="text-gray-700 text-sm leading-relaxed">
+          <p className="text-muted-foreground text-sm leading-relaxed">
             Track your progress with points, badges, and achievements.
             Complete training sessions to earn rewards and level up!
           </p>
@@ -43,10 +43,10 @@ const OnboardingTour = ({ run, onComplete }) => {
       target: '[data-tutorial="dashboard-stats"]',
       content: (
         <div>
-          <h3 className="text-lg font-bold text-gray-900 mb-2">
+          <h3 className="text-lg font-bold text-foreground mb-2">
             Your Statistics 📊
           </h3>
-          <p className="text-gray-700 text-sm leading-relaxed">
+          <p className="text-muted-foreground text-sm leading-relaxed">
             Monitor your total sessions, average scores, streaks, and badges earned.
             These stats help you track your improvement over time.
           </p>
@@ -59,10 +59,10 @@ const OnboardingTour = ({ run, onComplete }) => {
       target: 'a[href="/courses"]',
       content: (
         <div>
-          <h3 className="text-lg font-bold text-gray-900 mb-2">
+          <h3 className="text-lg font-bold text-foreground mb-2">
             Browse Training Courses 📚
           </h3>
-          <p className="text-gray-700 text-sm leading-relaxed">
+          <p className="text-muted-foreground text-sm leading-relaxed">
             Explore available training courses and scenarios.
             Click here to view all courses and start your training!
           </p>
@@ -75,10 +75,10 @@ const OnboardingTour = ({ run, onComplete }) => {
       target: '.bg-primary-600.animate-pulse, .bg-primary-600:not(.animate-pulse)',
       content: (
         <div>
-          <h3 className="text-lg font-bold text-gray-900 mb-2">
+          <h3 className="text-lg font-bold text-foreground mb-2">
             Start Your Practice 🎯
           </h3>
-          <p className="text-gray-700 text-sm leading-relaxed">
+          <p className="text-muted-foreground text-sm leading-relaxed">
             Ready to begin? Click this button to start a training session.
             Complete your daily practice calls to maintain your streak!
           </p>
@@ -91,10 +91,10 @@ const OnboardingTour = ({ run, onComplete }) => {
       target: 'a[href="/leaderboard"]',
       content: (
         <div>
-          <h3 className="text-lg font-bold text-gray-900 mb-2">
+          <h3 className="text-lg font-bold text-foreground mb-2">
             Leaderboard & Competition 🥇
           </h3>
-          <p className="text-gray-700 text-sm leading-relaxed">
+          <p className="text-muted-foreground text-sm leading-relaxed">
             See how you rank against other trainees. Compete for the top spot
             and earn recognition for your achievements!
           </p>
@@ -107,19 +107,19 @@ const OnboardingTour = ({ run, onComplete }) => {
       target: 'body',
       content: (
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-3">
+          <h2 className="text-2xl font-bold text-foreground mb-3">
             You're All Set! 🎉
           </h2>
-          <p className="text-gray-700 text-base leading-relaxed mb-4">
+          <p className="text-muted-foreground text-base leading-relaxed mb-4">
             You're ready to start your training journey. Remember:
           </p>
-          <ul className="text-left text-gray-700 text-sm space-y-2 mb-4">
+          <ul className="text-left text-muted-foreground text-sm space-y-2 mb-4">
             <li>✅ Complete daily practice calls to build your streak</li>
             <li>✅ Earn points and badges as you progress</li>
             <li>✅ Track your improvement with detailed statistics</li>
             <li>✅ Compete on the leaderboard</li>
           </ul>
-          <p className="text-gray-600 text-sm">
+          <p className="text-muted-foreground text-sm">
             Good luck, {profile?.full_name?.split(' ')[0] || 'there'}!
           </p>
         </div>

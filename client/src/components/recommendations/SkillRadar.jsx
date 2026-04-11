@@ -88,7 +88,7 @@ export default function SkillRadar({
             fill="none"
             stroke="currentColor"
             strokeWidth="1"
-            className="text-gray-700"
+            className="text-muted-foreground"
             strokeDasharray="3,3"
           />
         ))}
@@ -105,7 +105,7 @@ export default function SkillRadar({
               y2={center + radius * Math.sin(angle)}
               stroke="currentColor"
               strokeWidth="1"
-              className="text-gray-700"
+              className="text-muted-foreground"
             />
           );
         })}
@@ -213,11 +213,11 @@ export default function SkillRadar({
         <div className="absolute bottom-0 left-0 right-0 flex justify-center gap-4 text-xs">
           <div className="flex items-center gap-2">
             <div className="w-4 h-2 bg-purple-500/50 rounded" />
-            <span className="text-gray-400">Your Skills</span>
+            <span className="text-muted-foreground">Your Skills</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-0.5 bg-blue-500/50 border border-dashed border-blue-500/50" />
-            <span className="text-gray-400">Target</span>
+            <span className="text-muted-foreground">Target</span>
           </div>
         </div>
       )}

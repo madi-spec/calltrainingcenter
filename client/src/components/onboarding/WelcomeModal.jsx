@@ -60,7 +60,7 @@ export default function WelcomeModal({
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="relative bg-gray-800 rounded-2xl border border-gray-700 shadow-2xl max-w-lg w-full overflow-hidden"
+          className="relative bg-card rounded-2xl border border-border shadow-2xl max-w-lg w-full overflow-hidden"
         >
           {/* Header decoration */}
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500" />
@@ -68,7 +68,7 @@ export default function WelcomeModal({
           {/* Close button */}
           <button
             onClick={onSkip}
-            className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10"
+            className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors z-10"
           >
             <X className="w-5 h-5" />
           </button>
@@ -83,9 +83,9 @@ export default function WelcomeModal({
               className="mx-auto w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-500/25"
             >
               {isComplete ? (
-                <Sparkles className="w-10 h-10 text-white" />
+                <Sparkles className="w-10 h-10 text-foreground" />
               ) : (
-                <Phone className="w-10 h-10 text-white" />
+                <Phone className="w-10 h-10 text-foreground" />
               )}
             </motion.div>
 
@@ -94,7 +94,7 @@ export default function WelcomeModal({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-2xl font-bold text-white mb-3"
+              className="text-2xl font-bold text-foreground mb-3"
             >
               {step.title}
             </motion.h2>
@@ -104,7 +104,7 @@ export default function WelcomeModal({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-gray-300 mb-6"
+              className="text-secondary-foreground mb-6"
             >
               {step.description}
             </motion.p>
@@ -121,12 +121,12 @@ export default function WelcomeModal({
                   {step.tips.map((tip, index) => (
                     <div
                       key={index}
-                      className="flex items-center gap-3 p-3 bg-gray-750 rounded-lg text-left"
+                      className="flex items-center gap-3 p-3 bg-muted rounded-lg text-left"
                     >
                       <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center flex-shrink-0">
                         <CheckCircle className="w-4 h-4 text-green-400" />
                       </div>
-                      <span className="text-gray-200 text-sm">{tip}</span>
+                      <span className="text-foreground text-sm">{tip}</span>
                     </div>
                   ))}
                 </div>
@@ -150,7 +150,7 @@ export default function WelcomeModal({
                     <div className={`w-12 h-12 mx-auto mb-2 bg-${color}-500/20 rounded-xl flex items-center justify-center`}>
                       <Icon className={`w-6 h-6 text-${color}-400`} />
                     </div>
-                    <span className="text-xs text-gray-400">{label}</span>
+                    <span className="text-xs text-muted-foreground">{label}</span>
                   </div>
                 ))}
               </motion.div>
@@ -167,13 +167,13 @@ export default function WelcomeModal({
                 <>
                   <button
                     onClick={handleSecondaryAction}
-                    className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-gray-200 font-medium rounded-xl transition-colors"
+                    className="px-6 py-3 bg-muted hover:bg-muted text-foreground font-medium rounded-xl transition-colors"
                   >
                     {step.secondaryAction.label}
                   </button>
                   <button
                     onClick={handlePrimaryAction}
-                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors"
+                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-foreground font-medium rounded-xl transition-colors"
                   >
                     {step.primaryAction.label}
                   </button>
@@ -182,13 +182,13 @@ export default function WelcomeModal({
                 <>
                   <button
                     onClick={onSkip}
-                    className="px-6 py-3 text-gray-400 hover:text-gray-200 font-medium rounded-xl transition-colors"
+                    className="px-6 py-3 text-muted-foreground hover:text-foreground font-medium rounded-xl transition-colors"
                   >
                     Skip Tutorial
                   </button>
                   <button
                     onClick={onNext}
-                    className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors"
+                    className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-foreground font-medium rounded-xl transition-colors"
                   >
                     Get Started
                   </button>

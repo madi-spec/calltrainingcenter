@@ -1,5 +1,5 @@
 const variants = {
-  default: 'bg-gray-700 text-gray-300',
+  default: 'bg-muted text-secondary-foreground',
   primary: 'bg-blue-500/20 text-blue-400 border border-blue-500/30',
   success: 'bg-green-500/20 text-green-400 border border-green-500/30',
   warning: 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30',

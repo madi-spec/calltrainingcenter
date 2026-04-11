@@ -59,7 +59,7 @@ function BranchingChoice({ node, onChoiceSelected, isVisible }) {
       case 'poor':
         return 'border-red-500 bg-red-50';
       default:
-        return 'border-gray-300 bg-white';
+        return 'border-border bg-white';
     }
   };
 
@@ -82,15 +82,15 @@ function BranchingChoice({ node, onChoiceSelected, isVisible }) {
       >
         <Card className="max-w-3xl w-full max-h-[90vh] overflow-y-auto">
           {/* Header */}
-          <div className="flex items-start gap-3 mb-6 pb-4 border-b border-gray-200">
+          <div className="flex items-start gap-3 mb-6 pb-4 border-b border-border">
             <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
               <GitBranch className="w-6 h-6 text-blue-600" />
             </div>
             <div className="flex-1">
-              <h3 className="text-xl font-bold text-gray-900 mb-1">
+              <h3 className="text-xl font-bold text-foreground mb-1">
                 Decision Point
               </h3>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 {node.description || 'Choose how to respond to this situation'}
               </p>
             </div>
@@ -122,7 +122,7 @@ function BranchingChoice({ node, onChoiceSelected, isVisible }) {
                   w-full p-4 rounded-lg border-2 text-left transition-all
                   ${selectedChoice?.id === choice.id
                     ? `${getOutcomeColor(choice.outcome_type)} border-2 shadow-lg`
-                    : 'border-gray-300 bg-white hover:border-blue-300 hover:shadow-md'
+                    : 'border-border bg-white hover:border-blue-300 hover:shadow-md'
                   }
                   ${isConfirming ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                   disabled:opacity-50 disabled:cursor-not-allowed
@@ -134,7 +134,7 @@ function BranchingChoice({ node, onChoiceSelected, isVisible }) {
                     flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold
                     ${selectedChoice?.id === choice.id
                       ? 'bg-white text-blue-600'
-                      : 'bg-gray-100 text-gray-600'
+                      : 'bg-muted text-muted-foreground'
                     }
                   `}>
                     {index + 1}
@@ -145,8 +145,8 @@ function BranchingChoice({ node, onChoiceSelected, isVisible }) {
                     <p className={`
                       font-medium mb-2
                       ${selectedChoice?.id === choice.id
-                        ? 'text-gray-900'
-                        : 'text-gray-700'
+                        ? 'text-foreground'
+                        : 'text-muted-foreground'
                       }
                     `}>
                       {choice.text}
@@ -174,7 +174,7 @@ function BranchingChoice({ node, onChoiceSelected, isVisible }) {
                       animate={{ scale: 1 }}
                       className="flex-shrink-0 w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center"
                     >
-                      <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-4 h-4 text-foreground" fill="currentColor" viewBox="0 0 20 20">
                         <path
                           fillRule="evenodd"
                           d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -189,7 +189,7 @@ function BranchingChoice({ node, onChoiceSelected, isVisible }) {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-3 justify-end pt-4 border-t border-gray-200">
+          <div className="flex gap-3 justify-end pt-4 border-t border-border">
             <Button
               variant="outline"
               onClick={handleCancel}
@@ -214,8 +214,8 @@ function BranchingChoice({ node, onChoiceSelected, isVisible }) {
           </div>
 
           {/* Footer Note */}
-          <div className="mt-4 pt-4 border-t border-gray-200">
-            <p className="text-xs text-gray-500 text-center">
+          <div className="mt-4 pt-4 border-t border-border">
+            <p className="text-xs text-muted-foreground text-center">
               Tip: Choose the response that best demonstrates professional sales techniques
               and customer service skills for the highest score.
             </p>

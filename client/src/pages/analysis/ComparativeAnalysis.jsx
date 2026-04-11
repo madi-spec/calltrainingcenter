@@ -62,7 +62,7 @@ function ComparativeAnalysis() {
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading comparison data...</p>
+          <p className="text-muted-foreground dark:text-muted-foreground">Loading comparison data...</p>
         </div>
       </div>
     );
@@ -79,7 +79,7 @@ function ComparativeAnalysis() {
           <p className="text-red-600 dark:text-red-300 mb-4">{error}</p>
           <button
             onClick={() => navigate(-1)}
-            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+            className="px-4 py-2 bg-red-600 text-foreground rounded-lg hover:bg-red-700 transition-colors"
           >
             Go Back
           </button>
@@ -91,19 +91,19 @@ function ComparativeAnalysis() {
   if (!data || data.totalAttempts === 0) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-12">
-        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-8 text-center">
-          <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="bg-muted dark:bg-card rounded-lg p-8 text-center">
+          <svg className="w-16 h-16 text-muted-foreground mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+          <h2 className="text-xl font-semibold text-foreground dark:text-foreground mb-2">
             No Attempts Yet
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
+          <p className="text-muted-foreground dark:text-muted-foreground mb-6">
             Complete this scenario to see your performance comparison.
           </p>
           <Link
             to={`/scenario/${scenarioId}`}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-foreground rounded-lg hover:bg-primary-700 transition-colors"
           >
             Start Scenario
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -123,7 +123,7 @@ function ComparativeAnalysis() {
       <div className="mb-6">
         <Link
           to="/history"
-          className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-4"
+          className="inline-flex items-center gap-2 text-muted-foreground dark:text-muted-foreground hover:text-foreground dark:hover:text-foreground mb-4"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -133,17 +133,17 @@ function ComparativeAnalysis() {
 
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-2xl font-bold text-foreground dark:text-foreground">
               Performance Comparison
             </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">
+            <p className="text-muted-foreground dark:text-muted-foreground mt-1">
               {scenarioInfo?.name || 'Scenario'} • {data.totalAttempts} attempt{data.totalAttempts !== 1 ? 's' : ''}
             </p>
           </div>
 
           <Link
             to={`/scenario/${scenarioId}`}
-            className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            className="px-4 py-2 bg-primary-600 text-foreground rounded-lg hover:bg-primary-700 transition-colors"
           >
             Practice Again
           </Link>
@@ -155,10 +155,10 @@ function ComparativeAnalysis() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4"
+          className="bg-white dark:bg-card rounded-lg border border-border dark:border-border p-4"
         >
-          <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">First Score</div>
-          <div className="text-2xl font-bold text-gray-900 dark:text-white">
+          <div className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">First Score</div>
+          <div className="text-2xl font-bold text-foreground dark:text-foreground">
             {summary.firstScore ?? '--'}%
           </div>
         </motion.div>
@@ -167,10 +167,10 @@ function ComparativeAnalysis() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4"
+          className="bg-white dark:bg-card rounded-lg border border-border dark:border-border p-4"
         >
-          <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Latest Score</div>
-          <div className="text-2xl font-bold text-gray-900 dark:text-white">
+          <div className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Latest Score</div>
+          <div className="text-2xl font-bold text-foreground dark:text-foreground">
             {summary.lastScore ?? '--'}%
           </div>
         </motion.div>
@@ -179,9 +179,9 @@ function ComparativeAnalysis() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4"
+          className="bg-white dark:bg-card rounded-lg border border-border dark:border-border p-4"
         >
-          <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Best Score</div>
+          <div className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Best Score</div>
           <div className="text-2xl font-bold text-green-600 dark:text-green-400">
             {summary.bestScore ?? '--'}%
           </div>
@@ -191,15 +191,15 @@ function ComparativeAnalysis() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4`}
+          className={`bg-white dark:bg-card rounded-lg border border-border dark:border-border p-4`}
         >
-          <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Improvement</div>
+          <div className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Improvement</div>
           <div className={`text-2xl font-bold ${
             summary.improvement > 0
               ? 'text-green-600 dark:text-green-400'
               : summary.improvement < 0
               ? 'text-red-600 dark:text-red-400'
-              : 'text-gray-900 dark:text-white'
+              : 'text-foreground dark:text-foreground'
           }`}>
             {summary.improvement > 0 ? '+' : ''}{summary.improvement ?? 0}%
           </div>
@@ -219,7 +219,7 @@ function ComparativeAnalysis() {
               ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800'
               : progression.needsWork
               ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800'
-              : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700'
+              : 'bg-muted dark:bg-card border-border dark:border-border'
           }`}
         >
           <div className="flex items-center gap-3">
@@ -267,14 +267,14 @@ function ComparativeAnalysis() {
               </>
             ) : (
               <>
-                <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                  <svg className="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="w-10 h-10 rounded-full bg-muted dark:bg-muted flex items-center justify-center">
+                  <svg className="w-6 h-6 text-muted-foreground dark:text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                   </svg>
                 </div>
                 <div>
-                  <div className="font-medium text-gray-800 dark:text-gray-200">Keep Practicing</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <div className="font-medium text-foreground dark:text-foreground">Keep Practicing</div>
+                  <div className="text-sm text-muted-foreground dark:text-muted-foreground">
                     Continue working on this scenario to improve your performance.
                   </div>
                 </div>
@@ -306,13 +306,13 @@ function ComparativeAnalysis() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"
+              className="bg-white dark:bg-card rounded-lg border border-border dark:border-border"
             >
-              <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="font-semibold text-gray-900 dark:text-white">
+              <div className="px-4 py-3 border-b border-border dark:border-border">
+                <h3 className="font-semibold text-foreground dark:text-foreground">
                   Recurring Improvement Areas
                 </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                   These areas appeared in multiple attempts
                 </p>
               </div>
@@ -327,7 +327,7 @@ function ComparativeAnalysis() {
                         <div className="w-8 h-8 rounded-full bg-yellow-100 dark:bg-yellow-800 flex items-center justify-center text-yellow-600 dark:text-yellow-400 font-medium text-sm">
                           {item.occurrences}x
                         </div>
-                        <span className="text-gray-900 dark:text-white font-medium">
+                        <span className="text-foreground dark:text-foreground font-medium">
                           {item.title}
                         </span>
                       </div>

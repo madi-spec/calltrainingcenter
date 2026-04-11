@@ -51,7 +51,7 @@ export default function DailyChallengeCard({ challenge, onProgressUpdate }) {
         relative overflow-hidden rounded-xl border
         ${progress.is_completed
           ? 'bg-green-500/10 border-green-500/30'
-          : 'bg-gray-800 border-gray-700'}
+          : 'bg-card border-border'}
       `}
     >
       {/* Progress bar background */}
@@ -69,18 +69,18 @@ export default function DailyChallengeCard({ challenge, onProgressUpdate }) {
               ) : (
                 <Target className="w-5 h-5 text-primary-400 flex-shrink-0" />
               )}
-              <h3 className="font-semibold text-gray-100 truncate">
+              <h3 className="font-semibold text-foreground truncate">
                 {challenge.title}
               </h3>
             </div>
 
-            <p className="text-sm text-gray-400 mb-3">
+            <p className="text-sm text-muted-foreground mb-3">
               {challenge.description}
             </p>
 
             {/* Progress indicator */}
             <div className="flex items-center gap-3">
-              <div className="flex-1 h-2 bg-gray-700 rounded-full overflow-hidden">
+              <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${progressPercent}%` }}
@@ -88,7 +88,7 @@ export default function DailyChallengeCard({ challenge, onProgressUpdate }) {
                   className={`h-full bg-gradient-to-r ${getDifficultyColor()}`}
                 />
               </div>
-              <span className="text-sm font-medium text-gray-300 whitespace-nowrap">
+              <span className="text-sm font-medium text-secondary-foreground whitespace-nowrap">
                 {progress.progress_value}/{targetValue}
               </span>
             </div>
@@ -107,7 +107,7 @@ export default function DailyChallengeCard({ challenge, onProgressUpdate }) {
               <button
                 onClick={handleClaim}
                 disabled={claiming}
-                className="flex items-center gap-1 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors"
+                className="flex items-center gap-1 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-foreground text-sm font-medium rounded-lg transition-colors"
               >
                 {claiming ? (
                   <Loader2 className="w-4 h-4 animate-spin" />

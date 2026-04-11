@@ -33,8 +33,8 @@ function ScoreComparisonChart({
 
   if (!attempts || attempts.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-        <div className="text-center text-gray-500 dark:text-gray-400 py-8">
+      <div className="bg-white dark:bg-card rounded-lg border border-border dark:border-border p-6">
+        <div className="text-center text-muted-foreground dark:text-muted-foreground py-8">
           No data available for comparison.
         </div>
       </div>
@@ -42,19 +42,19 @@ function ScoreComparisonChart({
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-      <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-        <h3 className="font-semibold text-gray-900 dark:text-white">Score Progression</h3>
+    <div className="bg-white dark:bg-card rounded-lg border border-border dark:border-border">
+      <div className="px-4 py-3 border-b border-border dark:border-border">
+        <h3 className="font-semibold text-foreground dark:text-foreground">Score Progression</h3>
       </div>
 
       <div className="p-4">
         {/* Overall Score Chart */}
         <div className="mb-6">
-          <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Overall Scores</h4>
+          <h4 className="text-sm font-medium text-muted-foreground dark:text-secondary-foreground mb-3">Overall Scores</h4>
 
           <div className="relative" style={{ height: chartHeight + 40 }}>
             {/* Y-axis labels */}
-            <div className="absolute left-0 top-0 bottom-8 w-10 flex flex-col justify-between text-xs text-gray-500 dark:text-gray-400">
+            <div className="absolute left-0 top-0 bottom-8 w-10 flex flex-col justify-between text-xs text-muted-foreground dark:text-muted-foreground">
               <span>100</span>
               <span>75</span>
               <span>50</span>
@@ -69,7 +69,7 @@ function ScoreComparisonChart({
                 {[0, 25, 50, 75].map((line) => (
                   <div
                     key={line}
-                    className="absolute w-full border-t border-gray-200 dark:border-gray-700"
+                    className="absolute w-full border-t border-border dark:border-border"
                     style={{ top: `${100 - line}%` }}
                   />
                 ))}
@@ -96,7 +96,7 @@ function ScoreComparisonChart({
                           opacity: isSelected ? 1 : 0.8
                         }}
                       />
-                      <span className="text-xs text-gray-600 dark:text-gray-400 mt-2 font-medium">
+                      <span className="text-xs text-muted-foreground dark:text-muted-foreground mt-2 font-medium">
                         #{attempt.attemptNumber}
                       </span>
                     </div>
@@ -135,17 +135,17 @@ function ScoreComparisonChart({
         {/* Category Trends */}
         {showCategories && Object.keys(categoryTrends).length > 0 && (
           <div>
-            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Category Trends</h4>
+            <h4 className="text-sm font-medium text-muted-foreground dark:text-secondary-foreground mb-3">Category Trends</h4>
 
             <div className="space-y-3">
               {Object.entries(categoryTrends).map(([category, data]) => (
                 <div key={category} className="flex items-center gap-3">
-                  <div className="w-24 text-sm text-gray-600 dark:text-gray-400 truncate">
+                  <div className="w-24 text-sm text-muted-foreground dark:text-muted-foreground truncate">
                     {categoryLabels[category] || category}
                   </div>
 
                   {/* Progress bar */}
-                  <div className="flex-1 h-6 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden relative">
+                  <div className="flex-1 h-6 bg-muted dark:bg-muted rounded-full overflow-hidden relative">
                     {/* Average bar */}
                     <motion.div
                       initial={{ width: 0 }}
@@ -166,7 +166,7 @@ function ScoreComparisonChart({
 
                     {/* Score label */}
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-xs font-medium text-white drop-shadow">
+                      <span className="text-xs font-medium text-foreground drop-shadow">
                         {data.average}%
                       </span>
                     </div>
@@ -178,7 +178,7 @@ function ScoreComparisonChart({
                       ? 'text-green-600 dark:text-green-400'
                       : data.trend < 0
                       ? 'text-red-600 dark:text-red-400'
-                      : 'text-gray-500 dark:text-gray-400'
+                      : 'text-muted-foreground dark:text-muted-foreground'
                   }`}>
                     {data.trend > 0 ? '+' : ''}{data.trend}
                   </div>

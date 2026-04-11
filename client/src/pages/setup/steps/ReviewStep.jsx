@@ -142,7 +142,7 @@ export default function ReviewStep({ data, allStepData, onComplete, authFetch, o
       case 'incomplete':
         return <AlertCircle className="w-5 h-5 text-red-400" />;
       default:
-        return <CheckCircle2 className="w-5 h-5 text-gray-500" />;
+        return <CheckCircle2 className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
@@ -153,7 +153,7 @@ export default function ReviewStep({ data, allStepData, onComplete, authFetch, o
       case 'incomplete':
         return 'border-red-500/30 bg-red-500/5';
       default:
-        return 'border-gray-700 bg-gray-800';
+        return 'border-border bg-card';
     }
   };
 
@@ -174,28 +174,28 @@ export default function ReviewStep({ data, allStepData, onComplete, authFetch, o
             <Rocket className="w-6 h-6 text-primary-400" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-100">Ready to Launch!</h3>
-            <p className="text-gray-400">
+            <h3 className="text-lg font-semibold text-foreground">Ready to Launch!</h3>
+            <p className="text-muted-foreground">
               Review your configuration below. You can always update these settings later.
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-6 mt-4 pt-4 border-t border-gray-700/50">
+        <div className="flex items-center gap-6 mt-4 pt-4 border-t border-border/50">
           <div>
             <span className="text-2xl font-bold text-green-400">{completedOptional + 1}</span>
-            <span className="text-gray-400 ml-1">/ {sections.length}</span>
-            <p className="text-sm text-gray-500">Sections configured</p>
+            <span className="text-muted-foreground ml-1">/ {sections.length}</span>
+            <p className="text-sm text-muted-foreground">Sections configured</p>
           </div>
-          <div className="h-8 w-px bg-gray-700" />
+          <div className="h-8 w-px bg-muted" />
           <div>
             <span className="text-2xl font-bold text-primary-400">{stats?.packages || 0}</span>
-            <p className="text-sm text-gray-500">Packages</p>
+            <p className="text-sm text-muted-foreground">Packages</p>
           </div>
-          <div className="h-8 w-px bg-gray-700" />
+          <div className="h-8 w-px bg-muted" />
           <div>
             <span className="text-2xl font-bold text-primary-400">{stats?.teams || 0}</span>
-            <p className="text-sm text-gray-500">Teams</p>
+            <p className="text-sm text-muted-foreground">Teams</p>
           </div>
         </div>
       </div>
@@ -212,17 +212,17 @@ export default function ReviewStep({ data, allStepData, onComplete, authFetch, o
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-gray-700/50 flex items-center justify-center">
-                    <Icon className="w-5 h-5 text-gray-400" />
+                  <div className="w-10 h-10 rounded-lg bg-muted/50 flex items-center justify-center">
+                    <Icon className="w-5 h-5 text-muted-foreground" />
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h4 className="font-medium text-gray-200">{section.title}</h4>
+                      <h4 className="font-medium text-foreground">{section.title}</h4>
                       {getStatusIcon(section.status)}
                     </div>
-                    <p className="text-sm text-gray-400">{section.summary}</p>
+                    <p className="text-sm text-muted-foreground">{section.summary}</p>
                     {section.details.length > 0 && (
-                      <ul className="text-xs text-gray-500 mt-1">
+                      <ul className="text-xs text-muted-foreground mt-1">
                         {section.details.map((detail, i) => (
                           <li key={i}>{detail}</li>
                         ))}
@@ -234,7 +234,7 @@ export default function ReviewStep({ data, allStepData, onComplete, authFetch, o
                 {onEditStep && (
                   <button
                     onClick={() => onEditStep(index)}
-                    className="flex items-center gap-1 px-3 py-1 text-sm text-gray-400 hover:text-gray-300 hover:bg-gray-700 rounded transition-colors"
+                    className="flex items-center gap-1 px-3 py-1 text-sm text-muted-foreground hover:text-secondary-foreground hover:bg-muted rounded transition-colors"
                   >
                     <Edit2 className="w-3 h-3" />
                     Edit
@@ -247,28 +247,28 @@ export default function ReviewStep({ data, allStepData, onComplete, authFetch, o
       </div>
 
       {/* What Happens Next */}
-      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-        <h4 className="font-medium text-gray-200 mb-4">What happens next?</h4>
+      <div className="bg-card rounded-xl p-6 border border-border">
+        <h4 className="font-medium text-foreground mb-4">What happens next?</h4>
         <ul className="space-y-3">
           <li className="flex items-start gap-3">
             <CheckCircle2 className="w-5 h-5 text-green-400 mt-0.5 shrink-0" />
             <div>
-              <p className="text-gray-300">Training scenarios will be customized to your products</p>
-              <p className="text-sm text-gray-500">AI will use your packages, pricing, and objections in training calls</p>
+              <p className="text-secondary-foreground">Training scenarios will be customized to your products</p>
+              <p className="text-sm text-muted-foreground">AI will use your packages, pricing, and objections in training calls</p>
             </div>
           </li>
           <li className="flex items-start gap-3">
             <CheckCircle2 className="w-5 h-5 text-green-400 mt-0.5 shrink-0" />
             <div>
-              <p className="text-gray-300">Team members can start practicing immediately</p>
-              <p className="text-sm text-gray-500">Invite your team and assign them to training courses</p>
+              <p className="text-secondary-foreground">Team members can start practicing immediately</p>
+              <p className="text-sm text-muted-foreground">Invite your team and assign them to training courses</p>
             </div>
           </li>
           <li className="flex items-start gap-3">
             <CheckCircle2 className="w-5 h-5 text-green-400 mt-0.5 shrink-0" />
             <div>
-              <p className="text-gray-300">You can update these settings anytime</p>
-              <p className="text-sm text-gray-500">Access settings from the sidebar to add more packages, competitors, or team members</p>
+              <p className="text-secondary-foreground">You can update these settings anytime</p>
+              <p className="text-sm text-muted-foreground">Access settings from the sidebar to add more packages, competitors, or team members</p>
             </div>
           </li>
         </ul>
@@ -278,7 +278,7 @@ export default function ReviewStep({ data, allStepData, onComplete, authFetch, o
       <div className="flex justify-end">
         <button
           onClick={() => onComplete({})}
-          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-purple-600 hover:from-primary-700 hover:to-purple-700 text-white font-medium rounded-lg transition-all shadow-lg shadow-primary-500/20"
+          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-purple-600 hover:from-primary-700 hover:to-purple-700 text-foreground font-medium rounded-lg transition-all shadow-lg shadow-primary-500/20"
         >
           <Rocket className="w-5 h-5" />
           Complete Setup & Start Training

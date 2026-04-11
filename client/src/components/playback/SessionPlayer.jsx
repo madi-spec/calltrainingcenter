@@ -189,14 +189,14 @@ export default function SessionPlayer({
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className={`bg-gray-800 rounded-xl p-6 border border-gray-700 ${className}`}>
+    <div className={`bg-card rounded-xl p-6 border border-border ${className}`}>
       <audio ref={audioRef} src={audioUrl} preload="metadata" />
 
       {/* Progress Bar */}
       <div className="mb-6">
         <div
           ref={progressBarRef}
-          className="relative h-2 bg-gray-700 rounded-full cursor-pointer group"
+          className="relative h-2 bg-muted rounded-full cursor-pointer group"
           onClick={handleProgressClick}
           onMouseDown={handleDragStart}
           onMouseMove={handleProgressDrag}
@@ -205,7 +205,7 @@ export default function SessionPlayer({
         >
           {/* Buffered indicator */}
           <div
-            className="absolute left-0 top-0 h-full bg-gray-600 rounded-full transition-all"
+            className="absolute left-0 top-0 h-full bg-muted rounded-full transition-all"
             style={{ width: `${buffered}%` }}
           />
 
@@ -223,7 +223,7 @@ export default function SessionPlayer({
         </div>
 
         {/* Time display */}
-        <div className="flex justify-between text-sm text-gray-400 mt-2">
+        <div className="flex justify-between text-sm text-muted-foreground mt-2">
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
         </div>
@@ -235,10 +235,10 @@ export default function SessionPlayer({
           {/* Skip Back */}
           <button
             onClick={handleSkipBack}
-            className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+            className="p-2 hover:bg-muted rounded-lg transition-colors"
             aria-label="Skip back 10 seconds"
           >
-            <SkipBack className="w-5 h-5 text-gray-300" />
+            <SkipBack className="w-5 h-5 text-secondary-foreground" />
           </button>
 
           {/* Play/Pause */}
@@ -248,29 +248,29 @@ export default function SessionPlayer({
             aria-label={isPlaying ? 'Pause' : 'Play'}
           >
             {isPlaying ? (
-              <Pause className="w-6 h-6 text-white" />
+              <Pause className="w-6 h-6 text-foreground" />
             ) : (
-              <Play className="w-6 h-6 text-white ml-0.5" />
+              <Play className="w-6 h-6 text-foreground ml-0.5" />
             )}
           </button>
 
           {/* Skip Forward */}
           <button
             onClick={handleSkipForward}
-            className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+            className="p-2 hover:bg-muted rounded-lg transition-colors"
             aria-label="Skip forward 10 seconds"
           >
-            <SkipForward className="w-5 h-5 text-gray-300" />
+            <SkipForward className="w-5 h-5 text-secondary-foreground" />
           </button>
 
           {/* Playback Speed */}
           <button
             onClick={changePlaybackRate}
-            className="px-3 py-1.5 hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-1.5 min-w-[70px] justify-center"
+            className="px-3 py-1.5 hover:bg-muted rounded-lg transition-colors flex items-center gap-1.5 min-w-[70px] justify-center"
             aria-label={`Playback speed ${playbackRate}x`}
           >
-            <Gauge className="w-4 h-4 text-gray-300" />
-            <span className="text-sm font-medium text-gray-300">{playbackRate}x</span>
+            <Gauge className="w-4 h-4 text-secondary-foreground" />
+            <span className="text-sm font-medium text-secondary-foreground">{playbackRate}x</span>
           </button>
         </div>
 
@@ -278,13 +278,13 @@ export default function SessionPlayer({
         <div className="flex items-center gap-2">
           <button
             onClick={toggleMute}
-            className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+            className="p-2 hover:bg-muted rounded-lg transition-colors"
             aria-label={isMuted ? 'Unmute' : 'Mute'}
           >
             {isMuted || volume === 0 ? (
-              <VolumeX className="w-5 h-5 text-gray-300" />
+              <VolumeX className="w-5 h-5 text-secondary-foreground" />
             ) : (
-              <Volume2 className="w-5 h-5 text-gray-300" />
+              <Volume2 className="w-5 h-5 text-secondary-foreground" />
             )}
           </button>
 
@@ -295,7 +295,7 @@ export default function SessionPlayer({
             step="0.01"
             value={isMuted ? 0 : volume}
             onChange={handleVolumeChange}
-            className="w-24 h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+            className="w-24 h-1 bg-muted rounded-lg appearance-none cursor-pointer slider"
             aria-label="Volume"
           />
         </div>

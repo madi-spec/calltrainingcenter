@@ -91,9 +91,9 @@ export default function KBUploader({ authFetch, onUploadComplete, onError }) {
   };
 
   return (
-    <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-4">
-      <h2 className="text-lg font-semibold text-gray-100">Upload Training Documents</h2>
-      <p className="text-gray-400 text-sm">
+    <div className="bg-card rounded-xl p-6 border border-border space-y-4">
+      <h2 className="text-lg font-semibold text-foreground">Upload Training Documents</h2>
+      <p className="text-muted-foreground text-sm">
         Upload your training manuals, pricing sheets, and SOPs. We'll extract structured content automatically.
       </p>
 
@@ -102,18 +102,18 @@ export default function KBUploader({ authFetch, onUploadComplete, onError }) {
         className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-pointer ${
           dragOver
             ? 'border-primary-500 bg-primary-500/5'
-            : 'border-gray-600 hover:border-gray-500'
+            : 'border-border hover:border-border'
         }`}
         onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
         onDragLeave={() => setDragOver(false)}
         onDrop={handleDrop}
         onClick={() => inputRef.current?.click()}
       >
-        <Upload className="w-10 h-10 text-gray-500 mx-auto mb-3" />
-        <p className="text-gray-300 font-medium">
+        <Upload className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+        <p className="text-secondary-foreground font-medium">
           Drop files here or click to browse
         </p>
-        <p className="text-gray-500 text-sm mt-1">
+        <p className="text-muted-foreground text-sm mt-1">
           PDF, DOCX, or TXT — max {MAX_FILES} files, 5MB each
         </p>
         <input
@@ -135,16 +135,16 @@ export default function KBUploader({ authFetch, onUploadComplete, onError }) {
           {files.map((file, idx) => (
             <div
               key={`${file.name}-${idx}`}
-              className="flex items-center gap-3 bg-gray-700/50 rounded-lg p-3"
+              className="flex items-center gap-3 bg-muted/50 rounded-lg p-3"
             >
-              <FileText className="w-5 h-5 text-gray-400 shrink-0" />
+              <FileText className="w-5 h-5 text-muted-foreground shrink-0" />
               <div className="flex-1 min-w-0">
-                <p className="text-gray-200 text-sm truncate">{file.name}</p>
-                <p className="text-gray-500 text-xs">{formatSize(file.size)}</p>
+                <p className="text-foreground text-sm truncate">{file.name}</p>
+                <p className="text-muted-foreground text-xs">{formatSize(file.size)}</p>
               </div>
               <button
                 onClick={(e) => { e.stopPropagation(); removeFile(idx); }}
-                className="text-gray-500 hover:text-red-400 transition-colors"
+                className="text-muted-foreground hover:text-red-400 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -157,7 +157,7 @@ export default function KBUploader({ authFetch, onUploadComplete, onError }) {
       <button
         onClick={handleUpload}
         disabled={files.length === 0 || uploading}
-        className="w-full px-4 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 font-medium"
+        className="w-full px-4 py-3 bg-primary-600 text-foreground rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 font-medium"
       >
         {uploading ? (
           <>

@@ -86,20 +86,20 @@ export default function CompanyOnboarding() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-lg"
       >
-        <div className="bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-700">
+        <div className="bg-card rounded-2xl shadow-xl p-8 border border-border">
           {/* Header */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-500/10 rounded-full mb-4">
               <Sparkles className="w-8 h-8 text-primary-500" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-100">Welcome to CSR Training!</h1>
-            <p className="text-gray-400 mt-2">
+            <h1 className="text-2xl font-bold text-foreground">Welcome to CSR Training!</h1>
+            <p className="text-muted-foreground mt-2">
               Let's set up your company profile to personalize your training experience.
             </p>
           </div>
@@ -118,18 +118,18 @@ export default function CompanyOnboarding() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Company Name */}
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="name" className="block text-sm font-medium text-secondary-foreground mb-2">
                 Company Name <span className="text-red-400">*</span>
               </label>
               <div className="relative">
-                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
                   type="text"
                   id="name"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="Acme Pest Control"
                   autoFocus
                 />
@@ -138,18 +138,18 @@ export default function CompanyOnboarding() {
 
             {/* Phone Number */}
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="phone" className="block text-sm font-medium text-secondary-foreground mb-2">
                 Company Phone <span className="text-red-400">*</span>
               </label>
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
                   type="tel"
                   id="phone"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="(555) 123-4567"
                 />
               </div>
@@ -157,22 +157,22 @@ export default function CompanyOnboarding() {
 
             {/* Website */}
             <div>
-              <label htmlFor="website" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="website" className="block text-sm font-medium text-secondary-foreground mb-2">
                 Company Website <span className="text-red-400">*</span>
               </label>
               <div className="relative">
-                <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
                   type="text"
                   id="website"
                   name="website"
                   value={formData.website}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="yourcompany.com"
                 />
               </div>
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-muted-foreground">
                 We'll automatically import your services, pricing, and branding from your website
               </p>
             </div>
@@ -181,7 +181,7 @@ export default function CompanyOnboarding() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-foreground font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>

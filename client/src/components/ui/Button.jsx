@@ -3,12 +3,12 @@ import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 
 const variants = {
-  primary: 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/25',
-  secondary: 'bg-gray-700 hover:bg-gray-600 text-white',
-  danger: 'bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-600/25',
-  success: 'bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-600/25',
-  ghost: 'bg-transparent hover:bg-gray-800 text-gray-300 hover:text-white',
-  outline: 'bg-transparent border-2 border-gray-600 hover:border-gray-500 text-gray-300 hover:text-white'
+  primary: 'bg-blue-600 hover:bg-blue-700 text-foreground shadow-lg shadow-blue-600/25',
+  secondary: 'bg-muted hover:bg-muted text-foreground',
+  danger: 'bg-red-600 hover:bg-red-700 text-foreground shadow-lg shadow-red-600/25',
+  success: 'bg-green-600 hover:bg-green-700 text-foreground shadow-lg shadow-green-600/25',
+  ghost: 'bg-transparent hover:bg-card text-secondary-foreground hover:text-foreground',
+  outline: 'bg-transparent border-2 border-border hover:border-border text-secondary-foreground hover:text-foreground'
 };
 
 const sizes = {

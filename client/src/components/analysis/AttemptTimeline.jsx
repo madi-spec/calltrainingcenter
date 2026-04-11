@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 function AttemptTimeline({ attempts = [], selectedAttempt, onSelectAttempt }) {
   if (!attempts || attempts.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+      <div className="text-center py-8 text-muted-foreground dark:text-muted-foreground">
         No attempts recorded yet.
       </div>
     );
@@ -34,9 +34,9 @@ function AttemptTimeline({ attempts = [], selectedAttempt, onSelectAttempt }) {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-      <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-        <h3 className="font-semibold text-gray-900 dark:text-white">
+    <div className="bg-white dark:bg-card rounded-lg border border-border dark:border-border">
+      <div className="px-4 py-3 border-b border-border dark:border-border">
+        <h3 className="font-semibold text-foreground dark:text-foreground">
           Attempt History ({attempts.length})
         </h3>
       </div>
@@ -44,7 +44,7 @@ function AttemptTimeline({ attempts = [], selectedAttempt, onSelectAttempt }) {
       <div className="p-4">
         <div className="relative">
           {/* Timeline line */}
-          <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200 dark:bg-gray-700" />
+          <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-muted dark:bg-muted" />
 
           {/* Attempts */}
           <div className="space-y-4">
@@ -72,7 +72,7 @@ function AttemptTimeline({ attempts = [], selectedAttempt, onSelectAttempt }) {
                         ? 'border-primary-500 bg-primary-500'
                         : isBest
                         ? 'border-green-500 bg-green-100 dark:bg-green-900/30'
-                        : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 group-hover:border-primary-400'
+                        : 'border-border dark:border-border bg-white dark:bg-card group-hover:border-primary-400'
                     }`}
                   >
                     {isBest && !isSelected && (
@@ -87,12 +87,12 @@ function AttemptTimeline({ attempts = [], selectedAttempt, onSelectAttempt }) {
                     className={`p-3 rounded-lg border transition-all ${
                       isSelected
                         ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                        : 'border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-700 bg-gray-50 dark:bg-gray-800/50'
+                        : 'border-border dark:border-border hover:border-primary-300 dark:hover:border-primary-700 bg-muted dark:bg-card/50'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium text-gray-900 dark:text-white">
+                        <span className="text-sm font-medium text-foreground dark:text-foreground">
                           Attempt #{attempt.attemptNumber}
                         </span>
                         {isFirst && (
@@ -111,7 +111,7 @@ function AttemptTimeline({ attempts = [], selectedAttempt, onSelectAttempt }) {
                           </span>
                         )}
                       </div>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                      <span className="text-xs text-muted-foreground dark:text-muted-foreground">
                         {formatDate(attempt.date)}
                       </span>
                     </div>
@@ -121,13 +121,13 @@ function AttemptTimeline({ attempts = [], selectedAttempt, onSelectAttempt }) {
                         {/* Score */}
                         <div className="flex items-center gap-2">
                           <div className={`w-2 h-2 rounded-full ${getScoreColor(attempt.overallScore)}`} />
-                          <span className="text-lg font-bold text-gray-900 dark:text-white">
+                          <span className="text-lg font-bold text-foreground dark:text-foreground">
                             {attempt.overallScore ?? '--'}%
                           </span>
                         </div>
 
                         {/* Duration */}
-                        <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
+                        <div className="flex items-center gap-1 text-sm text-muted-foreground dark:text-muted-foreground">
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
@@ -142,7 +142,7 @@ function AttemptTimeline({ attempts = [], selectedAttempt, onSelectAttempt }) {
                             ? 'text-green-600 dark:text-green-400'
                             : attempt.overallScore < attempts[index - 1].overallScore
                             ? 'text-red-600 dark:text-red-400'
-                            : 'text-gray-500 dark:text-gray-400'
+                            : 'text-muted-foreground dark:text-muted-foreground'
                         }`}>
                           {attempt.overallScore > attempts[index - 1].overallScore
                             ? `+${attempt.overallScore - attempts[index - 1].overallScore}`
@@ -154,7 +154,7 @@ function AttemptTimeline({ attempts = [], selectedAttempt, onSelectAttempt }) {
                     </div>
 
                     {/* Quick actions */}
-                    <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700 flex gap-2">
+                    <div className="mt-2 pt-2 border-t border-border dark:border-border flex gap-2">
                       <Link
                         to={`/results/${attempt.sessionId}`}
                         onClick={(e) => e.stopPropagation()}

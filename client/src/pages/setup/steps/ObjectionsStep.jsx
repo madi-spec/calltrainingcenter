@@ -134,9 +134,9 @@ export default function ObjectionsStep({ data, allStepData, onComplete, authFetc
   return (
     <div className="space-y-6">
       {/* Instructions */}
-      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-        <h3 className="text-lg font-semibold text-gray-100 mb-2">Configure Objection Handling</h3>
-        <p className="text-gray-400">
+      <div className="bg-card rounded-xl p-6 border border-border">
+        <h3 className="text-lg font-semibold text-foreground mb-2">Configure Objection Handling</h3>
+        <p className="text-muted-foreground">
           Select common objections your team encounters and customize the recommended responses.
           These will be used to train your CSRs on effective responses.
         </p>
@@ -150,28 +150,28 @@ export default function ObjectionsStep({ data, allStepData, onComplete, authFetc
           const isExpanded = expandedCategory === category.id;
 
           return (
-            <div key={category.id} className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
+            <div key={category.id} className="bg-card rounded-xl border border-border overflow-hidden">
               <button
                 onClick={() => setExpandedCategory(isExpanded ? null : category.id)}
-                className="w-full flex items-center justify-between p-4 hover:bg-gray-700/50 transition-colors"
+                className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <span className={`px-2 py-1 rounded text-xs font-medium ${getCategoryColor(category.id)}`}>
                     {category.name}
                   </span>
-                  <span className="text-sm text-gray-400">
+                  <span className="text-sm text-muted-foreground">
                     {selectedCount}/{categoryTemplates.length} selected
                   </span>
                 </div>
                 {isExpanded ? (
-                  <ChevronUp className="w-5 h-5 text-gray-400" />
+                  <ChevronUp className="w-5 h-5 text-muted-foreground" />
                 ) : (
-                  <ChevronDown className="w-5 h-5 text-gray-400" />
+                  <ChevronDown className="w-5 h-5 text-muted-foreground" />
                 )}
               </button>
 
               {isExpanded && (
-                <div className="p-4 pt-0 space-y-3 border-t border-gray-700">
+                <div className="p-4 pt-0 space-y-3 border-t border-border">
                   {categoryTemplates.map(template => {
                     const isSelected = selectedTemplates.includes(template.id);
                     const isEditing = editingTemplate === template.id;
@@ -181,8 +181,8 @@ export default function ObjectionsStep({ data, allStepData, onComplete, authFetc
                         key={template.id}
                         className={`p-4 rounded-lg border transition-colors ${
                           isSelected
-                            ? 'bg-gray-700/50 border-gray-600'
-                            : 'bg-gray-800 border-gray-700 opacity-60'
+                            ? 'bg-muted/50 border-border'
+                            : 'bg-card border-border opacity-60'
                         }`}
                       >
                         <div className="flex items-start justify-between gap-4">
@@ -193,12 +193,12 @@ export default function ObjectionsStep({ data, allStepData, onComplete, authFetc
                                 className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${
                                   isSelected
                                     ? 'bg-primary-500 border-primary-500'
-                                    : 'border-gray-600 hover:border-gray-500'
+                                    : 'border-border hover:border-border'
                                 }`}
                               >
-                                {isSelected && <Check className="w-3 h-3 text-white" />}
+                                {isSelected && <Check className="w-3 h-3 text-foreground" />}
                               </button>
-                              <p className="font-medium text-gray-200">
+                              <p className="font-medium text-foreground">
                                 "{template.objection_text}"
                               </p>
                               {template.frequency === 'very_common' && (
@@ -214,19 +214,19 @@ export default function ObjectionsStep({ data, allStepData, onComplete, authFetc
                                   value={editedResponse}
                                   onChange={(e) => setEditedResponse(e.target.value)}
                                   rows={3}
-                                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 text-sm focus:ring-2 focus:ring-primary-500"
+                                  className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground text-sm focus:ring-2 focus:ring-primary-500"
                                 />
                                 <div className="flex gap-2">
                                   <button
                                     onClick={() => saveEdit(template.id)}
-                                    className="flex items-center gap-1 px-3 py-1 bg-primary-600 text-white text-sm rounded transition-colors hover:bg-primary-700"
+                                    className="flex items-center gap-1 px-3 py-1 bg-primary-600 text-foreground text-sm rounded transition-colors hover:bg-primary-700"
                                   >
                                     <Check className="w-3 h-3" />
                                     Save
                                   </button>
                                   <button
                                     onClick={cancelEdit}
-                                    className="flex items-center gap-1 px-3 py-1 bg-gray-700 text-gray-300 text-sm rounded transition-colors hover:bg-gray-600"
+                                    className="flex items-center gap-1 px-3 py-1 bg-muted text-secondary-foreground text-sm rounded transition-colors hover:bg-muted"
                                   >
                                     <X className="w-3 h-3" />
                                     Cancel
@@ -235,7 +235,7 @@ export default function ObjectionsStep({ data, allStepData, onComplete, authFetc
                               </div>
                             ) : (
                               <div className="ml-8">
-                                <p className="text-sm text-gray-400">
+                                <p className="text-sm text-muted-foreground">
                                   {template.customResponse || template.default_response}
                                 </p>
                                 {template.customResponse && (
@@ -250,7 +250,7 @@ export default function ObjectionsStep({ data, allStepData, onComplete, authFetc
                           {isSelected && !isEditing && (
                             <button
                               onClick={() => startEditing(template)}
-                              className="p-2 text-gray-400 hover:text-gray-300 hover:bg-gray-700 rounded transition-colors"
+                              className="p-2 text-muted-foreground hover:text-secondary-foreground hover:bg-muted rounded transition-colors"
                             >
                               <Edit2 className="w-4 h-4" />
                             </button>
@@ -267,10 +267,10 @@ export default function ObjectionsStep({ data, allStepData, onComplete, authFetc
       </div>
 
       {/* Custom Objections */}
-      <div className="bg-gray-800 rounded-xl border border-gray-700">
-        <div className="p-4 border-b border-gray-700">
+      <div className="bg-card rounded-xl border border-border">
+        <div className="p-4 border-b border-border">
           <div className="flex items-center justify-between">
-            <h4 className="font-medium text-gray-200">Custom Objections</h4>
+            <h4 className="font-medium text-foreground">Custom Objections</h4>
             <button
               onClick={() => setShowAddCustom(true)}
               className="flex items-center gap-1 px-3 py-1 text-sm text-primary-400 hover:bg-primary-500/10 rounded transition-colors"
@@ -283,20 +283,20 @@ export default function ObjectionsStep({ data, allStepData, onComplete, authFetc
 
         <div className="p-4 space-y-3">
           {customObjections.length === 0 && !showAddCustom && (
-            <p className="text-sm text-gray-500 text-center py-4">
+            <p className="text-sm text-muted-foreground text-center py-4">
               No custom objections added yet
             </p>
           )}
 
           {customObjections.map(objection => (
-            <div key={objection.id} className="p-3 bg-gray-700/50 rounded-lg">
+            <div key={objection.id} className="p-3 bg-muted/50 rounded-lg">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1">
                   <span className={`text-xs px-2 py-0.5 rounded ${getCategoryColor(objection.category)}`}>
                     {OBJECTION_CATEGORIES.find(c => c.id === objection.category)?.name}
                   </span>
-                  <p className="font-medium text-gray-200 mt-2">"{objection.text}"</p>
-                  <p className="text-sm text-gray-400 mt-1">{objection.response}</p>
+                  <p className="font-medium text-foreground mt-2">"{objection.text}"</p>
+                  <p className="text-sm text-muted-foreground mt-1">{objection.response}</p>
                 </div>
                 <button
                   onClick={() => removeCustomObjection(objection.id)}
@@ -309,11 +309,11 @@ export default function ObjectionsStep({ data, allStepData, onComplete, authFetc
           ))}
 
           {showAddCustom && (
-            <div className="p-4 bg-gray-700/50 rounded-lg space-y-3">
+            <div className="p-4 bg-muted/50 rounded-lg space-y-3">
               <select
                 value={newObjection.category}
                 onChange={(e) => setNewObjection({ ...newObjection, category: e.target.value })}
-                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 text-sm"
+                className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground text-sm"
               >
                 {OBJECTION_CATEGORIES.map(cat => (
                   <option key={cat.id} value={cat.id}>{cat.name}</option>
@@ -324,20 +324,20 @@ export default function ObjectionsStep({ data, allStepData, onComplete, authFetc
                 value={newObjection.text}
                 onChange={(e) => setNewObjection({ ...newObjection, text: e.target.value })}
                 placeholder="What the customer says..."
-                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 text-sm"
+                className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground text-sm"
               />
               <textarea
                 value={newObjection.response}
                 onChange={(e) => setNewObjection({ ...newObjection, response: e.target.value })}
                 placeholder="Recommended response..."
                 rows={2}
-                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 text-sm"
+                className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground text-sm"
               />
               <div className="flex gap-2">
                 <button
                   onClick={addCustomObjection}
                   disabled={!newObjection.text || !newObjection.response}
-                  className="flex items-center gap-1 px-3 py-1 bg-primary-600 text-white text-sm rounded transition-colors hover:bg-primary-700 disabled:opacity-50"
+                  className="flex items-center gap-1 px-3 py-1 bg-primary-600 text-foreground text-sm rounded transition-colors hover:bg-primary-700 disabled:opacity-50"
                 >
                   <Plus className="w-3 h-3" />
                   Add
@@ -347,7 +347,7 @@ export default function ObjectionsStep({ data, allStepData, onComplete, authFetc
                     setShowAddCustom(false);
                     setNewObjection({ category: 'price', text: '', response: '' });
                   }}
-                  className="px-3 py-1 bg-gray-700 text-gray-300 text-sm rounded transition-colors hover:bg-gray-600"
+                  className="px-3 py-1 bg-muted text-secondary-foreground text-sm rounded transition-colors hover:bg-muted"
                 >
                   Cancel
                 </button>
@@ -362,7 +362,7 @@ export default function ObjectionsStep({ data, allStepData, onComplete, authFetc
         <button
           onClick={handleSubmit}
           disabled={saving}
-          className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors disabled:opacity-50"
         >
           {saving ? (
             <>

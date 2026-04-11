@@ -216,11 +216,11 @@ ${s.resolutionConditions || 'Accept a reasonable solution that addresses your co
       >
         <div className="flex items-center gap-3 mb-2">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
-            <PlusCircle className="w-5 h-5 text-white" />
+            <PlusCircle className="w-5 h-5 text-foreground" />
           </div>
-          <h1 className="text-3xl font-bold text-white">{isEditMode ? 'Edit Scenario' : 'Create Scenario'}</h1>
+          <h1 className="text-3xl font-bold text-foreground">{isEditMode ? 'Edit Scenario' : 'Create Scenario'}</h1>
         </div>
-        <p className="text-gray-400">
+        <p className="text-muted-foreground">
           Build a custom training scenario for your team
         </p>
       </motion.div>
@@ -234,7 +234,7 @@ ${s.resolutionConditions || 'Accept a reasonable solution that addresses your co
       >
         <Card padding="sm">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-400">Insert company variables:</span>
+            <span className="text-sm text-muted-foreground">Insert company variables:</span>
             <div className="flex gap-2">
               <VariableButton label="company.name" value={company.name} />
               <VariableButton label="company.pricing.quarterlyPrice" value={`$${company.pricing?.quarterlyPrice}`} />
@@ -478,7 +478,7 @@ We've never had problems with your service"
             <Card.Content>
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-2">
+                  <h3 className="text-lg font-semibold text-foreground mb-2">
                     {scenario.name || 'Untitled Scenario'}
                   </h3>
                   <div className="flex gap-2 mb-3">
@@ -489,12 +489,12 @@ We've never had problems with your service"
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-muted-foreground">
                     {scenario.customerName || 'Customer'} - {scenario.emotionalState || 'Unknown emotional state'}
                   </p>
                 </div>
                 {scenario.voiceId && (
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Volume2 className="w-4 h-4" />
                     {voices.find(v => v.id === scenario.voiceId)?.name || 'Default'}
                   </div>
@@ -542,7 +542,7 @@ function VariableButton({ label, value }) {
   return (
     <button
       onClick={handleClick}
-      className="px-2 py-1 bg-gray-700 hover:bg-gray-600 rounded text-xs text-gray-300 transition-colors"
+      className="px-2 py-1 bg-muted hover:bg-muted rounded text-xs text-secondary-foreground transition-colors"
       title={value}
     >
       {copied ? 'Copied!' : `{{${label.split('.').pop()}}}`}

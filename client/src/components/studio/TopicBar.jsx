@@ -10,7 +10,7 @@ const STATUS_INDICATORS = {
 };
 
 const STATUS_COLORS = {
-  not_started: 'text-gray-500',
+  not_started: 'text-muted-foreground',
   interviewing: 'text-blue-400',
   ready: 'text-yellow-400',
   generating: 'text-purple-400',
@@ -39,7 +39,7 @@ export default function TopicBar({ topics, activeTopic, onSelectTopic, onAddTopi
       {topics.map(topic => {
         const isActive = activeTopic === topic.id;
         const indicator = STATUS_INDICATORS[topic.status] || '';
-        const indicatorColor = STATUS_COLORS[topic.status] || 'text-gray-500';
+        const indicatorColor = STATUS_COLORS[topic.status] || 'text-muted-foreground';
 
         return (
           <div key={topic.id} className="flex items-center gap-1">

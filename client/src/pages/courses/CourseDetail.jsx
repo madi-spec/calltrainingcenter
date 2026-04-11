@@ -75,8 +75,8 @@ export default function CourseDetail() {
   if (!course) {
     return (
       <div className="text-center py-12">
-        <BookOpen className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-        <p className="text-gray-400">Course not found</p>
+        <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+        <p className="text-muted-foreground">Course not found</p>
         <Link to="/courses" className="text-primary-400 hover:text-primary-300 mt-2 inline-block">
           Back to courses
         </Link>
@@ -93,7 +93,7 @@ export default function CourseDetail() {
       {/* Back Button */}
       <Link
         to="/courses"
-        className="inline-flex items-center gap-2 text-gray-400 hover:text-gray-300 transition-colors"
+        className="inline-flex items-center gap-2 text-muted-foreground hover:text-secondary-foreground transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to courses
@@ -103,7 +103,7 @@ export default function CourseDetail() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gray-800 rounded-2xl p-6 md:p-8 border border-gray-700"
+        className="bg-card rounded-2xl p-6 md:p-8 border border-border"
       >
         <div className="flex flex-col md:flex-row md:items-start gap-6">
           {/* Course Icon */}
@@ -116,7 +116,7 @@ export default function CourseDetail() {
                 <span className="text-sm text-primary-400 font-medium capitalize">
                   {course.category}
                 </span>
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-100 mt-1">
+                <h1 className="text-2xl md:text-3xl font-bold text-foreground mt-1">
                   {course.name}
                 </h1>
               </div>
@@ -128,20 +128,20 @@ export default function CourseDetail() {
               )}
             </div>
 
-            <p className="text-gray-400 mt-3">{course.description}</p>
+            <p className="text-muted-foreground mt-3">{course.description}</p>
 
             {/* Course Stats */}
             <div className="flex flex-wrap gap-4 mt-4">
-              <div className="flex items-center gap-2 text-gray-300">
-                <BookOpen className="w-4 h-4 text-gray-500" />
+              <div className="flex items-center gap-2 text-secondary-foreground">
+                <BookOpen className="w-4 h-4 text-muted-foreground" />
                 <span>{course.modules?.length || 0} modules</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-300">
-                <Target className="w-4 h-4 text-gray-500" />
+              <div className="flex items-center gap-2 text-secondary-foreground">
+                <Target className="w-4 h-4 text-muted-foreground" />
                 <span>{course.scenario_count || 10} scenarios per module</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-300">
-                <Clock className="w-4 h-4 text-gray-500" />
+              <div className="flex items-center gap-2 text-secondary-foreground">
+                <Clock className="w-4 h-4 text-muted-foreground" />
                 <span>
                   {course.difficulty === 'easy' && 'Beginner'}
                   {course.difficulty === 'medium' && 'Intermediate'}
@@ -154,10 +154,10 @@ export default function CourseDetail() {
             {progress && (
               <div className="mt-6">
                 <div className="flex items-center justify-between text-sm mb-2">
-                  <span className="text-gray-400">Course Progress</span>
-                  <span className="text-gray-200 font-medium">{percentComplete}%</span>
+                  <span className="text-muted-foreground">Course Progress</span>
+                  <span className="text-foreground font-medium">{percentComplete}%</span>
                 </div>
-                <div className="h-3 bg-gray-700 rounded-full overflow-hidden">
+                <div className="h-3 bg-muted rounded-full overflow-hidden">
                   <div
                     className={`h-full transition-all ${
                       isCompleted ? 'bg-green-500' : 'bg-primary-500'
@@ -173,7 +173,7 @@ export default function CourseDetail() {
               <button
                 onClick={handleStartCourse}
                 disabled={starting}
-                className="mt-6 flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50"
+                className="mt-6 flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-foreground font-semibold rounded-lg transition-colors disabled:opacity-50"
               >
                 {starting ? (
                   <>
@@ -192,7 +192,7 @@ export default function CourseDetail() {
 
           {/* Badge Preview */}
           {course.badge_name && (
-            <div className="bg-gray-700/50 rounded-xl p-4 text-center min-w-[160px]">
+            <div className="bg-muted/50 rounded-xl p-4 text-center min-w-[160px]">
               <div className="text-4xl mb-2">
                 {isCompleted ? (
                   course.badge_icon || '🏆'
@@ -200,8 +200,8 @@ export default function CourseDetail() {
                   <span className="opacity-30">{course.badge_icon || '🏆'}</span>
                 )}
               </div>
-              <p className="text-sm text-gray-400">Badge Reward</p>
-              <p className="text-gray-200 font-medium">{course.badge_name}</p>
+              <p className="text-sm text-muted-foreground">Badge Reward</p>
+              <p className="text-foreground font-medium">{course.badge_name}</p>
               {isCompleted && (
                 <div className="flex items-center justify-center gap-1 mt-2 text-yellow-400">
                   <Star className="w-4 h-4 fill-current" />
@@ -219,7 +219,7 @@ export default function CourseDetail() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
       >
-        <h2 className="text-lg font-semibold text-gray-100 mb-4">Course Modules</h2>
+        <h2 className="text-lg font-semibold text-foreground mb-4">Course Modules</h2>
 
         <div className="space-y-3">
           {course.modules?.map((module, index) => (
@@ -249,10 +249,10 @@ function ModuleCard({ module, index, courseStarted, isLocked }) {
   return (
     <Link
       to={isLocked || !courseStarted ? '#' : `/modules/${module.id}`}
-      className={`block bg-gray-800 rounded-xl border border-gray-700 overflow-hidden transition-all ${
+      className={`block bg-card rounded-xl border border-border overflow-hidden transition-all ${
         isLocked || !courseStarted
           ? 'opacity-60 cursor-not-allowed'
-          : 'hover:border-gray-600'
+          : 'hover:border-border'
       }`}
     >
       <div className="p-5">
@@ -264,8 +264,8 @@ function ModuleCard({ module, index, courseStarted, isLocked }) {
               : isInProgress
               ? 'bg-primary-500/20 text-primary-400'
               : isLocked
-              ? 'bg-gray-700 text-gray-500'
-              : 'bg-gray-700 text-gray-300'
+              ? 'bg-muted text-muted-foreground'
+              : 'bg-muted text-secondary-foreground'
           }`}>
             {isCompleted ? (
               <CheckCircle2 className="w-6 h-6" />
@@ -279,7 +279,7 @@ function ModuleCard({ module, index, courseStarted, isLocked }) {
           {/* Module Info */}
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-gray-200">{module.name}</h3>
+              <h3 className="font-semibold text-foreground">{module.name}</h3>
               {isCompleted && (
                 <span className="text-xs px-2 py-0.5 bg-green-500/20 text-green-400 rounded-full">
                   Complete
@@ -291,12 +291,12 @@ function ModuleCard({ module, index, courseStarted, isLocked }) {
                 </span>
               )}
             </div>
-            <p className="text-sm text-gray-400 mt-1">{module.description}</p>
+            <p className="text-sm text-muted-foreground mt-1">{module.description}</p>
 
             {/* Progress Stats */}
             {(isInProgress || isCompleted) && (
               <div className="flex items-center gap-4 mt-3 text-sm">
-                <span className="text-gray-400">
+                <span className="text-muted-foreground">
                   {scenariosCompleted}/{totalScenarios} scenarios
                 </span>
                 <span className={`${closeRate >= 60 ? 'text-green-400' : 'text-yellow-400'}`}>
@@ -308,14 +308,14 @@ function ModuleCard({ module, index, courseStarted, isLocked }) {
 
           {/* Action */}
           {!isLocked && courseStarted && (
-            <ChevronRight className="w-5 h-5 text-gray-500" />
+            <ChevronRight className="w-5 h-5 text-muted-foreground" />
           )}
         </div>
 
         {/* Progress Bar */}
         {isInProgress && (
           <div className="mt-4">
-            <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+            <div className="h-2 bg-muted rounded-full overflow-hidden">
               <div
                 className="h-full bg-primary-500 transition-all"
                 style={{ width: `${(scenariosCompleted / totalScenarios) * 100}%` }}

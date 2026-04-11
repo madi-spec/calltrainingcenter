@@ -79,21 +79,21 @@ function TrialStatusBanner({ onUpgradeClick }) {
       text: isDark ? 'text-red-200' : 'text-red-800',
       subText: isDark ? 'text-red-300' : 'text-red-600',
       icon: 'text-red-400',
-      button: 'bg-red-600 hover:bg-red-500 text-white'
+      button: 'bg-red-600 hover:bg-red-500 text-foreground'
     },
     amber: {
       bg: isDark ? 'bg-amber-900/50 border-amber-700' : 'bg-amber-50 border-amber-200',
       text: isDark ? 'text-amber-200' : 'text-amber-800',
       subText: isDark ? 'text-amber-300' : 'text-amber-600',
       icon: 'text-amber-400',
-      button: 'bg-amber-600 hover:bg-amber-500 text-white'
+      button: 'bg-amber-600 hover:bg-amber-500 text-foreground'
     },
     blue: {
       bg: isDark ? 'bg-primary-900/50 border-primary-700' : 'bg-primary-50 border-primary-200',
       text: isDark ? 'text-primary-200' : 'text-primary-800',
       subText: isDark ? 'text-primary-300' : 'text-primary-600',
       icon: 'text-primary-400',
-      button: 'bg-primary-600 hover:bg-primary-500 text-white'
+      button: 'bg-primary-600 hover:bg-primary-500 text-foreground'
     }
   };
 
@@ -106,7 +106,7 @@ function TrialStatusBanner({ onUpgradeClick }) {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
-        className={`${colors.bg} border-b ${isDark ? '' : ''} px-4 py-2`}
+        className={`${colors.bg} border-b px-4 py-2`}
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -127,7 +127,7 @@ function TrialStatusBanner({ onUpgradeClick }) {
             {!isUrgent && (
               <button
                 onClick={() => setIsDismissed(true)}
-                className={`p-1.5 rounded-lg ${isDark ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-200 text-gray-500'} transition-colors`}
+                className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground transition-colors"
                 title="Dismiss"
               >
                 <X className="w-4 h-4" />

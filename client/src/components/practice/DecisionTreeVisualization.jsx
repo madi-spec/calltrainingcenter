@@ -45,7 +45,7 @@ function DecisionTreeVisualization({
       case 'poor':
         return 'text-red-600 bg-red-50 border-red-200';
       default:
-        return 'text-gray-600 bg-gray-50 border-gray-200';
+        return 'text-muted-foreground bg-muted border-border';
     }
   };
 
@@ -73,16 +73,16 @@ function DecisionTreeVisualization({
   return (
     <Card className="p-6">
       {/* Header */}
-      <div className="flex items-start justify-between mb-6 pb-4 border-b border-gray-200">
+      <div className="flex items-start justify-between mb-6 pb-4 border-b border-border">
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
             <GitBranch className="w-6 h-6 text-blue-600" />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-gray-900 mb-1">
+            <h3 className="text-xl font-bold text-foreground mb-1">
               Your Decision Path
             </h3>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               Review the choices you made during this scenario
             </p>
           </div>
@@ -144,7 +144,7 @@ function DecisionTreeVisualization({
               transition={{ delay: nodeIndex * 0.1 }}
               className={`
                 relative pl-8 pb-6 border-l-2
-                ${wasTaken ? 'border-blue-500' : 'border-gray-200'}
+                ${wasTaken ? 'border-blue-500' : 'border-border'}
               `}
             >
               {/* Node Indicator */}
@@ -152,7 +152,7 @@ function DecisionTreeVisualization({
                 {wasTaken ? (
                   <CheckCircle2 className="w-6 h-6 text-blue-500 bg-white" />
                 ) : (
-                  <Circle className="w-6 h-6 text-gray-300 bg-white" />
+                  <Circle className="w-6 h-6 text-secondary-foreground bg-white" />
                 )}
               </div>
 
@@ -160,10 +160,10 @@ function DecisionTreeVisualization({
               <div className={`
                 ${wasTaken ? '' : 'opacity-50'}
               `}>
-                <h4 className="font-bold text-gray-900 mb-2">
+                <h4 className="font-bold text-foreground mb-2">
                   Decision Point {nodeIndex + 1}
                 </h4>
-                <p className="text-gray-600 mb-4">
+                <p className="text-muted-foreground mb-4">
                   {node.description}
                 </p>
 
@@ -177,7 +177,7 @@ function DecisionTreeVisualization({
                       ? 'border-yellow-500 bg-yellow-50'
                       : choice.outcome_type === 'poor'
                       ? 'border-red-500 bg-red-50'
-                      : 'border-gray-300 bg-gray-50';
+                      : 'border-border bg-muted';
 
                     return (
                       <div
@@ -186,7 +186,7 @@ function DecisionTreeVisualization({
                           p-3 rounded-lg border transition-all
                           ${isSelected
                             ? `${outcomeColor} border-2 shadow-md`
-                            : 'border-gray-200 bg-gray-50'
+                            : 'border-border bg-muted'
                           }
                           ${!wasTaken ? 'opacity-50' : ''}
                         `}
@@ -196,7 +196,7 @@ function DecisionTreeVisualization({
                             flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold
                             ${isSelected
                               ? 'bg-white text-blue-600'
-                              : 'bg-gray-200 text-gray-600'
+                              : 'bg-muted text-muted-foreground'
                             }
                           `}>
                             {choiceIndex + 1}
@@ -204,7 +204,7 @@ function DecisionTreeVisualization({
 
                           <div className="flex-1">
                             <p className={`
-                              ${isSelected ? 'font-medium text-gray-900' : 'text-gray-600'}
+                              ${isSelected ? 'font-medium text-foreground' : 'text-muted-foreground'}
                             `}>
                               {choice.text}
                             </p>
@@ -259,8 +259,8 @@ function DecisionTreeVisualization({
       </div>
 
       {/* Path Analysis */}
-      <div className="mt-6 pt-6 border-t border-gray-200">
-        <h4 className="font-bold text-gray-900 mb-3">Path Analysis</h4>
+      <div className="mt-6 pt-6 border-t border-border">
+        <h4 className="font-bold text-foreground mb-3">Path Analysis</h4>
         <div className="space-y-2">
           {pathQuality === 'optimal' && (
             <div className="flex items-start gap-2 text-green-700">

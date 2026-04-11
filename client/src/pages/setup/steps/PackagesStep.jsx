@@ -314,7 +314,7 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
               {packages.length} package{packages.length !== 1 ? 's' : ''} pre-filled from your website
             </span>
           </div>
-          <p className="text-sm text-gray-400 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Review and adjust the details below, then save to continue.
           </p>
         </div>
@@ -322,19 +322,19 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
 
       {/* Quick Start Options */}
       {packages.length === 0 && (
-        <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-          <h3 className="text-lg font-semibold text-gray-100 mb-4">Quick Start</h3>
-          <p className="text-gray-400 mb-6">
+        <div className="bg-card rounded-xl p-6 border border-border">
+          <h3 className="text-lg font-semibold text-foreground mb-4">Quick Start</h3>
+          <p className="text-muted-foreground mb-6">
             Choose how you'd like to set up your service packages
           </p>
 
           <div className="grid md:grid-cols-2 gap-4">
             <button
               onClick={handleUseDefaults}
-              className="p-4 bg-gray-700 hover:bg-gray-600 rounded-xl border border-gray-600 text-left transition-colors"
+              className="p-4 bg-muted hover:bg-muted rounded-xl border border-border text-left transition-colors"
             >
-              <h4 className="font-medium text-gray-200 mb-1">Use Template</h4>
-              <p className="text-sm text-gray-400">
+              <h4 className="font-medium text-foreground mb-1">Use Template</h4>
+              <p className="text-sm text-muted-foreground">
                 Start with our standard 3-tier package structure
               </p>
             </button>
@@ -352,7 +352,7 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
                 )}
                 <h4 className="font-medium text-primary-300">Generate with AI</h4>
               </div>
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-muted-foreground">
                 Create customized packages based on your company info
               </p>
             </button>
@@ -366,56 +366,56 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
           {packages.map((pkg, index) => (
             <div
               key={index}
-              className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden"
+              className="bg-card rounded-xl border border-border overflow-hidden"
             >
               <button
                 onClick={() => setExpandedPackage(expandedPackage === index ? null : index)}
-                className="w-full flex items-center justify-between p-4 hover:bg-gray-700/50 transition-colors"
+                className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors"
               >
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-lg bg-primary-500/10 flex items-center justify-center text-primary-400 font-bold">
                     {index + 1}
                   </div>
                   <div className="text-left">
-                    <h4 className="font-medium text-gray-200">
+                    <h4 className="font-medium text-foreground">
                       {pkg.name || 'New Package'}
                     </h4>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-sm text-muted-foreground">
                       ${pkg.recurringPrice}/{pkg.frequency}
                     </p>
                   </div>
                 </div>
                 {expandedPackage === index ? (
-                  <ChevronUp className="w-5 h-5 text-gray-400" />
+                  <ChevronUp className="w-5 h-5 text-muted-foreground" />
                 ) : (
-                  <ChevronDown className="w-5 h-5 text-gray-400" />
+                  <ChevronDown className="w-5 h-5 text-muted-foreground" />
                 )}
               </button>
 
               {expandedPackage === index && (
-                <div className="p-4 pt-0 space-y-4 border-t border-gray-700">
+                <div className="p-4 pt-0 space-y-4 border-t border-border">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-secondary-foreground mb-2">
                         Package Name
                       </label>
                       <input
                         type="text"
                         value={pkg.name}
                         onChange={(e) => updatePackage(index, 'name', e.target.value)}
-                        className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-primary-500"
+                        className="w-full px-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary-500"
                         placeholder="Premium Protection"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-secondary-foreground mb-2">
                         Service Frequency
                       </label>
                       <select
                         value={pkg.frequency}
                         onChange={(e) => updatePackage(index, 'frequency', e.target.value)}
-                        className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-primary-500"
+                        className="w-full px-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary-500"
                       >
                         <option value="monthly">Monthly</option>
                         <option value="bi-monthly">Bi-Monthly</option>
@@ -426,52 +426,52 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-secondary-foreground mb-2">
                         Initial Price
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">$</span>
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
                         <input
                           type="number"
                           value={pkg.initialPrice}
                           onChange={(e) => updatePackage(index, 'initialPrice', parseInt(e.target.value) || 0)}
-                          className="w-full pl-8 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-primary-500"
+                          className="w-full pl-8 pr-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary-500"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-secondary-foreground mb-2">
                         Recurring Price
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">$</span>
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
                         <input
                           type="number"
                           value={pkg.recurringPrice}
                           onChange={(e) => updatePackage(index, 'recurringPrice', parseInt(e.target.value) || 0)}
-                          className="w-full pl-8 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-primary-500"
+                          className="w-full pl-8 pr-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary-500"
                         />
                       </div>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-secondary-foreground mb-2">
                       Description
                     </label>
                     <textarea
                       value={pkg.description}
                       onChange={(e) => updatePackage(index, 'description', e.target.value)}
                       rows={2}
-                      className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary-500"
                       placeholder="Brief description of this package..."
                     />
                   </div>
 
                   {/* Selling Points */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-secondary-foreground mb-2">
                       Selling Points
                     </label>
                     <div className="space-y-2">
@@ -481,7 +481,7 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
                             type="text"
                             value={point}
                             onChange={(e) => updateSellingPoint(index, pointIndex, e.target.value)}
-                            className="flex-1 px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-primary-500"
+                            className="flex-1 px-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary-500"
                             placeholder="Key benefit..."
                           />
                           <button
@@ -518,7 +518,7 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
 
           <button
             onClick={addPackage}
-            className="w-full flex items-center justify-center gap-2 p-4 bg-gray-800 hover:bg-gray-700 rounded-xl border border-gray-700 border-dashed text-gray-400 hover:text-gray-300 transition-colors"
+            className="w-full flex items-center justify-center gap-2 p-4 bg-card hover:bg-muted rounded-xl border border-border border-dashed text-muted-foreground hover:text-secondary-foreground transition-colors"
           >
             <Plus className="w-5 h-5" />
             Add Another Package
@@ -532,7 +532,7 @@ export default function PackagesStep({ data, allStepData, onComplete, authFetch 
           <button
             onClick={handleSubmit}
             disabled={saving}
-            className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors disabled:opacity-50"
           >
             {saving ? (
               <>

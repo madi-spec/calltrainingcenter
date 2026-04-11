@@ -71,16 +71,16 @@ function ScheduleTraining({ scenario, assignment, onScheduled, onClose }) {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6"
+          className="bg-white dark:bg-card rounded-lg shadow-xl max-w-md w-full p-6"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-bold text-foreground dark:text-foreground">
               Schedule Training
             </h2>
             <button
               onClick={onClose}
-              className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+              className="p-1 text-muted-foreground hover:text-muted-foreground dark:hover:text-foreground"
             >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -89,13 +89,13 @@ function ScheduleTraining({ scenario, assignment, onScheduled, onClose }) {
           </div>
 
           {(scenario || assignment) && (
-            <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <p className="text-sm text-gray-600 dark:text-gray-300">
+            <div className="mb-4 p-3 bg-muted dark:bg-muted rounded-lg">
+              <p className="text-sm text-muted-foreground dark:text-secondary-foreground">
                 <span className="font-medium">Training:</span>{' '}
                 {scenario?.name || assignment?.scenario_name || 'Practice Session'}
               </p>
               {scenario?.difficulty && (
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                   Difficulty: {scenario.difficulty}
                 </p>
               )}
@@ -105,7 +105,7 @@ function ScheduleTraining({ scenario, assignment, onScheduled, onClose }) {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-sm font-medium text-muted-foreground dark:text-secondary-foreground mb-1">
                   Date
                 </label>
                 <input
@@ -113,32 +113,32 @@ function ScheduleTraining({ scenario, assignment, onScheduled, onClose }) {
                   value={formData.date}
                   min={new Date().toISOString().split('T')[0]}
                   onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-3 py-2 border border-border dark:border-border rounded-lg bg-white dark:bg-muted text-foreground dark:text-foreground"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-sm font-medium text-muted-foreground dark:text-secondary-foreground mb-1">
                   Time
                 </label>
                 <input
                   type="time"
                   value={formData.time}
                   onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-3 py-2 border border-border dark:border-border rounded-lg bg-white dark:bg-muted text-foreground dark:text-foreground"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-muted-foreground dark:text-secondary-foreground mb-1">
                 Duration
               </label>
               <select
                 value={formData.duration}
                 onChange={(e) => setFormData({ ...formData, duration: parseInt(e.target.value) })}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full px-3 py-2 border border-border dark:border-border rounded-lg bg-white dark:bg-muted text-foreground dark:text-foreground"
               >
                 <option value={15}>15 minutes</option>
                 <option value={30}>30 minutes</option>
@@ -148,7 +148,7 @@ function ScheduleTraining({ scenario, assignment, onScheduled, onClose }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-muted-foreground dark:text-secondary-foreground mb-1">
                 Notes (Optional)
               </label>
               <textarea
@@ -156,7 +156,7 @@ function ScheduleTraining({ scenario, assignment, onScheduled, onClose }) {
                 value={formData.notes}
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                 placeholder="Add any notes for this session..."
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none"
+                className="w-full px-3 py-2 border border-border dark:border-border rounded-lg bg-white dark:bg-muted text-foreground dark:text-foreground resize-none"
               />
             </div>
 
@@ -165,9 +165,9 @@ function ScheduleTraining({ scenario, assignment, onScheduled, onClose }) {
                 type="checkbox"
                 checked={formData.syncToCalendar}
                 onChange={(e) => setFormData({ ...formData, syncToCalendar: e.target.checked })}
-                className="w-4 h-4 text-primary-600 rounded border-gray-300 dark:border-gray-600 focus:ring-primary-500"
+                className="w-4 h-4 text-primary-600 rounded border-border dark:border-border focus:ring-primary-500"
               />
-              <span className="text-sm text-gray-700 dark:text-gray-300">
+              <span className="text-sm text-muted-foreground dark:text-secondary-foreground">
                 Add to my calendar (if connected)
               </span>
             </label>
@@ -182,14 +182,14 @@ function ScheduleTraining({ scenario, assignment, onScheduled, onClose }) {
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                className="flex-1 px-4 py-2 text-muted-foreground dark:text-secondary-foreground bg-muted dark:bg-muted rounded-lg hover:bg-muted dark:hover:bg-muted transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={submitting}
-                className="flex-1 px-4 py-2 text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-2 text-foreground bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {submitting ? (
                   <>

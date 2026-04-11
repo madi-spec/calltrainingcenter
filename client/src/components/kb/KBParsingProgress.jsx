@@ -63,7 +63,7 @@ export default function KBParsingProgress({ authFetch, uploadId, totalChunks, on
   const progress = totalChunks > 0 ? (parsedChunks / totalChunks) * 100 : 0;
 
   return (
-    <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-6">
+    <div className="bg-card rounded-xl p-6 border border-border space-y-6">
       <div className="flex items-center gap-3">
         {chunkError ? (
           <AlertCircle className="w-6 h-6 text-red-400" />
@@ -71,10 +71,10 @@ export default function KBParsingProgress({ authFetch, uploadId, totalChunks, on
           <Loader2 className="w-6 h-6 text-primary-400 animate-spin" />
         )}
         <div>
-          <h2 className="text-lg font-semibold text-gray-100">
+          <h2 className="text-lg font-semibold text-foreground">
             {chunkError ? 'Parsing Failed' : synthesizing ? 'Synthesizing Results...' : 'Parsing Documents...'}
           </h2>
-          <p className="text-gray-400 text-sm">
+          <p className="text-muted-foreground text-sm">
             {chunkError
               ? chunkError
               : synthesizing
@@ -88,11 +88,11 @@ export default function KBParsingProgress({ authFetch, uploadId, totalChunks, on
       {/* Progress bar */}
       {!chunkError && (
         <div className="space-y-2">
-          <div className="flex justify-between text-sm text-gray-400">
+          <div className="flex justify-between text-sm text-muted-foreground">
             <span>{synthesizing ? 'Synthesizing...' : `Chunk ${parsedChunks} / ${totalChunks}`}</span>
             <span>{synthesizing ? '100%' : `${Math.round(progress)}%`}</span>
           </div>
-          <div className="w-full bg-gray-700 rounded-full h-3">
+          <div className="w-full bg-muted rounded-full h-3">
             <div
               className={`h-3 rounded-full transition-all duration-500 ${
                 synthesizing ? 'bg-yellow-500 animate-pulse' : 'bg-primary-500'
@@ -110,9 +110,9 @@ export default function KBParsingProgress({ authFetch, uploadId, totalChunks, on
           { label: 'Guidelines', count: counts.guidelines, color: 'text-green-400' },
           { label: 'Topics', count: counts.training_topics, color: 'text-purple-400' }
         ].map(({ label, count, color }) => (
-          <div key={label} className="bg-gray-700/50 rounded-lg p-3 text-center">
+          <div key={label} className="bg-muted/50 rounded-lg p-3 text-center">
             <p className={`text-2xl font-bold ${color}`}>{count}</p>
-            <p className="text-gray-400 text-xs">{label} Found</p>
+            <p className="text-muted-foreground text-xs">{label} Found</p>
           </div>
         ))}
       </div>
@@ -124,7 +124,7 @@ export default function KBParsingProgress({ authFetch, uploadId, totalChunks, on
             parsingRef.current = false;
             parseNextChunk();
           }}
-          className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+          className="px-4 py-2 bg-primary-600 text-foreground rounded-lg hover:bg-primary-700 transition-colors"
         >
           Retry
         </button>

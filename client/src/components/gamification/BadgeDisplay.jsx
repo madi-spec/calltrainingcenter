@@ -3,9 +3,9 @@ import { Lock, Star, Sparkles, Crown, Gem, Medal } from 'lucide-react';
 
 const RARITY_STYLES = {
   common: {
-    bg: 'bg-gray-500/20',
-    border: 'border-gray-500/50',
-    text: 'text-gray-400',
+    bg: 'bg-muted/20',
+    border: 'border-border/50',
+    text: 'text-muted-foreground',
     glow: ''
   },
   uncommon: {
@@ -74,7 +74,7 @@ function BadgeIcon({ icon, rarity = 'common', earned = true, size = 'md' }) {
           {icon || <Star className="w-full h-full" />}
         </span>
       ) : (
-        <Lock className={`${iconSizes[size]} text-gray-500`} />
+        <Lock className={`${iconSizes[size]} text-muted-foreground`} />
       )}
     </div>
   );
@@ -91,7 +91,7 @@ export function BadgeCard({ badge, earned = false, showProgress = false, onClick
       onClick={onClick}
       className={`
         relative p-4 rounded-xl border text-left w-full
-        ${earned ? `${style.bg} ${style.border}` : 'bg-gray-800/50 border-gray-700'}
+        ${earned ? `${style.bg} ${style.border}` : 'bg-card/50 border-border'}
         ${earned && badge.rarity !== 'common' ? `shadow-lg ${style.glow}` : ''}
         hover:bg-opacity-80 transition-all duration-200
       `}
@@ -105,16 +105,16 @@ export function BadgeCard({ badge, earned = false, showProgress = false, onClick
         />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h3 className={`font-medium ${earned ? style.text : 'text-gray-400'}`}>
+            <h3 className={`font-medium ${earned ? style.text : 'text-muted-foreground'}`}>
               {badge.name}
             </h3>
             <RarityIcon className={`w-3 h-3 ${style.text}`} />
           </div>
-          <p className="text-sm text-gray-500 mt-0.5 line-clamp-2">
+          <p className="text-sm text-muted-foreground mt-0.5 line-clamp-2">
             {badge.description}
           </p>
           {badge.points_value > 0 && (
-            <p className={`text-xs mt-1 ${earned ? 'text-yellow-400' : 'text-gray-600'}`}>
+            <p className={`text-xs mt-1 ${earned ? 'text-yellow-400' : 'text-muted-foreground'}`}>
               +{badge.points_value} points
             </p>
           )}
@@ -123,11 +123,11 @@ export function BadgeCard({ badge, earned = false, showProgress = false, onClick
 
       {showProgress && !earned && badge.progress !== undefined && (
         <div className="mt-3">
-          <div className="flex justify-between text-xs text-gray-500 mb-1">
+          <div className="flex justify-between text-xs text-muted-foreground mb-1">
             <span>Progress</span>
             <span>{Math.round(badge.progress)}%</span>
           </div>
-          <div className="h-1.5 bg-gray-700 rounded-full overflow-hidden">
+          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
             <div
               className={`h-full ${style.bg} transition-all duration-500`}
               style={{ width: `${badge.progress}%` }}
@@ -137,7 +137,7 @@ export function BadgeCard({ badge, earned = false, showProgress = false, onClick
       )}
 
       {earned && badge.earned_at && (
-        <p className="text-xs text-gray-500 mt-2">
+        <p className="text-xs text-muted-foreground mt-2">
           Earned {new Date(badge.earned_at).toLocaleDateString()}
         </p>
       )}
@@ -178,7 +178,7 @@ export function RecentBadges({ badges, limit = 3 }) {
         />
       ))}
       {badges.length > limit && (
-        <span className="text-xs text-gray-500">
+        <span className="text-xs text-muted-foreground">
           +{badges.length - limit} more
         </span>
       )}

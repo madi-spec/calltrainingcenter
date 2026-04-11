@@ -80,40 +80,40 @@ export default function ChallengeColleagueModal({ scenario, onClose, onChallenge
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
-        className="bg-gray-800 rounded-2xl w-full max-w-md border border-gray-700 shadow-xl overflow-hidden"
+        className="bg-card rounded-2xl w-full max-w-md border border-border shadow-xl overflow-hidden"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-6 border-b border-gray-700">
+        <div className="p-6 border-b border-border">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
               <div className="p-3 bg-purple-500/20 rounded-xl">
                 <Swords className="w-6 h-6 text-purple-400" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-100">Challenge a Colleague</h2>
-                <p className="text-sm text-gray-400">{scenario?.name}</p>
+                <h2 className="text-xl font-bold text-foreground">Challenge a Colleague</h2>
+                <p className="text-sm text-muted-foreground">{scenario?.name}</p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+              className="p-2 hover:bg-muted rounded-lg transition-colors"
             >
-              <X className="w-5 h-5 text-gray-400" />
+              <X className="w-5 h-5 text-muted-foreground" />
             </button>
           </div>
         </div>
 
         {/* Search */}
-        <div className="p-4 border-b border-gray-700">
+        <div className="p-4 border-b border-border">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search colleagues..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full pl-10 pr-4 py-2 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
         </div>
@@ -122,10 +122,10 @@ export default function ChallengeColleagueModal({ scenario, onClose, onChallenge
         <div className="max-h-64 overflow-y-auto p-4 space-y-2">
           {loading ? (
             <div className="flex items-center justify-center py-8">
-              <Loader2 className="w-6 h-6 text-gray-400 animate-spin" />
+              <Loader2 className="w-6 h-6 text-muted-foreground animate-spin" />
             </div>
           ) : colleagues.length === 0 ? (
-            <p className="text-center text-gray-500 py-8">
+            <p className="text-center text-muted-foreground py-8">
               No colleagues found
             </p>
           ) : (
@@ -137,15 +137,15 @@ export default function ChallengeColleagueModal({ scenario, onClose, onChallenge
                   w-full flex items-center gap-3 p-3 rounded-xl transition-colors
                   ${selectedColleague?.id === colleague.id
                     ? 'bg-primary-500/20 border-primary-500/50 border'
-                    : 'bg-gray-700/50 hover:bg-gray-700 border border-transparent'}
+                    : 'bg-muted/50 hover:bg-muted border border-transparent'}
                 `}
               >
                 <div className="w-10 h-10 bg-primary-500/20 rounded-full flex items-center justify-center text-primary-400 font-bold">
                   {colleague.full_name?.charAt(0) || '?'}
                 </div>
                 <div className="flex-1 text-left">
-                  <p className="font-medium text-gray-200">{colleague.full_name}</p>
-                  <p className="text-sm text-gray-500">Level {colleague.level || 1}</p>
+                  <p className="font-medium text-foreground">{colleague.full_name}</p>
+                  <p className="text-sm text-muted-foreground">Level {colleague.level || 1}</p>
                 </div>
                 <div className="text-right">
                   <span className="flex items-center gap-1 text-sm text-yellow-400">
@@ -160,9 +160,9 @@ export default function ChallengeColleagueModal({ scenario, onClose, onChallenge
 
         {/* Challenge options */}
         {selectedColleague && (
-          <div className="p-4 border-t border-gray-700 space-y-4">
+          <div className="p-4 border-t border-border space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-secondary-foreground mb-1">
                 Message (optional)
               </label>
               <input
@@ -170,12 +170,12 @@ export default function ChallengeColleagueModal({ scenario, onClose, onChallenge
                 value={message}
                 onChange={e => setMessage(e.target.value)}
                 placeholder="Let's see who's better at this!"
-                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-secondary-foreground mb-1">
                 Wager Points (optional)
               </label>
               <div className="flex items-center gap-2">
@@ -186,15 +186,15 @@ export default function ChallengeColleagueModal({ scenario, onClose, onChallenge
                     className={`
                       flex-1 py-2 rounded-lg transition-colors
                       ${wagerPoints === amount
-                        ? 'bg-primary-600 text-white'
-                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}
+                        ? 'bg-primary-600 text-foreground'
+                        : 'bg-muted text-secondary-foreground hover:bg-muted'}
                     `}
                   >
                     {amount === 0 ? 'None' : `${amount} pts`}
                   </button>
                 ))}
               </div>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Winner takes the wager points
               </p>
             </div>
@@ -212,17 +212,17 @@ export default function ChallengeColleagueModal({ scenario, onClose, onChallenge
         )}
 
         {/* Actions */}
-        <div className="p-4 border-t border-gray-700 flex gap-3">
+        <div className="p-4 border-t border-border flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 px-4 py-3 bg-gray-700 hover:bg-gray-600 text-gray-200 font-medium rounded-xl transition-colors"
+            className="flex-1 px-4 py-3 bg-muted hover:bg-muted text-foreground font-medium rounded-xl transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleSendChallenge}
             disabled={!selectedColleague || sending}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 hover:bg-purple-700 disabled:bg-muted disabled:cursor-not-allowed text-foreground font-medium rounded-xl transition-colors"
           >
             {sending ? (
               <>

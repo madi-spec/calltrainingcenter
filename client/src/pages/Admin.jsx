@@ -30,8 +30,8 @@ function Admin() {
         animate={{ opacity: 1, y: 0 }}
         className="mb-8"
       >
-        <h1 className="text-3xl font-bold text-white mb-2">Setup & Configuration</h1>
-        <p className="text-gray-400">
+        <h1 className="text-3xl font-bold text-foreground mb-2">Setup & Configuration</h1>
+        <p className="text-muted-foreground">
           Personalize the training experience for your company
         </p>
       </motion.div>
@@ -81,8 +81,8 @@ function TabButton({ children, active, onClick, icon: Icon }) {
       onClick={onClick}
       className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
         active
-          ? 'bg-blue-600 text-white'
-          : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
+          ? 'bg-blue-600 text-foreground'
+          : 'bg-card text-muted-foreground hover:bg-muted hover:text-foreground'
       }`}
     >
       <Icon className="w-4 h-4" />
@@ -217,7 +217,7 @@ function CompanyScraperTab({ company, updateCompany, authFetch }) {
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Logo & Colors */}
                 <div>
-                  <h4 className="text-sm font-medium text-gray-300 mb-3">Branding</h4>
+                  <h4 className="text-sm font-medium text-secondary-foreground mb-3">Branding</h4>
                   {result.logo && (
                     <div className="mb-4">
                       <img
@@ -233,10 +233,10 @@ function CompanyScraperTab({ company, updateCompany, authFetch }) {
                         color && (
                           <div key={key} className="text-center">
                             <div
-                              className="w-10 h-10 rounded-lg border border-gray-600"
+                              className="w-10 h-10 rounded-lg border border-border"
                               style={{ backgroundColor: color }}
                             />
-                            <span className="text-xs text-gray-500">{key}</span>
+                            <span className="text-xs text-muted-foreground">{key}</span>
                           </div>
                         )
                       ))}
@@ -246,21 +246,21 @@ function CompanyScraperTab({ company, updateCompany, authFetch }) {
 
                 {/* Business Info */}
                 <div>
-                  <h4 className="text-sm font-medium text-gray-300 mb-3">Business Info</h4>
+                  <h4 className="text-sm font-medium text-secondary-foreground mb-3">Business Info</h4>
                   <div className="space-y-2 text-sm">
                     {result.extracted?.name && (
-                      <p className="text-gray-300">
-                        <span className="text-gray-500">Name:</span> {result.extracted.name}
+                      <p className="text-secondary-foreground">
+                        <span className="text-muted-foreground">Name:</span> {result.extracted.name}
                       </p>
                     )}
                     {result.extracted?.phone && (
-                      <p className="text-gray-300">
-                        <span className="text-gray-500">Phone:</span> {result.extracted.phone}
+                      <p className="text-secondary-foreground">
+                        <span className="text-muted-foreground">Phone:</span> {result.extracted.phone}
                       </p>
                     )}
                     {result.extracted?.serviceAreas && (
-                      <p className="text-gray-300">
-                        <span className="text-gray-500">Areas:</span> {result.extracted.serviceAreas.join(', ')}
+                      <p className="text-secondary-foreground">
+                        <span className="text-muted-foreground">Areas:</span> {result.extracted.serviceAreas.join(', ')}
                       </p>
                     )}
                   </div>
@@ -269,12 +269,12 @@ function CompanyScraperTab({ company, updateCompany, authFetch }) {
                 {/* Services */}
                 {result.extracted?.services && (
                   <div>
-                    <h4 className="text-sm font-medium text-gray-300 mb-3">Services</h4>
+                    <h4 className="text-sm font-medium text-secondary-foreground mb-3">Services</h4>
                     <div className="flex flex-wrap gap-2">
                       {result.extracted.services.slice(0, 8).map((service, i) => (
                         <span
                           key={i}
-                          className="px-2 py-1 bg-gray-700 rounded text-xs text-gray-300"
+                          className="px-2 py-1 bg-muted rounded text-xs text-secondary-foreground"
                         >
                           {service}
                         </span>
@@ -286,8 +286,8 @@ function CompanyScraperTab({ company, updateCompany, authFetch }) {
                 {/* Pricing */}
                 {result.extracted?.pricing && (
                   <div>
-                    <h4 className="text-sm font-medium text-gray-300 mb-3">Pricing</h4>
-                    <div className="space-y-1 text-sm text-gray-300">
+                    <h4 className="text-sm font-medium text-secondary-foreground mb-3">Pricing</h4>
+                    <div className="space-y-1 text-sm text-secondary-foreground">
                       {result.extracted.pricing.quarterlyPrice && (
                         <p>Quarterly: ${result.extracted.pricing.quarterlyPrice}</p>
                       )}
@@ -409,13 +409,13 @@ CSR: I'm sorry to hear that..."
                         <span className={`text-xs px-2 py-0.5 rounded ${
                           point.severity === 'high' ? 'bg-red-500/20 text-red-400' :
                           point.severity === 'medium' ? 'bg-yellow-500/20 text-yellow-400' :
-                          'bg-gray-500/20 text-gray-400'
+                          'bg-muted/20 text-muted-foreground'
                         }`}>
                           {point.severity}
                         </span>
                       </div>
                       {point.quote && (
-                        <p className="text-sm text-gray-400 italic">"{point.quote}"</p>
+                        <p className="text-sm text-muted-foreground italic">"{point.quote}"</p>
                       )}
                     </div>
                   ))}
@@ -444,8 +444,8 @@ CSR: I'm sorry to hear that..."
                           {scenario.difficulty}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-300 mb-2">{scenario.description}</p>
-                      <p className="text-xs text-gray-500">Based on: {scenario.basedOn}</p>
+                      <p className="text-sm text-secondary-foreground mb-2">{scenario.description}</p>
+                      <p className="text-xs text-muted-foreground">Based on: {scenario.basedOn}</p>
                     </div>
                   ))}
                 </div>
@@ -464,7 +464,7 @@ CSR: I'm sorry to hear that..."
                   {result.coachingInsights.recommendedFocus && (
                     <div className="p-4 bg-purple-500/10 rounded-lg border border-purple-500/20">
                       <h4 className="font-medium text-purple-300 mb-1">Recommended Focus</h4>
-                      <p className="text-sm text-gray-300">{result.coachingInsights.recommendedFocus}</p>
+                      <p className="text-sm text-secondary-foreground">{result.coachingInsights.recommendedFocus}</p>
                     </div>
                   )}
                   <div className="grid md:grid-cols-2 gap-4">
@@ -473,7 +473,7 @@ CSR: I'm sorry to hear that..."
                         <h4 className="text-sm font-medium text-green-400 mb-2">Strengths to Reinforce</h4>
                         <ul className="space-y-1">
                           {result.coachingInsights.strengthsToReinforce.map((s, i) => (
-                            <li key={i} className="text-sm text-gray-300 flex items-start gap-2">
+                            <li key={i} className="text-sm text-secondary-foreground flex items-start gap-2">
                               <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
                               {s}
                             </li>
@@ -486,7 +486,7 @@ CSR: I'm sorry to hear that..."
                         <h4 className="text-sm font-medium text-yellow-400 mb-2">Areas to Address</h4>
                         <ul className="space-y-1">
                           {result.coachingInsights.areasToAddress.map((a, i) => (
-                            <li key={i} className="text-sm text-gray-300 flex items-start gap-2">
+                            <li key={i} className="text-sm text-secondary-foreground flex items-start gap-2">
                               <AlertCircle className="w-4 h-4 text-yellow-400 flex-shrink-0 mt-0.5" />
                               {a}
                             </li>
@@ -602,22 +602,22 @@ function CompanyConfigTab({ company, updateCompany }) {
               </div>
               <div className="space-y-4">
                 <div>
-                  <span className="text-sm text-gray-500">Services</span>
+                  <span className="text-sm text-muted-foreground">Services</span>
                   <div className="flex flex-wrap gap-1 mt-1">
                     {company.services?.slice(0, 6).map((s, i) => (
-                      <span key={i} className="px-2 py-0.5 bg-gray-700 rounded text-xs text-gray-300">
+                      <span key={i} className="px-2 py-0.5 bg-muted rounded text-xs text-secondary-foreground">
                         {s}
                       </span>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <span className="text-sm text-gray-500">Service Areas</span>
-                  <p className="text-gray-300">{company.serviceAreas?.join(', ')}</p>
+                  <span className="text-sm text-muted-foreground">Service Areas</span>
+                  <p className="text-secondary-foreground">{company.serviceAreas?.join(', ')}</p>
                 </div>
                 <div>
-                  <span className="text-sm text-gray-500">Guarantees</span>
-                  <p className="text-gray-300">{company.guarantees?.[0]}</p>
+                  <span className="text-sm text-muted-foreground">Guarantees</span>
+                  <p className="text-secondary-foreground">{company.guarantees?.[0]}</p>
                 </div>
               </div>
             </div>
@@ -646,11 +646,11 @@ function CompanyConfigTab({ company, updateCompany }) {
               color && (
                 <div key={key} className="text-center">
                   <div
-                    className="w-16 h-16 rounded-lg border border-gray-600 shadow-lg"
+                    className="w-16 h-16 rounded-lg border border-border shadow-lg"
                     style={{ backgroundColor: color }}
                   />
-                  <span className="text-xs text-gray-500 mt-1 block">{key}</span>
-                  <span className="text-xs text-gray-400">{color}</span>
+                  <span className="text-xs text-muted-foreground mt-1 block">{key}</span>
+                  <span className="text-xs text-muted-foreground">{color}</span>
                 </div>
               )
             ))}
@@ -664,10 +664,10 @@ function CompanyConfigTab({ company, updateCompany }) {
 function InfoItem({ icon: Icon, label, value }) {
   return (
     <div className="flex items-center gap-3">
-      <Icon className="w-4 h-4 text-gray-500" />
+      <Icon className="w-4 h-4 text-muted-foreground" />
       <div>
-        <span className="text-xs text-gray-500">{label}</span>
-        <p className="text-gray-300">{value || '-'}</p>
+        <span className="text-xs text-muted-foreground">{label}</span>
+        <p className="text-secondary-foreground">{value || '-'}</p>
       </div>
     </div>
   );

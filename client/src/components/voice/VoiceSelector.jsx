@@ -67,7 +67,7 @@ export default function VoiceSelector({
   return (
     <div className={`relative ${className}`} ref={dropdownRef}>
       {label && (
-        <label className="block text-sm font-medium text-gray-300 mb-2">
+        <label className="block text-sm font-medium text-secondary-foreground mb-2">
           {label}
         </label>
       )}
@@ -76,33 +76,33 @@ export default function VoiceSelector({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-left hover:bg-gray-650 transition-colors"
+        className="w-full flex items-center justify-between px-4 py-3 bg-muted border border-border rounded-lg text-left hover:bg-accent transition-colors"
       >
         <div className="flex items-center gap-3">
           <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
             getVoiceGender(selectedVoice) === 'male' ? 'bg-blue-500/20' :
             getVoiceGender(selectedVoice) === 'female' ? 'bg-pink-500/20' :
-            'bg-gray-600'
+            'bg-muted'
           }`}>
             <User className={`w-4 h-4 ${
               getVoiceGender(selectedVoice) === 'male' ? 'text-blue-400' :
               getVoiceGender(selectedVoice) === 'female' ? 'text-pink-400' :
-              'text-gray-400'
+              'text-muted-foreground'
             }`} />
           </div>
           <div>
-            <p className="text-gray-100 font-medium">
+            <p className="text-foreground font-medium">
               {selectedVoice?.voice_name || 'Select a voice'}
             </p>
             {selectedVoice && (
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-muted-foreground">
                 {getProviderLabel(selectedVoice.voice_id)}
                 {selectedVoice.accent && ` \u2022 ${selectedVoice.accent}`}
               </p>
             )}
           </div>
         </div>
-        <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {/* Dropdown */}
@@ -112,11 +112,11 @@ export default function VoiceSelector({
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute z-50 w-full mt-2 bg-gray-800 border border-gray-700 rounded-xl shadow-xl overflow-hidden"
+            className="absolute z-50 w-full mt-2 bg-card border border-border rounded-xl shadow-xl overflow-hidden"
           >
             <div className="max-h-80 overflow-y-auto">
               {voices.length === 0 ? (
-                <div className="p-4 text-center text-gray-400">
+                <div className="p-4 text-center text-muted-foreground">
                   No voices available
                 </div>
               ) : (
@@ -131,7 +131,7 @@ export default function VoiceSelector({
                       className={`px-4 py-3 cursor-pointer transition-colors ${
                         isSelected
                           ? 'bg-blue-600/20 border-l-2 border-blue-500'
-                          : 'hover:bg-gray-750 border-l-2 border-transparent'
+                          : 'hover:bg-muted border-l-2 border-transparent'
                       }`}
                       onClick={() => handleSelect(voice)}
                     >
@@ -140,19 +140,19 @@ export default function VoiceSelector({
                           <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                             gender === 'male' ? 'bg-blue-500/20' :
                             gender === 'female' ? 'bg-pink-500/20' :
-                            'bg-gray-600'
+                            'bg-muted'
                           }`}>
                             <User className={`w-4 h-4 ${
                               gender === 'male' ? 'text-blue-400' :
                               gender === 'female' ? 'text-pink-400' :
-                              'text-gray-400'
+                              'text-muted-foreground'
                             }`} />
                           </div>
                           <div>
-                            <p className={`font-medium ${isSelected ? 'text-blue-400' : 'text-gray-100'}`}>
+                            <p className={`font-medium ${isSelected ? 'text-blue-400' : 'text-foreground'}`}>
                               {voice.voice_name}
                             </p>
-                            <p className="text-xs text-gray-400">
+                            <p className="text-xs text-muted-foreground">
                               {getProviderLabel(voice.voice_id)}
                               {voice.accent && ` \u2022 ${voice.accent}`}
                               {voice.description && ` \u2022 ${voice.description}`}
@@ -167,8 +167,8 @@ export default function VoiceSelector({
                               onClick={(e) => handlePreview(e, voice.voice_id)}
                               className={`p-2 rounded-full transition-colors ${
                                 isPreviewing
-                                  ? 'bg-blue-500 text-white'
-                                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                  ? 'bg-blue-500 text-foreground'
+                                  : 'bg-muted text-secondary-foreground hover:bg-muted'
                               }`}
                               title="Preview voice"
                             >

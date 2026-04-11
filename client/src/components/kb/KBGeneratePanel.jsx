@@ -60,7 +60,7 @@ export default function KBGeneratePanel({ authFetch, uploadId, onComplete, onErr
   };
 
   return (
-    <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-6">
+    <div className="bg-card rounded-xl p-6 border border-border space-y-6">
       <div className="flex items-center gap-3">
         {generating ? (
           <Loader2 className="w-6 h-6 text-primary-400 animate-spin" />
@@ -70,10 +70,10 @@ export default function KBGeneratePanel({ authFetch, uploadId, onComplete, onErr
           <AlertCircle className="w-6 h-6 text-red-400" />
         )}
         <div>
-          <h2 className="text-lg font-semibold text-gray-100">
+          <h2 className="text-lg font-semibold text-foreground">
             {generating ? 'Generating Training Content...' : done ? 'Generation Complete' : 'Generation Failed'}
           </h2>
-          <p className="text-gray-400 text-sm">
+          <p className="text-muted-foreground text-sm">
             {generating
               ? 'Writing to database tables...'
               : done
@@ -90,14 +90,14 @@ export default function KBGeneratePanel({ authFetch, uploadId, onComplete, onErr
           <div key={i} className="flex items-start gap-3 text-sm">
             {stepIcon(entry.status)}
             <div className="flex-1">
-              <span className="text-gray-200 font-medium capitalize">{entry.step.replace(/_/g, ' ')}</span>
-              <span className="text-gray-500 ml-2">{entry.detail}</span>
+              <span className="text-foreground font-medium capitalize">{entry.step.replace(/_/g, ' ')}</span>
+              <span className="text-muted-foreground ml-2">{entry.detail}</span>
             </div>
           </div>
         ))}
 
         {generating && log.length === 0 && (
-          <div className="flex items-center gap-3 text-sm text-gray-400">
+          <div className="flex items-center gap-3 text-sm text-muted-foreground">
             <Loader2 className="w-4 h-4 animate-spin" />
             Starting generation...
           </div>
@@ -107,17 +107,17 @@ export default function KBGeneratePanel({ authFetch, uploadId, onComplete, onErr
       {/* Summary */}
       {summary && (
         <div className="grid grid-cols-3 gap-4">
-          <div className="bg-gray-700/50 rounded-lg p-3 text-center">
+          <div className="bg-muted/50 rounded-lg p-3 text-center">
             <p className="text-2xl font-bold text-blue-400">{summary.packages}</p>
-            <p className="text-gray-400 text-xs">Packages</p>
+            <p className="text-muted-foreground text-xs">Packages</p>
           </div>
-          <div className="bg-gray-700/50 rounded-lg p-3 text-center">
+          <div className="bg-muted/50 rounded-lg p-3 text-center">
             <p className="text-2xl font-bold text-green-400">{summary.guidelines}</p>
-            <p className="text-gray-400 text-xs">Guidelines</p>
+            <p className="text-muted-foreground text-xs">Guidelines</p>
           </div>
-          <div className="bg-gray-700/50 rounded-lg p-3 text-center">
+          <div className="bg-muted/50 rounded-lg p-3 text-center">
             <p className="text-2xl font-bold text-purple-400">{summary.courses}</p>
-            <p className="text-gray-400 text-xs">Courses</p>
+            <p className="text-muted-foreground text-xs">Courses</p>
           </div>
         </div>
       )}
@@ -131,7 +131,7 @@ export default function KBGeneratePanel({ authFetch, uploadId, onComplete, onErr
             // Re-trigger
             window.location.reload();
           }}
-          className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2"
+          className="px-4 py-2 bg-primary-600 text-foreground rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2"
         >
           <Sparkles className="w-4 h-4" /> Retry Generation
         </button>

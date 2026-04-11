@@ -47,14 +47,14 @@ function ScoreRing({ score, size = 120, strokeWidth = 8 }) {
       {/* Score text */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <motion.span
-          className="text-4xl font-bold text-white"
+          className="text-4xl font-bold text-foreground"
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5, duration: 0.5 }}
         >
           {score}
         </motion.span>
-        <span className="text-sm text-gray-400">out of 100</span>
+        <span className="text-sm text-muted-foreground">out of 100</span>
       </div>
     </div>
   );

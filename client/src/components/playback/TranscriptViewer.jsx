@@ -176,8 +176,8 @@ export default function TranscriptViewer({
 
   if (!segments || segments.length === 0) {
     return (
-      <div className={`bg-gray-800 rounded-xl p-6 border border-gray-700 ${className}`}>
-        <div className="text-center text-gray-400 py-12">
+      <div className={`bg-card rounded-xl p-6 border border-border ${className}`}>
+        <div className="text-center text-muted-foreground py-12">
           <Phone className="w-12 h-12 mx-auto mb-3 opacity-50" />
           <p>No transcript available</p>
         </div>
@@ -186,10 +186,10 @@ export default function TranscriptViewer({
   }
 
   return (
-    <div className={`bg-gray-800 rounded-xl border border-gray-700 ${className}`}>
-      <div className="px-6 py-4 border-b border-gray-700">
-        <h3 className="text-lg font-semibold text-gray-100">Transcript</h3>
-        <p className="text-sm text-gray-400 mt-1">
+    <div className={`bg-card rounded-xl border border-border ${className}`}>
+      <div className="px-6 py-4 border-b border-border">
+        <h3 className="text-lg font-semibold text-foreground">Transcript</h3>
+        <p className="text-sm text-muted-foreground mt-1">
           Click any line to jump to that moment
         </p>
       </div>
@@ -212,7 +212,7 @@ export default function TranscriptViewer({
               onClick={() => onSeek?.(segment.timestamp)}
               className={`
                 p-4 rounded-lg cursor-pointer transition-all
-                ${isActive ? 'bg-gray-700 ring-2 ring-primary-500' : 'bg-gray-800/50 hover:bg-gray-700/50'}
+                ${isActive ? 'bg-muted ring-2 ring-primary-500' : 'bg-card/50 hover:bg-muted/50'}
                 ${markerType ? getMarkerBorder(markerType) : ''}
               `}
             >
@@ -231,13 +231,13 @@ export default function TranscriptViewer({
                       {getSpeakerIcon(segment.speaker)}
                       <span className="capitalize">{segment.speaker}</span>
                     </div>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-muted-foreground">
                       {formatTimestamp(segment.timestamp)}
                     </span>
                   </div>
 
                   {/* Text Content */}
-                  <p className={`text-sm leading-relaxed ${isActive ? 'text-gray-100 font-medium' : 'text-gray-300'}`}>
+                  <p className={`text-sm leading-relaxed ${isActive ? 'text-foreground font-medium' : 'text-secondary-foreground'}`}>
                     {segment.text}
                   </p>
                 </div>

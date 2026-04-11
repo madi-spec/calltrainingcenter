@@ -60,12 +60,12 @@ export default function PendingChallenges({ maxDisplay = 3, onUpdate }) {
 
   if (loading) {
     return (
-      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+      <div className="bg-card rounded-xl p-6 border border-border">
         <div className="animate-pulse">
-          <div className="h-6 w-40 bg-gray-700 rounded mb-4" />
+          <div className="h-6 w-40 bg-muted rounded mb-4" />
           <div className="space-y-3">
             {[1, 2].map(i => (
-              <div key={i} className="h-16 bg-gray-700 rounded-xl" />
+              <div key={i} className="h-16 bg-muted rounded-xl" />
             ))}
           </div>
         </div>
@@ -81,14 +81,14 @@ export default function PendingChallenges({ maxDisplay = 3, onUpdate }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+      className="bg-card rounded-xl p-6 border border-border"
     >
       <div className="flex items-center justify-between mb-4">
-        <h2 className="font-semibold text-gray-100 flex items-center gap-2">
+        <h2 className="font-semibold text-foreground flex items-center gap-2">
           <Swords className="w-5 h-5 text-purple-400" />
           Challenges
           {challenges.incoming.length > 0 && (
-            <span className="px-2 py-0.5 bg-red-500 text-white text-xs font-bold rounded-full">
+            <span className="px-2 py-0.5 bg-red-500 text-foreground text-xs font-bold rounded-full">
               {challenges.incoming.length}
             </span>
           )}
@@ -112,10 +112,10 @@ export default function PendingChallenges({ maxDisplay = 3, onUpdate }) {
                     {challenge.challenger?.full_name?.charAt(0) || '?'}
                   </div>
                   <div className="min-w-0">
-                    <p className="font-medium text-gray-200 truncate">
+                    <p className="font-medium text-foreground truncate">
                       {challenge.challenger?.full_name} challenges you!
                     </p>
-                    <p className="text-sm text-gray-400 truncate">
+                    <p className="text-sm text-muted-foreground truncate">
                       {challenge.message || 'No message'}
                     </p>
                   </div>
@@ -125,15 +125,15 @@ export default function PendingChallenges({ maxDisplay = 3, onUpdate }) {
                   <button
                     onClick={() => handleRespond(challenge.id, 'decline')}
                     disabled={responding === challenge.id}
-                    className="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+                    className="p-2 bg-muted hover:bg-muted rounded-lg transition-colors"
                     title="Decline"
                   >
-                    <X className="w-4 h-4 text-gray-400" />
+                    <X className="w-4 h-4 text-muted-foreground" />
                   </button>
                   <button
                     onClick={() => handleAcceptAndStart(challenge)}
                     disabled={responding === challenge.id}
-                    className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-foreground font-medium rounded-lg transition-colors"
                   >
                     {responding === challenge.id ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -161,7 +161,7 @@ export default function PendingChallenges({ maxDisplay = 3, onUpdate }) {
         {challenges.active.slice(0, maxDisplay - challenges.incoming.length).map(challenge => (
           <div
             key={challenge.id}
-            className="bg-gray-700/50 rounded-xl p-4 border border-gray-700"
+            className="bg-muted/50 rounded-xl p-4 border border-border"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -171,12 +171,12 @@ export default function PendingChallenges({ maxDisplay = 3, onUpdate }) {
                     : challenge.challenger?.full_name)?.charAt(0) || '?'}
                 </div>
                 <div>
-                  <p className="font-medium text-gray-200">
+                  <p className="font-medium text-foreground">
                     vs {challenge.challenger_id === profile?.id
                       ? challenge.challenged?.full_name
                       : challenge.challenger?.full_name}
                   </p>
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-muted-foreground">
                     {challenge.status === 'accepted' ? 'Waiting for both to complete' : 'In progress'}
                   </p>
                 </div>
@@ -184,7 +184,7 @@ export default function PendingChallenges({ maxDisplay = 3, onUpdate }) {
 
               <button
                 onClick={() => navigate(`/scenario/${challenge.scenario_id}?challenge=${challenge.id}`)}
-                className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
               >
                 Play
                 <ChevronRight className="w-4 h-4" />

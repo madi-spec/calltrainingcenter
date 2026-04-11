@@ -105,27 +105,27 @@ export default function Signup() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md"
       >
-        <div className="bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-700">
+        <div className="bg-card rounded-2xl shadow-xl p-8 border border-border">
           {/* Header */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-500/10 rounded-full mb-4">
               <UserPlus className="w-8 h-8 text-primary-500" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-100">Create Account</h1>
-            <p className="text-gray-400 mt-2">
+            <h1 className="text-2xl font-bold text-foreground">Create Account</h1>
+            <p className="text-muted-foreground mt-2">
               {step === 1 ? 'Enter your details' : 'Set up your organization'}
             </p>
           </div>
@@ -140,7 +140,7 @@ export default function Signup() {
                     ? 'w-8 bg-primary-500'
                     : s < step
                     ? 'w-8 bg-green-500'
-                    : 'w-2 bg-gray-600'
+                    : 'w-2 bg-muted'
                 }`}
               />
             ))}
@@ -168,18 +168,18 @@ export default function Signup() {
               >
                 {/* Full Name */}
                 <div>
-                  <label htmlFor="fullName" className="block text-sm font-medium text-gray-300 mb-2">
+                  <label htmlFor="fullName" className="block text-sm font-medium text-secondary-foreground mb-2">
                     Full Name
                   </label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <input
                       type="text"
                       id="fullName"
                       name="fullName"
                       value={formData.fullName}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       placeholder="John Smith"
                       required
                     />
@@ -188,18 +188,18 @@ export default function Signup() {
 
                 {/* Email */}
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-secondary-foreground mb-2">
                     Email Address
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <input
                       type="email"
                       id="email"
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       placeholder="you@company.com"
                       required
                     />
@@ -208,25 +208,25 @@ export default function Signup() {
 
                 {/* Password */}
                 <div>
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
+                  <label htmlFor="password" className="block text-sm font-medium text-secondary-foreground mb-2">
                     Password
                   </label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       id="password"
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-12 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full pl-10 pr-12 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       placeholder="Create a strong password"
                       required
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-secondary-foreground"
                     >
                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
@@ -237,7 +237,7 @@ export default function Signup() {
                       <div
                         key={i}
                         className={`flex items-center gap-2 text-sm ${
-                          req.test(formData.password) ? 'text-green-400' : 'text-gray-500'
+                          req.test(formData.password) ? 'text-green-400' : 'text-muted-foreground'
                         }`}
                       >
                         <Check className={`w-4 h-4 ${req.test(formData.password) ? 'opacity-100' : 'opacity-30'}`} />
@@ -249,18 +249,18 @@ export default function Signup() {
 
                 {/* Confirm Password */}
                 <div>
-                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-2">
+                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-secondary-foreground mb-2">
                     Confirm Password
                   </label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       id="confirmPassword"
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       placeholder="Confirm your password"
                       required
                     />
@@ -270,7 +270,7 @@ export default function Signup() {
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors"
+                  className="w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
                 >
                   Continue
                 </button>
@@ -286,18 +286,18 @@ export default function Signup() {
               >
                 {/* Organization Name */}
                 <div>
-                  <label htmlFor="organizationName" className="block text-sm font-medium text-gray-300 mb-2">
+                  <label htmlFor="organizationName" className="block text-sm font-medium text-secondary-foreground mb-2">
                     Company Name <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
-                    <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                    <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <input
                       type="text"
                       id="organizationName"
                       name="organizationName"
                       value={formData.organizationName}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       placeholder="Acme Pest Control"
                       required
                     />
@@ -306,18 +306,18 @@ export default function Signup() {
 
                 {/* Phone Number */}
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-2">
+                  <label htmlFor="phone" className="block text-sm font-medium text-secondary-foreground mb-2">
                     Company Phone <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <input
                       type="tel"
                       id="phone"
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       placeholder="(555) 123-4567"
                       required
                     />
@@ -326,23 +326,23 @@ export default function Signup() {
 
                 {/* Website */}
                 <div>
-                  <label htmlFor="website" className="block text-sm font-medium text-gray-300 mb-2">
+                  <label htmlFor="website" className="block text-sm font-medium text-secondary-foreground mb-2">
                     Company Website <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
-                    <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                    <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <input
                       type="text"
                       id="website"
                       name="website"
                       value={formData.website}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       placeholder="yourcompany.com"
                       required
                     />
                   </div>
-                  <p className="mt-2 text-sm text-gray-500">
+                  <p className="mt-2 text-sm text-muted-foreground">
                     We'll automatically import your company info, services, and branding
                   </p>
                 </div>
@@ -352,14 +352,14 @@ export default function Signup() {
                   <button
                     type="button"
                     onClick={() => setStep(1)}
-                    className="flex-1 py-3 px-4 bg-gray-700 hover:bg-gray-600 text-gray-300 font-medium rounded-lg transition-colors"
+                    className="flex-1 py-3 px-4 bg-muted hover:bg-muted text-secondary-foreground font-medium rounded-lg transition-colors"
                   >
                     Back
                   </button>
                   <button
                     type="submit"
                     disabled={loading || !formData.organizationName || !formData.phone || !formData.website}
-                    className="flex-1 py-3 px-4 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 py-3 px-4 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-foreground font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
                   >
                     {loading ? (
                       <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
@@ -377,7 +377,7 @@ export default function Signup() {
 
           {/* Sign In Link */}
           <div className="mt-8 text-center">
-            <p className="text-gray-400">
+            <p className="text-muted-foreground">
               Already have an account?{' '}
               <Link to="/auth/login" className="text-primary-400 hover:text-primary-300 font-medium">
                 Sign in

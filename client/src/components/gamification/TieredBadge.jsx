@@ -8,9 +8,9 @@ const TIER_COLORS = {
     glow: 'shadow-amber-500/20'
   },
   silver: {
-    bg: 'bg-gray-400/20',
-    border: 'border-gray-400/50',
-    text: 'text-gray-300',
+    bg: 'bg-muted/20',
+    border: 'border-border/50',
+    text: 'text-secondary-foreground',
     glow: 'shadow-gray-400/20'
   },
   gold: {
@@ -88,7 +88,7 @@ export default function TieredBadge({
       </div>
 
       {/* Badge name */}
-      <p className="mt-2 text-xs font-medium text-gray-300 text-center truncate max-w-[80px]">
+      <p className="mt-2 text-xs font-medium text-secondary-foreground text-center truncate max-w-[80px]">
         {badge.name}
       </p>
 
@@ -102,14 +102,14 @@ export default function TieredBadge({
       {/* Progress to next tier */}
       {showProgress && badge.nextTier && (
         <div className="mt-1 w-full max-w-[60px]">
-          <div className="h-1 bg-gray-700 rounded-full overflow-hidden">
+          <div className="h-1 bg-muted rounded-full overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${badge.progress}%` }}
               className={`h-full ${colors.bg.replace('/20', '')}`}
             />
           </div>
-          <p className="text-[10px] text-gray-500 text-center mt-0.5">
+          <p className="text-[10px] text-muted-foreground text-center mt-0.5">
             {badge.remaining} to {badge.nextTier}
           </p>
         </div>

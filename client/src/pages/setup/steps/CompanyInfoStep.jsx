@@ -275,23 +275,23 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Website Auto-Fill - First! */}
       <div className="bg-gradient-to-r from-purple-900/50 to-blue-900/50 rounded-xl p-6 border border-purple-500/30">
-        <h3 className="text-lg font-semibold text-gray-100 mb-2 flex items-center gap-2">
+        <h3 className="text-lg font-semibold text-foreground mb-2 flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-purple-400" />
           Quick Start - Enter Your Website
         </h3>
-        <p className="text-sm text-gray-400 mb-4">
+        <p className="text-sm text-muted-foreground mb-4">
           Enter your website URL and we'll automatically extract your company info, services, packages, and branding.
         </p>
 
         <div className="flex gap-2">
           <div className="relative flex-1">
-            <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
               name="website"
               value={formData.website}
               onChange={handleChange}
-              className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-lg"
+              className="w-full pl-10 pr-4 py-3 bg-card border border-border rounded-lg text-foreground focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-lg"
               placeholder="yourcompany.com"
             />
           </div>
@@ -299,7 +299,7 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
             type="button"
             onClick={handleScrapeWebsite}
             disabled={scraping || !formData.website}
-            className="flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 border border-purple-500 rounded-lg text-white font-medium transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 border border-purple-500 rounded-lg text-foreground font-medium transition-colors disabled:opacity-50"
           >
             {scraping ? (
               <>
@@ -363,12 +363,12 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
       </div>
 
       {/* Basic Info */}
-      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-        <h3 className="text-lg font-semibold text-gray-100 mb-4">Company Details</h3>
+      <div className="bg-card rounded-xl p-6 border border-border">
+        <h3 className="text-lg font-semibold text-foreground mb-4">Company Details</h3>
 
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-secondary-foreground mb-2">
               Company Name *
             </label>
             <input
@@ -377,40 +377,40 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               placeholder="Acme Pest Control"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-secondary-foreground mb-2">
               Phone Number
             </label>
             <div className="relative">
-              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="tel"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full pl-10 pr-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 placeholder="(555) 123-4567"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-secondary-foreground mb-2">
               Address
             </label>
             <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
-                className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full pl-10 pr-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 placeholder="123 Main St, City, State"
               />
             </div>
@@ -419,35 +419,35 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
       </div>
 
       {/* Branding */}
-      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-        <h3 className="text-lg font-semibold text-gray-100 mb-4 flex items-center gap-2">
+      <div className="bg-card rounded-xl p-6 border border-border">
+        <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
           <Palette className="w-5 h-5 text-primary-400" />
           Branding
         </h3>
-        <p className="text-sm text-gray-400 mb-4">
+        <p className="text-sm text-muted-foreground mb-4">
           Customize the platform with your company's look and feel
         </p>
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* Logo */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-secondary-foreground mb-2">
               Company Logo URL
             </label>
             <div className="flex gap-3">
               <div className="relative flex-1">
-                <Image className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Image className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input
                   type="url"
                   name="logo_url"
                   value={formData.logo_url}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full pl-10 pr-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   placeholder="https://example.com/logo.png"
                 />
               </div>
               {formData.logo_url && (
-                <div className="w-12 h-12 rounded-lg bg-white flex items-center justify-center overflow-hidden border border-gray-600">
+                <div className="w-12 h-12 rounded-lg bg-white flex items-center justify-center overflow-hidden border border-border">
                   <img
                     src={formData.logo_url}
                     alt="Logo preview"
@@ -461,7 +461,7 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
 
           {/* Tagline */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-secondary-foreground mb-2">
               Tagline / Slogan
             </label>
             <input
@@ -469,7 +469,7 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
               name="tagline"
               value={formData.tagline}
               onChange={handleChange}
-              className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               placeholder="Your trusted pest control experts"
             />
           </div>
@@ -477,7 +477,7 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
 
         {/* Brand Colors */}
         <div className="mt-6">
-          <label className="block text-sm font-medium text-gray-300 mb-3">
+          <label className="block text-sm font-medium text-secondary-foreground mb-3">
             Brand Colors
           </label>
           <div className="flex flex-wrap gap-4">
@@ -489,10 +489,10 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
                   ...prev,
                   brand_colors: { ...prev.brand_colors, primary: e.target.value }
                 }))}
-                className="w-10 h-10 rounded-lg border border-gray-600 cursor-pointer bg-transparent"
+                className="w-10 h-10 rounded-lg border border-border cursor-pointer bg-transparent"
               />
               <div>
-                <span className="text-sm text-gray-300">Primary</span>
+                <span className="text-sm text-secondary-foreground">Primary</span>
                 <input
                   type="text"
                   value={formData.brand_colors?.primary || ''}
@@ -500,7 +500,7 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
                     ...prev,
                     brand_colors: { ...prev.brand_colors, primary: e.target.value }
                   }))}
-                  className="block w-24 px-2 py-1 text-xs bg-gray-700 border border-gray-600 rounded text-gray-300"
+                  className="block w-24 px-2 py-1 text-xs bg-muted border border-border rounded text-secondary-foreground"
                   placeholder="#3b82f6"
                 />
               </div>
@@ -514,10 +514,10 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
                   ...prev,
                   brand_colors: { ...prev.brand_colors, secondary: e.target.value }
                 }))}
-                className="w-10 h-10 rounded-lg border border-gray-600 cursor-pointer bg-transparent"
+                className="w-10 h-10 rounded-lg border border-border cursor-pointer bg-transparent"
               />
               <div>
-                <span className="text-sm text-gray-300">Secondary</span>
+                <span className="text-sm text-secondary-foreground">Secondary</span>
                 <input
                   type="text"
                   value={formData.brand_colors?.secondary || ''}
@@ -525,7 +525,7 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
                     ...prev,
                     brand_colors: { ...prev.brand_colors, secondary: e.target.value }
                   }))}
-                  className="block w-24 px-2 py-1 text-xs bg-gray-700 border border-gray-600 rounded text-gray-300"
+                  className="block w-24 px-2 py-1 text-xs bg-muted border border-border rounded text-secondary-foreground"
                   placeholder="#6b7280"
                 />
               </div>
@@ -539,10 +539,10 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
                   ...prev,
                   brand_colors: { ...prev.brand_colors, accent: e.target.value }
                 }))}
-                className="w-10 h-10 rounded-lg border border-gray-600 cursor-pointer bg-transparent"
+                className="w-10 h-10 rounded-lg border border-border cursor-pointer bg-transparent"
               />
               <div>
-                <span className="text-sm text-gray-300">Accent</span>
+                <span className="text-sm text-secondary-foreground">Accent</span>
                 <input
                   type="text"
                   value={formData.brand_colors?.accent || ''}
@@ -550,7 +550,7 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
                     ...prev,
                     brand_colors: { ...prev.brand_colors, accent: e.target.value }
                   }))}
-                  className="block w-24 px-2 py-1 text-xs bg-gray-700 border border-gray-600 rounded text-gray-300"
+                  className="block w-24 px-2 py-1 text-xs bg-muted border border-border rounded text-secondary-foreground"
                   placeholder="#10b981"
                 />
               </div>
@@ -560,9 +560,9 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
       </div>
 
       {/* Services */}
-      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-        <h3 className="text-lg font-semibold text-gray-100 mb-4">Services Offered</h3>
-        <p className="text-sm text-gray-400 mb-4">
+      <div className="bg-card rounded-xl p-6 border border-border">
+        <h3 className="text-lg font-semibold text-foreground mb-4">Services Offered</h3>
+        <p className="text-sm text-muted-foreground mb-4">
           Select the services your company provides
         </p>
 
@@ -574,8 +574,8 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
               onClick={() => toggleService(service)}
               className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
                 formData.services.includes(service)
-                  ? 'bg-primary-500 text-white'
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  ? 'bg-primary-500 text-foreground'
+                  : 'bg-muted text-secondary-foreground hover:bg-muted'
               }`}
             >
               {service}
@@ -585,9 +585,9 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
       </div>
 
       {/* Guarantees */}
-      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-        <h3 className="text-lg font-semibold text-gray-100 mb-4">Service Guarantees</h3>
-        <p className="text-sm text-gray-400 mb-4">
+      <div className="bg-card rounded-xl p-6 border border-border">
+        <h3 className="text-lg font-semibold text-foreground mb-4">Service Guarantees</h3>
+        <p className="text-sm text-muted-foreground mb-4">
           Select the guarantees you offer to customers
         </p>
 
@@ -599,8 +599,8 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
               onClick={() => toggleGuarantee(guarantee)}
               className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
                 formData.guarantees.includes(guarantee)
-                  ? 'bg-green-500 text-white'
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  ? 'bg-green-500 text-foreground'
+                  : 'bg-muted text-secondary-foreground hover:bg-muted'
               }`}
             >
               {guarantee}
@@ -624,7 +624,7 @@ export default function CompanyInfoStep({ data, allStepData, onComplete, authFet
         <button
           type="submit"
           disabled={saving || !formData.name}
-          className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors disabled:opacity-50"
         >
           {saving ? (
             <>

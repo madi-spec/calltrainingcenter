@@ -126,7 +126,7 @@ export default function CompetitorsStep({ data, allStepData, onComplete, authFet
               {competitors.length} competitor{competitors.length !== 1 ? 's' : ''} found on your website
             </span>
           </div>
-          <p className="text-sm text-gray-400 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Add details about their weaknesses and your advantages to improve training scenarios.
           </p>
         </div>
@@ -145,59 +145,59 @@ export default function CompetitorsStep({ data, allStepData, onComplete, authFet
         {competitors.map((comp, index) => (
           <div
             key={index}
-            className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden"
+            className="bg-card rounded-xl border border-border overflow-hidden"
           >
             <button
               onClick={() => setExpandedCompetitor(expandedCompetitor === index ? null : index)}
-              className="w-full flex items-center justify-between p-4 hover:bg-gray-700/50 transition-colors"
+              className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors"
             >
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center text-red-400 font-bold">
                   {index + 1}
                 </div>
                 <div className="text-left">
-                  <h4 className="font-medium text-gray-200">
+                  <h4 className="font-medium text-foreground">
                     {comp.name || 'New Competitor'}
                   </h4>
                   {comp.typicalPricing && (
-                    <p className="text-sm text-gray-400">
+                    <p className="text-sm text-muted-foreground">
                       Typical pricing: {comp.typicalPricing}
                     </p>
                   )}
                 </div>
               </div>
               {expandedCompetitor === index ? (
-                <ChevronUp className="w-5 h-5 text-gray-400" />
+                <ChevronUp className="w-5 h-5 text-muted-foreground" />
               ) : (
-                <ChevronDown className="w-5 h-5 text-gray-400" />
+                <ChevronDown className="w-5 h-5 text-muted-foreground" />
               )}
             </button>
 
             {expandedCompetitor === index && (
-              <div className="p-4 pt-0 space-y-4 border-t border-gray-700">
+              <div className="p-4 pt-0 space-y-4 border-t border-border">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-secondary-foreground mb-2">
                       Competitor Name
                     </label>
                     <input
                       type="text"
                       value={comp.name}
                       onChange={(e) => updateCompetitor(index, 'name', e.target.value)}
-                      className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary-500"
                       placeholder="ABC Pest Control"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-secondary-foreground mb-2">
                       Typical Pricing
                     </label>
                     <input
                       type="text"
                       value={comp.typicalPricing}
                       onChange={(e) => updateCompetitor(index, 'typicalPricing', e.target.value)}
-                      className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary-500"
                       placeholder="$35-50/month"
                     />
                   </div>
@@ -205,7 +205,7 @@ export default function CompetitorsStep({ data, allStepData, onComplete, authFet
 
                 {/* Known Weaknesses */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-secondary-foreground mb-2">
                     Known Weaknesses
                   </label>
                   <div className="space-y-2">
@@ -215,7 +215,7 @@ export default function CompetitorsStep({ data, allStepData, onComplete, authFet
                           type="text"
                           value={weakness}
                           onChange={(e) => updateWeakness(index, weakIndex, e.target.value)}
-                          className="flex-1 px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-primary-500"
+                          className="flex-1 px-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary-500"
                           placeholder="e.g., Long response times"
                         />
                         <button
@@ -238,7 +238,7 @@ export default function CompetitorsStep({ data, allStepData, onComplete, authFet
 
                 {/* Our Advantages */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-secondary-foreground mb-2">
                     Our Advantages Over Them
                   </label>
                   <div className="space-y-2">
@@ -248,7 +248,7 @@ export default function CompetitorsStep({ data, allStepData, onComplete, authFet
                           type="text"
                           value={advantage}
                           onChange={(e) => updateAdvantage(index, advIndex, e.target.value)}
-                          className="flex-1 px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:ring-2 focus:ring-primary-500"
+                          className="flex-1 px-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary-500"
                           placeholder="e.g., Same-day service available"
                         />
                         <button
@@ -285,7 +285,7 @@ export default function CompetitorsStep({ data, allStepData, onComplete, authFet
 
         <button
           onClick={addCompetitor}
-          className="w-full flex items-center justify-center gap-2 p-4 bg-gray-800 hover:bg-gray-700 rounded-xl border border-gray-700 border-dashed text-gray-400 hover:text-gray-300 transition-colors"
+          className="w-full flex items-center justify-center gap-2 p-4 bg-card hover:bg-muted rounded-xl border border-border border-dashed text-muted-foreground hover:text-secondary-foreground transition-colors"
         >
           <Plus className="w-5 h-5" />
           Add Competitor
@@ -297,7 +297,7 @@ export default function CompetitorsStep({ data, allStepData, onComplete, authFet
         <button
           onClick={handleSubmit}
           disabled={saving}
-          className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors disabled:opacity-50"
         >
           {saving ? (
             <>

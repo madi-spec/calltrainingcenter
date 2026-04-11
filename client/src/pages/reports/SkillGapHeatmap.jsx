@@ -15,7 +15,7 @@ function formatCategoryName(category) {
 function CriticalGapsPanel({ gaps, onCreatePlan }) {
   if (!gaps || gaps.length === 0) {
     return (
-      <div className="py-6 text-center text-gray-500 dark:text-gray-400">
+      <div className="py-6 text-center text-muted-foreground dark:text-muted-foreground">
         No critical skill gaps found.
       </div>
     );
@@ -35,7 +35,7 @@ function CriticalGapsPanel({ gaps, onCreatePlan }) {
               </svg>
             </div>
             <div>
-              <p className="font-medium text-gray-900 dark:text-white">
+              <p className="font-medium text-foreground dark:text-foreground">
                 {gap.user?.full_name || 'Unknown User'}
               </p>
               <p className="text-sm text-red-600 dark:text-red-400">
@@ -78,24 +78,24 @@ function ImprovementPlanModal({ isOpen, onClose, gap, onSubmit }) {
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6"
+        className="bg-white dark:bg-card rounded-lg shadow-xl max-w-md w-full p-6"
       >
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+        <h2 className="text-xl font-bold text-foreground dark:text-foreground mb-4">
           Create Improvement Plan
         </h2>
 
-        <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-          <p className="text-sm text-gray-600 dark:text-gray-300">
+        <div className="mb-4 p-3 bg-muted dark:bg-muted rounded-lg">
+          <p className="text-sm text-muted-foreground dark:text-secondary-foreground">
             <strong>{gap.user?.full_name}</strong> - {formatCategoryName(gap.skill_category)}
           </p>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-muted-foreground dark:text-muted-foreground">
             Current: {gap.current_score}% | Target: {gap.target_score}%
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-muted-foreground dark:text-secondary-foreground mb-1">
               Target Score
             </label>
             <input
@@ -104,24 +104,24 @@ function ImprovementPlanModal({ isOpen, onClose, gap, onSubmit }) {
               max="100"
               value={formData.targetScore}
               onChange={(e) => setFormData({ ...formData, targetScore: parseInt(e.target.value) })}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 border border-border dark:border-border rounded-lg bg-white dark:bg-muted text-foreground dark:text-foreground"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-muted-foreground dark:text-secondary-foreground mb-1">
               Target Date (Optional)
             </label>
             <input
               type="date"
               value={formData.targetDate}
               onChange={(e) => setFormData({ ...formData, targetDate: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 border border-border dark:border-border rounded-lg bg-white dark:bg-muted text-foreground dark:text-foreground"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-muted-foreground dark:text-secondary-foreground mb-1">
               Notes
             </label>
             <textarea
@@ -129,7 +129,7 @@ function ImprovementPlanModal({ isOpen, onClose, gap, onSubmit }) {
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
               placeholder="Add coaching notes or specific focus areas..."
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none"
+              className="w-full px-3 py-2 border border-border dark:border-border rounded-lg bg-white dark:bg-muted text-foreground dark:text-foreground resize-none"
             />
           </div>
 
@@ -137,13 +137,13 @@ function ImprovementPlanModal({ isOpen, onClose, gap, onSubmit }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              className="flex-1 px-4 py-2 text-muted-foreground dark:text-secondary-foreground bg-muted dark:bg-muted rounded-lg hover:bg-muted dark:hover:bg-muted transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors"
+              className="flex-1 px-4 py-2 text-foreground bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors"
             >
               Create Plan
             </button>
@@ -250,8 +250,8 @@ function SkillGapHeatmap() {
     return (
       <div className="p-6 max-w-7xl mx-auto">
         <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
-          <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded"></div>
+          <div className="h-8 bg-muted dark:bg-muted rounded w-1/3"></div>
+          <div className="h-64 bg-muted dark:bg-muted rounded"></div>
         </div>
       </div>
     );
@@ -262,10 +262,10 @@ function SkillGapHeatmap() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl font-bold text-foreground dark:text-foreground">
             Skill Gap Analysis
           </h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-muted-foreground dark:text-muted-foreground mt-1">
             Identify training needs and track team skill development
           </p>
         </div>
@@ -273,7 +273,7 @@ function SkillGapHeatmap() {
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-foreground rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
         >
           <svg
             className={`w-5 h-5 ${refreshing ? 'animate-spin' : ''}`}
@@ -296,12 +296,12 @@ function SkillGapHeatmap() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Heatmap */}
         <div className="lg:col-span-3">
-          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-              <h2 className="font-semibold text-gray-900 dark:text-white">
+          <div className="bg-white dark:bg-card rounded-lg border border-border dark:border-border shadow-sm">
+            <div className="p-4 border-b border-border dark:border-border">
+              <h2 className="font-semibold text-foreground dark:text-foreground">
                 Team Skill Heatmap
               </h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                 {heatmapData.totalUsers} team members
               </p>
             </div>
@@ -319,15 +319,15 @@ function SkillGapHeatmap() {
 
         {/* Critical Gaps Sidebar */}
         <div className="lg:col-span-1">
-          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="bg-white dark:bg-card rounded-lg border border-border dark:border-border shadow-sm">
+            <div className="p-4 border-b border-border dark:border-border">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-red-500 rounded-full"></span>
-                <h2 className="font-semibold text-gray-900 dark:text-white">
+                <h2 className="font-semibold text-foreground dark:text-foreground">
                   Critical Gaps
                 </h2>
               </div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                 {criticalGaps.length} requiring attention
               </p>
             </div>

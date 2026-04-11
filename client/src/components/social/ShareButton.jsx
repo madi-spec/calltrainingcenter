@@ -55,9 +55,9 @@ export default function ShareButton({
   };
 
   const variantClasses = {
-    default: 'bg-gray-700 hover:bg-gray-600 text-gray-300',
-    primary: 'bg-primary-600 hover:bg-primary-700 text-white',
-    ghost: 'hover:bg-gray-700 text-gray-400'
+    default: 'bg-muted hover:bg-muted text-secondary-foreground',
+    primary: 'bg-primary-600 hover:bg-primary-700 text-foreground',
+    ghost: 'hover:bg-muted text-muted-foreground'
   };
 
   return (
@@ -67,7 +67,7 @@ export default function ShareButton({
         className={`
           flex items-center gap-2 rounded-lg transition-colors
           ${sizeClasses[size]}
-          ${shared ? 'bg-green-600 text-white' : variantClasses[variant]}
+          ${shared ? 'bg-green-600 text-foreground' : variantClasses[variant]}
         `}
         disabled={sharing}
       >
@@ -92,10 +92,10 @@ export default function ShareButton({
             initial={{ opacity: 0, scale: 0.95, y: -10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
-            className="absolute right-0 top-full mt-2 w-56 bg-gray-800 rounded-xl border border-gray-700 shadow-xl overflow-hidden z-50"
+            className="absolute right-0 top-full mt-2 w-56 bg-card rounded-xl border border-border shadow-xl overflow-hidden z-50"
           >
             <div className="p-2">
-              <p className="text-xs text-gray-500 uppercase tracking-wide px-2 py-1">
+              <p className="text-xs text-muted-foreground uppercase tracking-wide px-2 py-1">
                 Share with
               </p>
               {VISIBILITY_OPTIONS.map(option => {
@@ -110,13 +110,13 @@ export default function ShareButton({
                       w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors
                       ${isSelected
                         ? 'bg-primary-500/20 text-primary-400'
-                        : 'hover:bg-gray-700 text-gray-300'}
+                        : 'hover:bg-muted text-secondary-foreground'}
                     `}
                   >
                     <Icon className="w-4 h-4" />
                     <div className="text-left flex-1">
                       <p className="text-sm font-medium">{option.label}</p>
-                      <p className="text-xs text-gray-500">{option.description}</p>
+                      <p className="text-xs text-muted-foreground">{option.description}</p>
                     </div>
                     {isSelected && (
                       <Check className="w-4 h-4 text-primary-400" />
@@ -126,10 +126,10 @@ export default function ShareButton({
               })}
             </div>
 
-            <div className="p-2 border-t border-gray-700">
+            <div className="p-2 border-t border-border">
               <button
                 onClick={handleShare}
-                className="w-full py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors"
+                className="w-full py-2 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors"
               >
                 Share Now
               </button>

@@ -110,9 +110,9 @@ export default function Notifications() {
       case 'team':
         return <Users className="w-5 h-5 text-purple-400" />;
       case 'system':
-        return <AlertCircle className="w-5 h-5 text-gray-400" />;
+        return <AlertCircle className="w-5 h-5 text-muted-foreground" />;
       default:
-        return <Bell className="w-5 h-5 text-gray-400" />;
+        return <Bell className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
@@ -135,7 +135,7 @@ export default function Notifications() {
     <button
       onClick={() => onChange(!enabled)}
       className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-        enabled ? 'bg-primary-600' : 'bg-gray-600'
+        enabled ? 'bg-primary-600' : 'bg-muted'
       }`}
     >
       <span
@@ -151,8 +151,8 @@ export default function Notifications() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-100">Notifications</h1>
-          <p className="text-gray-400 mt-1">
+          <h1 className="text-2xl font-bold text-foreground">Notifications</h1>
+          <p className="text-muted-foreground mt-1">
             Manage how and when you receive notifications
           </p>
         </div>
@@ -161,7 +161,7 @@ export default function Notifications() {
             <button
               onClick={handleReset}
               disabled={!hasChanges}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 disabled:opacity-50 text-gray-300 font-medium rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted disabled:opacity-50 text-secondary-foreground font-medium rounded-lg transition-colors"
             >
               <RotateCcw className="w-5 h-5" />
               Reset
@@ -169,7 +169,7 @@ export default function Notifications() {
             <button
               onClick={handleSave}
               disabled={loading || !hasChanges}
-              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-white font-medium rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-600/50 text-foreground font-medium rounded-lg transition-colors"
             >
               <Save className="w-5 h-5" />
               {loading ? 'Saving...' : 'Save Changes'}
@@ -179,13 +179,13 @@ export default function Notifications() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-gray-700">
+      <div className="flex gap-2 border-b border-border">
         <button
           onClick={() => setActiveTab('settings')}
           className={`px-4 py-2 font-medium transition-colors border-b-2 -mb-px ${
             activeTab === 'settings'
               ? 'text-primary-400 border-primary-400'
-              : 'text-gray-400 border-transparent hover:text-gray-300'
+              : 'text-muted-foreground border-transparent hover:text-secondary-foreground'
           }`}
         >
           Settings
@@ -195,12 +195,12 @@ export default function Notifications() {
           className={`px-4 py-2 font-medium transition-colors border-b-2 -mb-px flex items-center gap-2 ${
             activeTab === 'inbox'
               ? 'text-primary-400 border-primary-400'
-              : 'text-gray-400 border-transparent hover:text-gray-300'
+              : 'text-muted-foreground border-transparent hover:text-secondary-foreground'
           }`}
         >
           Inbox
           {unreadCount > 0 && (
-            <span className="px-2 py-0.5 text-xs bg-primary-600 text-white rounded-full">
+            <span className="px-2 py-0.5 text-xs bg-primary-600 text-foreground rounded-full">
               {unreadCount}
             </span>
           )}
@@ -213,15 +213,15 @@ export default function Notifications() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+            className="bg-card rounded-xl p-6 border border-border"
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 bg-blue-500/10 rounded-lg">
                 <Mail className="w-6 h-6 text-blue-400" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-gray-100">Email Notifications</h2>
-                <p className="text-sm text-gray-400">Choose which emails you want to receive</p>
+                <h2 className="text-lg font-semibold text-foreground">Email Notifications</h2>
+                <p className="text-sm text-muted-foreground">Choose which emails you want to receive</p>
               </div>
             </div>
 
@@ -233,12 +233,12 @@ export default function Notifications() {
                 { key: 'email_team_updates', label: 'Team Updates', description: 'Updates about your team\'s progress (managers only)', icon: Users },
                 { key: 'email_weekly_digest', label: 'Weekly Digest', description: 'A summary of your weekly training activity', icon: Zap }
               ].map((item) => (
-                <div key={item.key} className="flex items-center justify-between p-4 bg-gray-750 rounded-lg">
+                <div key={item.key} className="flex items-center justify-between p-4 bg-muted rounded-lg">
                   <div className="flex items-center gap-3">
-                    <item.icon className="w-5 h-5 text-gray-400" />
+                    <item.icon className="w-5 h-5 text-muted-foreground" />
                     <div>
-                      <p className="font-medium text-gray-100">{item.label}</p>
-                      <p className="text-sm text-gray-400">{item.description}</p>
+                      <p className="font-medium text-foreground">{item.label}</p>
+                      <p className="text-sm text-muted-foreground">{item.description}</p>
                     </div>
                   </div>
                   <ToggleSwitch
@@ -255,23 +255,23 @@ export default function Notifications() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+            className="bg-card rounded-xl p-6 border border-border"
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 bg-purple-500/10 rounded-lg">
                 <MessageSquare className="w-6 h-6 text-purple-400" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-gray-100">In-App Notifications</h2>
-                <p className="text-sm text-gray-400">Configure toast notifications within the app</p>
+                <h2 className="text-lg font-semibold text-foreground">In-App Notifications</h2>
+                <p className="text-sm text-muted-foreground">Configure toast notifications within the app</p>
               </div>
             </div>
 
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-gray-750 rounded-lg">
+              <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
                 <div>
-                  <p className="font-medium text-gray-100">Enable All In-App Notifications</p>
-                  <p className="text-sm text-gray-400">Master toggle for all in-app notifications</p>
+                  <p className="font-medium text-foreground">Enable All In-App Notifications</p>
+                  <p className="text-sm text-muted-foreground">Master toggle for all in-app notifications</p>
                 </div>
                 <ToggleSwitch
                   enabled={settings.in_app_all}
@@ -280,14 +280,14 @@ export default function Notifications() {
               </div>
 
               {settings.in_app_all && (
-                <div className="ml-4 space-y-3 border-l-2 border-gray-700 pl-4">
+                <div className="ml-4 space-y-3 border-l-2 border-border pl-4">
                   {[
                     { key: 'in_app_achievements', label: 'Achievement notifications' },
                     { key: 'in_app_assignments', label: 'Assignment notifications' },
                     { key: 'in_app_reminders', label: 'Reminder notifications' }
                   ].map((item) => (
                     <div key={item.key} className="flex items-center justify-between py-2">
-                      <p className="text-gray-300">{item.label}</p>
+                      <p className="text-secondary-foreground">{item.label}</p>
                       <ToggleSwitch
                         enabled={settings[item.key]}
                         onChange={(value) => handleSettingChange(item.key, value)}
@@ -304,30 +304,30 @@ export default function Notifications() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+            className="bg-card rounded-xl p-6 border border-border"
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 bg-orange-500/10 rounded-lg">
                 <Clock className="w-6 h-6 text-orange-400" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-gray-100">Timing Preferences</h2>
-                <p className="text-sm text-gray-400">Control when you receive notifications</p>
+                <h2 className="text-lg font-semibold text-foreground">Timing Preferences</h2>
+                <p className="text-sm text-muted-foreground">Control when you receive notifications</p>
               </div>
             </div>
 
             <div className="space-y-4">
-              <div className="p-4 bg-gray-750 rounded-lg">
+              <div className="p-4 bg-muted rounded-lg">
                 <div className="flex items-center justify-between mb-3">
                   <div>
-                    <p className="font-medium text-gray-100">Reminder Timing</p>
-                    <p className="text-sm text-gray-400">How many days before due date to send reminders</p>
+                    <p className="font-medium text-foreground">Reminder Timing</p>
+                    <p className="text-sm text-muted-foreground">How many days before due date to send reminders</p>
                   </div>
                 </div>
                 <select
                   value={settings.reminder_days_before}
                   onChange={(e) => handleSettingChange('reminder_days_before', parseInt(e.target.value))}
-                  className="w-full md:w-48 px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full md:w-48 px-4 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
                 >
                   <option value={1}>1 day before</option>
                   <option value={2}>2 days before</option>
@@ -337,11 +337,11 @@ export default function Notifications() {
                 </select>
               </div>
 
-              <div className="p-4 bg-gray-750 rounded-lg">
+              <div className="p-4 bg-muted rounded-lg">
                 <div className="flex items-center justify-between mb-3">
                   <div>
-                    <p className="font-medium text-gray-100">Quiet Hours</p>
-                    <p className="text-sm text-gray-400">Pause notifications during specific hours</p>
+                    <p className="font-medium text-foreground">Quiet Hours</p>
+                    <p className="text-sm text-muted-foreground">Pause notifications during specific hours</p>
                   </div>
                   <ToggleSwitch
                     enabled={settings.quiet_hours_enabled}
@@ -352,21 +352,21 @@ export default function Notifications() {
                 {settings.quiet_hours_enabled && (
                   <div className="flex items-center gap-4 mt-3">
                     <div>
-                      <label className="block text-sm text-gray-400 mb-1">From</label>
+                      <label className="block text-sm text-muted-foreground mb-1">From</label>
                       <input
                         type="time"
                         value={settings.quiet_hours_start}
                         onChange={(e) => handleSettingChange('quiet_hours_start', e.target.value)}
-                        className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        className="px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm text-gray-400 mb-1">To</label>
+                      <label className="block text-sm text-muted-foreground mb-1">To</label>
                       <input
                         type="time"
                         value={settings.quiet_hours_end}
                         onChange={(e) => handleSettingChange('quiet_hours_end', e.target.value)}
-                        className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        className="px-3 py-2 bg-muted border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
                       />
                     </div>
                   </div>
@@ -380,11 +380,11 @@ export default function Notifications() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden"
+          className="bg-card rounded-xl border border-border overflow-hidden"
         >
           {/* Inbox Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-700">
-            <h2 className="font-semibold text-gray-100">
+          <div className="flex items-center justify-between p-4 border-b border-border">
+            <h2 className="font-semibold text-foreground">
               {unreadCount > 0 ? `${unreadCount} unread` : 'All caught up'}
             </h2>
             {unreadCount > 0 && (
@@ -399,19 +399,19 @@ export default function Notifications() {
           </div>
 
           {/* Notification List */}
-          <div className="divide-y divide-gray-700">
+          <div className="divide-y divide-border">
             {notifications.length === 0 ? (
               <div className="p-8 text-center">
-                <Bell className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-                <p className="text-gray-400">No notifications yet</p>
-                <p className="text-sm text-gray-500 mt-1">You'll see notifications here when you receive them</p>
+                <Bell className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+                <p className="text-muted-foreground">No notifications yet</p>
+                <p className="text-sm text-muted-foreground mt-1">You'll see notifications here when you receive them</p>
               </div>
             ) : (
               notifications.map((notification) => (
                 <div
                   key={notification.id}
-                  className={`p-4 hover:bg-gray-750 transition-colors ${
-                    !notification.read_at ? 'bg-gray-750/50' : ''
+                  className={`p-4 hover:bg-muted transition-colors ${
+                    !notification.read_at ? 'bg-muted/50' : ''
                   }`}
                 >
                   <div className="flex items-start gap-3">
@@ -421,12 +421,12 @@ export default function Notifications() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
                         <div>
-                          <p className={`font-medium ${!notification.read_at ? 'text-gray-100' : 'text-gray-300'}`}>
+                          <p className={`font-medium ${!notification.read_at ? 'text-foreground' : 'text-secondary-foreground'}`}>
                             {notification.title}
                           </p>
-                          <p className="text-sm text-gray-400 mt-0.5">{notification.message}</p>
+                          <p className="text-sm text-muted-foreground mt-0.5">{notification.message}</p>
                         </div>
-                        <span className="text-xs text-gray-500 whitespace-nowrap">
+                        <span className="text-xs text-muted-foreground whitespace-nowrap">
                           {formatTimeAgo(notification.created_at)}
                         </span>
                       </div>
@@ -442,7 +442,7 @@ export default function Notifications() {
                         )}
                         <button
                           onClick={() => deleteNotification(notification.id)}
-                          className="text-xs text-gray-500 hover:text-red-400 flex items-center gap-1"
+                          className="text-xs text-muted-foreground hover:text-red-400 flex items-center gap-1"
                         >
                           <Trash2 className="w-3 h-3" />
                           Delete

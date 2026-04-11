@@ -40,12 +40,12 @@ export default function BadgeShowcase({ maxDisplay = 6, showFeatured = true }) {
 
   if (loading) {
     return (
-      <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+      <div className="bg-card rounded-xl p-6 border border-border">
         <div className="animate-pulse">
-          <div className="h-6 w-32 bg-gray-700 rounded mb-4" />
+          <div className="h-6 w-32 bg-muted rounded mb-4" />
           <div className="grid grid-cols-3 gap-4">
             {[1, 2, 3].map(i => (
-              <div key={i} className="h-20 bg-gray-700 rounded-xl" />
+              <div key={i} className="h-20 bg-muted rounded-xl" />
             ))}
           </div>
         </div>
@@ -63,10 +63,10 @@ export default function BadgeShowcase({ maxDisplay = 6, showFeatured = true }) {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+        className="bg-card rounded-xl p-6 border border-border"
       >
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-semibold text-gray-100 flex items-center gap-2">
+          <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
             <Award className="w-5 h-5 text-yellow-400" />
             Badge Showcase
           </h2>
@@ -87,8 +87,8 @@ export default function BadgeShowcase({ maxDisplay = 6, showFeatured = true }) {
             <div className="flex items-center gap-4">
               <TieredBadge badge={featuredBadge.badge} size="large" showProgress />
               <div className="flex-1">
-                <p className="font-medium text-gray-100">{featuredBadge.badge?.name}</p>
-                <p className="text-sm text-gray-400">{featuredBadge.badge?.description}</p>
+                <p className="font-medium text-foreground">{featuredBadge.badge?.name}</p>
+                <p className="text-sm text-muted-foreground">{featuredBadge.badge?.description}</p>
                 {featuredBadge.badge?.is_tiered && (
                   <div className="mt-2">
                     <BadgeProgress badge={featuredBadge} />
@@ -124,9 +124,9 @@ export default function BadgeShowcase({ maxDisplay = 6, showFeatured = true }) {
           </div>
         ) : (
           <div className="text-center py-8">
-            <Award className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-            <p className="text-gray-400 mb-1">No badges earned yet</p>
-            <p className="text-sm text-gray-500">
+            <Award className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+            <p className="text-muted-foreground mb-1">No badges earned yet</p>
+            <p className="text-sm text-muted-foreground">
               Complete challenges to earn your first badge!
             </p>
           </div>
@@ -156,7 +156,7 @@ export default function BadgeShowcase({ maxDisplay = 6, showFeatured = true }) {
               initial={{ scale: 0.95 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.95 }}
-              className="bg-gray-800 rounded-2xl w-full max-w-sm p-6 border border-gray-700"
+              className="bg-card rounded-2xl w-full max-w-sm p-6 border border-border"
               onClick={e => e.stopPropagation()}
             >
               <div className="flex items-start justify-between mb-4">
@@ -170,16 +170,16 @@ export default function BadgeShowcase({ maxDisplay = 6, showFeatured = true }) {
                 />
                 <button
                   onClick={() => setSelectedBadge(null)}
-                  className="p-2 hover:bg-gray-700 rounded-lg"
+                  className="p-2 hover:bg-muted rounded-lg"
                 >
-                  <X className="w-5 h-5 text-gray-400" />
+                  <X className="w-5 h-5 text-muted-foreground" />
                 </button>
               </div>
 
-              <h3 className="text-xl font-bold text-gray-100 mb-2">
+              <h3 className="text-xl font-bold text-foreground mb-2">
                 {selectedBadge.badge?.name}
               </h3>
-              <p className="text-gray-400 mb-4">
+              <p className="text-muted-foreground mb-4">
                 {selectedBadge.badge?.description}
               </p>
 
@@ -196,7 +196,7 @@ export default function BadgeShowcase({ maxDisplay = 6, showFeatured = true }) {
                 />
               )}
 
-              <div className="mt-4 pt-4 border-t border-gray-700 text-sm text-gray-500">
+              <div className="mt-4 pt-4 border-t border-border text-sm text-muted-foreground">
                 <p>Earned: {new Date(selectedBadge.earned_at).toLocaleDateString()}</p>
                 {selectedBadge.progress_count > 1 && (
                   <p>Times earned: {selectedBadge.progress_count}</p>

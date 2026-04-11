@@ -338,10 +338,10 @@ export default function SetupWizard() {
           isCurrent
             ? 'bg-primary-500/20 text-primary-400 ring-2 ring-primary-500/50'
             : isComplete
-            ? 'text-green-400 hover:bg-gray-700 cursor-pointer'
+            ? 'text-green-400 hover:bg-muted cursor-pointer'
             : isVisited
-            ? 'text-gray-300 hover:bg-gray-700 cursor-pointer'
-            : 'text-gray-500 hover:bg-gray-700 hover:text-gray-400 cursor-pointer'
+            ? 'text-secondary-foreground hover:bg-muted cursor-pointer'
+            : 'text-muted-foreground hover:bg-muted hover:text-muted-foreground cursor-pointer'
         }`}
       >
         <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${
@@ -349,7 +349,7 @@ export default function SetupWizard() {
             ? 'bg-green-500/20'
             : isCurrent
             ? 'bg-primary-500/20'
-            : 'bg-gray-700'
+            : 'bg-muted'
         }`}>
           {isComplete ? (
             <CheckCircle2 className="w-4 h-4 text-green-400" />
@@ -365,18 +365,18 @@ export default function SetupWizard() {
   // Show loading while auto-scraping
   if (autoScraping) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary-500 mx-auto mb-4"></div>
-          <h2 className="text-xl font-bold text-gray-100 mb-2">Importing Your Company Data</h2>
-          <p className="text-gray-400">Scanning {website} for services, pricing, and branding...</p>
+          <h2 className="text-xl font-bold text-foreground mb-2">Importing Your Company Data</h2>
+          <p className="text-muted-foreground">Scanning {website} for services, pricing, and branding...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-background">
       {/* Welcome Modal for New Users */}
       <AnimatePresence>
         {showWelcomeModal && (
@@ -390,46 +390,46 @@ export default function SetupWizard() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-gray-800 rounded-2xl p-8 max-w-lg w-full border border-gray-700 shadow-2xl"
+              className="bg-card rounded-2xl p-8 max-w-lg w-full border border-border shadow-2xl"
             >
               <div className="text-center">
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500 to-purple-600 mb-6">
-                  <Rocket className="w-8 h-8 text-white" />
+                  <Rocket className="w-8 h-8 text-foreground" />
                 </div>
-                <h2 className="text-2xl font-bold text-gray-100 mb-3">
+                <h2 className="text-2xl font-bold text-foreground mb-3">
                   Welcome to Your Training Platform!
                 </h2>
-                <p className="text-gray-400 mb-6">
+                <p className="text-muted-foreground mb-6">
                   Let's personalize your experience. This configuration wizard will help you set up:
                 </p>
 
                 <div className="grid grid-cols-2 gap-3 mb-8 text-left">
-                  <div className="flex items-start gap-3 p-3 bg-gray-700/50 rounded-lg">
+                  <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                     <Building2 className="w-5 h-5 text-primary-400 mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-gray-200">Company Info</p>
-                      <p className="text-xs text-gray-400">Your business details</p>
+                      <p className="text-sm font-medium text-foreground">Company Info</p>
+                      <p className="text-xs text-muted-foreground">Your business details</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3 p-3 bg-gray-700/50 rounded-lg">
+                  <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                     <Package className="w-5 h-5 text-green-400 mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-gray-200">Services & Packages</p>
-                      <p className="text-xs text-gray-400">What you offer</p>
+                      <p className="text-sm font-medium text-foreground">Services & Packages</p>
+                      <p className="text-xs text-muted-foreground">What you offer</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3 p-3 bg-gray-700/50 rounded-lg">
+                  <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                     <Bot className="w-5 h-5 text-purple-400 mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-gray-200">AI Behavior</p>
-                      <p className="text-xs text-gray-400">Customize training</p>
+                      <p className="text-sm font-medium text-foreground">AI Behavior</p>
+                      <p className="text-xs text-muted-foreground">Customize training</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3 p-3 bg-gray-700/50 rounded-lg">
+                  <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                     <Users className="w-5 h-5 text-blue-400 mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-gray-200">Team Setup</p>
-                      <p className="text-xs text-gray-400">Invite your team</p>
+                      <p className="text-sm font-medium text-foreground">Team Setup</p>
+                      <p className="text-xs text-muted-foreground">Invite your team</p>
                     </div>
                   </div>
                 </div>
@@ -443,7 +443,7 @@ export default function SetupWizard() {
 
                 <button
                   onClick={() => setShowWelcomeModal(false)}
-                  className="w-full px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                  className="w-full px-6 py-3 bg-primary-600 hover:bg-primary-700 text-foreground font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
                 >
                   Let's Get Started
                   <ChevronRight className="w-4 h-4" />
@@ -454,7 +454,7 @@ export default function SetupWizard() {
         )}
       </AnimatePresence>
       {/* Header */}
-      <div className="bg-gray-800 border-b border-gray-700">
+      <div className="bg-card border-b border-border">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -462,13 +462,13 @@ export default function SetupWizard() {
                 <Settings2 className="w-6 h-6 text-primary-400" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-100">Setup Your Organization</h1>
-                <p className="text-sm text-gray-400">Click any section to configure</p>
+                <h1 className="text-xl font-bold text-foreground">Setup Your Organization</h1>
+                <p className="text-sm text-muted-foreground">Click any section to configure</p>
               </div>
             </div>
             <button
               onClick={() => navigate('/dashboard')}
-              className="text-sm text-gray-400 hover:text-gray-300"
+              className="text-sm text-muted-foreground hover:text-secondary-foreground"
             >
               Exit Setup
             </button>
@@ -477,12 +477,12 @@ export default function SetupWizard() {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="bg-gray-800/50 border-b border-gray-700 sticky top-0 z-10">
+      <div className="bg-card/50 border-b border-border sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-4">
           <div className="py-3 space-y-3">
             {/* Business Info Row */}
             <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-1">Business Info</p>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-1">Business Info</p>
               <div className="flex flex-wrap gap-2">
                 {businessSteps.map((step) => renderStepButton(step, STEPS.findIndex(s => s.id === step.id)))}
               </div>
@@ -490,7 +490,7 @@ export default function SetupWizard() {
 
             {/* AI Settings Row */}
             <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-1 flex items-center gap-1">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-1 flex items-center gap-1">
                 <Sparkles className="w-3 h-3" />
                 AI Settings
               </p>
@@ -502,13 +502,13 @@ export default function SetupWizard() {
             {/* Team & Review Row */}
             <div className="flex gap-6">
               <div>
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-1">Team</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-1">Team</p>
                 <div className="flex flex-wrap gap-2">
                   {teamSteps.map((step) => renderStepButton(step, STEPS.findIndex(s => s.id === step.id)))}
                 </div>
               </div>
               <div>
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-1">Finish</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-1">Finish</p>
                 <div className="flex flex-wrap gap-2">
                   {reviewSteps.map((step) => renderStepButton(step, STEPS.findIndex(s => s.id === step.id)))}
                 </div>
@@ -530,16 +530,16 @@ export default function SetupWizard() {
           >
             {/* Step Header */}
             <div className="mb-8">
-              <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
                 <span>Step {currentStep + 1} of {STEPS.length}</span>
                 {STEPS[currentStep].required && (
                   <span className="px-2 py-0.5 bg-primary-500/20 text-primary-400 rounded text-xs">Required</span>
                 )}
               </div>
-              <h2 className="text-2xl font-bold text-gray-100">
+              <h2 className="text-2xl font-bold text-foreground">
                 {STEPS[currentStep].title}
               </h2>
-              <p className="text-gray-400 mt-1">
+              <p className="text-muted-foreground mt-1">
                 {STEPS[currentStep].description}
               </p>
             </div>
@@ -562,14 +562,14 @@ export default function SetupWizard() {
             />
 
             {/* Navigation Buttons */}
-            <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-700">
+            <div className="flex items-center justify-between mt-8 pt-6 border-t border-border">
               <button
                 onClick={handleBack}
                 disabled={currentStep === 0}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
                   currentStep === 0
-                    ? 'text-gray-600 cursor-not-allowed'
-                    : 'text-gray-300 hover:bg-gray-800'
+                    ? 'text-muted-foreground cursor-not-allowed'
+                    : 'text-secondary-foreground hover:bg-card'
                 }`}
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -581,7 +581,7 @@ export default function SetupWizard() {
                   <button
                     onClick={handleSkip}
                     disabled={saving}
-                    className="flex items-center gap-2 px-4 py-2 text-gray-400 hover:text-gray-300 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 text-muted-foreground hover:text-secondary-foreground transition-colors"
                   >
                     <SkipForward className="w-4 h-4" />
                     Skip for now
@@ -592,7 +592,7 @@ export default function SetupWizard() {
                   <button
                     onClick={completeSetup}
                     disabled={saving}
-                    className="flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+                    className="flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 text-foreground font-medium rounded-lg transition-colors disabled:opacity-50"
                   >
                     {saving ? (
                       <>

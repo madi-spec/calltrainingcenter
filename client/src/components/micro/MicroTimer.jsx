@@ -79,7 +79,7 @@ export default function MicroTimer({
           fill="none"
           stroke="currentColor"
           strokeWidth="6"
-          className="text-gray-700"
+          className="text-muted-foreground"
         />
         <motion.circle
           cx="50"
@@ -102,7 +102,7 @@ export default function MicroTimer({
 
       {/* Center content */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <div className={`flex items-center gap-1 ${isWarning ? 'text-red-400' : 'text-gray-400'}`}>
+        <div className={`flex items-center gap-1 ${isWarning ? 'text-red-400' : 'text-muted-foreground'}`}>
           {isWarning ? (
             <AlertTriangle className={classes.icon} />
           ) : (
@@ -111,7 +111,7 @@ export default function MicroTimer({
         </div>
         <motion.span
           className={`font-mono font-bold ${classes.text} ${
-            isWarning ? 'text-red-400' : 'text-white'
+            isWarning ? 'text-red-400' : 'text-foreground'
           }`}
           animate={isWarning ? { scale: [1, 1.1, 1] } : {}}
           transition={{ duration: 0.5, repeat: isWarning ? Infinity : 0 }}

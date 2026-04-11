@@ -360,7 +360,7 @@ function Results() {
       return (
         <div className="max-w-2xl mx-auto px-4 py-16 text-center">
           <Loader2 className="w-12 h-12 text-primary-400 mx-auto animate-spin" />
-          <p className="text-gray-400 mt-4">Loading results...</p>
+          <p className="text-muted-foreground mt-4">Loading results...</p>
         </div>
       );
     }
@@ -402,15 +402,15 @@ function Results() {
             </div>
           </div>
 
-          <h2 className="text-2xl font-bold text-white mb-2">
+          <h2 className="text-2xl font-bold text-foreground mb-2">
             Analyzing Your Performance
           </h2>
-          <p className="text-gray-400 mb-8">
+          <p className="text-muted-foreground mb-8">
             Our AI coach is reviewing your conversation and preparing detailed feedback
           </p>
 
           {/* Progress bar */}
-          <div className="w-full bg-gray-700 rounded-full h-2 mb-6 overflow-hidden">
+          <div className="w-full bg-muted rounded-full h-2 mb-6 overflow-hidden">
             <motion.div
               className="h-full bg-gradient-to-r from-primary-500 to-purple-500"
               initial={{ width: 0 }}
@@ -434,22 +434,22 @@ function Results() {
                   transition={{ delay: index * 0.1 }}
                   className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${
                     isActive ? 'bg-primary-500/10 border border-primary-500/30' :
-                    isPast ? 'bg-green-500/10' : 'bg-gray-800'
+                    isPast ? 'bg-green-500/10' : 'bg-card'
                   }`}
                 >
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    isPast ? 'bg-green-500/20' : isActive ? 'bg-primary-500/20' : 'bg-gray-700'
+                    isPast ? 'bg-green-500/20' : isActive ? 'bg-primary-500/20' : 'bg-muted'
                   }`}>
                     {isPast ? (
                       <CheckCircle2 className="w-4 h-4 text-green-400" />
                     ) : isActive ? (
                       <Loader2 className="w-4 h-4 text-primary-400 animate-spin" />
                     ) : (
-                      <StepIcon className="w-4 h-4 text-gray-500" />
+                      <StepIcon className="w-4 h-4 text-muted-foreground" />
                     )}
                   </div>
                   <span className={`text-sm ${
-                    isPast ? 'text-green-400' : isActive ? 'text-primary-400' : 'text-gray-500'
+                    isPast ? 'text-green-400' : isActive ? 'text-primary-400' : 'text-muted-foreground'
                   }`}>
                     {step.label}
                   </span>
@@ -459,18 +459,18 @@ function Results() {
           </div>
 
           {/* Call summary while waiting */}
-          <div className="mt-8 p-4 bg-gray-800 rounded-lg border border-gray-700">
+          <div className="mt-8 p-4 bg-card rounded-lg border border-border">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-400">Scenario</span>
-              <span className="text-white">{scenario?.name}</span>
+              <span className="text-muted-foreground">Scenario</span>
+              <span className="text-foreground">{scenario?.name}</span>
             </div>
             <div className="flex items-center justify-between text-sm mt-2">
-              <span className="text-gray-400">Call Duration</span>
-              <span className="text-white">{formatDuration(duration)}</span>
+              <span className="text-muted-foreground">Call Duration</span>
+              <span className="text-foreground">{formatDuration(duration)}</span>
             </div>
             <div className="flex items-center justify-between text-sm mt-2">
-              <span className="text-gray-400">Customer</span>
-              <span className="text-white">{scenario?.customerName}</span>
+              <span className="text-muted-foreground">Customer</span>
+              <span className="text-foreground">{scenario?.customerName}</span>
             </div>
           </div>
         </motion.div>
@@ -522,8 +522,8 @@ function Results() {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8 text-center">
         <AlertTriangle className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
-        <h2 className="text-2xl font-bold text-white mb-4">Analysis Unavailable</h2>
-        <p className="text-gray-400 mb-6">
+        <h2 className="text-2xl font-bold text-foreground mb-4">Analysis Unavailable</h2>
+        <p className="text-muted-foreground mb-6">
           We couldn't analyze your call this time. Your conversation was still valuable practice.
         </p>
         <div className="flex gap-4 justify-center">
@@ -545,7 +545,7 @@ function Results() {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         onClick={handleNewScenario}
-        className="flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition-colors"
+        className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to scenarios
@@ -557,9 +557,9 @@ function Results() {
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-8"
       >
-        <h1 className="text-3xl font-bold text-white mb-2">Training Complete</h1>
-        <p className="text-gray-400">{scenario.name}</p>
-        <div className="flex items-center justify-center gap-4 mt-4 text-sm text-gray-500">
+        <h1 className="text-3xl font-bold text-foreground mb-2">Training Complete</h1>
+        <p className="text-muted-foreground">{scenario.name}</p>
+        <div className="flex items-center justify-center gap-4 mt-4 text-sm text-muted-foreground">
           <span className="flex items-center gap-1">
             <Clock className="w-4 h-4" />
             {formatDuration(duration)}
@@ -592,10 +592,10 @@ function Results() {
           <div className="mb-4">
             <ScoreRing score={analysis.overallScore} size={160} />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">
+          <h2 className="text-2xl font-bold text-foreground mb-2">
             {getScoreLabel(analysis.overallScore)}
           </h2>
-          <p className="text-gray-400 max-w-lg mx-auto">
+          <p className="text-muted-foreground max-w-lg mx-auto">
             {analysis.summary}
           </p>
         </Card>
@@ -608,7 +608,7 @@ function Results() {
         transition={{ delay: 0.2 }}
         className="mb-8"
       >
-        <h3 className="text-lg font-semibold text-white mb-4">Performance Breakdown</h3>
+        <h3 className="text-lg font-semibold text-foreground mb-4">Performance Breakdown</h3>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {analysis.categories && Object.entries(analysis.categories).map(([key, data], index) => (
             <CategoryScore
@@ -642,9 +642,9 @@ function Results() {
                 {analysis.strengths.map((strength, index) => (
                   <div key={index} className="p-4 bg-green-500/10 rounded-lg border border-green-500/20">
                     <h4 className="font-medium text-green-400 mb-1">{strength.title}</h4>
-                    <p className="text-sm text-gray-300 mb-2">{strength.description}</p>
+                    <p className="text-sm text-secondary-foreground mb-2">{strength.description}</p>
                     {strength.quote && (
-                      <p className="text-sm text-gray-500 italic">"{strength.quote}"</p>
+                      <p className="text-sm text-muted-foreground italic">"{strength.quote}"</p>
                     )}
                   </div>
                 ))}
@@ -674,11 +674,11 @@ function Results() {
                 {analysis.improvements.map((improvement, index) => (
                   <div key={index} className="p-4 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
                     <h4 className="font-medium text-yellow-400 mb-1">{improvement.title}</h4>
-                    <p className="text-sm text-gray-300 mb-2">{improvement.issue}</p>
+                    <p className="text-sm text-secondary-foreground mb-2">{improvement.issue}</p>
                     {improvement.quote && (
                       <div className="mb-2">
-                        <span className="text-xs text-gray-500">You said:</span>
-                        <p className="text-sm text-gray-400 italic">"{improvement.quote}"</p>
+                        <span className="text-xs text-muted-foreground">You said:</span>
+                        <p className="text-sm text-muted-foreground italic">"{improvement.quote}"</p>
                       </div>
                     )}
                     {improvement.alternative && (
@@ -733,11 +733,11 @@ function Results() {
             <Card.Content>
               <div className="space-y-3">
                 {analysis.keyMoment.timestamp && (
-                  <p className="text-sm text-gray-500">{analysis.keyMoment.timestamp}</p>
+                  <p className="text-sm text-muted-foreground">{analysis.keyMoment.timestamp}</p>
                 )}
-                <p className="text-gray-300">{analysis.keyMoment.description}</p>
+                <p className="text-secondary-foreground">{analysis.keyMoment.description}</p>
                 {analysis.keyMoment.impact && (
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-muted-foreground">
                     <span className="text-purple-400 font-medium">Impact:</span> {analysis.keyMoment.impact}
                   </p>
                 )}
@@ -771,7 +771,7 @@ function Results() {
             <Card.Content>
               <ul className="space-y-2">
                 {analysis.nextSteps.map((step, index) => (
-                  <li key={index} className="flex items-start gap-3 text-gray-300">
+                  <li key={index} className="flex items-start gap-3 text-secondary-foreground">
                     <span className="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-sm flex-shrink-0">
                       {index + 1}
                     </span>
@@ -794,7 +794,7 @@ function Results() {
         {lastResults.sessionId && (
           <Link
             to={`/replay/${lastResults.sessionId}`}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors text-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted text-foreground rounded-lg transition-colors text-sm"
           >
             <Play className="w-4 h-4" />
             Replay Call
@@ -802,7 +802,7 @@ function Results() {
         )}
         <Link
           to={`/analysis/${scenario.id}`}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors text-sm"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted text-foreground rounded-lg transition-colors text-sm"
         >
           <BarChart2 className="w-4 h-4" />
           Compare with Previous

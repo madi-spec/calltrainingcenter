@@ -28,7 +28,7 @@ function ActiveSessionCard({ session }) {
       case 'active': return 'bg-green-500';
       case 'paused': return 'bg-yellow-500';
       case 'ending': return 'bg-orange-500';
-      default: return 'bg-gray-500';
+      default: return 'bg-muted';
     }
   };
 
@@ -37,7 +37,7 @@ function ActiveSessionCard({ session }) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
-      className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 shadow-sm"
+      className="bg-white dark:bg-card rounded-lg p-4 border border-border dark:border-border shadow-sm"
     >
       <div className="flex items-start gap-3">
         {/* Avatar */}
@@ -56,7 +56,7 @@ function ActiveSessionCard({ session }) {
             </div>
           )}
           {/* Live indicator */}
-          <span className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 ${getStatusColor()} rounded-full border-2 border-white dark:border-gray-800`}>
+          <span className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 ${getStatusColor()} rounded-full border-2 border-white dark:border-border`}>
             <span className="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-75"></span>
           </span>
         </div>
@@ -64,14 +64,14 @@ function ActiveSessionCard({ session }) {
         {/* Info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between">
-            <h4 className="font-medium text-gray-900 dark:text-white truncate">
+            <h4 className="font-medium text-foreground dark:text-foreground truncate">
               {session.user_name || 'Unknown User'}
             </h4>
             <span className="text-sm font-mono text-primary-600 dark:text-primary-400">
               {duration}
             </span>
           </div>
-          <p className="text-sm text-gray-500 dark:text-gray-400 truncate mt-0.5">
+          <p className="text-sm text-muted-foreground dark:text-muted-foreground truncate mt-0.5">
             {session.scenario_name || 'Training in progress...'}
           </p>
         </div>
@@ -79,7 +79,7 @@ function ActiveSessionCard({ session }) {
 
       {/* Status indicator */}
       <div className="mt-3 flex items-center gap-2">
-        <div className="flex-1 h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+        <div className="flex-1 h-1 bg-muted dark:bg-muted rounded-full overflow-hidden">
           <motion.div
             className="h-full bg-primary-500"
             initial={{ width: '0%' }}
@@ -87,7 +87,7 @@ function ActiveSessionCard({ session }) {
             transition={{ duration: 300, ease: 'linear', repeat: Infinity }}
           />
         </div>
-        <span className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+        <span className="text-xs text-muted-foreground dark:text-muted-foreground capitalize">
           {session.status}
         </span>
       </div>

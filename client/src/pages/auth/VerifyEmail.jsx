@@ -7,27 +7,27 @@ export default function VerifyEmail() {
   const email = location.state?.email || 'your email';
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md text-center"
       >
-        <div className="bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-700">
+        <div className="bg-card rounded-2xl shadow-xl p-8 border border-border">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-primary-500/10 rounded-full mb-6">
             <Mail className="w-10 h-10 text-primary-500" />
           </div>
 
-          <h1 className="text-2xl font-bold text-gray-100 mb-2">Check your email</h1>
-          <p className="text-gray-400 mb-6">
+          <h1 className="text-2xl font-bold text-foreground mb-2">Check your email</h1>
+          <p className="text-muted-foreground mb-6">
             We've sent a verification link to{' '}
-            <span className="text-gray-300 font-medium">{email}</span>
+            <span className="text-secondary-foreground font-medium">{email}</span>
           </p>
 
           <div className="space-y-4">
-            <div className="p-4 bg-gray-700/50 rounded-lg text-left">
-              <h3 className="text-sm font-medium text-gray-300 mb-2">Next steps:</h3>
-              <ol className="text-sm text-gray-400 space-y-2">
+            <div className="p-4 bg-muted/50 rounded-lg text-left">
+              <h3 className="text-sm font-medium text-secondary-foreground mb-2">Next steps:</h3>
+              <ol className="text-sm text-muted-foreground space-y-2">
                 <li className="flex items-start gap-2">
                   <span className="flex-shrink-0 w-5 h-5 bg-primary-500/20 rounded-full flex items-center justify-center text-xs text-primary-400">1</span>
                   Open your email inbox
@@ -43,7 +43,7 @@ export default function VerifyEmail() {
               </ol>
             </div>
 
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-muted-foreground">
               Didn't receive the email? Check your spam folder or{' '}
               <button className="text-primary-400 hover:text-primary-300">
                 resend verification
@@ -51,7 +51,7 @@ export default function VerifyEmail() {
             </p>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-gray-700">
+          <div className="mt-8 pt-6 border-t border-border">
             <Link
               to="/auth/login"
               className="inline-flex items-center gap-2 text-primary-400 hover:text-primary-300"

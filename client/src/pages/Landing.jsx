@@ -141,34 +141,34 @@ function Landing() {
       case 'hard': return 'bg-red-500/10 text-red-400';
       case 'medium': return 'bg-yellow-500/10 text-yellow-400';
       case 'easy': return 'bg-green-500/10 text-green-400';
-      default: return 'bg-gray-500/10 text-gray-400';
+      default: return 'bg-muted/10 text-muted-foreground';
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-muted text-foreground">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-50/80 backdrop-blur-lg border-b border-gray-200">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-muted/80 backdrop-blur-lg border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-500 to-orange-400 flex items-center justify-center">
-                <Clock className="w-4 h-4 text-white" />
+                <Clock className="w-4 h-4 text-foreground" />
               </div>
               <span className="text-lg font-semibold">SellEveryCall</span>
             </div>
             <div className="hidden md:flex items-center gap-8">
-              <a href="#features" className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">Features</a>
-              <a href="#scenarios" className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">Scenarios</a>
-              <a href="#pricing" className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">Pricing</a>
+              <a href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Features</a>
+              <a href="#scenarios" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Scenarios</a>
+              <a href="#pricing" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Pricing</a>
             </div>
             <div className="flex items-center gap-4">
-              <Link to="/auth/login" className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
+              <Link to="/auth/login" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 Log In
               </Link>
               <Link
                 to="/auth/signup"
-                className="px-4 py-2 bg-gradient-to-r from-pink-500 to-orange-400 hover:from-pink-600 hover:to-orange-500 rounded-lg font-medium text-white text-sm transition-all shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40"
+                className="px-4 py-2 bg-gradient-to-r from-pink-500 to-orange-400 hover:from-pink-600 hover:to-orange-500 rounded-lg font-medium text-foreground text-sm transition-all shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40"
               >
                 Start Free Trial
               </Link>
@@ -186,9 +186,9 @@ function Landing() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-full text-gray-500 text-sm mb-8 shadow-sm">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-border rounded-full text-muted-foreground text-sm mb-8 shadow-sm">
               <div className="w-5 h-5 rounded-full bg-gradient-to-br from-pink-500 to-orange-400 flex items-center justify-center">
-                <Zap className="w-2.5 h-2.5 text-white" />
+                <Zap className="w-2.5 h-2.5 text-foreground" />
               </div>
               AI-Powered CSR Training
             </div>
@@ -199,20 +199,20 @@ function Landing() {
                 Win When It Is.
               </span>
             </h1>
-            <p className="text-lg text-gray-500 mb-10 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
               Give your CSRs unlimited practice with AI customers that push back, complain, and try to cancel—so your team is ready for anything.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
               <Link
                 to="/auth/signup"
-                className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-pink-500 to-orange-400 hover:from-pink-600 hover:to-orange-500 rounded-xl font-semibold text-white transition-all shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-pink-500 to-orange-400 hover:from-pink-600 hover:to-orange-500 rounded-xl font-semibold text-foreground transition-all shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 flex items-center justify-center gap-2"
               >
                 Start Free Trial
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <button
                 onClick={() => setIsDemoOpen(true)}
-                className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-gray-50 border border-gray-200 rounded-xl font-semibold text-gray-900 transition-colors flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-accent border border-border rounded-xl font-semibold text-foreground transition-colors flex items-center justify-center gap-2"
               >
                 <Play className="w-5 h-5" />
                 Watch Demo
@@ -220,18 +220,18 @@ function Landing() {
             </div>
 
             {/* Stats */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-12 pt-12 border-t border-gray-200">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-12 pt-12 border-t border-border">
               <div className="text-center">
-                <div className="text-5xl font-semibold text-gray-900 tracking-tight">47%</div>
-                <div className="text-sm text-gray-500 mt-1">Higher save rate</div>
+                <div className="text-5xl font-semibold text-foreground tracking-tight">47%</div>
+                <div className="text-sm text-muted-foreground mt-1">Higher save rate</div>
               </div>
               <div className="text-center">
-                <div className="text-5xl font-semibold text-gray-900 tracking-tight">3.2x</div>
-                <div className="text-sm text-gray-500 mt-1">Faster ramp-up</div>
+                <div className="text-5xl font-semibold text-foreground tracking-tight">3.2x</div>
+                <div className="text-sm text-muted-foreground mt-1">Faster ramp-up</div>
               </div>
               <div className="text-center">
-                <div className="text-5xl font-semibold text-gray-900 tracking-tight">89%</div>
-                <div className="text-sm text-gray-500 mt-1">CSR preference</div>
+                <div className="text-5xl font-semibold text-foreground tracking-tight">89%</div>
+                <div className="text-sm text-muted-foreground mt-1">CSR preference</div>
               </div>
             </div>
           </motion.div>
@@ -239,7 +239,7 @@ function Landing() {
       </section>
 
       {/* Problem Section */}
-      <section className="py-24 px-4 bg-gray-900 text-white relative overflow-hidden">
+      <section className="py-24 px-4 bg-background text-foreground relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-transparent to-purple-500/10 pointer-events-none" />
         <div className="max-w-5xl mx-auto relative">
           <div className="mb-12">
@@ -247,7 +247,7 @@ function Landing() {
             <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-5">
               Every lost customer started<br />with a phone call
             </h2>
-            <p className="text-lg text-gray-400 max-w-xl">
+            <p className="text-lg text-muted-foreground max-w-xl">
               Your CSRs handle angry customers, price shoppers, and cancellation threats every day. But how do they practice for those moments?
             </p>
           </div>
@@ -265,7 +265,7 @@ function Landing() {
                   <problem.icon className="w-6 h-6 text-pink-400" />
                 </div>
                 <h3 className="text-lg font-semibold mb-3">{problem.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{problem.description}</p>
+                <p className="text-muted-foreground text-sm leading-relaxed">{problem.description}</p>
               </motion.div>
             ))}
           </div>
@@ -273,14 +273,14 @@ function Landing() {
       </section>
 
       {/* Solution Section */}
-      <section id="features" className="py-24 px-4 bg-gray-50">
+      <section id="features" className="py-24 px-4 bg-muted">
         <div className="max-w-6xl mx-auto">
           <div className="mb-16 max-w-xl">
             <p className="text-pink-500 text-xs font-semibold uppercase tracking-wider mb-4">The Solution</p>
-            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-gray-900 mb-5">
+            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-foreground mb-5">
               AI customers that train your team
             </h2>
-            <p className="text-lg text-gray-500">
+            <p className="text-lg text-muted-foreground">
               SellEveryCall creates realistic voice conversations with AI customers who behave like real callers—complete with emotions, objections, and attitudes.
             </p>
           </div>
@@ -292,13 +292,13 @@ function Landing() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-white border border-gray-200 rounded-2xl p-8 hover:border-purple-300 hover:shadow-lg hover:-translate-y-0.5 transition-all"
+                className="bg-white border border-border rounded-2xl p-8 hover:border-purple-300 hover:shadow-lg hover:-translate-y-0.5 transition-all"
               >
-                <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-orange-400 rounded-lg flex items-center justify-center text-white text-sm font-semibold mb-5">
+                <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-orange-400 rounded-lg flex items-center justify-center text-foreground text-sm font-semibold mb-5">
                   {solution.number}
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">{solution.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{solution.description}</p>
+                <h3 className="text-lg font-semibold text-foreground mb-3">{solution.title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{solution.description}</p>
               </motion.div>
             ))}
           </div>
@@ -306,14 +306,14 @@ function Landing() {
       </section>
 
       {/* Scenarios Section */}
-      <section id="scenarios" className="py-24 px-4 bg-white border-t border-gray-200">
+      <section id="scenarios" className="py-24 px-4 bg-white border-t border-border">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 max-w-xl mx-auto">
             <p className="text-pink-500 text-xs font-semibold uppercase tracking-wider mb-4">Training Scenarios</p>
-            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-gray-900 mb-5">
+            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-foreground mb-5">
               8 built-in scenarios ready to go
             </h2>
-            <p className="text-lg text-gray-500">
+            <p className="text-lg text-muted-foreground">
               Start training immediately with scenarios designed by industry experts.
             </p>
           </div>
@@ -325,13 +325,13 @@ function Landing() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
                 viewport={{ once: true }}
-                className="bg-gray-50 border border-gray-200 rounded-xl p-6 hover:border-purple-300 transition-colors"
+                className="bg-muted border border-border rounded-xl p-6 hover:border-purple-300 transition-colors"
               >
                 <span className={`inline-block px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wide mb-4 ${getDifficultyColor(scenario.difficulty)}`}>
                   {scenario.difficulty}
                 </span>
-                <h3 className="font-semibold text-gray-900 mb-2">{scenario.title}</h3>
-                <p className="text-sm text-gray-500">{scenario.description}</p>
+                <h3 className="font-semibold text-foreground mb-2">{scenario.title}</h3>
+                <p className="text-sm text-muted-foreground">{scenario.description}</p>
               </motion.div>
             ))}
           </div>
@@ -339,14 +339,14 @@ function Landing() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-24 px-4 bg-gray-50 border-t border-gray-200">
+      <section id="pricing" className="py-24 px-4 bg-muted border-t border-border">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12 max-w-xl mx-auto">
             <p className="text-pink-500 text-xs font-semibold uppercase tracking-wider mb-4">Pricing</p>
-            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-gray-900 mb-5">
+            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-foreground mb-5">
               Simple, transparent pricing
             </h2>
-            <p className="text-lg text-gray-500">
+            <p className="text-lg text-muted-foreground">
               Platform access plus training hours. Scale as you grow.
             </p>
           </div>
@@ -363,12 +363,12 @@ function Landing() {
                 className={`relative bg-white rounded-2xl p-10 ${
                   plan.popular
                     ? 'border-2 border-transparent bg-gradient-to-br from-pink-500 to-orange-400 p-[2px]'
-                    : 'border border-gray-200'
+                    : 'border border-border'
                 }`}
               >
                 {plan.popular && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                    <span className="px-4 py-1.5 bg-gradient-to-r from-pink-500 to-orange-400 rounded-full text-xs font-semibold text-white">
+                    <span className="px-4 py-1.5 bg-gradient-to-r from-pink-500 to-orange-400 rounded-full text-xs font-semibold text-foreground">
                       Most Popular
                     </span>
                   </div>
@@ -376,18 +376,18 @@ function Landing() {
                 <div className={plan.popular ? 'bg-white rounded-[14px] p-8 h-full' : ''}>
                   <div className="mb-8">
                     <p className="text-purple-400 text-xs font-semibold uppercase tracking-wider mb-1">{plan.name}</p>
-                    <h3 className="text-2xl font-semibold text-gray-900 mb-1">{plan.tier}</h3>
-                    <p className="text-sm text-gray-500">{plan.description}</p>
+                    <h3 className="text-2xl font-semibold text-foreground mb-1">{plan.tier}</h3>
+                    <p className="text-sm text-muted-foreground">{plan.description}</p>
                   </div>
                   <div className="mb-8">
-                    <span className="text-5xl font-semibold text-gray-900 tracking-tight">${plan.price}</span>
-                    <span className="text-gray-500">/month</span>
+                    <span className="text-5xl font-semibold text-foreground tracking-tight">${plan.price}</span>
+                    <span className="text-muted-foreground">/month</span>
                   </div>
                   <ul className="space-y-3 mb-8">
                     {plan.features.map((feature, i) => (
                       <li key={i} className="flex items-start gap-3">
                         <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm text-gray-700">{feature.text}</span>
+                        <span className="text-sm text-muted-foreground">{feature.text}</span>
                       </li>
                     ))}
                   </ul>
@@ -395,8 +395,8 @@ function Landing() {
                     to="/auth/signup"
                     className={`block w-full py-3.5 rounded-lg font-semibold text-center transition-all ${
                       plan.ctaStyle === 'primary'
-                        ? 'bg-gradient-to-r from-pink-500 to-orange-400 hover:from-pink-600 hover:to-orange-500 text-white shadow-lg shadow-pink-500/25'
-                        : 'bg-white hover:bg-gray-50 border border-gray-200 text-gray-900'
+                        ? 'bg-gradient-to-r from-pink-500 to-orange-400 hover:from-pink-600 hover:to-orange-500 text-foreground shadow-lg shadow-pink-500/25'
+                        : 'bg-white hover:bg-accent border border-border text-foreground'
                     }`}
                   >
                     {plan.cta}
@@ -412,46 +412,46 @@ function Landing() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="bg-white border border-gray-200 rounded-2xl p-10 max-w-5xl mx-auto"
+            className="bg-white border border-border rounded-2xl p-10 max-w-5xl mx-auto"
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-10">
               <div>
-                <h3 className="text-2xl font-semibold text-gray-900 mb-2">Need more training hours?</h3>
-                <p className="text-gray-500">Purchase hour blocks anytime. They never expire.</p>
+                <h3 className="text-2xl font-semibold text-foreground mb-2">Need more training hours?</h3>
+                <p className="text-muted-foreground">Purchase hour blocks anytime. They never expire.</p>
               </div>
             </div>
             <div className="grid md:grid-cols-3 gap-5">
-              <div className="bg-gray-50 border border-gray-200 rounded-xl p-6">
+              <div className="bg-muted border border-border rounded-xl p-6">
                 <div className="flex items-center justify-between mb-5">
-                  <h4 className="font-semibold text-gray-900">5-Hour Block</h4>
-                  <span className="text-xs text-gray-500">~60 training calls</span>
+                  <h4 className="font-semibold text-foreground">5-Hour Block</h4>
+                  <span className="text-xs text-muted-foreground">~60 training calls</span>
                 </div>
                 <div className="space-y-2 text-sm">
-                  <div className="flex justify-between"><span className="text-gray-500">Starter</span><span className="font-semibold text-gray-900">$145</span></div>
-                  <div className="flex justify-between"><span className="text-gray-500">Pro</span><span className="font-semibold text-gray-900">$125</span></div>
-                  <div className="flex justify-between"><span className="text-gray-500">Enterprise</span><span className="font-semibold text-gray-900">$115</span></div>
+                  <div className="flex justify-between"><span className="text-muted-foreground">Starter</span><span className="font-semibold text-foreground">$145</span></div>
+                  <div className="flex justify-between"><span className="text-muted-foreground">Pro</span><span className="font-semibold text-foreground">$125</span></div>
+                  <div className="flex justify-between"><span className="text-muted-foreground">Enterprise</span><span className="font-semibold text-foreground">$115</span></div>
                 </div>
               </div>
-              <div className="bg-gray-50 border border-gray-200 rounded-xl p-6">
+              <div className="bg-muted border border-border rounded-xl p-6">
                 <div className="flex items-center justify-between mb-5">
-                  <h4 className="font-semibold text-gray-900">10-Hour Block</h4>
-                  <span className="text-xs text-gray-500">~120 calls · 4% off</span>
+                  <h4 className="font-semibold text-foreground">10-Hour Block</h4>
+                  <span className="text-xs text-muted-foreground">~120 calls · 4% off</span>
                 </div>
                 <div className="space-y-2 text-sm">
-                  <div className="flex justify-between"><span className="text-gray-500">Starter</span><span className="font-semibold text-gray-900">$279</span></div>
-                  <div className="flex justify-between"><span className="text-gray-500">Pro</span><span className="font-semibold text-gray-900">$239</span></div>
-                  <div className="flex justify-between"><span className="text-gray-500">Enterprise</span><span className="font-semibold text-gray-900">$219</span></div>
+                  <div className="flex justify-between"><span className="text-muted-foreground">Starter</span><span className="font-semibold text-foreground">$279</span></div>
+                  <div className="flex justify-between"><span className="text-muted-foreground">Pro</span><span className="font-semibold text-foreground">$239</span></div>
+                  <div className="flex justify-between"><span className="text-muted-foreground">Enterprise</span><span className="font-semibold text-foreground">$219</span></div>
                 </div>
               </div>
-              <div className="bg-gray-50 border border-gray-200 rounded-xl p-6">
+              <div className="bg-muted border border-border rounded-xl p-6">
                 <div className="flex items-center justify-between mb-5">
-                  <h4 className="font-semibold text-gray-900">25-Hour Block</h4>
-                  <span className="text-xs text-gray-500">~300 calls · 7% off</span>
+                  <h4 className="font-semibold text-foreground">25-Hour Block</h4>
+                  <span className="text-xs text-muted-foreground">~300 calls · 7% off</span>
                 </div>
                 <div className="space-y-2 text-sm">
-                  <div className="flex justify-between"><span className="text-gray-500">Starter</span><span className="font-semibold text-gray-900">$675</span></div>
-                  <div className="flex justify-between"><span className="text-gray-500">Pro</span><span className="font-semibold text-gray-900">$575</span></div>
-                  <div className="flex justify-between"><span className="text-gray-500">Enterprise</span><span className="font-semibold text-gray-900">$525</span></div>
+                  <div className="flex justify-between"><span className="text-muted-foreground">Starter</span><span className="font-semibold text-foreground">$675</span></div>
+                  <div className="flex justify-between"><span className="text-muted-foreground">Pro</span><span className="font-semibold text-foreground">$575</span></div>
+                  <div className="flex justify-between"><span className="text-muted-foreground">Enterprise</span><span className="font-semibold text-foreground">$525</span></div>
                 </div>
               </div>
             </div>
@@ -459,11 +459,11 @@ function Landing() {
             {/* Rollover Banner */}
             <div className="mt-10 bg-gradient-to-r from-pink-500/10 to-orange-400/10 border border-pink-500/20 rounded-xl p-6 flex items-start gap-4">
               <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-orange-400 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Clock className="w-5 h-5 text-white" />
+                <Clock className="w-5 h-5 text-foreground" />
               </div>
               <div>
-                <h4 className="font-semibold text-gray-900 mb-1">Annual plans: All hours upfront</h4>
-                <p className="text-sm text-gray-600">
+                <h4 className="font-semibold text-foreground mb-1">Annual plans: All hours upfront</h4>
+                <p className="text-sm text-muted-foreground">
                   Monthly plans reset each month. Annual plans give you all your hours immediately—perfect for heavy onboarding months or pre-season training pushes. Purchased hour blocks never expire on any plan.
                 </p>
               </div>
@@ -475,15 +475,15 @@ function Landing() {
       {/* CTA Section */}
       <section className="py-24 px-4 bg-gradient-to-r from-pink-500 via-orange-400 to-yellow-400 relative overflow-hidden">
         <div className="max-w-2xl mx-auto text-center relative">
-          <h2 className="text-3xl md:text-4xl font-semibold text-white mb-5 tracking-tight">
+          <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-5 tracking-tight">
             Ready to stop losing customers to bad calls?
           </h2>
-          <p className="text-lg text-white/90 mb-10">
+          <p className="text-lg text-foreground/90 mb-10">
             Start your free trial today. No credit card required. See results in your first week.
           </p>
           <Link
             to="/auth/signup"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-white hover:bg-gray-50 rounded-xl font-semibold text-gray-900 transition-colors shadow-lg"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-white hover:bg-accent rounded-xl font-semibold text-foreground transition-colors shadow-lg"
           >
             Start Free Trial
             <ArrowRight className="w-5 h-5" />
@@ -492,51 +492,51 @@ function Landing() {
       </section>
 
       {/* Footer */}
-      <footer className="py-16 px-4 bg-gray-900 text-white">
+      <footer className="py-16 px-4 bg-background text-foreground">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-12 mb-16">
             <div className="md:col-span-1">
               <div className="flex items-center gap-2 mb-5">
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-500 to-orange-400 flex items-center justify-center">
-                  <Clock className="w-4 h-4 text-white" />
+                  <Clock className="w-4 h-4 text-foreground" />
                 </div>
                 <span className="font-semibold">SellEveryCall</span>
               </div>
-              <p className="text-sm text-gray-400 leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 Train like it's real. Win when it is.
               </p>
-              <p className="text-sm text-gray-400 leading-relaxed mt-2">
+              <p className="text-sm text-muted-foreground leading-relaxed mt-2">
                 AI-powered CSR training built for service companies.
               </p>
             </div>
             <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-5">Product</h4>
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-5">Product</h4>
               <div className="space-y-3">
-                <a href="#features" className="block text-sm text-gray-400 hover:text-white transition-colors">Features</a>
-                <a href="#scenarios" className="block text-sm text-gray-400 hover:text-white transition-colors">Scenarios</a>
-                <a href="#pricing" className="block text-sm text-gray-400 hover:text-white transition-colors">Pricing</a>
+                <a href="#features" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Features</a>
+                <a href="#scenarios" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Scenarios</a>
+                <a href="#pricing" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Pricing</a>
               </div>
             </div>
             <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-5">Resources</h4>
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-5">Resources</h4>
               <div className="space-y-3">
-                <a href="#" className="block text-sm text-gray-400 hover:text-white transition-colors">Help Center</a>
-                <a href="#" className="block text-sm text-gray-400 hover:text-white transition-colors">Blog</a>
-                <a href="#" className="block text-sm text-gray-400 hover:text-white transition-colors">Case Studies</a>
+                <a href="#" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Help Center</a>
+                <a href="#" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Blog</a>
+                <a href="#" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Case Studies</a>
               </div>
             </div>
             <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-5">Company</h4>
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-5">Company</h4>
               <div className="space-y-3">
-                <a href="#" className="block text-sm text-gray-400 hover:text-white transition-colors">About</a>
-                <a href="#" className="block text-sm text-gray-400 hover:text-white transition-colors">Contact</a>
-                <a href="#" className="block text-sm text-gray-400 hover:text-white transition-colors">Privacy</a>
-                <a href="#" className="block text-sm text-gray-400 hover:text-white transition-colors">Terms</a>
+                <a href="#" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">About</a>
+                <a href="#" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Contact</a>
+                <a href="#" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Privacy</a>
+                <a href="#" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Terms</a>
               </div>
             </div>
           </div>
-          <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="text-sm text-gray-500">
+          <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="text-sm text-muted-foreground">
               © {new Date().getFullYear()} SellEveryCall. All rights reserved.
             </div>
           </div>

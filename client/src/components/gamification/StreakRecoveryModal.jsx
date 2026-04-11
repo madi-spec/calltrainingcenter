@@ -67,7 +67,7 @@ export default function StreakRecoveryModal({ recoveryData, tokensAvailable, onC
         <div className="flex items-start justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-red-500/20 rounded-xl">
-              <Flame className="w-6 h-6 text-red-400" />
+              <Flame className="w-5 h-5 text-red-400" />
             </div>
             <div>
               <h2 className="text-xl font-bold text-foreground">Recover Your Streak</h2>

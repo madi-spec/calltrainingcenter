@@ -114,7 +114,7 @@ export default function AICoachingStyleStep({ data, onComplete, authFetch, organ
       <div className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-xl p-6 border border-purple-500/30">
         <div className="flex items-center gap-3 mb-2">
           <div className="p-2 bg-purple-500/20 rounded-lg">
-            <MessageSquare className="w-6 h-6 text-purple-400" />
+            <MessageSquare className="w-5 h-5 text-purple-400" />
           </div>
           <h3 className="text-lg font-semibold text-foreground">Coaching & Feedback Style</h3>
         </div>

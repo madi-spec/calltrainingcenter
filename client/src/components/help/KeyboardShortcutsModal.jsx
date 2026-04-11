@@ -55,7 +55,7 @@ export default function KeyboardShortcutsModal({ isOpen, onClose }) {
           <div className="flex items-center justify-between p-6 border-b border-border">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-500/10 rounded-lg">
-                <Keyboard className="w-6 h-6 text-blue-400" />
+                <Keyboard className="w-5 h-5 text-muted-foreground" />
               </div>
               <div>
                 <h2 className="text-xl font-semibold text-foreground">Keyboard Shortcuts</h2>

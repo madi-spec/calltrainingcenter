@@ -188,7 +188,7 @@ export default function CourseBuilder() {
 
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-primary-500/20 flex items-center justify-center">
-            <BookOpen className="w-6 h-6 text-primary-400" />
+            <BookOpen className="w-5 h-5 text-primary-400" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Create New Course</h1>

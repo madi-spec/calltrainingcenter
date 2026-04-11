@@ -268,7 +268,7 @@ function ModuleCard({ module, index, courseStarted, isLocked }) {
               : 'bg-muted text-secondary-foreground'
           }`}>
             {isCompleted ? (
-              <CheckCircle2 className="w-6 h-6" />
+              <CheckCircle2 className="w-5 h-5" />
             ) : isLocked ? (
               <Lock className="w-5 h-5" />
             ) : (

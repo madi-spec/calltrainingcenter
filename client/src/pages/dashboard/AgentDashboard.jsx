@@ -147,11 +147,11 @@ export default function AgentDashboard() {
             <div className="flex items-center gap-3 mb-4">
               {metRequirement ? (
                 <div className="p-3 bg-green-500/20 rounded-xl">
-                  <CheckCircle2 className="w-8 h-8 text-green-400" />
+                  <CheckCircle2 className="w-5 h-5 text-green-400" />
                 </div>
               ) : (
                 <div className="p-3 bg-primary-500/20 rounded-xl">
-                  <Target className="w-8 h-8 text-primary-400" />
+                  <Target className="w-5 h-5 text-primary-400" />
                 </div>
               )}
               <div>
@@ -203,7 +203,7 @@ export default function AgentDashboard() {
                   : 'bg-primary-600 hover:bg-primary-700 text-white shadow-primary-500/30 animate-pulse hover:animate-none'
               }`}
             >
-              <Play className="w-6 h-6" />
+              <Play className="w-5 h-5" />
               {metRequirement ? 'Keep Practicing' : 'Start Next Call'}
             </Link>
           </div>

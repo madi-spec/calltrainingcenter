@@ -171,7 +171,7 @@ export default function ReviewStep({ data, allStepData, onComplete, authFetch, o
       <div className="bg-gradient-to-r from-primary-500/10 to-purple-500/10 rounded-xl p-6 border border-primary-500/20">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-primary-500/20 flex items-center justify-center">
-            <Rocket className="w-6 h-6 text-primary-400" />
+            <Rocket className="w-5 h-5 text-primary-400" />
           </div>
           <div>
             <h3 className="text-lg font-semibold text-foreground">Ready to Launch!</h3>

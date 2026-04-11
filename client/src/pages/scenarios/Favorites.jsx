@@ -104,7 +104,7 @@ export default function Favorites() {
       >
         <div>
           <h1 className="text-2xl font-bold text-foreground flex items-center gap-3">
-            <Heart className="w-7 h-7 text-red-400" />
+            <Heart className="w-5 h-5 text-muted-foreground" />
             Favorites & Bookmarks
           </h1>
           <p className="text-muted-foreground mt-1">

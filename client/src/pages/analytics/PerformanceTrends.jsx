@@ -83,7 +83,7 @@ export default function PerformanceTrends() {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-            <Activity className="w-7 h-7 text-primary-500" />
+            <Activity className="w-5 h-5 text-primary-500" />
             Performance Trends & Insights
           </h1>
           <p className="text-muted-foreground mt-1">

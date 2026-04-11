@@ -443,7 +443,7 @@ export default function ManagerDashboard() {
           to="/assignments"
           className="p-6 bg-card rounded-xl border border-border hover:border-primary-500 transition-colors group"
         >
-          <UserPlus className="w-8 h-8 text-primary-400 mb-3 group-hover:scale-110 transition-transform" />
+          <UserPlus className="w-5 h-5 text-muted-foreground mb-3" />
           <h3 className="font-semibold text-foreground mb-1">Assign Training</h3>
           <p className="text-sm text-muted-foreground">Create new training assignments for your team</p>
         </Link>
@@ -452,7 +452,7 @@ export default function ManagerDashboard() {
           to="/reports"
           className="p-6 bg-card rounded-xl border border-border hover:border-primary-500 transition-colors group"
         >
-          <BarChart3 className="w-8 h-8 text-blue-400 mb-3 group-hover:scale-110 transition-transform" />
+          <BarChart3 className="w-5 h-5 text-muted-foreground mb-3" />
           <h3 className="font-semibold text-foreground mb-1">View Reports</h3>
           <p className="text-sm text-muted-foreground">Analyze team performance and trends</p>
         </Link>
@@ -461,7 +461,7 @@ export default function ManagerDashboard() {
           to="/settings/team"
           className="p-6 bg-card rounded-xl border border-border hover:border-primary-500 transition-colors group"
         >
-          <Settings className="w-8 h-8 text-muted-foreground mb-3 group-hover:scale-110 transition-transform" />
+          <Settings className="w-5 h-5 text-muted-foreground mb-3" />
           <h3 className="font-semibold text-foreground mb-1">Manage Team</h3>
           <p className="text-sm text-muted-foreground">Add or remove team members</p>
         </Link>

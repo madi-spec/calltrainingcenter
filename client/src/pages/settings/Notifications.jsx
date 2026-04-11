@@ -217,7 +217,7 @@ export default function Notifications() {
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 bg-blue-500/10 rounded-lg">
-                <Mail className="w-6 h-6 text-blue-400" />
+                <Mail className="w-5 h-5 text-muted-foreground" />
               </div>
               <div>
                 <h2 className="text-lg font-semibold text-foreground">Email Notifications</h2>
@@ -259,7 +259,7 @@ export default function Notifications() {
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 bg-purple-500/10 rounded-lg">
-                <MessageSquare className="w-6 h-6 text-purple-400" />
+                <MessageSquare className="w-5 h-5 text-muted-foreground" />
               </div>
               <div>
                 <h2 className="text-lg font-semibold text-foreground">In-App Notifications</h2>
@@ -308,7 +308,7 @@ export default function Notifications() {
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 bg-orange-500/10 rounded-lg">
-                <Clock className="w-6 h-6 text-orange-400" />
+                <Clock className="w-5 h-5 text-muted-foreground" />
               </div>
               <div>
                 <h2 className="text-lg font-semibold text-foreground">Timing Preferences</h2>

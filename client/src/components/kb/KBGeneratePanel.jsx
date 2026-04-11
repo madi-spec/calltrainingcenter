@@ -63,11 +63,11 @@ export default function KBGeneratePanel({ authFetch, uploadId, onComplete, onErr
     <div className="bg-card rounded-xl p-6 border border-border space-y-6">
       <div className="flex items-center gap-3">
         {generating ? (
-          <Loader2 className="w-6 h-6 text-primary-400 animate-spin" />
+          <Loader2 className="w-5 h-5 text-primary-400 animate-spin" />
         ) : done ? (
-          <CheckCircle className="w-6 h-6 text-green-400" />
+          <CheckCircle className="w-5 h-5 text-green-400" />
         ) : (
-          <AlertCircle className="w-6 h-6 text-red-400" />
+          <AlertCircle className="w-5 h-5 text-red-400" />
         )}
         <div>
           <h2 className="text-lg font-semibold text-foreground">

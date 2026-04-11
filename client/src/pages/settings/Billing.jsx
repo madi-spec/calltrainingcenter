@@ -274,7 +274,7 @@ export default function Billing() {
                 {promoStatus.daysRemaining} days remaining on your free Enterprise trial
               </p>
             </div>
-            <CheckCircle2 className="w-6 h-6 text-green-400" />
+            <CheckCircle2 className="w-5 h-5 text-green-400" />
           </div>
         </motion.div>
       )}

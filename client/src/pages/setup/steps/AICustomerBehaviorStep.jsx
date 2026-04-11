@@ -102,7 +102,7 @@ export default function AICustomerBehaviorStep({ data, onComplete, authFetch, or
       <div className="bg-gradient-to-r from-blue-900/50 to-purple-900/50 rounded-xl p-6 border border-blue-500/30">
         <div className="flex items-center gap-3 mb-2">
           <div className="p-2 bg-blue-500/20 rounded-lg">
-            <Bot className="w-6 h-6 text-blue-400" />
+            <Bot className="w-5 h-5 text-blue-400" />
           </div>
           <h3 className="text-lg font-semibold text-foreground">AI Customer Behavior</h3>
         </div>

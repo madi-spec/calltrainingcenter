@@ -171,7 +171,7 @@ export default function Profile() {
       >
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-blue-500/10 rounded-lg">
-            <User className="w-6 h-6 text-blue-400" />
+            <User className="w-5 h-5 text-muted-foreground" />
           </div>
           <div>
             <h2 className="text-lg font-semibold text-foreground">Profile Information</h2>
@@ -213,7 +213,7 @@ export default function Profile() {
       >
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-orange-500/10 rounded-lg">
-            <Bell className="w-6 h-6 text-orange-400" />
+            <Bell className="w-5 h-5 text-muted-foreground" />
           </div>
           <div>
             <h2 className="text-lg font-semibold text-foreground">Notification Preferences</h2>
@@ -281,7 +281,7 @@ export default function Profile() {
       >
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-purple-500/10 rounded-lg">
-            <Award className="w-6 h-6 text-purple-400" />
+            <Award className="w-5 h-5 text-muted-foreground" />
           </div>
           <div>
             <h2 className="text-lg font-semibold text-foreground">Your Achievements</h2>
@@ -301,7 +301,7 @@ export default function Profile() {
       >
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-green-500/10 rounded-lg">
-            <GraduationCap className="w-6 h-6 text-green-400" />
+            <GraduationCap className="w-5 h-5 text-muted-foreground" />
           </div>
           <div>
             <h2 className="text-lg font-semibold text-foreground">Tutorial & Help</h2>

@@ -169,7 +169,7 @@ function Layout({ children }) {
               onClick={() => setSidebarOpen(false)}
               className="lg:hidden p-1 text-muted-foreground hover:text-foreground"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
 
@@ -191,7 +191,7 @@ function Layout({ children }) {
                     : 'text-sidebar-foreground hover:bg-sidebar-accent'
                 }`}
               >
-                <item.icon className="w-5 h-5" />
+                <item.icon className="w-4 h-4" />
                 <span>{item.label}</span>
               </Link>
             ))}
@@ -212,7 +212,7 @@ function Layout({ children }) {
                       : 'text-sidebar-foreground hover:bg-sidebar-accent'
                   }`}
                 >
-                  <item.icon className="w-5 h-5" />
+                  <item.icon className="w-4 h-4" />
                   <span>{item.label}</span>
                 </Link>
               ))}
@@ -290,7 +290,7 @@ function Layout({ children }) {
             <Menu className="w-6 h-6" />
           </button>
           <Link to="/dashboard" className="flex items-center gap-2">
-            <Phone className="w-5 h-5 text-primary-500" />
+            <Phone className="w-4 h-4 text-primary-500" />
             <span className="font-semibold text-foreground">CSR Training</span>
           </Link>
           <div className="relative flex items-center gap-2">
@@ -299,7 +299,7 @@ function Layout({ children }) {
               className="p-2 text-muted-foreground hover:text-foreground"
               title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
             >
-              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
             <button
               onClick={() => setUserMenuOpen(!userMenuOpen)}

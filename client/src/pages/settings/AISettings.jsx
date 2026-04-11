@@ -878,7 +878,7 @@ Respond with JSON in this exact format:
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-purple-500/10 rounded-lg">
-              <Sliders className="w-6 h-6 text-purple-400" />
+              <Sliders className="w-5 h-5 text-muted-foreground" />
             </div>
             <div>
               <h2 className="text-lg font-semibold text-foreground">Scoring Weights</h2>
@@ -960,7 +960,7 @@ Respond with JSON in this exact format:
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-cyan-500/10 rounded-lg">
-              <Bot className="w-6 h-6 text-cyan-400" />
+              <Bot className="w-5 h-5 text-muted-foreground" />
             </div>
             <div>
               <h2 className="text-lg font-semibold text-foreground">Customer Behavior</h2>
@@ -1026,7 +1026,7 @@ Respond with JSON in this exact format:
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-purple-500/10 rounded-lg">
-              <MessageSquare className="w-6 h-6 text-purple-400" />
+              <MessageSquare className="w-5 h-5 text-muted-foreground" />
             </div>
             <div>
               <h2 className="text-lg font-semibold text-foreground">Coaching Style</h2>
@@ -1095,7 +1095,7 @@ Respond with JSON in this exact format:
         >
           <div className="flex items-center gap-3">
             <div className="p-2 bg-orange-500/10 rounded-lg">
-              <ListChecks className="w-6 h-6 text-orange-400" />
+              <ListChecks className="w-5 h-5 text-muted-foreground" />
             </div>
             <div className="text-left">
               <h2 className="text-lg font-semibold text-foreground">Custom Scoring Criteria</h2>
@@ -1357,7 +1357,7 @@ Respond with JSON in this exact format:
         >
           <div className="flex items-center gap-3">
             <div className="p-2 bg-green-500/10 rounded-lg">
-              <Volume2 className="w-6 h-6 text-green-400" />
+              <Volume2 className="w-5 h-5 text-muted-foreground" />
             </div>
             <div className="text-left">
               <h2 className="text-lg font-semibold text-foreground">Voice Preferences</h2>

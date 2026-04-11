@@ -117,7 +117,7 @@ export default function AIScoringStep({ data, onComplete, authFetch, organizatio
       <div className="bg-gradient-to-r from-orange-900/50 to-red-900/50 rounded-xl p-6 border border-orange-500/30">
         <div className="flex items-center gap-3 mb-2">
           <div className="p-2 bg-orange-500/20 rounded-lg">
-            <Sliders className="w-6 h-6 text-orange-400" />
+            <Sliders className="w-5 h-5 text-orange-400" />
           </div>
           <h3 className="text-lg font-semibold text-foreground">Scoring Weights & Criteria</h3>
         </div>

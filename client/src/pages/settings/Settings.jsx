@@ -136,7 +136,7 @@ export default function Settings() {
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-4">
                   <div className={`p-3 rounded-lg ${section.color}`}>
-                    <section.icon className="w-6 h-6" />
+                    <section.icon className="w-5 h-5" />
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-foreground group-hover:text-primary-400 transition-colors">

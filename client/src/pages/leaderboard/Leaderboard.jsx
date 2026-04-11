@@ -45,11 +45,11 @@ export default function Leaderboard() {
   const getRankIcon = (rank) => {
     switch (rank) {
       case 1:
-        return <Crown className="w-6 h-6 text-yellow-400" />;
+        return <Crown className="w-5 h-5 text-yellow-400" />;
       case 2:
-        return <Medal className="w-6 h-6 text-secondary-foreground" />;
+        return <Medal className="w-5 h-5 text-secondary-foreground" />;
       case 3:
-        return <Medal className="w-6 h-6 text-amber-600" />;
+        return <Medal className="w-5 h-5 text-amber-600" />;
       default:
         return <span className="text-lg font-bold text-muted-foreground">#{rank}</span>;
     }

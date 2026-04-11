@@ -88,7 +88,7 @@ export default function ChallengeColleagueModal({ scenario, onClose, onChallenge
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
               <div className="p-3 bg-purple-500/20 rounded-xl">
-                <Swords className="w-6 h-6 text-purple-400" />
+                <Swords className="w-5 h-5 text-purple-400" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-foreground">Challenge a Colleague</h2>
@@ -122,7 +122,7 @@ export default function ChallengeColleagueModal({ scenario, onClose, onChallenge
         <div className="max-h-64 overflow-y-auto p-4 space-y-2">
           {loading ? (
             <div className="flex items-center justify-center py-8">
-              <Loader2 className="w-6 h-6 text-muted-foreground animate-spin" />
+              <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
             </div>
           ) : colleagues.length === 0 ? (
             <p className="text-center text-muted-foreground py-8">

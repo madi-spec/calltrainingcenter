@@ -159,7 +159,7 @@ export default function MicroPractice() {
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 bg-purple-500/20 rounded-xl flex items-center justify-center">
-                <Sparkles className="w-7 h-7 text-purple-400" />
+                <Sparkles className="w-5 h-5 text-purple-400" />
               </div>
               <div>
                 <div className="flex items-center gap-2 mb-1">

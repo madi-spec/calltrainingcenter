@@ -116,7 +116,7 @@ export default function Recommendations() {
       >
         <div>
           <h1 className="text-2xl font-bold text-foreground flex items-center gap-3">
-            <Target className="w-7 h-7 text-purple-400" />
+            <Target className="w-5 h-5 text-muted-foreground" />
             Personalized Recommendations
           </h1>
           <p className="text-muted-foreground mt-1">

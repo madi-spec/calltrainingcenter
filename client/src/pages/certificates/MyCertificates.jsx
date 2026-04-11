@@ -138,7 +138,7 @@ export default function MyCertificates() {
                         {cert.course?.icon ? (
                           <span className="text-2xl">{cert.course.icon}</span>
                         ) : (
-                          <Award className="w-6 h-6 text-foreground" />
+                          <Award className="w-5 h-5 text-foreground" />
                         )}
                       </div>
                       {cert.score && (

@@ -263,7 +263,7 @@ export default function WarmupQuiz({
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-purple-500/10 rounded-lg">
-            <Brain className="w-6 h-6 text-purple-400" />
+            <Brain className="w-5 h-5 text-purple-400" />
           </div>
           <div>
             <h2 className="text-lg font-semibold text-foreground">Pre-Call Warm-up</h2>

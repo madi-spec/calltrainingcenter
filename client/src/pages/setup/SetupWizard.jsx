@@ -459,7 +459,7 @@ export default function SetupWizard() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-primary-500/10 rounded-xl">
-                <Settings2 className="w-6 h-6 text-primary-400" />
+                <Settings2 className="w-5 h-5 text-primary-400" />
               </div>
               <div>
                 <h1 className="text-xl font-bold text-foreground">Setup Your Organization</h1>

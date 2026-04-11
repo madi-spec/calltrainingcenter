@@ -114,7 +114,7 @@ export default function StreakStatus({ compact = false }) {
                 ? 'bg-orange-500/20'
                 : 'bg-muted'}
             `}>
-              <Flame className={`w-6 h-6 ${streak.current > 0 ? 'text-orange-400' : 'text-muted-foreground'}`} />
+              <Flame className={`w-5 h-5 ${streak.current > 0 ? 'text-orange-400' : 'text-muted-foreground'}`} />
             </div>
 
             <div>

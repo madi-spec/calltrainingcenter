@@ -79,21 +79,21 @@ function LiveDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
             <span className="relative">
               <span className="w-3 h-3 bg-red-500 rounded-full inline-block mr-2"></span>
               <span className="absolute top-0 left-0 w-3 h-3 bg-red-500 rounded-full animate-ping"></span>
             </span>
             Live Training Dashboard
           </h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-muted-foreground mt-1">
             Real-time view of team training activity
           </p>
         </div>
 
         <div className="flex items-center gap-4">
           {/* Last refresh indicator */}
-          <div className="text-sm text-gray-500 dark:text-gray-400">
+          <div className="text-sm text-muted-foreground">
             Updated {lastRefresh.toLocaleTimeString()}
           </div>
 
@@ -101,7 +101,7 @@ function LiveDashboard() {
           <select
             value={refreshInterval}
             onChange={(e) => setRefreshInterval(Number(e.target.value))}
-            className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="px-3 py-1.5 text-sm border border-input rounded-md bg-background text-foreground"
           >
             <option value={10}>10s</option>
             <option value={30}>30s</option>
@@ -113,10 +113,10 @@ function LiveDashboard() {
           <button
             onClick={handleManualRefresh}
             disabled={isRefreshing}
-            className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50"
+            className="p-2 rounded-lg bg-muted hover:bg-accent transition-colors disabled:opacity-50"
           >
             <svg
-              className={`w-5 h-5 text-gray-600 dark:text-gray-300 ${isRefreshing ? 'animate-spin' : ''}`}
+              className={`w-5 h-5 text-muted-foreground ${isRefreshing ? 'animate-spin' : ''}`}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -134,14 +134,14 @@ function LiveDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
         {/* Active Sessions Panel */}
         <div className="lg:col-span-1">
-          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="bg-card rounded-lg border border-border">
+            <div className="p-4 border-b border-border">
               <div className="flex items-center justify-between">
-                <h2 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <h2 className="font-semibold text-foreground flex items-center gap-2">
                   <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
                   Active Sessions
                 </h2>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
+                <span className="text-sm text-muted-foreground">
                   {activeSessions.length} active
                 </span>
               </div>
@@ -151,12 +151,12 @@ function LiveDashboard() {
               {loading ? (
                 <div className="space-y-3">
                   {[...Array(3)].map((_, i) => (
-                    <div key={i} className="animate-pulse bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
+                    <div key={i} className="animate-pulse bg-muted rounded-lg p-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gray-200 dark:bg-gray-600 rounded-full"></div>
+                        <div className="w-10 h-10 bg-muted rounded-full"></div>
                         <div className="flex-1 space-y-2">
-                          <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-2/3"></div>
-                          <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-1/2"></div>
+                          <div className="h-4 bg-muted rounded w-2/3"></div>
+                          <div className="h-3 bg-muted rounded w-1/2"></div>
                         </div>
                       </div>
                     </div>
@@ -164,13 +164,13 @@ function LiveDashboard() {
                 </div>
               ) : activeSessions.length === 0 ? (
                 <div className="py-8 text-center">
-                  <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                    <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-muted flex items-center justify-center">
+                    <svg className="w-6 h-6 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                   </div>
-                  <p className="text-gray-500 dark:text-gray-400">No active sessions</p>
-                  <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+                  <p className="text-muted-foreground">No active sessions</p>
+                  <p className="text-sm text-muted-foreground mt-1">
                     Training sessions will appear here in real-time
                   </p>
                 </div>
@@ -187,13 +187,13 @@ function LiveDashboard() {
 
         {/* Recent Completions Panel */}
         <div className="lg:col-span-2">
-          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="bg-card rounded-lg border border-border">
+            <div className="p-4 border-b border-border">
               <div className="flex items-center justify-between">
-                <h2 className="font-semibold text-gray-900 dark:text-white">
+                <h2 className="font-semibold text-foreground">
                   Recent Completions
                 </h2>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
+                <span className="text-sm text-muted-foreground">
                   Last 20 sessions
                 </span>
               </div>
@@ -207,7 +207,7 @@ function LiveDashboard() {
       </div>
 
       {/* Help text */}
-      <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
+      <div className="mt-6 text-center text-sm text-muted-foreground">
         This dashboard updates automatically every {refreshInterval} seconds.
         Training sessions appear in real-time using Supabase Realtime subscriptions.
       </div>

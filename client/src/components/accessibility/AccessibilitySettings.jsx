@@ -4,13 +4,13 @@ function Toggle({ label, description, checked, onChange }) {
   const id = label.toLowerCase().replace(/\s+/g, '-');
 
   return (
-    <div className="flex items-start justify-between py-3 border-b border-gray-100 dark:border-gray-700 last:border-0">
+    <div className="flex items-start justify-between py-3 border-b border-border last:border-0">
       <div className="pr-4">
-        <label htmlFor={id} className="font-medium text-gray-900 dark:text-white cursor-pointer">
+        <label htmlFor={id} className="font-medium text-foreground cursor-pointer">
           {label}
         </label>
         {description && (
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+          <p className="text-sm text-muted-foreground mt-0.5">
             {description}
           </p>
         )}
@@ -20,8 +20,8 @@ function Toggle({ label, description, checked, onChange }) {
         role="switch"
         aria-checked={checked}
         onClick={() => onChange(!checked)}
-        className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:ring-offset-2 dark:focus:ring-offset-gray-800 ${
-          checked ? 'bg-primary-600' : 'bg-gray-200 dark:bg-gray-600'
+        className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:ring-offset-2 focus:ring-offset-background ${
+          checked ? 'bg-primary-600' : 'bg-muted'
         }`}
       >
         <span
@@ -48,11 +48,11 @@ function AccessibilitySettings() {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+        <h3 className="text-lg font-semibold text-foreground mb-4">
           Accessibility Settings
         </h3>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 divide-y divide-gray-100 dark:divide-gray-700">
+        <div className="bg-card rounded-lg border border-border divide-y divide-border">
           <div className="p-4">
             <Toggle
               label="Reduce Motion"
@@ -87,7 +87,7 @@ function AccessibilitySettings() {
 
       <button
         onClick={resetSettings}
-        className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 underline"
+        className="text-sm text-muted-foreground hover:text-foreground underline"
       >
         Reset to defaults
       </button>

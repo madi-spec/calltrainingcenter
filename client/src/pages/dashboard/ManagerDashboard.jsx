@@ -432,7 +432,7 @@ export default function ManagerDashboard() {
           </div>
         ) : (
           <div className="text-center py-8">
-            <Clock className="w-12 h-12 text-gray-600 mx-auto mb-3" />
+            <Clock className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
             <p className="text-muted-foreground">No recent team sessions</p>
           </div>
         )}

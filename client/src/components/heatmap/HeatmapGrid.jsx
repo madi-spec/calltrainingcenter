@@ -38,7 +38,7 @@ function ScoreCell({ score, target, onClick }) {
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       onClick={onClick}
-      className={`w-full h-12 rounded-md ${bgColor} ${textColor} font-medium text-sm flex items-center justify-center transition-all hover:ring-2 hover:ring-primary-500 hover:ring-offset-2 dark:hover:ring-offset-gray-800`}
+      className={`w-full h-12 rounded-md ${bgColor} ${textColor} font-medium text-sm flex items-center justify-center transition-all hover:ring-2 hover:ring-primary-500 hover:ring-offset-2 hover:ring-offset-background`}
     >
       {score !== null ? `${score}%` : '--'}
     </motion.button>

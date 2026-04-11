@@ -418,7 +418,7 @@ export default function AgentDashboard() {
             </div>
           ) : (
             <div className="text-center py-8">
-              <Award className="w-12 h-12 text-gray-600 mx-auto mb-3" />
+              <Award className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
               <p className="text-muted-foreground mb-1">No badges earned yet</p>
               <p className="text-sm text-muted-foreground">
                 Complete courses to earn badges

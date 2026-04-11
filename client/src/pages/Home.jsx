@@ -70,29 +70,14 @@ function Home() {
   });
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Hero Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-12"
-      >
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 mb-6 shadow-lg shadow-blue-500/25">
-          <Phone className="w-8 h-8 text-foreground" />
-        </div>
-        <h1 className="text-4xl font-bold text-foreground mb-4">
-          CSR Training Simulator
-        </h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Practice handling real customer scenarios with AI-powered voice calls.
-          Get instant coaching feedback to improve your skills.
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Page Header */}
+      <div className="mb-6">
+        <h1 className="text-2xl font-semibold text-foreground tracking-tight">Practice Scenarios</h1>
+        <p className="text-sm text-muted-foreground mt-1">
+          {company.name ? `Practice calls personalized for ${company.name}` : 'Practice handling real customer scenarios with AI-powered voice calls'}
         </p>
-        {company.name && (
-          <p className="text-sm text-blue-400 mt-4">
-            Personalized for {company.name}
-          </p>
-        )}
-      </motion.div>
+      </div>
 
       {/* Filters */}
       <motion.div
@@ -162,7 +147,7 @@ function Home() {
           {canCreate && (
             <Link
               to="/builder"
-              className="flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 rounded-lg text-sm font-medium transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:opacity-90 rounded-md text-sm font-medium transition-opacity"
             >
               <Plus className="w-4 h-4" />
               Create Scenario
@@ -173,16 +158,13 @@ function Home() {
 
       {/* Scenario Grid */}
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[...Array(6)].map((_, i) => (
-            <div
-              key={i}
-              className="glass-card p-6 animate-pulse"
-            >
-              <div className="h-6 bg-muted rounded w-3/4 mb-4" />
-              <div className="h-4 bg-muted rounded w-1/2 mb-2" />
-              <div className="h-20 bg-muted rounded mb-4" />
-              <div className="h-10 bg-muted rounded" />
+            <div key={i} className="bg-card border border-border rounded-lg p-6 animate-pulse">
+              <div className="h-5 bg-muted rounded w-3/4 mb-3" />
+              <div className="h-3 bg-muted rounded w-1/3 mb-4" />
+              <div className="h-16 bg-muted rounded mb-4" />
+              <div className="h-3 bg-muted rounded w-1/2" />
             </div>
           ))}
         </div>
@@ -202,21 +184,14 @@ function Home() {
   );
 }
 
-function FilterButton({ children, active, onClick, color = 'blue' }) {
-  const colors = {
-    blue: 'bg-blue-600 text-foreground',
-    green: 'bg-green-600 text-foreground',
-    yellow: 'bg-yellow-600 text-foreground',
-    red: 'bg-red-600 text-foreground'
-  };
-
+function FilterButton({ children, active, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+      className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors ${
         active
-          ? colors[color]
-          : 'bg-card text-muted-foreground hover:bg-muted hover:text-foreground'
+          ? 'bg-foreground text-background'
+          : 'text-muted-foreground hover:text-foreground hover:bg-accent'
       }`}
     >
       {children}

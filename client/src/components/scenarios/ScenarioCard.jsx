@@ -124,8 +124,8 @@ function ScenarioCard({ scenario, canEdit, onDelete }) {
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
               )}
-              <span className="text-sm text-blue-400 font-medium">
-                Start Training →
+              <span className="text-sm text-muted-foreground group-hover:text-foreground font-medium transition-colors">
+                Start →
               </span>
             </div>
           </>

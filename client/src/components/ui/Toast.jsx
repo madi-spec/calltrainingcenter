@@ -11,17 +11,17 @@ const TOAST_ICONS = {
   achievement: Trophy
 };
 
-const TOAST_STYLES = {
-  success: 'bg-green-500/10 border-green-500/50 text-green-400',
-  error: 'bg-red-500/10 border-red-500/50 text-red-400',
-  warning: 'bg-yellow-500/10 border-yellow-500/50 text-yellow-400',
-  info: 'bg-blue-500/10 border-blue-500/50 text-blue-400',
-  achievement: 'bg-purple-500/10 border-purple-500/50 text-purple-400'
+const TOAST_COLORS = {
+  success: 'text-green-500',
+  error: 'text-red-500',
+  warning: 'text-yellow-500',
+  info: 'text-blue-500',
+  achievement: 'text-purple-500'
 };
 
 function ToastItem({ toast, onDismiss }) {
   const Icon = TOAST_ICONS[toast.type] || Info;
-  const style = TOAST_STYLES[toast.type] || TOAST_STYLES.info;
+  const iconColor = TOAST_COLORS[toast.type] || TOAST_COLORS.info;
 
   useEffect(() => {
     if (toast.duration !== 0) {
@@ -38,24 +38,24 @@ function ToastItem({ toast, onDismiss }) {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -20, scale: 0.95 }}
       transition={{ duration: 0.2 }}
-      className={`flex items-start gap-3 p-4 rounded-lg border backdrop-blur-sm shadow-lg ${style}`}
+      className="bg-card border border-border rounded-md shadow-lg px-4 py-3 flex items-center gap-3"
     >
-      <Icon className="w-5 h-5 flex-shrink-0 mt-0.5" />
+      <Icon className={`w-4 h-4 flex-shrink-0 ${iconColor}`} />
       <div className="flex-1 min-w-0">
         {toast.title && (
-          <p className="font-medium text-sm">{toast.title}</p>
+          <p className="font-medium text-sm text-foreground">{toast.title}</p>
         )}
         {toast.message && (
-          <p className={`text-sm ${toast.title ? 'mt-1 opacity-80' : ''}`}>
+          <p className={`text-sm text-foreground ${toast.title ? 'mt-0.5 opacity-80' : ''}`}>
             {toast.message}
           </p>
         )}
       </div>
       <button
         onClick={() => onDismiss(toast.id)}
-        className="flex-shrink-0 p-1 rounded hover:bg-white/10 transition-colors"
+        className="flex-shrink-0 p-1 rounded hover:bg-accent transition-colors text-muted-foreground"
       >
-        <X className="w-4 h-4" />
+        <X className="w-3.5 h-3.5" />
       </button>
     </motion.div>
   );
